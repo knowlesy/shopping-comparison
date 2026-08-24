@@ -47,6 +47,7 @@ export interface SupermarketProduct {
   unitPrice: number;
   unitPriceMeasure: string; // e.g. "£/kg", "£/100g", "£/l", "£/item"
   isHealthier: boolean;
+  isFrozen?: boolean;
   fatPercentage?: number;
   isOrganic?: boolean;
   isWholewheat?: boolean;

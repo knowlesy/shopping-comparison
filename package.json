@@ -8,7 +8,8 @@
     "dev:client": "npm --prefix client run dev",
     "build": "npm --prefix client run build && npm --prefix server run build",
     "start": "npm --prefix server run start",
-    "test": "npm --prefix server run test"
+    "test": "npm --prefix server run test",
+    "test:food-form": "node tests/food-form-and-variety-audit.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",

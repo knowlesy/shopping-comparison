@@ -1,5 +1,7 @@
 import fs from "fs";
 
+const STORES = ['asda', 'tesco', 'sainsburys', 'morrisons', 'iceland', 'aldi', 'lidl'];
+
 const EXPANDED_EGGS = [
   // ASDA
   { id: 'asda-eggs-6-med', supermarket: 'asda', title: 'ASDA 6 Free Range Medium Eggs', brand: 'ASDA', tier: 'standard', category: 'dairy-eggs', subCategory: 'eggs', packageSize: 6, packageUnit: 'pack', packageDisplay: '6 pack', price: 1.35, unitPrice: 0.23, unitPriceMeasure: '£/egg', isHealthier: true, isFreeRange: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1506976785307-8732e854ad03?w=200&auto=format&fit=crop&q=60' },
@@ -70,15 +72,20 @@ const EXPANDED_EGGS = [
   { id: 'iceland-eggs-15-pack', supermarket: 'iceland', title: 'Iceland 15 Class A Eggs', brand: 'Iceland', tier: 'standard', category: 'dairy-eggs', subCategory: 'eggs', packageSize: 15, packageUnit: 'pack', packageDisplay: '15 pack', price: 2.10, unitPrice: 0.14, unitPriceMeasure: '£/egg', isHealthier: false, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1506976785307-8732e854ad03?w=200&auto=format&fit=crop&q=60' }
 ];
 
-const STORES = ['asda', 'tesco', 'sainsburys', 'morrisons', 'iceland', 'aldi', 'lidl'];
-
 const EXPANDED_GREEK_YOGURT = [];
 const EXPANDED_MILK = [];
 const EXPANDED_POTATOES = [];
+const EXPANDED_MINCE = [];
+const EXPANDED_CHICKEN = [];
+const EXPANDED_FISH = [];
+const EXPANDED_SPINACH = [];
+const EXPANDED_GARLIC = [];
+const EXPANDED_PASTA = [];
 
 for (const store of STORES) {
-  const storeName = store.charAt(0).toUpperCase() + store.slice(1);
-  const brandName = store === 'asda' ? 'ASDA' : store === 'tesco' ? 'Tesco' : store === 'sainsburys' ? "Sainsbury's" : store === 'morrisons' ? 'Morrisons' : store === 'aldi' ? 'Brooklea' : store === 'lidl' ? 'Milbona' : 'Iceland';
+  const brandName = store === 'asda' ? 'ASDA' : store === 'tesco' ? 'Tesco' : store === 'sainsburys' ? "Sainsbury's" : store === 'morrisons' ? 'Morrisons' : store === 'aldi' ? 'Ashfields' : store === 'lidl' ? 'Birchwood' : 'Iceland';
+  const dairyBrand = store === 'aldi' ? 'Brooklea' : store === 'lidl' ? 'Milbona' : brandName;
+  const produceBrand = store === 'aldi' ? "Nature's Pick" : store === 'lidl' ? 'Oaklands' : brandName;
 
   // Greek Yogurts
   EXPANDED_GREEK_YOGURT.push(
@@ -86,38 +93,90 @@ for (const store of STORES) {
     { id: `${store}-fage-0-1kg`, supermarket: store, title: 'Fage Total 0% Fat Authentic Greek Yogurt 1kg', brand: 'Fage', tier: 'premium', category: 'dairy-eggs', subCategory: 'yogurt', packageSize: 1000, packageUnit: 'g', packageDisplay: '1kg', price: 5.50, unitPrice: 5.50, unitPriceMeasure: '£/kg', isHealthier: true, fatPercentage: 0, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=200&auto=format&fit=crop&q=60' },
     { id: `${store}-fage-5-500g`, supermarket: store, title: 'Fage Total 5% Authentic Greek Yogurt 500g', brand: 'Fage', tier: 'premium', category: 'dairy-eggs', subCategory: 'yogurt', packageSize: 500, packageUnit: 'g', packageDisplay: '500g', price: 3.25, unitPrice: 6.50, unitPriceMeasure: '£/kg', isHealthier: true, fatPercentage: 5, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=200&auto=format&fit=crop&q=60' },
     { id: `${store}-fage-2-500g`, supermarket: store, title: 'Fage Total 2% Authentic Greek Yogurt 500g', brand: 'Fage', tier: 'premium', category: 'dairy-eggs', subCategory: 'yogurt', packageSize: 500, packageUnit: 'g', packageDisplay: '500g', price: 3.25, unitPrice: 6.50, unitPriceMeasure: '£/kg', isHealthier: true, fatPercentage: 2, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=200&auto=format&fit=crop&q=60' },
-    { id: `${store}-own-greek-0-500g`, supermarket: store, title: `${brandName} 0% Fat Authentic Greek Yogurt 500g`, brand: brandName, tier: 'standard', category: 'dairy-eggs', subCategory: 'yogurt', packageSize: 500, packageUnit: 'g', packageDisplay: '500g', price: 1.50, unitPrice: 3.00, unitPriceMeasure: '£/kg', isHealthier: true, fatPercentage: 0, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=200&auto=format&fit=crop&q=60' },
-    { id: `${store}-own-greek-0-1kg`, supermarket: store, title: `${brandName} Fat Free Authentic Greek Yogurt 1kg`, brand: brandName, tier: 'standard', category: 'dairy-eggs', subCategory: 'yogurt', packageSize: 1000, packageUnit: 'g', packageDisplay: '1kg', price: 2.50, unitPrice: 2.50, unitPriceMeasure: '£/kg', isHealthier: true, fatPercentage: 0, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=200&auto=format&fit=crop&q=60' },
-    { id: `${store}-own-greek-style-0-500g`, supermarket: store, title: `${brandName} Fat Free Greek Style Yogurt 500g`, brand: brandName, tier: 'standard', category: 'dairy-eggs', subCategory: 'yogurt', packageSize: 500, packageUnit: 'g', packageDisplay: '500g', price: 1.10, unitPrice: 2.20, unitPriceMeasure: '£/kg', isHealthier: true, fatPercentage: 0, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=200&auto=format&fit=crop&q=60' },
-    { id: `${store}-own-greek-style-1kg`, supermarket: store, title: `${brandName} Greek Style Natural Yogurt 1kg`, brand: brandName, tier: 'standard', category: 'dairy-eggs', subCategory: 'yogurt', packageSize: 1000, packageUnit: 'g', packageDisplay: '1kg', price: 1.75, unitPrice: 1.75, unitPriceMeasure: '£/kg', isHealthier: true, fatPercentage: 5, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-own-greek-0-500g`, supermarket: store, title: `${dairyBrand} 0% Fat Authentic Greek Yogurt 500g`, brand: dairyBrand, tier: 'standard', category: 'dairy-eggs', subCategory: 'yogurt', packageSize: 500, packageUnit: 'g', packageDisplay: '500g', price: 1.50, unitPrice: 3.00, unitPriceMeasure: '£/kg', isHealthier: true, fatPercentage: 0, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-own-greek-0-1kg`, supermarket: store, title: `${dairyBrand} Fat Free Authentic Greek Yogurt 1kg`, brand: dairyBrand, tier: 'standard', category: 'dairy-eggs', subCategory: 'yogurt', packageSize: 1000, packageUnit: 'g', packageDisplay: '1kg', price: 2.50, unitPrice: 2.50, unitPriceMeasure: '£/kg', isHealthier: true, fatPercentage: 0, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-own-greek-style-0-500g`, supermarket: store, title: `${dairyBrand} Fat Free Greek Style Yogurt 500g`, brand: dairyBrand, tier: 'standard', category: 'dairy-eggs', subCategory: 'yogurt', packageSize: 500, packageUnit: 'g', packageDisplay: '500g', price: 1.10, unitPrice: 2.20, unitPriceMeasure: '£/kg', isHealthier: true, fatPercentage: 0, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-own-greek-style-1kg`, supermarket: store, title: `${dairyBrand} Greek Style Natural Yogurt 1kg`, brand: dairyBrand, tier: 'standard', category: 'dairy-eggs', subCategory: 'yogurt', packageSize: 1000, packageUnit: 'g', packageDisplay: '1kg', price: 1.75, unitPrice: 1.75, unitPriceMeasure: '£/kg', isHealthier: true, fatPercentage: 5, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=200&auto=format&fit=crop&q=60' },
     { id: `${store}-yeo-greek-0-450g`, supermarket: store, title: 'Yeo Valley Organic 0% Fat Greek Style Yogurt 450g', brand: 'Yeo Valley', tier: 'premium', category: 'dairy-eggs', subCategory: 'yogurt', packageSize: 450, packageUnit: 'g', packageDisplay: '450g', price: 2.00, unitPrice: 4.44, unitPriceMeasure: '£/kg', isHealthier: true, isOrganic: true, fatPercentage: 0, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=200&auto=format&fit=crop&q=60' }
   );
 
   // Milk Varieties
   EXPANDED_MILK.push(
-    { id: `${store}-milk-semi-1pint`, supermarket: store, title: `${brandName} British Fresh Semi-Skimmed Milk 1 Pint (568ml)`, brand: brandName, tier: 'standard', category: 'dairy-eggs', subCategory: 'milk', packageSize: 568, packageUnit: 'ml', packageDisplay: '1 Pint (568ml)', price: 0.90, unitPrice: 1.58, unitPriceMeasure: '£/L', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=60' },
-    { id: `${store}-milk-semi-2pint`, supermarket: store, title: `${brandName} British Fresh Semi-Skimmed Milk 2 Pints (1.136L)`, brand: brandName, tier: 'standard', category: 'dairy-eggs', subCategory: 'milk', packageSize: 1136, packageUnit: 'ml', packageDisplay: '2 Pints (1.13L)', price: 1.20, unitPrice: 1.06, unitPriceMeasure: '£/L', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=60' },
-    { id: `${store}-milk-semi-4pint`, supermarket: store, title: `${brandName} British Fresh Semi-Skimmed Milk 4 Pints (2.27L)`, brand: brandName, tier: 'standard', category: 'dairy-eggs', subCategory: 'milk', packageSize: 2270, packageUnit: 'ml', packageDisplay: '4 Pints (2.27L)', price: 1.45, unitPrice: 0.64, unitPriceMeasure: '£/L', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=60' },
-    { id: `${store}-milk-semi-6pint`, supermarket: store, title: `${brandName} British Fresh Semi-Skimmed Milk 6 Pints (3.4L)`, brand: brandName, tier: 'standard', category: 'dairy-eggs', subCategory: 'milk', packageSize: 3400, packageUnit: 'ml', packageDisplay: '6 Pints (3.4L)', price: 2.15, unitPrice: 0.63, unitPriceMeasure: '£/L', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=60' },
-    { id: `${store}-milk-whole-2pint`, supermarket: store, title: `${brandName} British Fresh Whole Milk 2 Pints (1.136L)`, brand: brandName, tier: 'standard', category: 'dairy-eggs', subCategory: 'milk', packageSize: 1136, packageUnit: 'ml', packageDisplay: '2 Pints (1.13L)', price: 1.20, unitPrice: 1.06, unitPriceMeasure: '£/L', isHealthier: false, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=60' },
-    { id: `${store}-milk-whole-4pint`, supermarket: store, title: `${brandName} British Fresh Whole Milk 4 Pints (2.27L)`, brand: brandName, tier: 'standard', category: 'dairy-eggs', subCategory: 'milk', packageSize: 2270, packageUnit: 'ml', packageDisplay: '4 Pints (2.27L)', price: 1.45, unitPrice: 0.64, unitPriceMeasure: '£/L', isHealthier: false, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=60' },
-    { id: `${store}-milk-skim-2pint`, supermarket: store, title: `${brandName} British Fresh Skimmed Milk 2 Pints (1.136L)`, brand: brandName, tier: 'standard', category: 'dairy-eggs', subCategory: 'milk', packageSize: 1136, packageUnit: 'ml', packageDisplay: '2 Pints (1.13L)', price: 1.20, unitPrice: 1.06, unitPriceMeasure: '£/L', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-milk-semi-1pint`, supermarket: store, title: `${dairyBrand} British Fresh Semi-Skimmed Milk 1 Pint (568ml)`, brand: dairyBrand, tier: 'standard', category: 'dairy-eggs', subCategory: 'milk', packageSize: 568, packageUnit: 'ml', packageDisplay: '1 Pint (568ml)', price: 0.90, unitPrice: 1.58, unitPriceMeasure: '£/L', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-milk-semi-2pint`, supermarket: store, title: `${dairyBrand} British Fresh Semi-Skimmed Milk 2 Pints (1.136L)`, brand: dairyBrand, tier: 'standard', category: 'dairy-eggs', subCategory: 'milk', packageSize: 1136, packageUnit: 'ml', packageDisplay: '2 Pints (1.13L)', price: 1.20, unitPrice: 1.06, unitPriceMeasure: '£/L', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-milk-semi-4pint`, supermarket: store, title: `${dairyBrand} British Fresh Semi-Skimmed Milk 4 Pints (2.27L)`, brand: dairyBrand, tier: 'standard', category: 'dairy-eggs', subCategory: 'milk', packageSize: 2270, packageUnit: 'ml', packageDisplay: '4 Pints (2.27L)', price: 1.45, unitPrice: 0.64, unitPriceMeasure: '£/L', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-milk-semi-6pint`, supermarket: store, title: `${dairyBrand} British Fresh Semi-Skimmed Milk 6 Pints (3.4L)`, brand: dairyBrand, tier: 'standard', category: 'dairy-eggs', subCategory: 'milk', packageSize: 3400, packageUnit: 'ml', packageDisplay: '6 Pints (3.4L)', price: 2.15, unitPrice: 0.63, unitPriceMeasure: '£/L', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-milk-whole-2pint`, supermarket: store, title: `${dairyBrand} British Fresh Whole Milk 2 Pints (1.136L)`, brand: dairyBrand, tier: 'standard', category: 'dairy-eggs', subCategory: 'milk', packageSize: 1136, packageUnit: 'ml', packageDisplay: '2 Pints (1.13L)', price: 1.20, unitPrice: 1.06, unitPriceMeasure: '£/L', isHealthier: false, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-milk-whole-4pint`, supermarket: store, title: `${dairyBrand} British Fresh Whole Milk 4 Pints (2.27L)`, brand: dairyBrand, tier: 'standard', category: 'dairy-eggs', subCategory: 'milk', packageSize: 2270, packageUnit: 'ml', packageDisplay: '4 Pints (2.27L)', price: 1.45, unitPrice: 0.64, unitPriceMeasure: '£/L', isHealthier: false, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-milk-skim-2pint`, supermarket: store, title: `${dairyBrand} British Fresh Skimmed Milk 2 Pints (1.136L)`, brand: dairyBrand, tier: 'standard', category: 'dairy-eggs', subCategory: 'milk', packageSize: 1136, packageUnit: 'ml', packageDisplay: '2 Pints (1.13L)', price: 1.20, unitPrice: 1.06, unitPriceMeasure: '£/L', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=60' },
     { id: `${store}-milk-cravendale-2l`, supermarket: store, title: 'Cravendale Pure Filtered Semi-Skimmed Milk 2L', brand: 'Cravendale', tier: 'premium', category: 'dairy-eggs', subCategory: 'milk', packageSize: 2000, packageUnit: 'ml', packageDisplay: '2L', price: 2.20, unitPrice: 1.10, unitPriceMeasure: '£/L', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=60' },
-    { id: `${store}-milk-organic-semi-2pint`, supermarket: store, title: `${brandName} Organic British Semi-Skimmed Milk 2 Pints`, brand: `${brandName} Organic`, tier: 'premium', category: 'dairy-eggs', subCategory: 'milk', packageSize: 1136, packageUnit: 'ml', packageDisplay: '2 Pints (1.13L)', price: 1.55, unitPrice: 1.36, unitPriceMeasure: '£/L', isHealthier: true, isOrganic: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=60' },
-    { id: `${store}-milk-uht-semi-1l`, supermarket: store, title: `${brandName} UHT Semi-Skimmed Long Life Milk 1L`, brand: brandName, tier: 'standard', category: 'dairy-eggs', subCategory: 'milk', packageSize: 1000, packageUnit: 'ml', packageDisplay: '1L', price: 0.95, unitPrice: 0.95, unitPriceMeasure: '£/L', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=60' }
+    { id: `${store}-milk-organic-semi-2pint`, supermarket: store, title: `${dairyBrand} Organic British Semi-Skimmed Milk 2 Pints`, brand: `${dairyBrand} Organic`, tier: 'premium', category: 'dairy-eggs', subCategory: 'milk', packageSize: 1136, packageUnit: 'ml', packageDisplay: '2 Pints (1.13L)', price: 1.55, unitPrice: 1.36, unitPriceMeasure: '£/L', isHealthier: true, isOrganic: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-milk-uht-semi-1l`, supermarket: store, title: `${dairyBrand} UHT Semi-Skimmed Long Life Milk 1L`, brand: dairyBrand, tier: 'standard', category: 'dairy-eggs', subCategory: 'milk', packageSize: 1000, packageUnit: 'ml', packageDisplay: '1L', price: 0.95, unitPrice: 0.95, unitPriceMeasure: '£/L', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=200&auto=format&fit=crop&q=60' }
   );
 
-  // Potato Varieties
+  // Potatoes
   EXPANDED_POTATOES.push(
-    { id: `${store}-potatoes-baby-1kg`, supermarket: store, title: `${brandName} Baby New Potatoes 1kg`, brand: brandName, tier: 'standard', category: 'produce', subCategory: 'potatoes', packageSize: 1000, packageUnit: 'g', packageDisplay: '1kg', price: 1.00, unitPrice: 1.00, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200&auto=format&fit=crop&q=60' },
-    { id: `${store}-potatoes-baby-2kg`, supermarket: store, title: `${brandName} Crisp & Sweet Baby Potatoes 2kg`, brand: brandName, tier: 'standard', category: 'produce', subCategory: 'potatoes', packageSize: 2000, packageUnit: 'g', packageDisplay: '2kg', price: 1.95, unitPrice: 0.98, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200&auto=format&fit=crop&q=60' },
-    { id: `${store}-potatoes-maris-piper-2.5kg`, supermarket: store, title: `${brandName} British Maris Piper Potatoes 2.5kg`, brand: brandName, tier: 'standard', category: 'produce', subCategory: 'potatoes', packageSize: 2500, packageUnit: 'g', packageDisplay: '2.5kg', price: 1.75, unitPrice: 0.70, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200&auto=format&fit=crop&q=60' },
-    { id: `${store}-potatoes-king-edward-2kg`, supermarket: store, title: `${brandName} British King Edward Potatoes 2kg`, brand: brandName, tier: 'standard', category: 'produce', subCategory: 'potatoes', packageSize: 2000, packageUnit: 'g', packageDisplay: '2kg', price: 1.80, unitPrice: 0.90, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200&auto=format&fit=crop&q=60' },
-    { id: `${store}-potatoes-charlotte-1kg`, supermarket: store, title: `${brandName} Charlotte Baby Salad Potatoes 1kg`, brand: brandName, tier: 'standard', category: 'produce', subCategory: 'potatoes', packageSize: 1000, packageUnit: 'g', packageDisplay: '1kg', price: 1.25, unitPrice: 1.25, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200&auto=format&fit=crop&q=60' },
-    { id: `${store}-potatoes-baking-4pack`, supermarket: store, title: `${brandName} British Baking Potatoes 4 Pack`, brand: brandName, tier: 'standard', category: 'produce', subCategory: 'potatoes', packageSize: 1000, packageUnit: 'g', packageDisplay: '4 pack', price: 0.95, unitPrice: 0.95, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200&auto=format&fit=crop&q=60' },
-    { id: `${store}-potatoes-white-2.5kg`, supermarket: store, title: `${brandName} British White Potatoes 2.5kg`, brand: brandName, tier: 'standard', category: 'produce', subCategory: 'potatoes', packageSize: 2500, packageUnit: 'g', packageDisplay: '2.5kg', price: 1.45, unitPrice: 0.58, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200&auto=format&fit=crop&q=60' },
-    { id: `${store}-potatoes-red-2kg`, supermarket: store, title: `${brandName} British Red Potatoes 2kg`, brand: brandName, tier: 'standard', category: 'produce', subCategory: 'potatoes', packageSize: 2000, packageUnit: 'g', packageDisplay: '2kg', price: 1.50, unitPrice: 0.75, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200&auto=format&fit=crop&q=60' },
-    { id: `${store}-potatoes-jersey-750g`, supermarket: store, title: `${brandName} Jersey Royal Baby Salad Potatoes 750g`, brand: brandName, tier: 'premium', category: 'produce', subCategory: 'potatoes', packageSize: 750, packageUnit: 'g', packageDisplay: '750g', price: 1.50, unitPrice: 2.00, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200&auto=format&fit=crop&q=60' }
+    { id: `${store}-potatoes-baby-1kg`, supermarket: store, title: `${produceBrand} Baby New Potatoes 1kg`, brand: produceBrand, tier: 'standard', category: 'produce', subCategory: 'potatoes', packageSize: 1000, packageUnit: 'g', packageDisplay: '1kg', price: 1.00, unitPrice: 1.00, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-potatoes-baby-2kg`, supermarket: store, title: `${produceBrand} Crisp & Sweet Baby Potatoes 2kg`, brand: produceBrand, tier: 'standard', category: 'produce', subCategory: 'potatoes', packageSize: 2000, packageUnit: 'g', packageDisplay: '2kg', price: 1.95, unitPrice: 0.98, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-potatoes-maris-piper-2.5kg`, supermarket: store, title: `${produceBrand} British Maris Piper Potatoes 2.5kg`, brand: produceBrand, tier: 'standard', category: 'produce', subCategory: 'potatoes', packageSize: 2500, packageUnit: 'g', packageDisplay: '2.5kg', price: 1.75, unitPrice: 0.70, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-potatoes-king-edward-2kg`, supermarket: store, title: `${produceBrand} British King Edward Potatoes 2kg`, brand: produceBrand, tier: 'standard', category: 'produce', subCategory: 'potatoes', packageSize: 2000, packageUnit: 'g', packageDisplay: '2kg', price: 1.80, unitPrice: 0.90, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-potatoes-charlotte-1kg`, supermarket: store, title: `${produceBrand} Charlotte Baby Salad Potatoes 1kg`, brand: produceBrand, tier: 'standard', category: 'produce', subCategory: 'potatoes', packageSize: 1000, packageUnit: 'g', packageDisplay: '1kg', price: 1.25, unitPrice: 1.25, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-potatoes-baking-4pack`, supermarket: store, title: `${produceBrand} British Baking Potatoes 4 Pack`, brand: produceBrand, tier: 'standard', category: 'produce', subCategory: 'potatoes', packageSize: 1000, packageUnit: 'g', packageDisplay: '4 pack', price: 0.95, unitPrice: 0.95, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-potatoes-white-2.5kg`, supermarket: store, title: `${produceBrand} British White Potatoes 2.5kg`, brand: produceBrand, tier: 'standard', category: 'produce', subCategory: 'potatoes', packageSize: 2500, packageUnit: 'g', packageDisplay: '2.5kg', price: 1.45, unitPrice: 0.58, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-potatoes-red-2kg`, supermarket: store, title: `${produceBrand} British Red Potatoes 2kg`, brand: produceBrand, tier: 'standard', category: 'produce', subCategory: 'potatoes', packageSize: 2000, packageUnit: 'g', packageDisplay: '2kg', price: 1.50, unitPrice: 0.75, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-potatoes-jersey-750g`, supermarket: store, title: `${produceBrand} Jersey Royal Baby Salad Potatoes 750g`, brand: produceBrand, tier: 'premium', category: 'produce', subCategory: 'potatoes', packageSize: 750, packageUnit: 'g', packageDisplay: '750g', price: 1.50, unitPrice: 2.00, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200&auto=format&fit=crop&q=60' }
+  );
+
+  // Beef Mince
+  EXPANDED_MINCE.push(
+    { id: `${store}-beef-mince-5-500g`, supermarket: store, title: `${brandName} British 5% Lean Beef Steak Mince 500g`, brand: brandName, tier: 'standard', category: 'meat', subCategory: 'beef', packageSize: 500, packageUnit: 'g', packageDisplay: '500g', price: 3.49, unitPrice: 6.98, unitPriceMeasure: '£/kg', isHealthier: true, fatPercentage: 5, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1588168333986-5078d3ae3976?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-beef-mince-5-1kg`, supermarket: store, title: `${brandName} British 5% Lean Beef Steak Mince 1kg (Family Pack)`, brand: brandName, tier: 'standard', category: 'meat', subCategory: 'beef', packageSize: 1000, packageUnit: 'g', packageDisplay: '1kg', price: 6.49, unitPrice: 6.49, unitPriceMeasure: '£/kg', isHealthier: true, fatPercentage: 5, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1588168333986-5078d3ae3976?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-beef-mince-12-500g`, supermarket: store, title: `${brandName} British 12% Lean Beef Mince 500g`, brand: brandName, tier: 'standard', category: 'meat', subCategory: 'beef', packageSize: 500, packageUnit: 'g', packageDisplay: '500g', price: 2.89, unitPrice: 5.78, unitPriceMeasure: '£/kg', isHealthier: false, fatPercentage: 12, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1588168333986-5078d3ae3976?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-beef-mince-20-500g`, supermarket: store, title: `${brandName} British 20% Beef Mince 500g`, brand: brandName, tier: 'value', category: 'meat', subCategory: 'beef', packageSize: 500, packageUnit: 'g', packageDisplay: '500g', price: 2.49, unitPrice: 4.98, unitPriceMeasure: '£/kg', isHealthier: false, fatPercentage: 20, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1588168333986-5078d3ae3976?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-beef-mince-frozen-5-500g`, supermarket: store, title: `${brandName} Frozen 5% Lean Beef Mince 500g`, brand: brandName, tier: 'standard', category: 'meat', subCategory: 'beef', packageSize: 500, packageUnit: 'g', packageDisplay: '500g', price: 3.00, unitPrice: 6.00, unitPriceMeasure: '£/kg', isHealthier: true, isFrozen: true, fatPercentage: 5, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1588168333986-5078d3ae3976?w=200&auto=format&fit=crop&q=60' }
+  );
+
+  // Chicken Breasts & Mini Fillets
+  EXPANDED_CHICKEN.push(
+    { id: `${store}-chicken-breast-1kg`, supermarket: store, title: `${brandName} British Fresh Chicken Breast Fillets 1kg`, brand: brandName, tier: 'standard', category: 'meat', subCategory: 'chicken', packageSize: 1000, packageUnit: 'g', packageDisplay: '1kg', price: 6.49, unitPrice: 6.49, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-chicken-breast-650g`, supermarket: store, title: `${brandName} British Fresh Chicken Breast Fillets 650g`, brand: brandName, tier: 'standard', category: 'meat', subCategory: 'chicken', packageSize: 650, packageUnit: 'g', packageDisplay: '650g', price: 4.75, unitPrice: 7.30, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-chicken-breast-300g`, supermarket: store, title: `${brandName} British Fresh Chicken Breast Fillets 300g`, brand: brandName, tier: 'standard', category: 'meat', subCategory: 'chicken', packageSize: 300, packageUnit: 'g', packageDisplay: '300g', price: 2.50, unitPrice: 8.33, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-chicken-mini-fillets-600g`, supermarket: store, title: `${brandName} British Fresh Chicken Mini Fillets 600g`, brand: brandName, tier: 'standard', category: 'meat', subCategory: 'chicken', packageSize: 600, packageUnit: 'g', packageDisplay: '600g', price: 4.50, unitPrice: 7.50, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-chicken-diced-500g`, supermarket: store, title: `${brandName} British Fresh Diced Chicken Breast 500g`, brand: brandName, tier: 'standard', category: 'meat', subCategory: 'chicken', packageSize: 500, packageUnit: 'g', packageDisplay: '500g', price: 4.25, unitPrice: 8.50, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-chicken-frozen-1kg`, supermarket: store, title: `${brandName} British Frozen Chicken Breast Fillets 1kg`, brand: brandName, tier: 'standard', category: 'meat', subCategory: 'chicken', packageSize: 1000, packageUnit: 'g', packageDisplay: '1kg', price: 5.50, unitPrice: 5.50, unitPriceMeasure: '£/kg', isHealthier: true, isFrozen: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=200&auto=format&fit=crop&q=60' }
+  );
+
+  // Cod / Fish
+  EXPANDED_FISH.push(
+    { id: `${store}-cod-loins-frozen-500g`, supermarket: store, title: `${brandName} Frozen Skinless Boneless Cod Loins 4 Pack (500g)`, brand: brandName, tier: 'standard', category: 'fish', subCategory: 'cod', packageSize: 500, packageUnit: 'g', packageDisplay: '500g', price: 4.50, unitPrice: 9.00, unitPriceMeasure: '£/kg', isHealthier: true, isFrozen: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1534948216015-843149f72be3?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-cod-fillets-frozen-400g`, supermarket: store, title: `${brandName} Frozen Atlantic Cod Fillets 4 Pack (400g)`, brand: brandName, tier: 'standard', category: 'fish', subCategory: 'cod', packageSize: 400, packageUnit: 'g', packageDisplay: '400g', price: 3.75, unitPrice: 9.38, unitPriceMeasure: '£/kg', isHealthier: true, isFrozen: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1534948216015-843149f72be3?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-cod-fillets-fresh-280g`, supermarket: store, title: `${brandName} Fresh British Skinless Cod Fillets 280g`, brand: brandName, tier: 'standard', category: 'fish', subCategory: 'cod', packageSize: 280, packageUnit: 'g', packageDisplay: '280g', price: 4.00, unitPrice: 14.28, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1534948216015-843149f72be3?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-cod-loins-fresh-260g`, supermarket: store, title: `${brandName} Fresh British Cod Loins 2 Pack (260g)`, brand: brandName, tier: 'premium', category: 'fish', subCategory: 'cod', packageSize: 260, packageUnit: 'g', packageDisplay: '260g', price: 4.25, unitPrice: 16.35, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1534948216015-843149f72be3?w=200&auto=format&fit=crop&q=60' }
+  );
+
+  // Spinach
+  EXPANDED_SPINACH.push(
+    { id: `${store}-spinach-fresh-250g`, supermarket: store, title: `${produceBrand} Fresh British Baby Spinach 250g`, brand: produceBrand, tier: 'standard', category: 'produce', subCategory: 'spinach', packageSize: 250, packageUnit: 'g', packageDisplay: '250g', price: 1.00, unitPrice: 4.00, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-spinach-fresh-500g`, supermarket: store, title: `${produceBrand} Fresh British Baby Spinach 500g (Family Pack)`, brand: produceBrand, tier: 'standard', category: 'produce', subCategory: 'spinach', packageSize: 500, packageUnit: 'g', packageDisplay: '500g', price: 1.80, unitPrice: 3.60, unitPriceMeasure: '£/kg', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-spinach-organic-200g`, supermarket: store, title: `${produceBrand} Organic British Baby Spinach 200g`, brand: `${produceBrand} Organic`, tier: 'premium', category: 'produce', subCategory: 'spinach', packageSize: 200, packageUnit: 'g', packageDisplay: '200g', price: 1.40, unitPrice: 7.00, unitPriceMeasure: '£/kg', isHealthier: true, isOrganic: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-spinach-frozen-1kg`, supermarket: store, title: `${brandName} Frozen Chopped Spinach 1kg`, brand: brandName, tier: 'standard', category: 'produce', subCategory: 'spinach', packageSize: 1000, packageUnit: 'g', packageDisplay: '1kg', price: 1.50, unitPrice: 1.50, unitPriceMeasure: '£/kg', isHealthier: true, isFrozen: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=200&auto=format&fit=crop&q=60' }
+  );
+
+  // Garlic
+  EXPANDED_GARLIC.push(
+    { id: `${store}-garlic-bulb-3pack`, supermarket: store, title: `${produceBrand} British Garlic Bulbs 3 Pack`, brand: produceBrand, tier: 'standard', category: 'produce', subCategory: 'garlic', packageSize: 3, packageUnit: 'item', packageDisplay: '3 pack', price: 0.85, unitPrice: 0.28, unitPriceMeasure: '£/bulb', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-garlic-bulb-single`, supermarket: store, title: `${produceBrand} Single Large Garlic Bulb`, brand: produceBrand, tier: 'standard', category: 'produce', subCategory: 'garlic', packageSize: 1, packageUnit: 'item', packageDisplay: '1 bulb', price: 0.35, unitPrice: 0.35, unitPriceMeasure: '£/bulb', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-garlic-smoked-single`, supermarket: store, title: `${produceBrand} British Smoked Garlic Bulb`, brand: produceBrand, tier: 'premium', category: 'produce', subCategory: 'garlic', packageSize: 1, packageUnit: 'item', packageDisplay: '1 bulb', price: 1.00, unitPrice: 1.00, unitPriceMeasure: '£/bulb', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-garlic-puree-75g`, supermarket: store, title: `${brandName} Easy Garlic Puree / Paste 75g`, brand: brandName, tier: 'standard', category: 'produce', subCategory: 'garlic', packageSize: 75, packageUnit: 'g', packageDisplay: '75g', price: 1.10, unitPrice: 1.47, unitPriceMeasure: '£/100g', isHealthier: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=200&auto=format&fit=crop&q=60' }
+  );
+
+  // Pasta
+  const pastaBrand = store === 'aldi' ? 'Cucina' : store === 'lidl' ? 'Combino' : brandName;
+  EXPANDED_PASTA.push(
+    { id: `${store}-wholewheat-fusilli-1kg`, supermarket: store, title: `${pastaBrand} 100% Wholewheat Fusilli Pasta 1kg`, brand: pastaBrand, tier: 'standard', category: 'pantry', subCategory: 'pasta', packageSize: 1000, packageUnit: 'g', packageDisplay: '1kg', price: 1.55, unitPrice: 1.55, unitPriceMeasure: '£/kg', isHealthier: true, isWholewheat: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1551462147-ff29053bfc14?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-wholewheat-fusilli-500g`, supermarket: store, title: `${pastaBrand} 100% Wholewheat Fusilli Pasta 500g`, brand: pastaBrand, tier: 'standard', category: 'pantry', subCategory: 'pasta', packageSize: 500, packageUnit: 'g', packageDisplay: '500g', price: 0.85, unitPrice: 1.70, unitPriceMeasure: '£/kg', isHealthier: true, isWholewheat: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1551462147-ff29053bfc14?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-wholewheat-penne-1kg`, supermarket: store, title: `${pastaBrand} 100% Wholewheat Penne Pasta 1kg`, brand: pastaBrand, tier: 'standard', category: 'pantry', subCategory: 'pasta', packageSize: 1000, packageUnit: 'g', packageDisplay: '1kg', price: 1.55, unitPrice: 1.55, unitPriceMeasure: '£/kg', isHealthier: true, isWholewheat: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1551462147-ff29053bfc14?w=200&auto=format&fit=crop&q=60' },
+    { id: `${store}-wholewheat-spaghetti-500g`, supermarket: store, title: `${pastaBrand} 100% Wholewheat Spaghetti 500g`, brand: pastaBrand, tier: 'standard', category: 'pantry', subCategory: 'pasta', packageSize: 500, packageUnit: 'g', packageDisplay: '500g', price: 0.85, unitPrice: 1.70, unitPriceMeasure: '£/kg', isHealthier: true, isWholewheat: true, inStock: true, imageUrl: 'https://images.unsplash.com/photo-1551462147-ff29053bfc14?w=200&auto=format&fit=crop&q=60' }
   );
 }
 
@@ -125,30 +184,33 @@ const ALL_EXPANDED = [
   ...EXPANDED_EGGS,
   ...EXPANDED_GREEK_YOGURT,
   ...EXPANDED_MILK,
-  ...EXPANDED_POTATOES
+  ...EXPANDED_POTATOES,
+  ...EXPANDED_MINCE,
+  ...EXPANDED_CHICKEN,
+  ...EXPANDED_FISH,
+  ...EXPANDED_SPINACH,
+  ...EXPANDED_GARLIC,
+  ...EXPANDED_PASTA
 ];
 
-console.log(`Generated ${ALL_EXPANDED.length} enriched grocery products across Eggs, Greek Yogurt, Milk, and Potatoes for all 7 supermarkets!`);
+console.log(`Generated ${ALL_EXPANDED.length} enriched grocery products across all UK supermarket categories!`);
 
-// Update logic-api catalogData.js and server catalogData.ts
-function injectProducts(filePath, isTypeScript = false) {
+function injectProducts(filePath) {
   let content = fs.readFileSync(filePath, "utf8");
   
+  // Strip out any previous injected variety block
+  const blockStart = content.indexOf("// --- ENRICHED VARIETY CATALOG");
+  if (blockStart !== -1) {
+    const marker = "export const DEFAULT_INGREDIENT_IDEAS";
+    const markerIdx = content.indexOf(marker, blockStart);
+    const closingIdx = content.lastIndexOf("];", markerIdx);
+    content = content.slice(0, blockStart) + content.slice(closingIdx);
+  }
+
   const marker = "export const DEFAULT_INGREDIENT_IDEAS";
   const markerIdx = content.indexOf(marker);
-  if (markerIdx === -1) {
-    console.error("Could not find marker in", filePath);
-    return;
-  }
-
-  // Find the "];" right before the marker
   const closingIdx = content.lastIndexOf("];", markerIdx);
-  if (closingIdx === -1) {
-    console.error("Could not find closing bracket in", filePath);
-    return;
-  }
 
-  // Format new items
   const formattedItems = ALL_EXPANDED.map(p => {
     return `  {
     id: '${p.id}',
@@ -165,17 +227,17 @@ function injectProducts(filePath, isTypeScript = false) {
     unitPrice: ${p.unitPrice.toFixed(2)},
     unitPriceMeasure: '${p.unitPriceMeasure}',
     isHealthier: ${p.isHealthier ? 'true' : 'false'},
-    ${p.isFreeRange ? 'isFreeRange: true,\n    ' : ''}${p.isOrganic ? 'isOrganic: true,\n    ' : ''}${p.fatPercentage !== undefined ? `fatPercentage: ${p.fatPercentage},\n    ` : ''}inStock: true,
+    ${p.isFreeRange ? 'isFreeRange: true,\n    ' : ''}${p.isOrganic ? 'isOrganic: true,\n    ' : ''}${p.isFrozen ? 'isFrozen: true,\n    ' : ''}${p.isWholewheat ? 'isWholewheat: true,\n    ' : ''}${p.fatPercentage !== undefined ? `fatPercentage: ${p.fatPercentage},\n    ` : ''}inStock: true,
     productUrl: '',
     imageUrl: '${p.imageUrl}'
   }`;
   }).join(",\n");
 
-  const newContent = content.slice(0, closingIdx) + ",\n  // --- ENRICHED VARIETY CATALOG (Eggs, Greek Yogurt, Milk, Potatoes) ---\n" + formattedItems + "\n" + content.slice(closingIdx);
+  const newContent = content.slice(0, closingIdx) + ",\n  // --- ENRICHED VARIETY CATALOG (All Staples) ---\n" + formattedItems + "\n" + content.slice(closingIdx);
 
   fs.writeFileSync(filePath, newContent, "utf8");
   console.log(`✓ Injected ${ALL_EXPANDED.length} items into ${filePath}`);
 }
 
-injectProducts("services/logic-api/src/services/catalogData.js", false);
-injectProducts("server/src/services/catalogData.ts", true);
+injectProducts("services/logic-api/src/services/catalogData.js");
+injectProducts("server/src/services/catalogData.ts");
