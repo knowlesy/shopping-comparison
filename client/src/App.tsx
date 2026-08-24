@@ -35,10 +35,81 @@ const DEFAULT_PREFS: UserPreferences = {
 };
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'list' | 'compare' | 'history' | 'favorites' | 'quickcheck'>('list');
-  const [isDark, setIsDark] = useState(false);
-  const [items, setItems] = useState<ParsedItem[]>([]);
-  const [comparison, setComparison] = useState<ComparisonResponse | null>(null);
+  // Persistent active tab
+  const [activeTab, setActiveTabState] = useState<'list' | 'compare' | 'history' | 'favorites' | 'quickcheck'>(() => {
+    try {
+      const savedTab = localStorage.getItem('trolleywise_active_tab');
+      if (savedTab && ['list', 'compare', 'history', 'favorites', 'quickcheck'].includes(savedTab)) {
+        return savedTab as any;
+      }
+    } catch {}
+    return 'list';
+  });
+
+  const setActiveTab = (tab: 'list' | 'compare' | 'history' | 'favorites' | 'quickcheck') => {
+    setActiveTabState(tab);
+    try {
+      localStorage.setItem('trolleywise_active_tab', tab);
+    } catch {}
+  };
+
+  // Persistent theme
+  const [isDark, setIsDarkState] = useState(() => {
+    try {
+      return localStorage.getItem('trolleywise_theme') === 'dark';
+    } catch {}
+    return false;
+  });
+
+  const setIsDark = (dark: boolean) => {
+    setIsDarkState(dark);
+    try {
+      localStorage.setItem('trolleywise_theme', dark ? 'dark' : 'light');
+    } catch {}
+  };
+
+  // Persistent items list
+  const [items, setItemsState] = useState<ParsedItem[]>(() => {
+    try {
+      const saved = localStorage.getItem('trolleywise_items');
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return [];
+  });
+
+  const setItems: React.Dispatch<React.SetStateAction<ParsedItem[]>> = (updater) => {
+    setItemsState(prev => {
+      const next = typeof updater === 'function' ? updater(prev) : updater;
+      try {
+        localStorage.setItem('trolleywise_items', JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+  };
+
+  // Persistent comparison result
+  const [comparison, setComparisonState] = useState<ComparisonResponse | null>(() => {
+    try {
+      const saved = localStorage.getItem('trolleywise_active_comparison');
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return null;
+  });
+
+  const setComparison = (comp: ComparisonResponse | null | ((prev: ComparisonResponse | null) => ComparisonResponse | null)) => {
+    setComparisonState(prev => {
+      const next = typeof comp === 'function' ? comp(prev) : comp;
+      try {
+        if (next) {
+          localStorage.setItem('trolleywise_active_comparison', JSON.stringify(next));
+        } else {
+          localStorage.removeItem('trolleywise_active_comparison');
+        }
+      } catch {}
+      return next;
+    });
+  };
+
   const [preferences, setPreferences] = useState<UserPreferences>(DEFAULT_PREFS);
   const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
   const [ingredientIdeas, setIngredientIdeas] = useState<IngredientIdea[]>([]);
@@ -67,11 +138,10 @@ export default function App() {
     }
   }, [isDark]);
 
-  // Initial data loading
+  // Initial data loading (non-blocking)
   useEffect(() => {
     const initData = async () => {
       try {
-        setLoading(true);
         // 1. Fetch preferences
         const prefs = await api.getSettings().catch(() => DEFAULT_PREFS);
         setPreferences(prefs);
@@ -112,8 +182,6 @@ export default function App() {
         }
       } catch (err) {
         console.error('Initialization error:', err);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -559,6 +627,40 @@ export default function App() {
             onSaveToArchive={handleSaveToArchive}
             onBackToList={() => setActiveTab('list')}
           />
+        )}
+
+        {!loading && activeTab === 'compare' && !comparison && (
+          <div className="max-w-xl mx-auto px-4 py-16 text-center space-y-4">
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shadow-md">
+              <Sparkles className="w-7 h-7 text-amber-500" />
+            </div>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+              {items.length > 0 ? `Ready to compare ${items.length} items` : 'No active comparison yet'}
+            </h3>
+            <p className="text-sm text-slate-500 max-w-sm mx-auto">
+              {items.length > 0
+                ? 'Your shopping list is ready. Click below to run a live price comparison across UK supermarkets.'
+                : 'Create or paste a shopping list first to find the lowest supermarket prices.'}
+            </p>
+            <div className="pt-2">
+              {items.length > 0 ? (
+                <button
+                  onClick={() => handleCompare(items)}
+                  className="inline-flex items-center space-x-2 px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md transition"
+                >
+                  <Sparkles className="w-4 h-4 text-amber-300" />
+                  <span>Compare {items.length} Items Now</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => setActiveTab('list')}
+                  className="inline-flex items-center space-x-2 px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md transition"
+                >
+                  <span>Go to Shopping List</span>
+                </button>
+              )}
+            </div>
+          </div>
         )}
 
         {activeTab === 'quickcheck' && (
