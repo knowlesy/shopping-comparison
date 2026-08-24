@@ -456,7 +456,16 @@ export default function App() {
                 Comparing Basket Across UK Supermarkets
               </h2>
               <p className="text-sm text-slate-500 max-w-md mx-auto">
-                Scanning Asda, Sainsbury's, Tesco, Morrisons & Iceland for real prices, pack sizing, and deals.
+                Scanning {(() => {
+                  const nameMap: Record<string, string> = {
+                    asda: 'Asda', sainsburys: "Sainsbury's", tesco: 'Tesco', morrisons: 'Morrisons',
+                    iceland: 'Iceland', aldi: 'Aldi', lidl: 'Lidl', waitrose: 'Waitrose',
+                    ocado: 'Ocado', coop: 'Co-op',
+                  };
+                  const names = (preferences.enabledSupermarkets || ['asda', 'sainsburys', 'tesco', 'morrisons', 'iceland', 'aldi', 'lidl']).map(s => nameMap[s] || s);
+                  if (names.length <= 1) return names[0] || 'supermarkets';
+                  return names.slice(0, -1).join(', ') + ' & ' + names[names.length - 1];
+                })()} for real prices, pack sizing, and deals.
               </p>
             </div>
 
@@ -499,16 +508,23 @@ export default function App() {
                 </div>
 
                 {/* Active Supermarket Badges */}
-                <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
-                  {(preferences.enabledSupermarkets || ['asda', 'sainsburys', 'tesco', 'morrisons', 'iceland']).map(store => (
-                    <span
-                      key={store}
-                      className="text-[11px] font-semibold px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center space-x-1 uppercase tracking-wider"
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse inline-block" />
-                      <span>{store}</span>
-                    </span>
-                  ))}
+                <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+                  {(preferences.enabledSupermarkets || ['asda', 'sainsburys', 'tesco', 'morrisons', 'iceland', 'aldi', 'lidl']).map(store => {
+                    const nameMap: Record<string, string> = {
+                      asda: 'Asda', sainsburys: "Sainsbury's", tesco: 'Tesco', morrisons: 'Morrisons',
+                      iceland: 'Iceland', aldi: 'Aldi', lidl: 'Lidl', waitrose: 'Waitrose',
+                      ocado: 'Ocado', coop: 'Co-op',
+                    };
+                    return (
+                      <span
+                        key={store}
+                        className="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 flex items-center space-x-1.5 border border-slate-200/60 dark:border-slate-700/60 shadow-xs"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse inline-block shrink-0" />
+                        <span>{nameMap[store] || store.toUpperCase()}</span>
+                      </span>
+                    );
+                  })}
                 </div>
               </div>
             )}

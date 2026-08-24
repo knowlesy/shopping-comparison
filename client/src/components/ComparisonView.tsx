@@ -386,11 +386,11 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({
             {items
               .filter(item => !selectedItemFilter || item.id === selectedItemFilter)
               .map((item, idx) => {
-                // Find lowest price for this specific item across all 5 supermarkets
+                // Find lowest price for this specific item across all supermarkets
                 let minItemPrice = Infinity;
                 storeKeys.forEach(k => {
                   const m = supermarkets[k]?.items.find(i => i.parsedItem.id === item.id);
-                  if (m && m.product && m.totalPrice < minItemPrice) {
+                  if (m && m.product && m.totalPrice > 0 && m.totalPrice < minItemPrice) {
                     minItemPrice = m.totalPrice;
                   }
                 });
@@ -427,7 +427,7 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({
                       </div>
 
                       {/* Lowest store badge for this row */}
-                      {minItemPrice < Infinity && (
+                      {minItemPrice < Infinity && minItemPrice > 0 && (
                         <span className="text-xs px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold self-start sm:self-center">
                           Lowest: £{minItemPrice.toFixed(2)}
                         </span>
@@ -442,7 +442,7 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({
                             i => i.parsedItem.id === item.id
                           );
                           const product = match?.product;
-                          const isBestPrice = match && product && match.totalPrice === minItemPrice;
+                          const isBestPrice = match && product && match.totalPrice > 0 && match.totalPrice === minItemPrice;
 
                           return (
                             <div
