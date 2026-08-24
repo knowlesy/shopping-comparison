@@ -148,7 +148,16 @@ export const ListCreator: React.FC<ListCreatorProps> = ({
             Build your shopping list & find the lowest UK supermarket prices.
           </h1>
           <p className="text-emerald-100 text-sm sm:text-base leading-relaxed">
-            Paste your complete list or pick from your favorite ingredients. We intelligently analyze pack sizes (e.g. 900g beef mince $\rightarrow$ 750g or 2x500g), healthier preferences (5% lean, 0% yogurt), and find live prices across <strong className="text-white">Asda, Sainsbury's, Tesco, Morrisons, and Iceland</strong>.
+            Paste your complete list or pick from your favorite ingredients. We intelligently analyze pack sizes (e.g. 900g beef mince → 750g or 2×500g), healthier preferences (5% lean, 0% yogurt), and find live prices across <strong className="text-white">{(() => {
+              const nameMap: Record<string, string> = {
+                asda: 'Asda', sainsburys: "Sainsbury's", tesco: 'Tesco', morrisons: 'Morrisons',
+                iceland: 'Iceland', aldi: 'Aldi', lidl: 'Lidl', waitrose: 'Waitrose',
+                ocado: 'Ocado', coop: 'Co-op',
+              };
+              const names = (enabledSupermarkets || ['asda', 'sainsburys', 'tesco', 'morrisons', 'iceland', 'aldi', 'lidl']).map(s => nameMap[s] || s);
+              if (names.length <= 1) return names[0] || 'UK Supermarkets';
+              return names.slice(0, -1).join(', ') + ' & ' + names[names.length - 1];
+            })()}</strong>.
           </p>
         </div>
         <div className="absolute right-0 bottom-0 opacity-10 pointer-events-none transform translate-x-12 translate-y-12">
@@ -160,15 +169,15 @@ export const ListCreator: React.FC<ListCreatorProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column: List Builder / Pasting */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
             {/* View Mode Switcher */}
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
-              <div className="flex items-center space-x-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+              <div className="grid grid-cols-2 sm:flex items-center gap-2 w-full sm:w-auto">
                 <button
                   onClick={() => setInputMode('paste')}
-                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition ${
+                  className={`px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition text-center ${
                     inputMode === 'paste'
-                      ? 'bg-slate-900 text-white dark:bg-emerald-600'
+                      ? 'bg-slate-900 text-white dark:bg-emerald-600 shadow-xs'
                       : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                   }`}
                 >
@@ -176,15 +185,15 @@ export const ListCreator: React.FC<ListCreatorProps> = ({
                 </button>
                 <button
                   onClick={() => setInputMode('checklist')}
-                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center space-x-1.5 ${
+                  className={`px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center justify-center space-x-1.5 ${
                     inputMode === 'checklist'
-                      ? 'bg-slate-900 text-white dark:bg-emerald-600'
+                      ? 'bg-slate-900 text-white dark:bg-emerald-600 shadow-xs'
                       : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                   }`}
                 >
                   <span>✓ Checklist</span>
                   {items.length > 0 && (
-                    <span className="px-2 py-0.5 rounded-full text-xs bg-emerald-500 text-white">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] sm:text-xs bg-emerald-500 text-white font-bold">
                       {items.length}
                     </span>
                   )}
@@ -194,7 +203,7 @@ export const ListCreator: React.FC<ListCreatorProps> = ({
               {/* Sample loader button */}
               <button
                 onClick={handleLoadSample}
-                className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center space-x-1"
+                className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center justify-end sm:justify-start space-x-1 py-1"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 <span>Load 28-Item Sample List</span>
