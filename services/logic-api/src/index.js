@@ -13,8 +13,8 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors());
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use(express.json({ limit: '5mb' }));
+app.use(express.urlencoded({ extended: true, limit: '5mb' }));
 
 // In-memory data stores for settings, history, favorites, ideas
 let userSettings = {
@@ -265,10 +265,9 @@ app.post('/api/compare', async (req, res) => {
     res.json(comparison);
 
   } catch (err) {
-    console.error('[Logic-API] Compare endpoint error:', err.message);
+    console.error('[Logic-API] Compare endpoint error:', err);
     res.status(500).json({
-      error: `Live comparison failed: ${err.message}`,
-      details: err.stack
+      error: `Live comparison failed: ${err.message}`
     });
   }
 });
@@ -360,10 +359,10 @@ app.post('/api/compare/stream', async (req, res) => {
 
   } catch (err) {
     clearInterval(heartbeat);
-    console.error('[Logic-API] Stream compare error:', err.message);
+    console.error('[Logic-API] Stream compare error:', err);
     res.write(`data: ${JSON.stringify({
       type: 'error',
-      error: err.message
+      error: err.message || 'Stream processing failed'
     })}\n\n`);
     res.end();
   }
@@ -413,7 +412,27 @@ app.get('/api/settings', (req, res) => {
 });
 
 app.put('/api/settings', (req, res) => {
-  userSettings = { ...userSettings, ...req.body };
+  const allowedKeys = [
+    'healthierDefault',
+    'fatPercentagePreference',
+    'preferWholewheat',
+    'preferFreeRange',
+    'preferOrganic',
+    'cutMatchingStrategy',
+    'brandTierPriority',
+    'packSizingPolicy',
+    'enabledSupermarkets',
+    'devMode'
+  ];
+
+  const sanitized = {};
+  for (const key of allowedKeys) {
+    if (req.body && req.body[key] !== undefined) {
+      sanitized[key] = req.body[key];
+    }
+  }
+
+  userSettings = { ...userSettings, ...sanitized };
   res.json(userSettings);
 });
 

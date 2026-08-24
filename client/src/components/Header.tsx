@@ -1,9 +1,9 @@
 import React from 'react';
-import { ShoppingCart, Sparkles, History, BookmarkCheck, Settings, Moon, Sun } from 'lucide-react';
+import { ShoppingCart, Sparkles, History, BookmarkCheck, Settings, Moon, Sun, Search } from 'lucide-react';
 
 interface HeaderProps {
-  activeTab: 'list' | 'compare' | 'history' | 'favorites';
-  setActiveTab: (tab: 'list' | 'compare' | 'history' | 'favorites') => void;
+  activeTab: 'list' | 'compare' | 'history' | 'favorites' | 'quickcheck';
+  setActiveTab: (tab: 'list' | 'compare' | 'history' | 'favorites' | 'quickcheck') => void;
   onOpenSettings: () => void;
   isDark: boolean;
   setIsDark: (dark: boolean) => void;
@@ -78,6 +78,18 @@ export const Header: React.FC<HeaderProps> = ({
                   {cheapestStore}
                 </span>
               )}
+            </button>
+
+            <button
+              onClick={() => setActiveTab('quickcheck')}
+              className={`flex items-center space-x-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                activeTab === 'quickcheck'
+                  ? 'bg-violet-50 text-violet-700 dark:bg-violet-950/60 dark:text-violet-300 font-semibold shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+              }`}
+            >
+              <Search className="w-4 h-4 text-violet-500" />
+              <span>Quick Check</span>
             </button>
 
             <button

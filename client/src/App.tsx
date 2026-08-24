@@ -8,6 +8,7 @@ import { ArchiveHistory } from './components/ArchiveHistory';
 import { FavoritesManager } from './components/FavoritesManager';
 import { SettingsModal } from './components/SettingsModal';
 import { ItemSwapModal } from './components/ItemSwapModal';
+import { QuickPriceCheck } from './components/QuickPriceCheck';
 import {
   ParsedItem,
   ComparisonResponse,
@@ -34,7 +35,7 @@ const DEFAULT_PREFS: UserPreferences = {
 };
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'list' | 'compare' | 'history' | 'favorites'>('list');
+  const [activeTab, setActiveTab] = useState<'list' | 'compare' | 'history' | 'favorites' | 'quickcheck'>('list');
   const [isDark, setIsDark] = useState(false);
   const [items, setItems] = useState<ParsedItem[]>([]);
   const [comparison, setComparison] = useState<ComparisonResponse | null>(null);
@@ -200,8 +201,8 @@ export default function App() {
       setComparison(comp);
       setActiveTab('compare');
 
-      // Stash pending comparison for auto-archive safety net (unless dev mode)
-      if (!preferences.devMode) {
+      // Stash pending comparison for auto-archive safety net only for genuine weekly shops (>= 3 items, not dev mode)
+      if (!preferences.devMode && listToCompare.length >= 3) {
         try {
           const shopData = buildShopSnapshot(comp, listToCompare);
           localStorage.setItem('trolleywise_pending_comparison', JSON.stringify({
@@ -531,6 +532,10 @@ export default function App() {
             onSaveToArchive={handleSaveToArchive}
             onBackToList={() => setActiveTab('list')}
           />
+        )}
+
+        {activeTab === 'quickcheck' && (
+          <QuickPriceCheck enabledSupermarkets={preferences.enabledSupermarkets} />
         )}
 
         {activeTab === 'history' && (

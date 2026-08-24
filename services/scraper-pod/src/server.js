@@ -9,8 +9,8 @@ const app = express();
 const PORT = process.env.PORT || 3002;
 
 app.use(cors());
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use(express.json({ limit: '5mb' }));
+app.use(express.urlencoded({ extended: true, limit: '5mb' }));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -22,13 +22,99 @@ app.get('/health', (req, res) => {
   });
 });
 
+// SSRF / Host validation
+const ALLOWED_HOSTS = [
+  'trolley.co.uk',
+  'www.trolley.co.uk',
+  'groceries.asda.com',
+  'asda.com',
+  'sainsburys.co.uk',
+  'tesco.com',
+  'morrisons.com',
+  'groceries.morrisons.com',
+  'iceland.co.uk',
+  'groceries.aldi.co.uk',
+  'aldi.co.uk',
+  'lidl.co.uk',
+  'waitrose.com',
+  'ocado.com',
+  'coop.co.uk'
+];
+
+function isAllowedUrl(urlString) {
+  try {
+    const parsed = new URL(urlString);
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false;
+    const hostname = parsed.hostname.toLowerCase();
+    
+    // Prevent SSRF against private networks / metadata
+    if (
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname === '0.0.0.0' ||
+      hostname === '::1' ||
+      hostname.startsWith('10.') ||
+      hostname.startsWith('192.168.') ||
+      hostname.startsWith('172.16.') ||
+      hostname.startsWith('169.254.')
+    ) {
+      return false;
+    }
+
+    return ALLOWED_HOSTS.some(allowed => hostname === allowed || hostname.endsWith(`.${allowed}`));
+  } catch {
+    return false;
+  }
+}
+
+// Managed browser instance pool
+let sharedBrowser = null;
+let browserLaunchPromise = null;
+
+async function getBrowser() {
+  if (sharedBrowser && sharedBrowser.isConnected()) {
+    return sharedBrowser;
+  }
+
+  if (browserLaunchPromise) {
+    return browserLaunchPromise;
+  }
+
+  browserLaunchPromise = (async () => {
+    try {
+      console.log('[Scraper-Pod] Initializing shared Chromium instance...');
+      const { browser } = await connect({
+        headless: true,
+        turnstile: true,
+        disableXvfb: false,
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-gpu'
+        ]
+      });
+      sharedBrowser = browser;
+      sharedBrowser.on('disconnected', () => {
+        console.log('[Scraper-Pod] Browser disconnected. Will re-initialize on next request.');
+        sharedBrowser = null;
+      });
+      return sharedBrowser;
+    } finally {
+      browserLaunchPromise = null;
+    }
+  })();
+
+  return browserLaunchPromise;
+}
+
 // Main scraping endpoint
 app.post('/scrape', async (req, res) => {
   const {
     url,
     waitForSelector,
     timeout = 35000,
-    delay = 2500,
+    delay = 2000,
     turnstile = true
   } = req.body;
 
@@ -39,26 +125,20 @@ app.post('/scrape', async (req, res) => {
     });
   }
 
+  if (!isAllowedUrl(url)) {
+    return res.status(403).json({
+      success: false,
+      error: 'Access denied: Target URL host is not on the allowed supermarket scraping domain list.'
+    });
+  }
+
   console.log(`[Scraper-Pod] Received scrape request for: ${url}`);
   const startTime = Date.now();
-
-  let browserInstance = null;
+  let page = null;
 
   try {
-    // Launch real browser in headless mode
-    const { browser, page } = await connect({
-      headless: true,
-      turnstile: turnstile,
-      disableXvfb: false,
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-gpu'
-      ]
-    });
-
-    browserInstance = browser;
+    const browser = await getBrowser();
+    page = await browser.newPage();
 
     // Set standard desktop viewport
     await page.setViewport({ width: 1920, height: 1080 });
@@ -74,20 +154,17 @@ app.post('/scrape', async (req, res) => {
       timeout: Number(timeout)
     });
 
-    // If Turnstile or Cloudflare challenge is present, allow time for solver
+    // If Turnstile or Cloudflare challenge is present, allow settling time
     if (turnstile) {
-      console.log(`[Scraper-Pod] Checking for Cloudflare / Turnstile challenges...`);
-      // Wait for challenge resolution or dynamic page stabilization
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise(resolve => setTimeout(resolve, 1500));
     }
 
     // If a specific selector was requested, wait for it
     if (waitForSelector && typeof waitForSelector === 'string') {
       try {
-        console.log(`[Scraper-Pod] Waiting for selector: ${waitForSelector}`);
-        await page.waitForSelector(waitForSelector, { timeout: Math.min(10000, timeout) });
-      } catch (selErr) {
-        console.warn(`[Scraper-Pod] Warning: Selector "${waitForSelector}" not found before timeout. Proceeding with current DOM.`);
+        await page.waitForSelector(waitForSelector, { timeout: Math.min(8000, timeout) });
+      } catch {
+        console.warn(`[Scraper-Pod] Selector "${waitForSelector}" not found before timeout. Proceeding.`);
       }
     }
 
@@ -96,11 +173,10 @@ app.post('/scrape', async (req, res) => {
       await new Promise(resolve => setTimeout(resolve, Number(delay)));
     }
 
-    // Extract page metadata and contents
+    // Extract page metadata and contents (omit duplicate body payload to reduce bandwidth)
     const title = await page.title();
     const finalUrl = page.url();
     const html = await page.content();
-    const body = await page.evaluate(() => document.body ? document.body.innerHTML : '');
 
     const elapsed = Date.now() - startTime;
     console.log(`[Scraper-Pod] Scrape complete in ${elapsed}ms. Title: "${title}". HTML Length: ${html.length} bytes.`);
@@ -110,7 +186,6 @@ app.post('/scrape', async (req, res) => {
       url,
       finalUrl,
       title,
-      body,
       html,
       length: html.length,
       elapsedMs: elapsed
@@ -127,11 +202,11 @@ app.post('/scrape', async (req, res) => {
       elapsedMs: elapsed
     });
   } finally {
-    if (browserInstance) {
+    if (page) {
       try {
-        await browserInstance.close();
-      } catch (closeErr) {
-        console.warn('[Scraper-Pod] Error closing browser instance:', closeErr.message);
+        await page.close();
+      } catch (pageCloseErr) {
+        console.warn('[Scraper-Pod] Error closing page:', pageCloseErr.message);
       }
     }
   }
@@ -142,3 +217,4 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`   Health Check: GET http://localhost:${PORT}/health`);
   console.log(`   Scrape API:   POST http://localhost:${PORT}/scrape`);
 });
+
