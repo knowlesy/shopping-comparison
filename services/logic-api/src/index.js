@@ -182,47 +182,51 @@ function getCoreSearchQuery(item) {
  */
 async function getOrFetchCandidates(coreQuery, enabledStores, forceRefresh = false) {
   const cacheKey = `cache:scrape:${coreQuery}`;
+  let candidateProducts = [];
+  let isCacheHit = false;
 
   if (!forceRefresh && PriceCache.has(cacheKey)) {
-    const cached = PriceCache.get(cacheKey);
-    console.log(`[PriceCache] Cache HIT for query "${coreQuery}" (${cached.length} products).`);
-    return cached;
+    candidateProducts = [...PriceCache.get(cacheKey)];
+    isCacheHit = true;
+    console.log(`[PriceCache] Cache HIT for query "${coreQuery}" (${candidateProducts.length} products).`);
+  } else {
+    console.log(`[PriceCache] Cache MISS / Force for query "${coreQuery}". Requesting live scrape...`);
+    const targetUrl = `https://www.trolley.co.uk/search/?q=${encodeURIComponent(coreQuery)}`;
+
+    // Step 1: Call Service A (Scraper Pod) for raw HTML
+    const { html } = await ScraperClient.fetchHtml(targetUrl, {
+      waitForSelector: '.product-item, body',
+      timeout: 35000,
+      delay: 2000
+    });
+
+    // Step 2: Parse raw DOM with Cheerio / Gemini
+    candidateProducts = await GeminiDomParser.parseHtml(html, coreQuery);
   }
 
-  console.log(`[PriceCache] Cache MISS / Force for query "${coreQuery}". Requesting live scrape...`);
-  const targetUrl = `https://www.trolley.co.uk/search/?q=${encodeURIComponent(coreQuery)}`;
-
-  // Step 1: Call Service A (Scraper Pod) for raw HTML
-  const { html } = await ScraperClient.fetchHtml(targetUrl, {
-    waitForSelector: '.product-item, body',
-    timeout: 35000,
-    delay: 2000
-  });
-
-  // Step 2: Parse raw DOM with Cheerio / Gemini
-  const candidateProducts = await GeminiDomParser.parseHtml(html, coreQuery);
-
-  // Check which enabled stores are missing from the primary search results
+  // Check which enabled stores are missing (e.g. newly enabled supermarket)
   const foundStores = new Set(candidateProducts.map(p => p.supermarket));
   const missingStores = enabledStores.filter(s => !foundStores.has(s));
 
-  // If any stores are missing, do targeted fallback scrape for only those missing stores
-  for (const store of missingStores) {
-    try {
-      const storeUrl = `https://www.trolley.co.uk/search/?q=${encodeURIComponent(`${store} ${coreQuery}`)}`;
-      const { html: storeHtml } = await ScraperClient.fetchHtml(storeUrl, {
-        waitForSelector: '.product-item, body',
-        timeout: 20000,
-        delay: 1000
-      });
-      const storeProds = await GeminiDomParser.parseHtml(storeHtml, `${store} ${coreQuery}`);
-      candidateProducts.push(...storeProds.filter(p => p.supermarket === store));
-    } catch (e) {
-      console.warn(`[Logic-API] Targeted scrape fallback for ${store} failed:`, e.message);
+  // If any enabled stores are missing, do targeted fallback scrape for those stores
+  if (missingStores.length > 0) {
+    for (const store of missingStores) {
+      try {
+        const storeUrl = `https://www.trolley.co.uk/search/?q=${encodeURIComponent(`${store} ${coreQuery}`)}`;
+        const { html: storeHtml } = await ScraperClient.fetchHtml(storeUrl, {
+          waitForSelector: '.product-item, body',
+          timeout: 20000,
+          delay: 1000
+        });
+        const storeProds = await GeminiDomParser.parseHtml(storeHtml, `${store} ${coreQuery}`);
+        candidateProducts.push(...storeProds.filter(p => p.supermarket === store));
+      } catch (e) {
+        console.warn(`[Logic-API] Targeted scrape fallback for ${store} failed:`, e.message);
+      }
     }
   }
 
-  // Save to 72h persistent cache
+  // Save / refresh persistent cache
   PriceCache.set(cacheKey, candidateProducts);
   return candidateProducts;
 }

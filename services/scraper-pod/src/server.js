@@ -47,7 +47,7 @@ function isAllowedUrl(urlString) {
     if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false;
     const hostname = parsed.hostname.toLowerCase();
     
-    // Prevent SSRF against private networks / metadata
+    // Prevent SSRF against private networks / localhost / link-local / metadata
     if (
       hostname === 'localhost' ||
       hostname === '127.0.0.1' ||
@@ -55,8 +55,8 @@ function isAllowedUrl(urlString) {
       hostname === '::1' ||
       hostname.startsWith('10.') ||
       hostname.startsWith('192.168.') ||
-      hostname.startsWith('172.16.') ||
-      hostname.startsWith('169.254.')
+      hostname.startsWith('169.254.') ||
+      /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname)
     ) {
       return false;
     }

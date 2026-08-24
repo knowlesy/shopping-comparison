@@ -162,11 +162,12 @@ export class GeminiDomParser {
 
     console.log(`[Logic-API -> GeminiDomParser] Extracted ${rawCards.length} raw product cards from DOM.`);
 
-    // If Google GenAI API key is present, valid, and not rate-limited, enhance extraction with Gemini
+    // If Google GenAI API key is present, valid, and not in quota cooldown, enhance extraction with Gemini
     const rawKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENAI_API_KEY || process.env.GOOGLE_API_KEY;
     const apiKey = (rawKey && typeof rawKey === 'string' && rawKey.trim().length > 10) ? rawKey.trim() : null;
+    const now = Date.now();
 
-    if (apiKey && rawCards.length > 0 && !GeminiDomParser.isQuotaExhausted) {
+    if (apiKey && rawCards.length > 0 && now > (GeminiDomParser.quotaCooldownUntil || 0)) {
       try {
         const enhanced = await this.enhanceWithGemini(rawCards.slice(0, 20), searchQuery, apiKey);
         if (enhanced && enhanced.length > 0) {
@@ -174,8 +175,8 @@ export class GeminiDomParser {
         }
       } catch (geminiErr) {
         if (geminiErr.message && (geminiErr.message.includes('429') || geminiErr.message.includes('RESOURCE_EXHAUSTED'))) {
-          GeminiDomParser.isQuotaExhausted = true;
-          console.warn('[Logic-API -> GeminiDomParser] GenAI free tier daily quota exhausted. Seamlessly switching to ultra-fast native DOM parsing.');
+          GeminiDomParser.quotaCooldownUntil = Date.now() + 10 * 60 * 1000;
+          console.warn('[Logic-API -> GeminiDomParser] GenAI free tier rate limit reached. Cooldown for 10m; using native fast DOM parsing.');
         } else {
           console.warn(`[Logic-API -> GeminiDomParser] GenAI parsing fallback: ${geminiErr.message}`);
         }

@@ -1,5 +1,14 @@
 import { CATALOG_PRODUCTS } from './catalogData.js';
 
+// Pre-index catalog products by supermarket once at startup to avoid repeated O(N) filtering in loops
+const CATALOG_BY_STORE = {};
+for (const p of CATALOG_PRODUCTS || []) {
+  if (!CATALOG_BY_STORE[p.supermarket]) {
+    CATALOG_BY_STORE[p.supermarket] = [];
+  }
+  CATALOG_BY_STORE[p.supermarket].push(p);
+}
+
 /**
  * Fuzzy Weight Matching and Pack Sizing Engine
  */
@@ -15,7 +24,7 @@ export class FuzzyMatcher {
    */
   static matchProduct(supermarket, item, candidateProducts = [], preferences = {}) {
     const scrapedForStore = (candidateProducts || []).filter(p => p.supermarket === supermarket);
-    const catalogForStore = (CATALOG_PRODUCTS || []).filter(p => p.supermarket === supermarket);
+    const catalogForStore = CATALOG_BY_STORE[supermarket] || [];
     
     // Merge scraped live products with verified baseline catalog products
     const storeProducts = [...scrapedForStore, ...catalogForStore];
