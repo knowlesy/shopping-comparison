@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  scraper-pod:
+    build:
+      context: ./services/scraper-pod
+      dockerfile: Dockerfile
+    container_name: uk-grocery-scraper-pod
+    ports:
+      - "3002:3002"
+    environment:
+      - PORT=3002
+      - NODE_ENV=production
+    shm_size: '2gb'
+    ipc: host
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3002/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  logic-api:
+    build:
+      context: ./services/logic-api
+      dockerfile: Dockerfile
+    container_name: uk-grocery-logic-api
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - NODE_ENV=production
+      - SCRAPER_SERVICE_URL=http://scraper-pod:3002/scrape
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+    depends_on:
+      - scraper-pod
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3001/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
