@@ -401,18 +401,50 @@ app.get('/api/products/alternatives', async (req, res) => {
   }
 
   try {
-    const targetUrl = `https://www.trolley.co.uk/search/?q=${encodeURIComponent(query)}`;
-    const { html } = await ScraperClient.fetchHtml(targetUrl, {
-      waitForSelector: '.product-item, body',
-      timeout: 30000,
-      delay: 2000
+    const coreQuery = getCoreSearchQuery({ name: query });
+    const targetUrl = `https://www.trolley.co.uk/search/?q=${encodeURIComponent(`${store} ${coreQuery}`)}`;
+    
+    let scrapedForStore = [];
+    try {
+      const { html } = await ScraperClient.fetchHtml(targetUrl, {
+        waitForSelector: '.product-item, body',
+        timeout: 25000,
+        delay: 1500
+      });
+      const products = await GeminiDomParser.parseHtml(html, coreQuery);
+      scrapedForStore = products.filter(p => p.supermarket === store);
+    } catch (scrapeErr) {
+      console.warn(`[Logic-API] Live scrape for alternatives (${store} ${coreQuery}) fallback:`, scrapeErr.message);
+    }
+
+    // Baseline catalog products for this store
+    const queryLower = (query || '').toLowerCase();
+    const coreLower = (coreQuery || '').toLowerCase();
+    const catalogForStore = (CATALOG_PRODUCTS || []).filter(p => {
+      if (p.supermarket !== store) return false;
+      const titleLower = p.title.toLowerCase();
+      const catLower = (p.category || '').toLowerCase();
+      const subLower = (p.subCategory || '').toLowerCase();
+      return titleLower.includes(coreLower) || 
+             coreLower.split(' ').some(w => w.length > 2 && titleLower.includes(w)) ||
+             (catLower && queryLower.includes(catLower)) ||
+             (subLower && queryLower.includes(subLower));
     });
 
-    const products = await GeminiDomParser.parseHtml(html, query);
-    const storeAlternatives = products.filter(p => p.supermarket === store);
+    // Merge and deduplicate by title
+    const seenTitles = new Set();
+    const combined = [];
 
-    PriceCache.set(cacheKey, storeAlternatives);
-    res.json({ alternatives: storeAlternatives });
+    for (const p of [...scrapedForStore, ...catalogForStore]) {
+      const normTitle = p.title.toLowerCase().trim();
+      if (!seenTitles.has(normTitle)) {
+        seenTitles.add(normTitle);
+        combined.push(p);
+      }
+    }
+
+    PriceCache.set(cacheKey, combined);
+    res.json({ alternatives: combined });
   } catch (err) {
     console.error('[Logic-API] Alternatives error:', err.message);
     res.status(500).json({ error: err.message, alternatives: [] });

@@ -28,7 +28,7 @@ interface ListCreatorProps {
 
 export const EXAMPLE_LIST_TEXT = `900g 5% lean beef mince
 1.6kg frozen cod loins
-15 free range eggs
+12 free range eggs
 1kg authentic Greek yogurt 0%
 800g tinned brown lentils
 1.13L semi-skimmed milk

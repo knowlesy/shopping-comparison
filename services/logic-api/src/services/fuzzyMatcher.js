@@ -65,20 +65,40 @@ export class FuzzyMatcher {
 
     const best = scored[0];
 
+    // Identify primary noun terms from search item
+    const itemText = `${item.baseItem || ''} ${item.name || ''}`.toLowerCase();
+    const CORE_NOUNS = [
+      'milk', 'egg', 'eggs', 'yogurt', 'yoghurt', 'lentil', 'lentils', 'cod', 'salmon',
+      'haddock', 'tuna', 'prawn', 'prawns', 'fish', 'mince', 'beef', 'chicken', 'pork', 'lamb',
+      'steak', 'bacon', 'sausage', 'fusilli', 'pasta', 'penne', 'spaghetti', 'rice',
+      'oats', 'porridge', 'bread', 'loaf', 'potato', 'potatoes', 'carrot', 'carrots',
+      'onion', 'onions', 'garlic', 'spinach', 'celery', 'banana', 'bananas', 'pear',
+      'pears', 'clementine', 'clementines', 'apple', 'apples', 'orange', 'oranges',
+      'mushroom', 'mushrooms', 'pepper', 'peppers', 'courgette', 'courgettes',
+      'tomato', 'tomatoes', 'polpa', 'puree', 'oil', 'olive oil', 'walnut', 'almond',
+      'chia', 'seed', 'seeds', 'cheese', 'cheddar', 'butter'
+    ];
+    const targetNouns = CORE_NOUNS.filter(n => itemText.includes(n));
+
     // Filter alternatives:
     // 1. Must not be the selected best product
-    // 2. Must have a high relevance score (score >= 35) to prevent random bread/fruit showing up
-    // 3. Must match the item's category
+    // 2. Must have a high relevance score (score >= 40)
+    // 3. Must match the item's category (if specific)
+    // 4. Must match at least one of the item's primary nouns
     const alternatives = scored
       .filter(s => s.product.id !== best.product.id)
-      .filter(s => s.score >= 35)
+      .filter(s => s.score >= 40)
       .filter(s => {
-        if (item.category && s.product.category) {
-          return s.product.category === item.category;
+        if (item.category && s.product.category && item.category !== 'general' && s.product.category !== 'general') {
+          if (item.category !== s.product.category) return false;
+        }
+        if (targetNouns.length > 0) {
+          const prodTitle = s.product.title.toLowerCase();
+          return targetNouns.some(n => prodTitle.includes(n));
         }
         return true;
       })
-      .slice(0, 10)
+      .slice(0, 12)
       .map(s => s.product);
 
     return {

@@ -367,7 +367,36 @@ export class ClientSupermarketComparisonService {
     }
 
     const best = scoredCandidates[0];
-    const alternatives = scoredCandidates.slice(1, 6).map(c => c.product);
+
+    // Filter alternatives to genuine same-type matches
+    const itemText = `${item.baseItem || ''} ${item.name || ''}`.toLowerCase();
+    const CORE_NOUNS = [
+      'milk', 'egg', 'eggs', 'yogurt', 'yoghurt', 'lentil', 'lentils', 'cod', 'salmon',
+      'haddock', 'tuna', 'prawn', 'prawns', 'fish', 'mince', 'beef', 'chicken', 'pork', 'lamb',
+      'steak', 'bacon', 'sausage', 'fusilli', 'pasta', 'penne', 'spaghetti', 'rice',
+      'oats', 'porridge', 'bread', 'loaf', 'potato', 'potatoes', 'carrot', 'carrots',
+      'onion', 'onions', 'garlic', 'spinach', 'celery', 'banana', 'bananas', 'pear',
+      'pears', 'clementine', 'clementines', 'apple', 'apples', 'orange', 'oranges',
+      'mushroom', 'mushrooms', 'pepper', 'peppers', 'courgette', 'courgettes',
+      'tomato', 'tomatoes', 'polpa', 'puree', 'oil', 'olive oil', 'walnut', 'almond',
+      'chia', 'seed', 'seeds', 'cheese', 'cheddar', 'butter'
+    ];
+    const targetNouns = CORE_NOUNS.filter(n => itemText.includes(n));
+
+    const alternatives = scoredCandidates
+      .filter(c => c.product.id !== best.product.id && c.score >= 40)
+      .filter(c => {
+        if (item.category && c.product.category && item.category !== 'general' && c.product.category !== 'general') {
+          if (item.category !== c.product.category) return false;
+        }
+        if (targetNouns.length > 0) {
+          const prodTitle = c.product.title.toLowerCase();
+          return targetNouns.some(n => prodTitle.includes(n));
+        }
+        return true;
+      })
+      .slice(0, 10)
+      .map(c => c.product);
 
     return {
       parsedItem: item,
@@ -388,6 +417,19 @@ export class ClientSupermarketComparisonService {
     const item = { rawText: itemRawText, name: itemRawText, baseItem: itemRawText, targetQuantity: 1, unit: 'item', category: 'general', id: 'temp' };
     const keywords = this.extractKeywords(item);
     const storeProducts = CATALOG_PRODUCTS.filter(p => p.supermarket === store);
+    const itemText = itemRawText.toLowerCase();
+    const CORE_NOUNS = [
+      'milk', 'egg', 'eggs', 'yogurt', 'yoghurt', 'lentil', 'lentils', 'cod', 'salmon',
+      'haddock', 'tuna', 'prawn', 'prawns', 'fish', 'mince', 'beef', 'chicken', 'pork', 'lamb',
+      'steak', 'bacon', 'sausage', 'fusilli', 'pasta', 'penne', 'spaghetti', 'rice',
+      'oats', 'porridge', 'bread', 'loaf', 'potato', 'potatoes', 'carrot', 'carrots',
+      'onion', 'onions', 'garlic', 'spinach', 'celery', 'banana', 'bananas', 'pear',
+      'pears', 'clementine', 'clementines', 'apple', 'apples', 'orange', 'oranges',
+      'mushroom', 'mushrooms', 'pepper', 'peppers', 'courgette', 'courgettes',
+      'tomato', 'tomatoes', 'polpa', 'puree', 'oil', 'olive oil', 'walnut', 'almond',
+      'chia', 'seed', 'seeds', 'cheese', 'cheddar', 'butter'
+    ];
+    const targetNouns = CORE_NOUNS.filter(n => itemText.includes(n));
 
     return storeProducts
       .map(prod => ({
@@ -395,6 +437,13 @@ export class ClientSupermarketComparisonService {
         score: this.computeTextRelevance(prod.title + ' ' + prod.category + ' ' + (prod.subCategory || ''), keywords),
       }))
       .filter(item => item.score > 20)
+      .filter(item => {
+        if (targetNouns.length > 0) {
+          const prodTitle = item.prod.title.toLowerCase();
+          return targetNouns.some(n => prodTitle.includes(n));
+        }
+        return true;
+      })
       .sort((a, b) => b.score - a.score)
       .map(item => item.prod);
   }
@@ -405,8 +454,21 @@ export class ClientSupermarketComparisonService {
     keywords: string[],
     preferences: UserPreferences
   ) {
+    // 0. Hard Category Guard
+    if (item.category && prod.category && item.category !== 'general' && prod.category !== 'general' && item.category !== prod.category) {
+      return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
+    }
+
     let score = 0;
     const titleLower = prod.title.toLowerCase();
+    const itemLower = (item.name || '').toLowerCase();
+
+    // Specific cross-species penalties
+    if (itemLower.includes('milk') && !titleLower.includes('milk')) score -= 200;
+    if ((itemLower.includes('egg') || itemLower.includes('eggs')) && (!titleLower.includes('egg') && !titleLower.includes('eggs'))) score -= 200;
+    if (itemLower.includes('lentil') && !titleLower.includes('lentil') && !titleLower.includes('pulses') && !titleLower.includes('beans')) score -= 200;
+    if (itemLower.includes('cod') && !titleLower.includes('cod')) score -= 150;
+    if (itemLower.includes('yogurt') && !titleLower.includes('yogurt') && !titleLower.includes('yoghurt')) score -= 200;
 
     const textScore = this.computeTextRelevance(titleLower + ' ' + prod.category + ' ' + (prod.subCategory || ''), keywords);
     score += textScore * 2;
