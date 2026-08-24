@@ -544,7 +544,7 @@ export class ClientSupermarketComparisonService {
     const raw = (item.baseItem + ' ' + (item.brandPreference || '')).toLowerCase();
     const clean = raw
       .replace(/[^\w\s]/g, ' ')
-      .replace(/\b(approx|fresh|sliced|tinned|frozen|natural|pack|packs|head|bunch|tin|tins|bulbs?|loaves|loaf)\b/g, '')
+      .replace(/\b(approx|fresh|sliced|tinned|frozen|natural|pack|packs|head|bunch|tin|tins|bulbs?|loaves|loaf|whole|halves|piece|pieces|portion|portions|target|item|items|mix)\b/g, '')
       .trim();
 
     return clean.split(/\s+/).filter(k => k.length > 1);

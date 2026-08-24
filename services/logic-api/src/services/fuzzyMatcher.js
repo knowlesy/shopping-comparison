@@ -65,6 +65,23 @@ export class FuzzyMatcher {
 
     const best = scored[0];
 
+    if (!best || best.score < 25) {
+      return {
+        parsedItem: item,
+        supermarket,
+        product: null,
+        packsNeeded: 1,
+        totalQuantity: item.targetQuantity,
+        totalPrice: 0,
+        effectiveUnitPrice: 0,
+        weightDifferencePercent: 0,
+        isClosestPack: false,
+        matchScore: 0,
+        reason: 'Item not found in catalog; clickable live search provided.',
+        alternatives: []
+      };
+    }
+
     // Identify primary noun terms from search item
     const itemText = `${item.baseItem || ''} ${item.name || ''}`.toLowerCase();
     const CORE_NOUNS = [
@@ -157,6 +174,12 @@ export class FuzzyMatcher {
 
     const effectiveAttributes = `${effectiveTitle} ${prod.fatPercentage !== undefined ? `${prod.fatPercentage} ${prod.fatPercentage}% lean fat` : ''} ${prod.isFrozen ? 'frozen' : 'fresh'} ${prod.isOrganic ? 'organic' : ''}`;
     const matchCount = keywords.filter(kw => effectiveAttributes.includes(kw)).length;
+    
+    // If absolutely zero keywords match the product title/attributes, heavily penalize to prevent size/tier leakage
+    if (matchCount === 0) {
+      return { score: -200, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
+    }
+
     const textScore = keywords.length > 0 ? (matchCount / keywords.length) * 60 : 0;
     score += textScore;
 
@@ -367,7 +390,7 @@ export class FuzzyMatcher {
     const raw = `${item.baseItem || ''} ${item.name || ''} ${item.brandPreference || ''}`.toLowerCase();
     const clean = raw
       .replace(/[^\w\s]/g, ' ')
-      .replace(/\b(approx|fresh|sliced|tinned|frozen|natural|pack|packs|head|bunch|tin|tins|bulbs?|loaves|loaf)\b/g, '')
+      .replace(/\b(approx|fresh|sliced|tinned|frozen|natural|pack|packs|head|bunch|tin|tins|bulbs?|loaves|loaf|whole|halves|piece|pieces|portion|portions|target|item|items|mix)\b/g, '')
       .trim();
 
     return clean.split(/\s+/).filter(k => k.length > 1);

@@ -7,7 +7,9 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
-    "test": "node src/test-logic.js"
+    "test": "node src/test-matching-matrix.js",
+    "test:matrix": "node src/test-matching-matrix.js",
+    "test:live": "node src/test-logic.js"
   },
   "dependencies": {
     "@google/genai": "^2.18.0",
