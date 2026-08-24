@@ -387,40 +387,61 @@ app.get('/api/products/alternatives', async (req, res) => {
 
   try {
     const coreQuery = getCoreSearchQuery({ name: query });
-    const targetUrl = `https://www.trolley.co.uk/search/?q=${encodeURIComponent(`${store} ${coreQuery}`)}`;
-    
-    let scrapedForStore = [];
-    try {
-      const { html } = await ScraperClient.fetchHtml(targetUrl, {
-        waitForSelector: '.product-item, body',
-        timeout: 25000,
-        delay: 1500
-      });
-      const products = await GeminiDomParser.parseHtml(html, coreQuery);
-      scrapedForStore = products.filter(p => p.supermarket === store);
-    } catch (scrapeErr) {
-      console.warn(`[Logic-API] Live scrape for alternatives (${store} ${coreQuery}) fallback:`, scrapeErr.message);
-    }
-
-    // Baseline catalog products for this store
     const queryLower = (query || '').toLowerCase();
     const coreLower = (coreQuery || '').toLowerCase();
+
+    // 1. Get baseline catalog products immediately for 0ms responsiveness
     const catalogForStore = (CATALOG_PRODUCTS || []).filter(p => {
       if (p.supermarket !== store) return false;
       const titleLower = p.title.toLowerCase();
       const catLower = (p.category || '').toLowerCase();
       const subLower = (p.subCategory || '').toLowerCase();
+
+      // Negative filters for non-staples
+      if (/\b(?:egg|eggs)\b/i.test(queryLower) && /\b(?:scotch|mayo|custard|creme egg|easter|chocolate egg|noodles?|sandwich)\b/i.test(titleLower)) return false;
+      if (/\b(?:potato|potatoes)\b/i.test(queryLower) && /\b(?:crisps?|chips?|waffles?|croquettes?|salad in mayo)\b/i.test(titleLower)) return false;
+      if (/\b(?:milk)\b/i.test(queryLower) && /\b(?:chocolate milk|milkshake|condensed|evaporated|powdered|flavoured)\b/i.test(titleLower)) return false;
+      if (/\b(?:yogurt|yoghurt)\b/i.test(queryLower) && /\b(?:drink|corner|split pot|frubes|munch bunch|dessert)\b/i.test(titleLower)) return false;
+
       return titleLower.includes(coreLower) || 
              coreLower.split(' ').some(w => w.length > 2 && titleLower.includes(w)) ||
              (catLower && queryLower.includes(catLower)) ||
              (subLower && queryLower.includes(subLower));
     });
 
+    let scrapedForStore = [];
+    if (forceRefresh === 'true' || catalogForStore.length < 3) {
+      try {
+        const targetUrl = `https://www.trolley.co.uk/search/?q=${encodeURIComponent(`${store} ${coreQuery}`)}`;
+        const scrapePromise = ScraperClient.fetchHtml(targetUrl, {
+          waitForSelector: '.product-item, body',
+          timeout: 2500,
+          delay: 500
+        });
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Alternatives scrape timeout')), 2500)
+        );
+        const { html } = await Promise.race([scrapePromise, timeoutPromise]);
+        const products = await GeminiDomParser.parseHtml(html, coreQuery);
+        scrapedForStore = products.filter(p => {
+          if (p.supermarket !== store) return false;
+          const titleLower = p.title.toLowerCase();
+          if (/\b(?:egg|eggs)\b/i.test(queryLower) && /\b(?:scotch|mayo|custard|creme egg|easter|chocolate egg|noodles?|sandwich)\b/i.test(titleLower)) return false;
+          if (/\b(?:potato|potatoes)\b/i.test(queryLower) && /\b(?:crisps?|chips?|waffles?|croquettes?|salad in mayo)\b/i.test(titleLower)) return false;
+          if (/\b(?:milk)\b/i.test(queryLower) && /\b(?:chocolate milk|milkshake|condensed|evaporated|powdered|flavoured)\b/i.test(titleLower)) return false;
+          if (/\b(?:yogurt|yoghurt)\b/i.test(queryLower) && /\b(?:drink|corner|split pot|frubes|munch bunch|dessert)\b/i.test(titleLower)) return false;
+          return true;
+        });
+      } catch (scrapeErr) {
+        // Fast catalog fallback
+      }
+    }
+
     // Merge and deduplicate by title
     const seenTitles = new Set();
     const combined = [];
 
-    for (const p of [...scrapedForStore, ...catalogForStore]) {
+    for (const p of [...catalogForStore, ...scrapedForStore]) {
       const normTitle = p.title.toLowerCase().trim();
       if (!seenTitles.has(normTitle)) {
         seenTitles.add(normTitle);

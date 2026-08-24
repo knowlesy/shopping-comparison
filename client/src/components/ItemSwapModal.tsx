@@ -33,26 +33,43 @@ export const ItemSwapModal: React.FC<ItemSwapModalProps> = ({
 
   useEffect(() => {
     if (isOpen && store && item) {
-      setSearchQuery(item.baseItem || item.name);
+      const cleanTerm = (item.baseItem || item.name || '')
+        .replace(/\b\d+%\s*(?:fat|lean)?\b/gi, '')
+        .replace(/\b\d+(?:\.\d+)?\s*(?:kg|g|l|lt|ml|pints?|pt|pack|packs|tin|tins|tub|tubs|loaves|loaf)\b/gi, '')
+        .replace(/[^\w\s]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      setSearchQuery(cleanTerm || item.baseItem || item.name);
       setActiveFilter('all');
-      
-      // If we already have pre-cached candidate alternatives from the comparison run, use them instantly!
+
+      // Pre-seed alternatives immediately for 0ms render
       if (currentMatch?.alternatives && currentMatch.alternatives.length > 0) {
         setAlternatives(currentMatch.alternatives);
-        setLoading(false);
-      } else {
-        fetchAlternatives(store, item.baseItem || item.name);
       }
-    }
-  }, [isOpen, store, item, currentMatch]);
 
-  const fetchAlternatives = async (targetStore: SupermarketName, query: string) => {
+      // Fetch comprehensive alternatives for this supermarket
+      fetchAlternatives(store, cleanTerm || item.baseItem || item.name, currentMatch?.alternatives);
+    }
+  }, [isOpen, store, item]);
+
+  const fetchAlternatives = async (targetStore: SupermarketName, query: string, seedAlts?: SupermarketProduct[]) => {
     try {
       setLoading(true);
       const res = await api.getAlternatives(targetStore, query);
-      setAlternatives(res);
+      const combined = [...(seedAlts || []), ...res];
+      const seen = new Set<string>();
+      const deduped = combined.filter(p => {
+        if (!p || !p.id || seen.has(p.id)) return false;
+        seen.add(p.id);
+        return true;
+      });
+      setAlternatives(deduped);
     } catch (err) {
       console.error('Error fetching alternatives:', err);
+      if (seedAlts && seedAlts.length > 0) {
+        setAlternatives(seedAlts);
+      }
     } finally {
       setLoading(false);
     }

@@ -99,23 +99,44 @@ export class FuzzyMatcher {
 
     // Filter alternatives:
     // 1. Must not be the selected best product
-    // 2. Must have a high relevance score (score >= 40)
+    // 2. Must have a valid relevance score (score >= 20)
     // 3. Must match the item's category (if specific)
     // 4. Must match at least one of the item's primary nouns
+    // 5. Must not be prohibited processed food (e.g. scotch eggs, crisps)
+    const isEggQuery = /\b(?:egg|eggs)\b/i.test(itemText) && !/\b(?:scotch|mayo|custard)\b/i.test(itemText);
+    const isPotatoQuery = /\b(?:potato|potatoes)\b/i.test(itemText) && !/\b(?:crisp|chip)\b/i.test(itemText);
+    const isMilkQuery = /\b(?:milk)\b/i.test(itemText) && !/\b(?:chocolate|milkshake)\b/i.test(itemText);
+    const isYogurtQuery = /\b(?:yogurt|yoghurt)\b/i.test(itemText);
+
     const alternatives = scored
       .filter(s => s.product.id !== best.product.id)
-      .filter(s => s.score >= 40)
+      .filter(s => s.score >= 20)
       .filter(s => {
+        const prodTitle = s.product.title.toLowerCase();
+
+        // Hard negative exclusions on alternatives
+        if (isEggQuery && /\b(?:scotch|mayo|salad in mayo|custard|creme egg|easter|chocolate egg|noodles?|sandwich|sweets)\b/i.test(prodTitle)) {
+          return false;
+        }
+        if (isPotatoQuery && /\b(?:crisps?|chips?|waffles?|croquettes?|salad in mayo|ready meal|snack)\b/i.test(prodTitle)) {
+          return false;
+        }
+        if (isMilkQuery && /\b(?:chocolate milk|milkshake|condensed|evaporated|powdered|flavoured)\b/i.test(prodTitle)) {
+          return false;
+        }
+        if (isYogurtQuery && /\b(?:drink|corner|split pot|frubes|munch bunch|dessert|custard)\b/i.test(prodTitle)) {
+          return false;
+        }
+
         if (item.category && s.product.category && item.category !== 'general' && s.product.category !== 'general') {
           if (item.category !== s.product.category) return false;
         }
         if (targetNouns.length > 0) {
-          const prodTitle = s.product.title.toLowerCase();
           return targetNouns.some(n => prodTitle.includes(n));
         }
         return true;
       })
-      .slice(0, 12)
+      .slice(0, 16)
       .map(s => s.product);
 
     return {
@@ -256,6 +277,27 @@ export class FuzzyMatcher {
 
     if (isReadyMealOrGravy && !isExplicitlyRequestedReadyMeal) {
       score -= 250; // Completely exclude ready meals/gravy cans from raw staple matches
+    }
+
+    // Specific cross-species & processed snack exclusions for staples
+    const isEggRequested = /\b(?:egg|eggs)\b/i.test(itemLower) && !/\b(?:scotch|mayo|custard|noodle)\b/i.test(itemLower);
+    if (isEggRequested && /\b(?:scotch|mayo|salad in mayo|custard|creme egg|easter|chocolate egg|noodles?|sandwich|fried egg sweets)\b/i.test(titleLower)) {
+      score -= 500;
+    }
+
+    const isPotatoRequested = /\b(?:potato|potatoes)\b/i.test(itemLower) && !/\b(?:crisp|crisps|chip|chips|waffle)\b/i.test(itemLower);
+    if (isPotatoRequested && /\b(?:crisps?|chips?|waffles?|croquettes?|salad in mayo|ready meal|snack)\b/i.test(titleLower)) {
+      score -= 500;
+    }
+
+    const isPlainMilkRequested = /\b(?:milk)\b/i.test(itemLower) && !/\b(?:chocolate|milkshake|condensed|evaporated|powder)\b/i.test(itemLower);
+    if (isPlainMilkRequested && /\b(?:chocolate milk|milkshake|condensed|evaporated|powdered|flavoured)\b/i.test(titleLower)) {
+      score -= 500;
+    }
+
+    const isGreekYogurtRequested = /\b(?:greek yogurt|greek yoghurt|authentic greek)\b/i.test(itemLower);
+    if (isGreekYogurtRequested && /\b(?:drink|corner|split pot|frubes|munch bunch|dessert|custard)\b/i.test(titleLower)) {
+      score -= 500;
     }
 
     // Explicit check for canned/tinned meat in gravy vs raw mince/beef/chicken
