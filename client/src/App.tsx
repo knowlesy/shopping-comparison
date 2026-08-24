@@ -185,6 +185,13 @@ export default function App() {
     if (listToCompare.length === 0) return;
     try {
       setLoading(true);
+      setTimeout(() => {
+        const el = document.getElementById('loading-section');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 60);
+
       setProgress({
         type: 'init',
         currentItemIndex: 1,
@@ -200,6 +207,9 @@ export default function App() {
       });
       setComparison(comp);
       setActiveTab('compare');
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 60);
 
       // Stash pending comparison for auto-archive safety net only for genuine weekly shops (>= 3 items, not dev mode)
       if (!preferences.devMode && listToCompare.length >= 3) {
@@ -446,7 +456,7 @@ export default function App() {
         )}
 
         {loading && (
-          <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center space-y-6">
+          <div id="loading-section" className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center space-y-6 scroll-mt-20">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 shadow-lg animate-pulse">
               <Sparkles className="w-8 h-8" />
             </div>
