@@ -462,13 +462,16 @@ export class ClientSupermarketComparisonService {
     let score = 0;
     const titleLower = prod.title.toLowerCase();
     const itemLower = (item.name || '').toLowerCase();
-
-    // Specific cross-species penalties
+    // Specific cross-species and processed food penalties
     if (itemLower.includes('milk') && !titleLower.includes('milk')) score -= 200;
     if ((itemLower.includes('egg') || itemLower.includes('eggs')) && (!titleLower.includes('egg') && !titleLower.includes('eggs'))) score -= 200;
     if (itemLower.includes('lentil') && !titleLower.includes('lentil') && !titleLower.includes('pulses') && !titleLower.includes('beans')) score -= 200;
     if (itemLower.includes('cod') && !titleLower.includes('cod')) score -= 150;
     if (itemLower.includes('yogurt') && !titleLower.includes('yogurt') && !titleLower.includes('yoghurt')) score -= 200;
+    if (itemLower.includes('spinach') && !titleLower.includes('spinach')) score -= 200;
+    if (itemLower.includes('garlic') && (titleLower.includes('pizza') || titleLower.includes('bread') || titleLower.includes('baguette') || titleLower.includes('sauce') || titleLower.includes('dip'))) score -= 250;
+    if (itemLower.includes('mince') && (titleLower.includes('soup') || titleLower.includes('gravy') || titleLower.includes('pie') || titleLower.includes('crisp') || titleLower.includes('canned') || titleLower.includes('tinned'))) score -= 300;
+    if (item.category === 'produce' && (titleLower.includes('pizza') || titleLower.includes('bread') || titleLower.includes('soup') || titleLower.includes('crisp'))) score -= 250;
 
     const textScore = this.computeTextRelevance(titleLower + ' ' + prod.category + ' ' + (prod.subCategory || ''), keywords);
     score += textScore * 2;

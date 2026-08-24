@@ -1,0 +1,704 @@
+[
+  {
+    "id": "list-01",
+    "name": "High-Protein Fitness Meal Prep",
+    "items": [
+      "900g 5% lean beef mince",
+      "1kg fresh chicken breast fillets",
+      "4 fresh salmon fillets",
+      "1kg authentic Greek yogurt 0%",
+      "12 free range eggs",
+      "1kg brown basmati rice",
+      "500g fresh broccoli florets",
+      "1kg Scottish rolled oats"
+    ]
+  },
+  {
+    "id": "list-02",
+    "name": "Family Sunday Roast",
+    "items": [
+      "1.5kg whole fresh British chicken",
+      "2kg Maris Piper potatoes",
+      "1kg fresh carrots",
+      "500g fresh parsnips",
+      "12 Yorkshire puddings",
+      "170g Bisto beef gravy granules",
+      "900g frozen garden peas",
+      "1 savoy cabbage"
+    ]
+  },
+  {
+    "id": "list-03",
+    "name": "Italian Pasta Night",
+    "items": [
+      "1kg wholewheat fusilli pasta",
+      "500ml extra virgin olive oil",
+      "3 x 400g Mutti Polpa chopped tomatoes",
+      "200g double concentrate tomato puree",
+      "1 pack fresh garlic bulbs",
+      "25g fresh basil bunch",
+      "200g Parmigiano Reggiano cheese"
+    ]
+  },
+  {
+    "id": "list-04",
+    "name": "Healthy Plant-Based Vegan",
+    "items": [
+      "400g canned brown lentils in water",
+      "400g canned chickpeas in water",
+      "1L unsweetened almond milk",
+      "200g fresh baby spinach",
+      "150g whole chia seeds",
+      "280g organic firm tofu",
+      "100g nutritional yeast flakes",
+      "1kg brown onions"
+    ]
+  },
+  {
+    "id": "list-05",
+    "name": "Student Budget Staples",
+    "items": [
+      "800g medium sliced wholemeal bread",
+      "4 x 415g Heinz baked beans",
+      "400g mature British cheddar cheese",
+      "1 bunch bananas",
+      "1.5kg frozen french fries chips",
+      "340g smooth peanut butter",
+      "1.13L semi-skimmed milk",
+      "6 pack instant chicken noodles"
+    ]
+  },
+  {
+    "id": "list-06",
+    "name": "Gluten-Free Weekly Essentials",
+    "items": [
+      "400g gluten free wholemeal bread",
+      "500g gluten free fusilli pasta",
+      "500g gluten free rolled porridge oats",
+      "1kg fresh British chicken thighs",
+      "170g smooth almond butter",
+      "6 pack Gala apples",
+      "1L lactofree semi skimmed milk"
+    ]
+  },
+  {
+    "id": "list-07",
+    "name": "Full English Breakfast",
+    "items": [
+      "8 British pork sausages",
+      "300g unsmoked back bacon rashers",
+      "6 large free range eggs",
+      "415g baked beans in tomato sauce",
+      "200g black pudding slices",
+      "800g thick sliced white bread",
+      "250g salted British butter",
+      "10 frozen hash browns"
+    ]
+  },
+  {
+    "id": "list-08",
+    "name": "Asian Stir-Fry Dinner",
+    "items": [
+      "300g medium egg noodles",
+      "250ml toasted sesame oil",
+      "150ml light soy sauce",
+      "350g fresh stir fry vegetable mix",
+      "500g fresh diced chicken breast",
+      "100g fresh root ginger",
+      "1 bunch fresh spring onions",
+      "1 pack fresh red chillies"
+    ]
+  },
+  {
+    "id": "list-09",
+    "name": "Seafood & Fish Dinner",
+    "items": [
+      "4 frozen skinless cod loins",
+      "180g cooked king prawns",
+      "4 fresh lemons",
+      "250g salted Lurpak butter",
+      "1kg baby new potatoes",
+      "200g fine green beans",
+      "250g tartare sauce"
+    ]
+  },
+  {
+    "id": "list-10",
+    "name": "Mexican Taco Fiesta",
+    "items": [
+      "500g 5% lean beef mince",
+      "8 soft flour tortilla wraps",
+      "400g canned red kidney beans",
+      "300g mild tomato chunky salsa",
+      "300ml soured cream",
+      "200g fresh guacamole",
+      "200g grated mature cheddar cheese",
+      "200g sliced pickled jalapeños"
+    ]
+  },
+  {
+    "id": "list-11",
+    "name": "Indian Curry Feast",
+    "items": [
+      "650g fresh diced chicken breast",
+      "500g basmati rice",
+      "400g canned coconut milk",
+      "500g Greek style natural yogurt",
+      "2 plain naan breads",
+      "200g tikka masala curry paste",
+      "1kg brown onions",
+      "25g fresh coriander bunch"
+    ]
+  },
+  {
+    "id": "list-12",
+    "name": "Mediterranean Salad & Grill",
+    "items": [
+      "200g authentic Greek feta cheese",
+      "250g Kalamata pitted olives",
+      "500g sweet cherry tomatoes on the vine",
+      "1 whole cucumber",
+      "1kg red onions",
+      "500ml extra virgin olive oil",
+      "400g wholemeal pitta breads",
+      "4 fresh chicken breast fillets"
+    ]
+  },
+  {
+    "id": "list-13",
+    "name": "Weekend Baking Day",
+    "items": [
+      "1.5kg plain white flour",
+      "1.5kg self raising flour",
+      "1kg white granulated sugar",
+      "500g soft dark brown sugar",
+      "250g unsalted baking butter",
+      "6 free range eggs",
+      "100g cocoa powder",
+      "50ml vanilla extract"
+    ]
+  },
+  {
+    "id": "list-14",
+    "name": "Morning Smoothie & Breakfast",
+    "items": [
+      "1kg frozen mixed berries",
+      "1kg ripe bananas",
+      "1L unsweetened almond milk",
+      "500g 0% fat Greek yogurt",
+      "200g natural walnut halves",
+      "150g whole chia seeds",
+      "340g pure clear honey",
+      "1kg Scottish rolled oats"
+    ]
+  },
+  {
+    "id": "list-15",
+    "name": "Household Cleaning Restock",
+    "items": [
+      "640ml Fairy Original washing up liquid",
+      "500ml Flash multi surface antibacterial spray",
+      "750ml Domestos bleach cleaner",
+      "24 pack Andrex toilet roll tissue",
+      "4 pack Plenty kitchen roll towels",
+      "54 wash Ariel laundry liquid detergent",
+      "1 pack dishwashing sponge scourers"
+    ]
+  },
+  {
+    "id": "list-16",
+    "name": "Winter Comfort Stew & Soup",
+    "items": [
+      "600g British diced beef steak",
+      "1kg Maris Piper potatoes",
+      "1kg carrots",
+      "1 head celery",
+      "1kg brown onions",
+      "1 pack fresh garlic bulbs",
+      "8 beef stock cubes",
+      "800g crusty white farmhouse bread loaf"
+    ]
+  },
+  {
+    "id": "list-17",
+    "name": "Summer BBQ Cookout",
+    "items": [
+      "4 British beef quarter pounder burgers",
+      "8 pork sausages",
+      "4 brioche burger buns",
+      "8 hot dog rolls",
+      "450ml Heinz tomato ketchup",
+      "400ml Hellmanns real mayonnaise",
+      "300g sweet coleslaw salad",
+      "6 pack sweetcorn cobs"
+    ]
+  },
+  {
+    "id": "list-18",
+    "name": "Diabetic & Low Glycemic Friendly",
+    "items": [
+      "1kg authentic 0% fat Greek yogurt",
+      "200g natural walnut halves",
+      "150g whole chia seeds",
+      "200g fresh baby spinach",
+      "4 fresh salmon fillets",
+      "1kg fresh courgettes",
+      "400g closed cup mushrooms",
+      "12 free range eggs"
+    ]
+  },
+  {
+    "id": "list-19",
+    "name": "Low Carb & Keto Lifestyle",
+    "items": [
+      "500g 20% fat minced beef",
+      "300g unsmoked streaky bacon",
+      "4 ripe Hass avocados",
+      "400g mature cheddar cheese",
+      "12 large free range eggs",
+      "250g salted butter",
+      "200g fresh baby spinach",
+      "500ml extra virgin olive oil"
+    ]
+  },
+  {
+    "id": "list-20",
+    "name": "Kids Lunchbox & Snacks",
+    "items": [
+      "800g soft wholemeal sliced bread",
+      "6 pack Walkers ready salted crisps",
+      "6 pack Gala apples",
+      "6 pack easy peeler clementines",
+      "6 pack Frubes strawberry fromage frais yogurt",
+      "10 mini Babybel original cheeses",
+      "6 pack Capri Sun orange juice drinks"
+    ]
+  },
+  {
+    "id": "list-21",
+    "name": "Gourmet Steak Night",
+    "items": [
+      "2 British sirloin beef steaks 227g",
+      "1kg baby new potatoes",
+      "250g fresh asparagus spears",
+      "250g chestnut mushrooms",
+      "250g salted butter",
+      "1 bulb fresh garlic",
+      "200ml peppercorn sauce"
+    ]
+  },
+  {
+    "id": "list-22",
+    "name": "Classic British Cottage Pie",
+    "items": [
+      "500g 5% lean beef mince",
+      "1.5kg Maris Piper potatoes",
+      "500g carrots",
+      "500g frozen garden peas",
+      "1kg brown onions",
+      "170g Bisto beef gravy granules",
+      "200g tomato puree",
+      "200ml whole milk"
+    ]
+  },
+  {
+    "id": "list-23",
+    "name": "Homemade Pizza Party",
+    "items": [
+      "1kg strong white bread flour",
+      "7g fast action dried yeast sachet",
+      "400g Mutti Polpa chopped tomatoes",
+      "250g fresh mozzarella ball cheese",
+      "150g spicy pepperoni slices",
+      "500ml extra virgin olive oil",
+      "25g fresh basil bunch"
+    ]
+  },
+  {
+    "id": "list-24",
+    "name": "Pantry Bulk Restock",
+    "items": [
+      "1kg wholewheat fusilli pasta",
+      "1kg basmati white rice",
+      "1kg Scottish rolled oats",
+      "4 x 400g canned chopped tomatoes",
+      "4 x 400g canned chickpeas",
+      "4 x 400g canned kidney beans",
+      "1L sunflower cooking oil",
+      "1kg white granulated sugar"
+    ]
+  },
+  {
+    "id": "list-25",
+    "name": "Comforting Chicken Noodle Soup",
+    "items": [
+      "500g fresh chicken breast fillets",
+      "250g medium egg noodles",
+      "1kg carrots",
+      "1 head celery",
+      "1kg brown onions",
+      "1 pack garlic bulbs",
+      "8 chicken stock cubes",
+      "25g fresh flat leaf parsley"
+    ]
+  },
+  {
+    "id": "list-26",
+    "name": "Greek Mezze Spread",
+    "items": [
+      "200g authentic Greek feta cheese",
+      "200g tzatziki dip",
+      "200g classic houmous",
+      "200g Kalamata pitted olives",
+      "400g wholemeal pitta breads",
+      "500g baby plum tomatoes",
+      "1 whole fresh cucumber"
+    ]
+  },
+  {
+    "id": "list-27",
+    "name": "Budget Under £15 Essentials",
+    "items": [
+      "800g medium wholemeal sliced bread",
+      "1.13L semi-skimmed milk",
+      "6 free range eggs",
+      "1kg wholewheat fusilli pasta",
+      "400g canned chopped tomatoes",
+      "1kg British carrots",
+      "1kg brown onions",
+      "1 bunch bananas"
+    ]
+  },
+  {
+    "id": "list-28",
+    "name": "Fresh Fruit Fiesta",
+    "items": [
+      "1 bunch bananas",
+      "800g sweet conference pears",
+      "600g easy peeler clementines",
+      "6 pack Braeburn apples",
+      "400g red seedless grapes",
+      "400g fresh British strawberries",
+      "150g fresh blueberries"
+    ]
+  },
+  {
+    "id": "list-29",
+    "name": "Autumn Vegetable Medley",
+    "items": [
+      "1kg fresh courgettes",
+      "1kg mixed sweet bell peppers",
+      "400g closed cup mushrooms",
+      "600g sweet baby plum tomatoes",
+      "1kg British fresh carrots",
+      "1 head fresh celery",
+      "1kg red onions",
+      "1 pack garlic bulbs"
+    ]
+  },
+  {
+    "id": "list-30",
+    "name": "French Toast & Brunch",
+    "items": [
+      "800g brioche sliced loaf bread",
+      "6 free range eggs",
+      "500ml semi skimmed milk",
+      "250g salted butter",
+      "250ml pure Canadian maple syrup",
+      "400g fresh strawberries",
+      "150g fresh blueberries",
+      "50g ground cinnamon"
+    ]
+  },
+  {
+    "id": "list-31",
+    "name": "Thai Green Chicken Curry",
+    "items": [
+      "500g diced chicken breast",
+      "400g canned coconut milk",
+      "200g Thai green curry paste",
+      "500g jasmine white rice",
+      "150ml fish sauce",
+      "100g fresh baby corn",
+      "100g sugar snap peas",
+      "25g fresh coriander"
+    ]
+  },
+  {
+    "id": "list-32",
+    "name": "Quick Midweek Lasagne",
+    "items": [
+      "500g 5% lean beef mince",
+      "500g dried lasagne sheets",
+      "2 x 400g chopped tomatoes",
+      "200g tomato puree",
+      "500g white béchamel lasagne sauce",
+      "200g grated mozzarella cheese",
+      "1kg brown onions"
+    ]
+  },
+  {
+    "id": "list-33",
+    "name": "Vegetarian Chilli Sin Carne",
+    "items": [
+      "2 x 400g canned red kidney beans",
+      "400g canned black beans",
+      "2 x 400g canned chopped tomatoes",
+      "200g tomato puree",
+      "1kg mixed sweet bell peppers",
+      "1kg brown onions",
+      "500g long grain white rice",
+      "30g chilli powder spice mix"
+    ]
+  },
+  {
+    "id": "list-34",
+    "name": "Fish & Chips Fakeaway",
+    "items": [
+      "4 frozen skinless cod loins",
+      "1.5kg Maris Piper potatoes",
+      "300g plain white flour",
+      "500g frozen mushy peas",
+      "1L sunflower cooking oil",
+      "250g tartare sauce",
+      "4 fresh lemons"
+    ]
+  },
+  {
+    "id": "list-35",
+    "name": "Weekend Roast Pork Dinner",
+    "items": [
+      "1.2kg British boneless pork loin joint",
+      "2kg Maris Piper potatoes",
+      "1kg carrots",
+      "300g Bramley apple sauce",
+      "170g pork sage & onion stuffing mix",
+      "170g Bisto pork gravy granules",
+      "500g fresh green broccoli"
+    ]
+  },
+  {
+    "id": "list-36",
+    "name": "Superfood Salad Bowls",
+    "items": [
+      "250g cooked merchant gourmet quinoa",
+      "200g fresh baby spinach",
+      "400g canned chickpeas in water",
+      "2 ripe Hass avocados",
+      "200g authentic Greek feta cheese",
+      "150g whole chia seeds",
+      "200g natural walnut halves",
+      "500ml extra virgin olive oil"
+    ]
+  },
+  {
+    "id": "list-37",
+    "name": "Healthy Wrap Lunches",
+    "items": [
+      "8 wholewheat tortilla wraps",
+      "500g cooked chicken breast slices",
+      "200g classic houmous",
+      "200g fresh baby spinach",
+      "500g sweet baby plum tomatoes",
+      "1 whole cucumber",
+      "200g grated mature cheddar"
+    ]
+  },
+  {
+    "id": "list-38",
+    "name": "Morning Porridge Bar",
+    "items": [
+      "1kg Scottish rolled porridge oats",
+      "1.13L semi skimmed milk",
+      "340g pure clear honey",
+      "200g walnut halves",
+      "150g whole chia seeds",
+      "1kg bananas",
+      "400g British strawberries",
+      "50g ground cinnamon"
+    ]
+  },
+  {
+    "id": "list-39",
+    "name": "Japanese Katsu Curry",
+    "items": [
+      "500g fresh chicken breast fillets",
+      "150g Japanese panko breadcrumbs",
+      "6 free range eggs",
+      "500g short grain sushi rice",
+      "220g S&B Golden Japanese curry sauce mix",
+      "1kg carrots",
+      "1kg brown onions"
+    ]
+  },
+  {
+    "id": "list-40",
+    "name": "Spanish Paella Night",
+    "items": [
+      "500g Spanish paella bomba rice",
+      "200g diced cooking chorizo sausage",
+      "500g chicken thighs skinless",
+      "180g cooked king prawns",
+      "1kg mixed sweet bell peppers",
+      "400g canned chopped tomatoes",
+      "1g pure Spanish saffron threads",
+      "4 fresh lemons"
+    ]
+  },
+  {
+    "id": "list-41",
+    "name": "Classic Spaghetti Carbonara",
+    "items": [
+      "1kg bronze cut spaghetti pasta",
+      "200g Italian guanciale or pancetta cubes",
+      "6 free range eggs",
+      "200g Pecorino Romano cheese",
+      "200g Parmigiano Reggiano cheese",
+      "50g whole black peppercorns"
+    ]
+  },
+  {
+    "id": "list-42",
+    "name": "Hearty Beef Bolognese",
+    "items": [
+      "750g 5% lean beef mince",
+      "1kg spaghetti pasta",
+      "3 x 400g Mutti Polpa chopped tomatoes",
+      "200g double concentrate tomato puree",
+      "1kg carrots",
+      "1 head celery",
+      "1kg brown onions",
+      "1 pack fresh garlic bulbs"
+    ]
+  },
+  {
+    "id": "list-43",
+    "name": "Mediterranean Salmon Traybake",
+    "items": [
+      "4 fresh Scottish salmon fillets",
+      "1kg baby new potatoes",
+      "1kg fresh courgettes",
+      "600g baby plum tomatoes",
+      "200g Kalamata pitted olives",
+      "500ml extra virgin olive oil",
+      "4 fresh lemons"
+    ]
+  },
+  {
+    "id": "list-44",
+    "name": "Homemade Burgers & Wedges",
+    "items": [
+      "500g 5% lean beef mince",
+      "4 brioche burger buns",
+      "200g mature cheddar cheese slices",
+      "1.5kg Maris Piper potatoes",
+      "1 iceberg lettuce",
+      "500g beefsteak tomatoes",
+      "1kg red onions",
+      "450ml Heinz tomato ketchup"
+    ]
+  },
+  {
+    "id": "list-45",
+    "name": "Fresh Green Salad Bar",
+    "items": [
+      "200g fresh baby spinach",
+      "100g fresh rocket salad leaves",
+      "1 whole cucumber",
+      "600g sweet baby plum tomatoes",
+      "1 bunch spring onions",
+      "1 bunch red radishes",
+      "500ml extra virgin olive oil",
+      "250ml balsamic vinegar of Modena"
+    ]
+  },
+  {
+    "id": "list-46",
+    "name": "Cozy Autumn Apple Crumble",
+    "items": [
+      "1.5kg British Bramley cooking apples",
+      "1kg plain white flour",
+      "500g Scottish rolled oats",
+      "500g soft light brown sugar",
+      "250g unsalted British butter",
+      "500ml Ambrosia Devon custard",
+      "50g ground cinnamon"
+    ]
+  },
+  {
+    "id": "list-47",
+    "name": "Savoury Cheese & Onion Toasties",
+    "items": [
+      "800g thick sliced wholemeal bread",
+      "400g extra mature British cheddar cheese",
+      "1kg brown onions",
+      "1kg red onions",
+      "250g salted British butter",
+      "300g Branston original pickle chutney"
+    ]
+  },
+  {
+    "id": "list-48",
+    "name": "Overnight Chia & Oat Pots",
+    "items": [
+      "1kg Scottish rolled oats",
+      "150g whole chia seeds",
+      "1L unsweetened almond milk",
+      "1kg authentic 0% Greek yogurt",
+      "340g pure clear honey",
+      "1kg frozen mixed berries",
+      "200g walnut halves"
+    ]
+  },
+  {
+    "id": "list-49",
+    "name": "Rich Beef & Lentil Cottage Stew",
+    "items": [
+      "500g 5% lean beef mince",
+      "400g canned brown lentils in water",
+      "1kg carrots",
+      "1 head celery",
+      "1kg brown onions",
+      "1kg Maris Piper potatoes",
+      "200g tomato puree",
+      "8 beef stock cubes"
+    ]
+  },
+  {
+    "id": "list-50",
+    "name": "Complete 7-Day Master Grocery Basket",
+    "items": [
+      "900g 5% lean beef mince",
+      "1.6kg frozen cod loins",
+      "1kg fresh chicken breast fillets",
+      "12 free range eggs",
+      "1kg authentic Greek yogurt 0%",
+      "1.13L semi-skimmed milk",
+      "400g canned brown lentils in water",
+      "1kg wholewheat fusilli pasta",
+      "2kg baby new potatoes",
+      "1kg Scottish rolled oats",
+      "800g wholemeal sliced bread",
+      "3 x 400g Mutti Polpa chopped tomatoes",
+      "200g tomato puree",
+      "500ml extra virgin olive oil",
+      "1kg courgettes",
+      "1kg mixed bell peppers",
+      "400g closed cup mushrooms",
+      "600g baby plum tomatoes",
+      "1kg carrots",
+      "1 head celery",
+      "1kg brown onions",
+      "1kg red onions",
+      "1 pack garlic bulbs",
+      "240g baby spinach",
+      "1 bunch bananas",
+      "800g sweet conference pears",
+      "600g clementines",
+      "200g walnut halves",
+      "150g whole chia seeds",
+      "640ml Fairy washing up liquid",
+      "500ml Flash all purpose spray"
+    ]
+  }
+]
