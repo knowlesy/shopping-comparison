@@ -98,7 +98,8 @@ export class FuzzyMatcher {
 
   static scoreCandidate(prod, item, keywords, preferences = {}, storeProducts = []) {
     // 0. Hard Category Guard: Prevent Cross-Category Contamination (e.g. Bread/Fruit matching Fish)
-    if (item.category && prod.category && item.category !== prod.category) {
+    // Only enforce when both item and product have specific non-general categories
+    if (item.category && prod.category && item.category !== 'general' && prod.category !== 'general' && item.category !== prod.category) {
       return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
     }
 
@@ -211,7 +212,13 @@ export class FuzzyMatcher {
                                           itemLower.includes('stew');
 
     if (isReadyMealOrGravy && !isExplicitlyRequestedReadyMeal) {
-      score -= 150; // Completely exclude ready meals from raw staple matches
+      score -= 250; // Completely exclude ready meals/gravy cans from raw staple matches
+    }
+
+    // Explicit check for canned/tinned meat in gravy vs raw mince/beef/chicken
+    const isRawMeatStaple = /\b(?:mince|steak|beef|chicken|pork|lamb|turkey|breast|fillet)\b/i.test(itemLower) && !/\b(?:canned|tinned|gravy|pie|stew|meal)\b/i.test(itemLower);
+    if (isRawMeatStaple && (titleLower.includes('in gravy') || titleLower.includes('& gravy') || titleLower.includes('and gravy') || titleLower.includes('& onions') || titleLower.includes('and onions') || titleLower.includes('canned') || titleLower.includes('tinned') || titleLower.includes('pie filling'))) {
+      score -= 300; // Ensure plain fresh/frozen meat is always chosen over canned minced beef in gravy
     }
 
     if (!itemLower.includes('breaded') && (titleLower.includes('breaded') || titleLower.includes('battered') || titleLower.includes('crumbed'))) {

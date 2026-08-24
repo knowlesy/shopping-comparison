@@ -70,10 +70,21 @@ app.post('/api/cache/clear', (req, res) => {
  * 1. POST /api/parse-list
  * NLP line parser for UK shopping lists
  */
+function detectItemCategory(text) {
+  const lower = text.toLowerCase();
+  if (/\b(?:beef|mince|chicken|pork|lamb|steak|bacon|sausage|meat|turkey|duck|gammon|veal|burgers?|meatballs?)\b/i.test(lower)) return 'meat';
+  if (/\b(?:cod|salmon|haddock|tuna|prawn|prawns|fish|seafood|trout|mackerel|sea bass|pollock|basa)\b/i.test(lower)) return 'fish';
+  if (/\b(?:milk|yogurt|yoghurt|cheese|egg|eggs|butter|cream|cheddar|dairy)\b/i.test(lower)) return 'dairy-eggs';
+  if (/\b(?:potato|potatoes|carrot|carrots|onion|onions|garlic|courgette|pepper|peppers|mushroom|mushrooms|tomato|tomatoes|spinach|apple|apples|banana|bananas|orange|oranges|berry|berries|lettuce|cucumber|salad|vegetables?|fruits?)\b/i.test(lower)) return 'produce';
+  if (/\b(?:pasta|fusilli|penne|spaghetti|rice|oat|oats|porridge|lentil|lentils|chia|walnut|walnuts|flour|sugar|oil|olive oil|salt|sauce|tin|tins|tinned|can|canned|beans|passata|puree|noodles?)\b/i.test(lower)) return 'pantry';
+  if (/\b(?:bread|loaf|loaves|roll|rolls|bagel|bagels|pitta|wrap|wraps|bakery|croissant|muffin)\b/i.test(lower)) return 'bakery';
+  return 'general';
+}
+
 app.post('/api/parse-list', (req, res) => {
-  const { rawText } = req.body;
+  const { rawText = '' } = req.body;
   if (!rawText || typeof rawText !== 'string') {
-    return res.json({ items: [] });
+    return res.status(400).json({ error: 'No rawText provided in request body' });
   }
 
   const lines = rawText
@@ -89,7 +100,7 @@ app.post('/api/parse-list', (req, res) => {
       rawText: line,
       name: text,
       baseItem: text,
-      category: 'general',
+      category: detectItemCategory(text),
       targetQuantity: 1,
       unit: 'item',
       checked: false,

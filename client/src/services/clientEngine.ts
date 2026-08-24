@@ -95,14 +95,23 @@ export class ClientShoppingParser {
     let text = rawText;
 
     // Remove leading bullet points, numbered lists, checkboxes (e.g. "1. ", "1) ", "- ", "* ", "• ", "- [ ] ", "- [x] ", "[x] ")
-    text = text.replace(/^(\d+[\.\)\-]\s+|[-*•]\s*|\s*\[[\sxX]?\]\s*)+/i, '').trim();
+    const detectCategory = (str: string): string => {
+      const lower = str.toLowerCase();
+      if (/\b(?:beef|mince|chicken|pork|lamb|steak|bacon|sausage|meat|turkey|duck|gammon|veal|burgers?|meatballs?)\b/i.test(lower)) return 'meat';
+      if (/\b(?:cod|salmon|haddock|tuna|prawn|prawns|fish|seafood|trout|mackerel|sea bass|pollock|basa)\b/i.test(lower)) return 'fish';
+      if (/\b(?:milk|yogurt|yoghurt|cheese|egg|eggs|butter|cream|cheddar|dairy)\b/i.test(lower)) return 'dairy-eggs';
+      if (/\b(?:potato|potatoes|carrot|carrots|onion|onions|garlic|courgette|pepper|peppers|mushroom|mushrooms|tomato|tomatoes|spinach|apple|apples|banana|bananas|orange|oranges|berry|berries|lettuce|cucumber|salad|vegetables?|fruits?)\b/i.test(lower)) return 'produce';
+      if (/\b(?:pasta|fusilli|penne|spaghetti|rice|oat|oats|porridge|lentil|lentils|chia|walnut|walnuts|flour|sugar|oil|olive oil|salt|sauce|tin|tins|tinned|can|canned|beans|passata|puree|noodles?)\b/i.test(lower)) return 'pantry';
+      if (/\b(?:bread|loaf|loaves|roll|rolls|bagel|bagels|pitta|wrap|wraps|bakery|croissant|muffin)\b/i.test(lower)) return 'bakery';
+      return 'general';
+    };
 
     const parsed: ParsedItem = {
       id: id || `item-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
       rawText,
       name: text,
       baseItem: text,
-      category: 'general',
+      category: detectCategory(text),
       targetQuantity: 1,
       unit: 'item',
       checked: false,
