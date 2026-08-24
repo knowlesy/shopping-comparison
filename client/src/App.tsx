@@ -439,6 +439,7 @@ export default function App() {
         setIsDark={setIsDark}
         itemCount={items.length}
         cheapestStore={comparison ? comparison.supermarkets[comparison.cheapestStore]?.info.name : undefined}
+        loading={loading}
       />
 
       {/* Main Content Area */}

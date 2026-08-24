@@ -1,5 +1,4 @@
-import React from 'react';
-import { ShoppingCart, Sparkles, History, BookmarkCheck, Settings, Moon, Sun, Search } from 'lucide-react';
+import { ShoppingCart, Sparkles, History, BookmarkCheck, Settings, Moon, Sun, Search, Loader2 } from 'lucide-react';
 
 interface HeaderProps {
   activeTab: 'list' | 'compare' | 'history' | 'favorites' | 'quickcheck';
@@ -9,6 +8,7 @@ interface HeaderProps {
   setIsDark: (dark: boolean) => void;
   itemCount: number;
   cheapestStore?: string;
+  loading?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -19,6 +19,7 @@ export const Header: React.FC<HeaderProps> = ({
   setIsDark,
   itemCount,
   cheapestStore,
+  loading = false,
 }) => {
   return (
     <header className="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors w-full">
@@ -89,15 +90,19 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={() => setActiveTab('compare')}
               className={`flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all shrink-0 ${
-                activeTab === 'compare'
+                activeTab === 'compare' || loading
                   ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 font-bold shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
               }`}
             >
-              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500 shrink-0" />
-              <span className="hidden sm:inline">Compare Prices</span>
-              <span className="sm:hidden">Compare</span>
-              {cheapestStore && (
+              {loading ? (
+                <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600 dark:text-emerald-400 animate-spin shrink-0" />
+              ) : (
+                <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500 shrink-0" />
+              )}
+              <span className="hidden sm:inline">{loading ? 'Scanning...' : 'Compare Prices'}</span>
+              <span className="sm:hidden">{loading ? 'Scanning...' : 'Compare'}</span>
+              {cheapestStore && !loading && (
                 <span className="hidden md:inline-block ml-1 px-1.5 py-0.5 text-[10px] rounded bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300 font-bold uppercase">
                   {cheapestStore}
                 </span>

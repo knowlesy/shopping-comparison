@@ -12,6 +12,7 @@ import {
   Heart,
   Search,
   BookOpen,
+  Loader2,
 } from 'lucide-react';
 import { ParsedItem, IngredientIdea, SupermarketName } from '../types';
 
@@ -359,11 +360,20 @@ export const ListCreator: React.FC<ListCreatorProps> = ({
                   }
                 }}
                 disabled={loading || (items.length === 0 && !rawText.trim())}
-                className="flex items-center justify-center space-x-2 w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm shadow-lg shadow-emerald-600/25 transition transform active:scale-95 disabled:opacity-50"
+                className="flex items-center justify-center space-x-2 w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm shadow-lg shadow-emerald-600/25 transition transform active:scale-95 disabled:opacity-75 disabled:cursor-not-allowed"
               >
-                <Sparkles className="w-4 h-4 text-amber-300 shrink-0" />
-                <span className="whitespace-nowrap">Compare Prices Now</span>
-                <ArrowRight className="w-4 h-4 shrink-0" />
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin text-white shrink-0" />
+                    <span className="whitespace-nowrap">Scanning Supermarkets...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4 text-amber-300 shrink-0" />
+                    <span className="whitespace-nowrap">Compare Prices Now</span>
+                    <ArrowRight className="w-4 h-4 shrink-0" />
+                  </>
+                )}
               </button>
             </div>
           </div>
