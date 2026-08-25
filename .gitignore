@@ -41,3 +41,8 @@ services/logic-api/data/*
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Blog & Internal Audit Notes
+blog.md
+docs/blog_assets/
+report*.md
