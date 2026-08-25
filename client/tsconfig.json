@@ -16,6 +16,6 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "../data/catalog.json"],
+  "include": ["src", "../data/catalog.json", "../data/contamination-rules.json"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

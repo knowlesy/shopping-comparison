@@ -1,0 +1,43 @@
+[
+  {
+    "category": "eggs",
+    "matchPattern": "\\b(?:egg|eggs)\\b",
+    "matchNegatePattern": "\\b(?:scotch|mayo|salad in mayo|custard|noodle)\\b",
+    "prohibitedPattern": "\\b(?:scotch|mayo|salad in mayo|mayonnaise|custard|creme egg|easter|chocolate egg|noodles?|sandwich|fried egg sweets|sweets)\\b"
+  },
+  {
+    "category": "potatoes",
+    "matchPattern": "\\b(?:potato|potatoes)\\b",
+    "matchNegatePattern": "\\b(?:crisp|crisps|chip|chips|waffle)\\b",
+    "prohibitedPattern": "\\b(?:crisps?|chips?|waffles?|croquettes?|salad in mayo|mayonnaise|ready meal|snack)\\b"
+  },
+  {
+    "category": "milk",
+    "matchPattern": "\\b(?:milk)\\b",
+    "matchNegatePattern": "\\b(?:chocolate|milkshake|condensed|evaporated|powder)\\b",
+    "prohibitedPattern": "\\b(?:chocolate milk|milkshake|condensed|evaporated|powder|powdered|flavoured)\\b"
+  },
+  {
+    "category": "yogurt",
+    "matchPattern": "\\b(?:yogurt|yoghurt|authentic greek)\\b",
+    "prohibitedPattern": "\\b(?:drink|corner|split pot|frubes|munch bunch|dessert|custard)\\b"
+  },
+  {
+    "category": "raw-meat",
+    "matchPattern": "\\b(?:mince|steak|beef|chicken|pork|lamb|turkey|breast|fillet)\\b",
+    "matchNegatePattern": "\\b(?:canned|tinned|gravy|pie|stew|meal)\\b",
+    "prohibitedPattern": "\\b(?:in gravy|& gravy|and gravy|& onions|and onions|canned|tinned|pie filling|pie\\b|cat food|dog food|pet food)\\b"
+  },
+  {
+    "category": "garlic",
+    "matchPattern": "\\b(?:garlic|garlic bulb|cloves of garlic)\\b",
+    "matchNegatePattern": "\\b(?:bread|baguette|butter|sauce|dip)\\b",
+    "prohibitedPattern": "\\b(?:garlic bread|baguette|garlic doughballs?|garlic mayonnaise|garlic sauce|garlic dip|garlic butter|crisps)\\b"
+  },
+  {
+    "category": "spinach",
+    "matchPattern": "\\b(?:spinach|baby spinach|spinach leaves)\\b",
+    "matchNegatePattern": "\\b(?:pasta|pie|bake|soup)\\b",
+    "prohibitedPattern": "\\b(?:pasta bake|lasagne|ricotta tortelloni|spinach.*pie|spinach soup|dip)\\b"
+  }
+]
