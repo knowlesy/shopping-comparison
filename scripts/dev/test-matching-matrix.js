@@ -1,6 +1,6 @@
-import { FuzzyMatcher } from './services/fuzzyMatcher.js';
-import { CATALOG_PRODUCTS } from './services/catalogData.js';
-import { BasketCalculator } from './services/basketCalculator.js';
+import { FuzzyMatcher } from '../../services/logic-api/src/services/fuzzyMatcher.js';
+import { CATALOG_PRODUCTS } from '../../services/logic-api/src/services/catalogData.js';
+import { BasketCalculator } from '../../services/logic-api/src/services/basketCalculator.js';
 
 // ANSI Colors for clean test output
 const RED = '\x1b[31m';

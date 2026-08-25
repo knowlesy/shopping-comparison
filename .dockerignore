@@ -1,0 +1,9 @@
+node_modules
+client/node_modules
+client/dist
+docs
+test-results
+tests
+scripts
+.git
+*.md
