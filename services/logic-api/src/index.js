@@ -6,6 +6,7 @@ import { GeminiDomParser } from './services/geminiParser.js';
 import { FuzzyMatcher } from './services/fuzzyMatcher.js';
 import { BasketCalculator } from './services/basketCalculator.js';
 import { PriceCache } from './services/priceCache.js';
+import { isContaminated } from './services/contaminationRules.js';
 
 dotenv.config();
 
@@ -397,11 +398,8 @@ app.get('/api/products/alternatives', async (req, res) => {
       const catLower = (p.category || '').toLowerCase();
       const subLower = (p.subCategory || '').toLowerCase();
 
-      // Negative filters for non-staples
-      if (/\b(?:egg|eggs)\b/i.test(queryLower) && /\b(?:scotch|mayo|custard|creme egg|easter|chocolate egg|noodles?|sandwich)\b/i.test(titleLower)) return false;
-      if (/\b(?:potato|potatoes)\b/i.test(queryLower) && /\b(?:crisps?|chips?|waffles?|croquettes?|salad in mayo)\b/i.test(titleLower)) return false;
-      if (/\b(?:milk)\b/i.test(queryLower) && /\b(?:chocolate milk|milkshake|condensed|evaporated|powdered|flavoured)\b/i.test(titleLower)) return false;
-      if (/\b(?:yogurt|yoghurt)\b/i.test(queryLower) && /\b(?:drink|corner|split pot|frubes|munch bunch|dessert)\b/i.test(titleLower)) return false;
+      // Negative filters for non-staples / contaminated items
+      if (isContaminated(queryLower, p.title)) return false;
 
       return titleLower.includes(coreLower) || 
              coreLower.split(' ').some(w => w.length > 2 && titleLower.includes(w)) ||
@@ -425,11 +423,7 @@ app.get('/api/products/alternatives', async (req, res) => {
         const products = await GeminiDomParser.parseHtml(html, coreQuery);
         scrapedForStore = products.filter(p => {
           if (p.supermarket !== store) return false;
-          const titleLower = p.title.toLowerCase();
-          if (/\b(?:egg|eggs)\b/i.test(queryLower) && /\b(?:scotch|mayo|custard|creme egg|easter|chocolate egg|noodles?|sandwich)\b/i.test(titleLower)) return false;
-          if (/\b(?:potato|potatoes)\b/i.test(queryLower) && /\b(?:crisps?|chips?|waffles?|croquettes?|salad in mayo)\b/i.test(titleLower)) return false;
-          if (/\b(?:milk)\b/i.test(queryLower) && /\b(?:chocolate milk|milkshake|condensed|evaporated|powdered|flavoured)\b/i.test(titleLower)) return false;
-          if (/\b(?:yogurt|yoghurt)\b/i.test(queryLower) && /\b(?:drink|corner|split pot|frubes|munch bunch|dessert)\b/i.test(titleLower)) return false;
+          if (isContaminated(queryLower, p.title)) return false;
           return true;
         });
       } catch (scrapeErr) {

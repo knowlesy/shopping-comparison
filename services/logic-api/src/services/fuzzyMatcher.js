@@ -1,4 +1,5 @@
 import { CATALOG_PRODUCTS } from './catalogData.js';
+import { isContaminated } from './contaminationRules.js';
 
 // Pre-index catalog products by supermarket once at startup to avoid repeated O(N) filtering in loops
 const CATALOG_BY_STORE = {};
@@ -103,11 +104,6 @@ export class FuzzyMatcher {
     // 3. Must match the item's category (if specific)
     // 4. Must match at least one of the item's primary nouns
     // 5. Must not be prohibited processed food (e.g. scotch eggs, crisps)
-    const isEggQuery = /\b(?:egg|eggs)\b/i.test(itemText) && !/\b(?:scotch|mayo|custard)\b/i.test(itemText);
-    const isPotatoQuery = /\b(?:potato|potatoes)\b/i.test(itemText) && !/\b(?:crisp|chip)\b/i.test(itemText);
-    const isMilkQuery = /\b(?:milk)\b/i.test(itemText) && !/\b(?:chocolate|milkshake)\b/i.test(itemText);
-    const isYogurtQuery = /\b(?:yogurt|yoghurt)\b/i.test(itemText);
-
     const alternatives = scored
       .filter(s => s.product.id !== best.product.id)
       .filter(s => s.score >= 20)
@@ -115,16 +111,7 @@ export class FuzzyMatcher {
         const prodTitle = s.product.title.toLowerCase();
 
         // Hard negative exclusions on alternatives
-        if (isEggQuery && /\b(?:scotch|mayo|salad in mayo|custard|creme egg|easter|chocolate egg|noodles?|sandwich|sweets)\b/i.test(prodTitle)) {
-          return false;
-        }
-        if (isPotatoQuery && /\b(?:crisps?|chips?|waffles?|croquettes?|salad in mayo|ready meal|snack)\b/i.test(prodTitle)) {
-          return false;
-        }
-        if (isMilkQuery && /\b(?:chocolate milk|milkshake|condensed|evaporated|powdered|flavoured)\b/i.test(prodTitle)) {
-          return false;
-        }
-        if (isYogurtQuery && /\b(?:drink|corner|split pot|frubes|munch bunch|dessert|custard)\b/i.test(prodTitle)) {
+        if (isContaminated(itemText, prodTitle)) {
           return false;
         }
 
@@ -280,30 +267,8 @@ export class FuzzyMatcher {
     }
 
     // Specific cross-species & processed snack exclusions for staples
-    const isEggRequested = /\b(?:egg|eggs)\b/i.test(itemLower) && !/\b(?:scotch|mayo|custard|noodle)\b/i.test(itemLower);
-    if (isEggRequested && /\b(?:scotch|mayo|salad in mayo|custard|creme egg|easter|chocolate egg|noodles?|sandwich|fried egg sweets)\b/i.test(titleLower)) {
+    if (isContaminated(itemLower, titleLower)) {
       score -= 500;
-    }
-
-    const isPotatoRequested = /\b(?:potato|potatoes)\b/i.test(itemLower) && !/\b(?:crisp|crisps|chip|chips|waffle)\b/i.test(itemLower);
-    if (isPotatoRequested && /\b(?:crisps?|chips?|waffles?|croquettes?|salad in mayo|ready meal|snack)\b/i.test(titleLower)) {
-      score -= 500;
-    }
-
-    const isPlainMilkRequested = /\b(?:milk)\b/i.test(itemLower) && !/\b(?:chocolate|milkshake|condensed|evaporated|powder)\b/i.test(itemLower);
-    if (isPlainMilkRequested && /\b(?:chocolate milk|milkshake|condensed|evaporated|powdered|flavoured)\b/i.test(titleLower)) {
-      score -= 500;
-    }
-
-    const isGreekYogurtRequested = /\b(?:greek yogurt|greek yoghurt|authentic greek)\b/i.test(itemLower);
-    if (isGreekYogurtRequested && /\b(?:drink|corner|split pot|frubes|munch bunch|dessert|custard)\b/i.test(titleLower)) {
-      score -= 500;
-    }
-
-    // Explicit check for canned/tinned meat in gravy vs raw mince/beef/chicken
-    const isRawMeatStaple = /\b(?:mince|steak|beef|chicken|pork|lamb|turkey|breast|fillet)\b/i.test(itemLower) && !/\b(?:canned|tinned|gravy|pie|stew|meal)\b/i.test(itemLower);
-    if (isRawMeatStaple && (titleLower.includes('in gravy') || titleLower.includes('& gravy') || titleLower.includes('and gravy') || titleLower.includes('& onions') || titleLower.includes('and onions') || titleLower.includes('canned') || titleLower.includes('tinned') || titleLower.includes('pie filling'))) {
-      score -= 300; // Ensure plain fresh/frozen meat is always chosen over canned minced beef in gravy
     }
 
     if (!itemLower.includes('breaded') && (titleLower.includes('breaded') || titleLower.includes('battered') || titleLower.includes('crumbed'))) {

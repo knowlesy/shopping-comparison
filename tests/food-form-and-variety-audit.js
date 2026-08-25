@@ -5,6 +5,8 @@ import { IngredientParser } from "../services/logic-api/src/services/ingredientP
 import { FuzzyMatcher } from "../services/logic-api/src/services/fuzzyMatcher.js";
 import { CATALOG_PRODUCTS } from "../services/logic-api/src/services/catalogData.js";
 
+import { isContaminated, CONTAMINATION_RULES } from "../services/logic-api/src/services/contaminationRules.js";
+
 const ARTIFACT_DIR = "/Users/peterknowles/.gemini/antigravity/brain/fb1ce239-2a37-4c30-a665-6c2e9a3628c8";
 const SCREENSHOTS_DIR = path.join(ARTIFACT_DIR, "screenshots");
 if (!fs.existsSync(SCREENSHOTS_DIR)) {
@@ -25,44 +27,11 @@ const preferences = {
   enabledSupermarkets: SUPERMARKETS
 };
 
-// Contamination rule definitions: regex patterns that must NEVER match for a given query type
-const NEGATIVE_RULES = [
-  {
-    name: "Fresh Cooking Eggs",
-    matchQuery: (q) => /\b(egg|eggs)\b/i.test(q) && !/\b(scotch|mayo|custard|noodle)\b/i.test(q),
-    prohibitedInProduct: /\b(scotch|mayo|salad in mayo|custard|creme egg|easter|chocolate egg|noodles?|sandwich|fried egg sweets)\b/i
-  },
-  {
-    name: "Fresh Cooking Potatoes",
-    matchQuery: (q) => /\b(potato|potatoes)\b/i.test(q) && !/\b(crisp|crisps|chip|chips|waffle)\b/i.test(q),
-    prohibitedInProduct: /\b(crisps?|chips?|waffles?|croquettes?|salad in mayo|ready meal|snack)\b/i
-  },
-  {
-    name: "Fresh / Pure Milk",
-    matchQuery: (q) => /\b(milk)\b/i.test(q) && !/\b(chocolate|milkshake|condensed|evaporated|powder)\b/i.test(q),
-    prohibitedInProduct: /\b(chocolate milk|milkshake|condensed|evaporated|powdered|flavoured)\b/i
-  },
-  {
-    name: "Authentic / Plain Greek Yogurt",
-    matchQuery: (q) => /\b(greek yogurt|greek yoghurt|authentic greek)\b/i.test(q),
-    prohibitedInProduct: /\b(drink|corner|split pot|frubes|munch bunch|dessert|custard)\b/i
-  },
-  {
-    name: "Raw Meat & Poultry (Mince, Chicken, Beef, Steak, Pork)",
-    matchQuery: (q) => /\b(mince|steak|beef|chicken|pork|lamb|turkey|breast|fillet)\b/i.test(q) && !/\b(canned|tinned|gravy|pie|stew|meal)\b/i.test(q),
-    prohibitedInProduct: /\b(in gravy|& gravy|and gravy|& onions|and onions|canned|tinned|pie filling|soup|crisp|ready meal|cat food|dog food)\b/i
-  },
-  {
-    name: "Fresh Garlic Produce",
-    matchQuery: (q) => /\b(garlic|garlic bulb|cloves of garlic)\b/i.test(q) && !/\b(bread|baguette|butter|sauce|dip)\b/i.test(q),
-    prohibitedInProduct: /\b(garlic bread|baguette|garlic doughball|garlic mayonnaise|garlic sauce|garlic dip|garlic butter|crisps)\b/i
-  },
-  {
-    name: "Fresh Spinach Produce",
-    matchQuery: (q) => /\b(spinach|baby spinach|spinach leaves)\b/i.test(q) && !/\b(pasta|pie|bake|soup)\b/i.test(q),
-    prohibitedInProduct: /\b(pasta bake|lasagne|ricotta tortelloni|spinach & ricotta pie|spinach soup|dip)\b/i
-  }
-];
+const NEGATIVE_RULES = CONTAMINATION_RULES.map(r => ({
+  name: r.category,
+  matchQuery: r.matchQuery,
+  prohibitedInProduct: r.prohibited
+}));
 
 async function runExpandedTestSuite() {
   console.log("===============================================================================");

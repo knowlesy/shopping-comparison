@@ -10,6 +10,7 @@ import {
   SplitBasketStore,
 } from '../types';
 import catalogJson from '../../../data/catalog.json';
+import { isContaminated } from './contaminationRules';
 
 export const CATALOG_PRODUCTS = (catalogJson.products || []) as SupermarketProduct[];
 export const SUPERMARKETS_INFO = (catalogJson.supermarkets || {}) as Record<string, any>;
@@ -433,11 +434,6 @@ export class ClientSupermarketComparisonService {
     ];
     const targetNouns = CORE_NOUNS.filter(n => itemText.includes(n));
 
-    const isEggQuery = /\b(?:egg|eggs)\b/i.test(itemText) && !/\b(?:scotch|mayo|custard)\b/i.test(itemText);
-    const isPotatoQuery = /\b(?:potato|potatoes)\b/i.test(itemText) && !/\b(?:crisp|chip)\b/i.test(itemText);
-    const isMilkQuery = /\b(?:milk)\b/i.test(itemText) && !/\b(?:chocolate|milkshake)\b/i.test(itemText);
-    const isYogurtQuery = /\b(?:yogurt|yoghurt)\b/i.test(itemText);
-
     return storeProducts
       .map(prod => ({
         prod,
@@ -447,16 +443,7 @@ export class ClientSupermarketComparisonService {
       .filter(item => {
         const prodTitle = item.prod.title.toLowerCase();
 
-        if (isEggQuery && /\b(?:scotch|mayo|salad in mayo|custard|creme egg|easter|chocolate egg|noodles?|sandwich|sweets)\b/i.test(prodTitle)) {
-          return false;
-        }
-        if (isPotatoQuery && /\b(?:crisps?|chips?|waffles?|croquettes?|salad in mayo|ready meal|snack)\b/i.test(prodTitle)) {
-          return false;
-        }
-        if (isMilkQuery && /\b(?:chocolate milk|milkshake|condensed|evaporated|powdered|flavoured)\b/i.test(prodTitle)) {
-          return false;
-        }
-        if (isYogurtQuery && /\b(?:drink|corner|split pot|frubes|munch bunch|dessert|custard)\b/i.test(prodTitle)) {
+        if (isContaminated(itemText, prodTitle)) {
           return false;
         }
 
@@ -494,21 +481,8 @@ export class ClientSupermarketComparisonService {
     if (itemLower.includes('mince') && (titleLower.includes('soup') || titleLower.includes('gravy') || titleLower.includes('pie') || titleLower.includes('crisp') || titleLower.includes('canned') || titleLower.includes('tinned'))) score -= 300;
     if (item.category === 'produce' && (titleLower.includes('pizza') || titleLower.includes('bread') || titleLower.includes('soup') || titleLower.includes('crisp'))) score -= 250;
 
-    // Hard exclusions for non-cooking egg snacks, crisps, flavored milk, yogurt drinks
-    const isEggQuery = /\b(?:egg|eggs)\b/i.test(itemLower) && !/\b(?:scotch|mayo|custard)\b/i.test(itemLower);
-    if (isEggQuery && /\b(?:scotch|mayo|salad in mayo|custard|creme egg|easter|chocolate egg|noodles?|sandwich|sweets)\b/i.test(titleLower)) {
-      score -= 500;
-    }
-    const isPotatoQuery = /\b(?:potato|potatoes)\b/i.test(itemLower) && !/\b(?:crisp|chip)\b/i.test(itemLower);
-    if (isPotatoQuery && /\b(?:crisps?|chips?|waffles?|croquettes?|salad in mayo|ready meal|snack)\b/i.test(titleLower)) {
-      score -= 500;
-    }
-    const isMilkQuery = /\b(?:milk)\b/i.test(itemLower) && !/\b(?:chocolate|milkshake)\b/i.test(itemLower);
-    if (isMilkQuery && /\b(?:chocolate milk|milkshake|condensed|evaporated|powdered|flavoured)\b/i.test(titleLower)) {
-      score -= 500;
-    }
-    const isYogurtQuery = /\b(?:yogurt|yoghurt)\b/i.test(itemLower);
-    if (isYogurtQuery && /\b(?:drink|corner|split pot|frubes|munch bunch|dessert|custard)\b/i.test(titleLower)) {
+    // Hard exclusions for contaminated snacks and processed items
+    if (isContaminated(itemLower, titleLower)) {
       score -= 500;
     }
 
