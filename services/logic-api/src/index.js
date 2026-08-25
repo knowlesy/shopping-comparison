@@ -12,8 +12,12 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
 
-app.use(cors());
+app.use(cors({
+  origin: CLIENT_ORIGIN,
+  credentials: true
+}));
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true, limit: '5mb' }));
 
@@ -293,11 +297,20 @@ app.post('/api/compare/stream', async (req, res) => {
   const totalChecks = items.length * enabledStores.length;
 
   // Periodic SSE heartbeat comment to prevent proxy or browser socket timeouts
+  let isClosed = false;
   const heartbeat = setInterval(() => {
+    if (isClosed) return;
     try {
       res.write(': heartbeat\n\n');
-    } catch {}
+    } catch {
+      clearInterval(heartbeat);
+    }
   }, 8000);
+
+  req.on('close', () => {
+    isClosed = true;
+    clearInterval(heartbeat);
+  });
 
   res.write(`data: ${JSON.stringify({
     type: 'init',
@@ -316,6 +329,7 @@ app.post('/api/compare/stream', async (req, res) => {
 
   try {
     for (let i = 0; i < items.length; i++) {
+      if (isClosed) break;
       const item = items[i];
       const coreQuery = getCoreSearchQuery(item);
 
@@ -332,10 +346,14 @@ app.post('/api/compare/stream', async (req, res) => {
 
       const candidateProducts = await getOrFetchCandidates(coreQuery, enabledStores, forceRefresh);
 
+      if (isClosed) break;
+
       for (const store of enabledStores) {
         const match = FuzzyMatcher.matchProduct(store, item, candidateProducts, preferences);
         storeMatchesMap[store].push(match);
       }
+
+      if (isClosed) break;
 
       res.write(`data: ${JSON.stringify({
         type: 'item_matched',
@@ -349,23 +367,27 @@ app.post('/api/compare/stream', async (req, res) => {
       })}\n\n`);
     }
 
-    const comparison = BasketCalculator.computeComparison(items, storeMatchesMap, enabledStores);
+    if (!isClosed) {
+      const comparison = BasketCalculator.computeComparison(items, storeMatchesMap, enabledStores);
 
-    res.write(`data: ${JSON.stringify({
-      type: 'complete',
-      comparison
-    })}\n\n`);
+      res.write(`data: ${JSON.stringify({
+        type: 'complete',
+        comparison
+      })}\n\n`);
+    }
     clearInterval(heartbeat);
     res.end();
 
   } catch (err) {
     clearInterval(heartbeat);
     console.error('[Logic-API] Stream compare error:', err);
-    res.write(`data: ${JSON.stringify({
-      type: 'error',
-      error: err.message || 'Stream processing failed'
-    })}\n\n`);
-    res.end();
+    if (!isClosed) {
+      res.write(`data: ${JSON.stringify({
+        type: 'error',
+        error: err.message || 'Stream processing failed'
+      })}\n\n`);
+      res.end();
+    }
   }
 });
 

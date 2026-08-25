@@ -1,5 +1,4 @@
 import express from 'express';
-import cors from 'cors';
 import dotenv from 'dotenv';
 import { connect } from 'puppeteer-real-browser';
 
@@ -7,8 +6,8 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3002;
+const SCRAPE_TOKEN = process.env.SCRAPE_TOKEN;
 
-app.use(cors());
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true, limit: '5mb' }));
 
@@ -21,6 +20,24 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString()
   });
 });
+
+// Auth middleware: enforce shared secret token on scrape endpoint (fails closed)
+function authenticateScrapeToken(req, res, next) {
+  if (!SCRAPE_TOKEN) {
+    return res.status(401).json({
+      success: false,
+      error: 'Unauthorized: SCRAPE_TOKEN environment variable is not configured on scraper-pod (failing closed).'
+    });
+  }
+  const token = req.headers['x-scrape-token'];
+  if (!token || token !== SCRAPE_TOKEN) {
+    return res.status(401).json({
+      success: false,
+      error: 'Unauthorized: invalid or missing x-scrape-token header.'
+    });
+  }
+  next();
+}
 
 // SSRF / Host validation
 const ALLOWED_HOSTS = [
@@ -80,41 +97,53 @@ async function getBrowser() {
     return browserLaunchPromise;
   }
 
+  console.log('[Scraper-Pod] Initializing shared Puppeteer Real Browser instance...');
   browserLaunchPromise = (async () => {
     try {
-      console.log('[Scraper-Pod] Initializing shared Chromium instance...');
-      const { browser } = await connect({
-        headless: true,
-        turnstile: true,
-        disableXvfb: false,
+      const response = await connect({
+        headless: 'auto',
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
           '--disable-dev-shm-usage',
+          '--disable-accelerated-2d-canvas',
+          '--no-first-run',
+          '--no-zygote',
           '--disable-gpu'
-        ]
+        ],
+        turnstile: true,
+        connectOption: {
+          defaultViewport: { width: 1920, height: 1080 }
+        }
       });
-      sharedBrowser = browser;
+
+      sharedBrowser = response.browser;
       sharedBrowser.on('disconnected', () => {
-        console.log('[Scraper-Pod] Browser disconnected. Will re-initialize on next request.');
+        console.warn('[Scraper-Pod] Browser disconnected. Resetting browser instance pool.');
         sharedBrowser = null;
+        browserLaunchPromise = null;
       });
+
+      console.log('[Scraper-Pod] Shared browser instance successfully initialized.');
       return sharedBrowser;
-    } finally {
+    } catch (err) {
+      console.error('[Scraper-Pod] Failed to initialize shared browser:', err.message);
+      sharedBrowser = null;
       browserLaunchPromise = null;
+      throw err;
     }
   })();
 
   return browserLaunchPromise;
 }
 
-// Main scraping endpoint
-app.post('/scrape', async (req, res) => {
+// Scrape endpoint
+app.post('/scrape', authenticateScrapeToken, async (req, res) => {
   const {
     url,
     waitForSelector,
     timeout = 35000,
-    delay = 2000,
+    delay = 1500,
     turnstile = true
   } = req.body;
 
@@ -217,4 +246,3 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`   Health Check: GET http://localhost:${PORT}/health`);
   console.log(`   Scrape API:   POST http://localhost:${PORT}/scrape`);
 });
-

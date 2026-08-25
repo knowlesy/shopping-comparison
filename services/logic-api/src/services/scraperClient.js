@@ -18,7 +18,8 @@ export class ScraperClient {
       const response = await fetch(SCRAPER_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'x-scrape-token': process.env.SCRAPE_TOKEN || ''
         },
         body: JSON.stringify({
           url,
