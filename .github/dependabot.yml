@@ -1,34 +1,74 @@
 version: 2
 updates:
-  # Maintain dependencies for root npm packages
+  # Root dependencies
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 5
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
 
-  # Maintain dependencies for client
+  # Client frontend dependencies
   - package-ecosystem: "npm"
     directory: "/client"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 5
+    groups:
+      react-ecosystem:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      vite-ecosystem:
+        patterns:
+          - "vite"
+          - "@vitejs/*"
+      tailwind-ecosystem:
+        patterns:
+          - "tailwindcss"
+          - "postcss"
+          - "autoprefixer"
+          - "tailwind-merge"
+          - "clsx"
+      other:
+        patterns:
+          - "*"
+    ignore:
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/react-dom"
+        update-types: ["version-update:semver-major"]
 
-  # Maintain dependencies for logic-api microservice
+  # Logic-API microservice
   - package-ecosystem: "npm"
     directory: "/services/logic-api"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 5
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
 
-  # Maintain dependencies for scraper-pod microservice
+  # Scraper-Pod microservice
   - package-ecosystem: "npm"
     directory: "/services/scraper-pod"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 5
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
 
-  # Maintain Docker base image dependencies
+  # Docker base images
   - package-ecosystem: "docker"
     directory: "/services/logic-api"
     schedule:
