@@ -7,7 +7,7 @@ services:
     environment:
       - PORT=3002
       - NODE_ENV=production
-      - SCRAPE_TOKEN=${SCRAPE_TOKEN:-dev_secret_scrape_token_123}
+      - SCRAPE_TOKEN=${SCRAPE_TOKEN}
     shm_size: '2gb'
     ipc: host
     restart: unless-stopped
@@ -29,7 +29,7 @@ services:
       - PORT=3001
       - NODE_ENV=production
       - SCRAPER_SERVICE_URL=http://scraper-pod:3002/scrape
-      - SCRAPE_TOKEN=${SCRAPE_TOKEN:-dev_secret_scrape_token_123}
+      - SCRAPE_TOKEN=${SCRAPE_TOKEN}
       - CLIENT_ORIGIN=${CLIENT_ORIGIN:-http://localhost:5173}
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
     depends_on:

@@ -22,12 +22,20 @@ The canonical backend stack consists of two isolated microservices:
 1. **`logic-api`**: Core comparison, NLP parsing, and basket optimization service (`http://localhost:3001`).
 2. **`scraper-pod`**: Sandboxed Chromium scraping engine (`http://scraper-pod:3002`).
 
-### 1. Launch Services via Docker Compose
+### 1. Configure Environment
+Copy `.env.example` to `.env` and set your `SCRAPE_TOKEN`:
+```bash
+cp .env.example .env
+# Set a secure random token in .env, e.g.:
+# SCRAPE_TOKEN=$(openssl rand -hex 24)
+```
+
+### 2. Launch Services via Docker Compose
 ```bash
 docker compose up --build -d
 ```
 
-### 2. Start the Frontend Client
+### 3. Start the Frontend Client
 ```bash
 npm --prefix client install
 npm --prefix client run dev
@@ -38,15 +46,19 @@ Open **`http://localhost:5173`** in your browser.
 
 ## 💻 Local Development (Without Docker)
 
-You can run all services concurrently:
+Both microservices automatically load environment variables from `.env` via `dotenv`.
+
 ```bash
-# Install root, client, and microservice dependencies
+# 1. Configure environment
+cp .env.example .env
+
+# 2. Install root, client, and microservice dependencies
 npm install
 npm --prefix client install
 npm --prefix services/logic-api install
 npm --prefix services/scraper-pod install
 
-# Start all 3 services concurrently
+# 3. Start all 3 services concurrently
 npm run dev
 ```
 
