@@ -5,11 +5,12 @@ WORKDIR /usr/src/app
 ENV NODE_ENV=production \
     PORT=3001
 
-COPY package*.json ./
+COPY services/logic-api/package*.json ./
 
 RUN npm install --omit=dev
 
-COPY src/ ./src/
+COPY services/logic-api/src/ ./src/
+COPY data/ ./data/
 
 EXPOSE 3001
 

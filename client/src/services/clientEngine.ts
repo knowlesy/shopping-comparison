@@ -9,9 +9,11 @@ import {
   SplitBasketOptimization,
   SplitBasketStore,
 } from '../types';
-import { CATALOG_PRODUCTS, SUPERMARKETS_INFO, DEFAULT_INGREDIENT_IDEAS } from '../../../server/src/services/catalogData';
+import catalogJson from '../../../data/catalog.json';
 
-export { CATALOG_PRODUCTS, SUPERMARKETS_INFO, DEFAULT_INGREDIENT_IDEAS };
+export const CATALOG_PRODUCTS = (catalogJson.products || []) as SupermarketProduct[];
+export const SUPERMARKETS_INFO = (catalogJson.supermarkets || {}) as Record<string, any>;
+export const DEFAULT_INGREDIENT_IDEAS = (catalogJson.ingredientIdeas || []) as any[];
 
 export function extractSearchQuery(text: string): string {
   let clean = text

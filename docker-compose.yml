@@ -23,8 +23,8 @@ services:
 
   logic-api:
     build:
-      context: ./services/logic-api
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./services/logic-api/Dockerfile
     container_name: uk-grocery-logic-api
     ports:
       - "3001:3001"
