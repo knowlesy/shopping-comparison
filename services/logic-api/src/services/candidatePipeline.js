@@ -9,6 +9,7 @@ export function getCoreSearchQuery(item) {
       ? item.toLowerCase()
       : (item.baseItem || item.name || '').toLowerCase();
   const cleaned = raw
+    .replace(/^(\d+)\s*[xX*]\s*/g, '')
     .replace(/\b\d+%\s*(?:fat|lean)\b/gi, '')
     .replace(
       /\b(?:lean|fresh|organic|free\s*range|wholewheat|wholegrain|wholemeal|frozen|tinned|canned|authentic|sliced|salted|unsalted|smoked|unsmoked)\b/gi,
@@ -26,19 +27,39 @@ export function getCoreSearchQuery(item) {
 }
 
 /**
- * Shared candidate pipeline for fetching candidates with 72h PriceCache check and bounded scraping
+ * Builds a deterministic scrape cache key incorporating the query and sorted enabled stores.
+ * @param {string} coreQuery
+ * @param {string[]} enabledStores
+ * @returns {string}
+ */
+export function buildScrapeCacheKey(coreQuery, enabledStores = []) {
+  const normalizedQuery = (coreQuery || '').toLowerCase().trim();
+  const sortedStores =
+    Array.isArray(enabledStores) && enabledStores.length > 0
+      ? [...enabledStores].map((s) => String(s).toLowerCase().trim()).sort().join(',')
+      : 'all';
+  return `cache:v2:scrape:${normalizedQuery}:${sortedStores}`;
+}
+
+/**
+ * Shared candidate pipeline for fetching candidates with 72h PriceCache check, bounded scraping, and source tracking.
  * @param {string} coreQuery - Normalized ingredient search query
  * @param {object} options - { forceRefresh, timeoutMs, enabledStores }
- * @returns {Promise<Array>} Array of candidate products
+ * @returns {Promise<{ products: Array, source: 'live' | 'cache' | 'catalog' }>}
  */
-export async function getOrFetchCandidates(coreQuery, options = {}) {
-  const { forceRefresh = false, timeoutMs = 3500, _enabledStores = [] } = options;
-  const cacheKey = `cache:scrape:${coreQuery}`;
-  let candidateProducts = [];
+export async function getOrFetchCandidatesWithSource(coreQuery, options = {}) {
+  const { forceRefresh = false, timeoutMs = 3500, enabledStores = [] } = options;
+  const cacheKey = buildScrapeCacheKey(coreQuery, enabledStores);
 
   if (!forceRefresh && PriceCache.has(cacheKey)) {
-    return [...PriceCache.get(cacheKey)];
+    return {
+      products: [...PriceCache.get(cacheKey)],
+      source: 'cache'
+    };
   }
+
+  let candidateProducts = [];
+  let source = 'catalog';
 
   try {
     const targetUrl = `https://www.trolley.co.uk/search/?q=${encodeURIComponent(coreQuery)}`;
@@ -55,13 +76,29 @@ export async function getOrFetchCandidates(coreQuery, options = {}) {
 
     const { html } = await Promise.race([scrapePromise, timeoutPromise]);
     candidateProducts = await GeminiDomParser.parseHtml(html, coreQuery);
+    if (candidateProducts && candidateProducts.length > 0) {
+      source = 'live';
+    }
   } catch (_err) {
     // Gracefully proceed with verified catalog products
+    source = 'catalog';
   }
 
   // Save / refresh persistent cache
   if (candidateProducts.length > 0) {
     PriceCache.set(cacheKey, candidateProducts);
   }
-  return candidateProducts;
+
+  return {
+    products: candidateProducts,
+    source
+  };
+}
+
+/**
+ * Backward-compatible helper returning candidate products array directly.
+ */
+export async function getOrFetchCandidates(coreQuery, options = {}) {
+  const res = await getOrFetchCandidatesWithSource(coreQuery, options);
+  return res.products;
 }

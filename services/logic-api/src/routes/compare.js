@@ -1,7 +1,10 @@
 import express from 'express';
 import { FuzzyMatcher } from '../services/fuzzyMatcher.js';
 import { BasketCalculator } from '../services/basketCalculator.js';
-import { getCoreSearchQuery, getOrFetchCandidates } from '../services/candidatePipeline.js';
+import {
+  getCoreSearchQuery,
+  getOrFetchCandidatesWithSource
+} from '../services/candidatePipeline.js';
 import { getUserSettings } from './settings.js';
 
 export const compareRouter = express.Router();
@@ -35,13 +38,20 @@ compareRouter.post('/', async (req, res) => {
     storeMatchesMap[s] = [];
   }
 
+  const sourcesCount = { live: 0, cache: 0, catalog: 0 };
+
   try {
     for (const item of items) {
       const coreQuery = getCoreSearchQuery(item);
-      const candidateProducts = await getOrFetchCandidates(coreQuery, {
-        forceRefresh,
-        enabledStores
-      });
+      const { products: candidateProducts, source } =
+        await getOrFetchCandidatesWithSource(coreQuery, {
+          forceRefresh,
+          enabledStores
+        });
+
+      if (sourcesCount[source] !== undefined) {
+        sourcesCount[source]++;
+      }
 
       for (const store of enabledStores) {
         const match = FuzzyMatcher.matchProduct(store, item, candidateProducts, preferences);
@@ -50,9 +60,16 @@ compareRouter.post('/', async (req, res) => {
     }
 
     const comparison = BasketCalculator.computeComparison(items, storeMatchesMap, enabledStores);
+    comparison.meta = {
+      sources: {
+        live: sourcesCount.live,
+        cache: sourcesCount.cache,
+        catalog: sourcesCount.catalog
+      }
+    };
 
     console.log(
-      `[Logic-API] Comparison complete. Cheapest store: ${comparison.cheapestStore.toUpperCase()}`
+      `[Logic-API] Comparison complete. Cheapest store: ${comparison.cheapestStore.toUpperCase()} (sources: live=${sourcesCount.live}, cache=${sourcesCount.cache}, catalog=${sourcesCount.catalog})`
     );
     res.json(comparison);
   } catch (err) {
@@ -123,6 +140,8 @@ compareRouter.post('/stream', async (req, res) => {
     storeMatchesMap[s] = [];
   }
 
+  const sourcesCount = { live: 0, cache: 0, catalog: 0 };
+
   try {
     for (let i = 0; i < items.length; i++) {
       if (isClosed) break;
@@ -142,10 +161,15 @@ compareRouter.post('/stream', async (req, res) => {
         })}\n\n`
       );
 
-      const candidateProducts = await getOrFetchCandidates(coreQuery, {
-        forceRefresh,
-        enabledStores
-      });
+      const { products: candidateProducts, source } =
+        await getOrFetchCandidatesWithSource(coreQuery, {
+          forceRefresh,
+          enabledStores
+        });
+
+      if (sourcesCount[source] !== undefined) {
+        sourcesCount[source]++;
+      }
 
       if (isClosed) break;
 
@@ -172,6 +196,13 @@ compareRouter.post('/stream', async (req, res) => {
 
     if (!isClosed) {
       const comparison = BasketCalculator.computeComparison(items, storeMatchesMap, enabledStores);
+      comparison.meta = {
+        sources: {
+          live: sourcesCount.live,
+          cache: sourcesCount.cache,
+          catalog: sourcesCount.catalog
+        }
+      };
 
       res.write(
         `data: ${JSON.stringify({
