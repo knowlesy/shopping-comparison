@@ -27,6 +27,12 @@ jobs:
       - name: Install client dependencies
         run: npm --prefix client ci
 
+      - name: Install logic-api dependencies
+        run: npm --prefix services/logic-api ci
+
+      - name: Install scraper-pod dependencies
+        run: npm --prefix services/scraper-pod ci
+
       - name: Lint codebase
         run: npx eslint services/
 
