@@ -1,8 +1,8 @@
 # TrolleyWise UK 🛒
 
-[![CI](https://github.com/knowlesy/shopping-comparison/actions/workflows/ci.yml/badge.svg)](https://github.com/knowlesy/shopping-comparison/actions/workflows/ci.yml)
+[![CI](https://github.com/knowlesy/shopping-comparison/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/knowlesy/shopping-comparison/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](LICENSE)
-[![Node.js](https://img.shields.io/badge/Node.js-20.x-green.svg)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-22.x-green.svg)](https://nodejs.org/)
 [![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg)](docker-compose.yml)
 
 A high-performance grocery price comparison and basket optimization application for UK supermarket shoppers. Compare real product prices, packaging configurations, closest-weight sizing, and healthier dietary alternatives across 7 major UK supermarkets: **ASDA**, **Tesco**, **Sainsbury's**, **Morrisons**, **Iceland**, **Aldi**, and **Lidl**.
