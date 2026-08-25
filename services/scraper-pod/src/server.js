@@ -6,7 +6,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3002;
-const SCRAPE_TOKEN = process.env.SCRAPE_TOKEN || 'trolleywise-internal-scrape-token';
+const SCRAPE_TOKEN = process.env.SCRAPE_TOKEN;
 
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true, limit: '5mb' }));
@@ -24,7 +24,7 @@ app.get('/health', (req, res) => {
 // Auth middleware: enforce shared secret token on scrape endpoint (fails closed)
 function authenticateScrapeToken(req, res, next) {
   if (!SCRAPE_TOKEN) {
-    return res.status(401).json({
+    return res.status(500).json({
       success: false,
       error:
         'Unauthorized: SCRAPE_TOKEN environment variable is not configured on scraper-pod (failing closed).'

@@ -10,7 +10,12 @@ data:
   PORT_CLIENT: "8080"
   SCRAPER_SERVICE_URL: "http://trolleywise-scraper-pod:3002/scrape"
   CLIENT_ORIGIN: "http://localhost:8080"
----
+# NOTE: Do NOT commit production secrets to Git!
+# Generate a random 48-char secret and apply to the cluster:
+#   kubectl create secret generic trolleywise-secret -n trolleywise \
+#     --from-literal=SCRAPE_TOKEN="$(openssl rand -hex 24)" \
+#     --from-literal=GEMINI_API_KEY=""
+# Or manage via Sealed Secrets / External Secrets Operator.
 apiVersion: v1
 kind: Secret
 metadata:
@@ -18,6 +23,5 @@ metadata:
   namespace: trolleywise
 type: Opaque
 stringData:
-  SCRAPE_TOKEN: "trolleywise-internal-scrape-token"
-  # Optional: GEMINI_API_KEY can be added here if AI candidate reviewer is used
+  SCRAPE_TOKEN: "CHANGE_ME_SECURE_TOKEN"
   GEMINI_API_KEY: ""

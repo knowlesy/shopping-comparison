@@ -19,7 +19,7 @@ export class ScraperClient {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-scrape-token': process.env.SCRAPE_TOKEN || 'trolleywise-internal-scrape-token'
+          'x-scrape-token': process.env.SCRAPE_TOKEN || ''
         },
         body: JSON.stringify({
           url,
