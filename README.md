@@ -1,5 +1,8 @@
 # TrolleyWise UK 🛒
 
+> **Built with Google Antigravity & Anthropic Claude**  
+> Architected, engineered, and verified through AI-driven pair programming and multi-agent adversarial audits.
+
 [![CI](https://github.com/knowlesy/shopping-comparison/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/knowlesy/shopping-comparison/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-22.x-green.svg)](https://nodejs.org/)
@@ -16,7 +19,7 @@ Side-by-side comparison across all 7 UK stores with unit prices (£/kg, £/L), p
 ![Supermarket Price & Sizing Matrix](docs/assets/02-price-matrix.png)
 
 ### 2. Smart NLP Shopping List & Ingredient Parser
-Extracts quantities, compound multi-packs ($3 \times 400g$), and dietary tags ($5\%$ lean, $0\%$ Greek yogurt, wholewheat, free range, organic).
+Extracts quantities, compound multi-packs (`3 x 400g`), and dietary tags (`5% lean`, `0% Greek yogurt`, wholewheat, free range, organic).
 ![Smart Shopping List](docs/assets/01-shopping-list.png)
 
 ### 3. Interactive "Swap Item" Alternative Picker
@@ -37,11 +40,11 @@ Quickly check standalone items across all 7 supermarkets, or review past shoppin
 ## ✨ Key Features
 
 - **7 UK Supermarkets**: Full coverage for Asda, Tesco, Sainsbury's, Morrisons, Iceland, Aldi, and Lidl.
-- **Smart NLP Item Parser**: Extracts weights ($g$, $kg$), liquid volumes ($ml$, $L$, pints), multi-pack multipliers ($3 \times 400g$), and health tags.
-- **Closest-Pack Sizing Engine**: Recommends optimal pack counts and calculates true unit costs.
+- **Smart NLP Item Parser**: Extracts weights (`g`, `kg`), liquid volumes (`ml`, `L`, pints), multi-pack multipliers (`3 x 400g`), and health tags.
+- **Closest-Pack Sizing Engine**: Recommends optimal pack counts and calculates true unit costs in £/kg and £/L.
 - **Food Form & Contamination Filter**: Zero false matches (rejects Scotch eggs for fresh eggs, crisps for potatoes, milkshakes for milk, dessert pots for Greek yogurt).
 - **Dual Comparison Modes**: Standard JSON API (`POST /api/compare`) and real-time Server-Sent Events streaming (`POST /api/compare/stream`).
-- **Split-Basket Optimizer**: Computes two-store split checkout savings versus single-store baskets.
+- **Split-Basket Optimizer**: Computes two-store split checkout savings versus single-store baskets in £.
 - **Persistent 72-Hour Caching**: Fast sub-10ms response times for repeat searches with auto-cache disk persistence.
 - **Offline Client Fallback**: Browser-side engine allows full comparison and parsing functionality offline.
 
