@@ -30,13 +30,30 @@ services:
       - NODE_ENV=production
       - SCRAPER_SERVICE_URL=http://scraper-pod:3002/scrape
       - SCRAPE_TOKEN=${SCRAPE_TOKEN}
-      - CLIENT_ORIGIN=${CLIENT_ORIGIN:-http://localhost:5173}
+      - CLIENT_ORIGIN=${CLIENT_ORIGIN:-http://localhost:8080}
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
     depends_on:
       - scraper-pod
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:3001/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  client:
+    build:
+      context: .
+      dockerfile: ./client/Dockerfile
+    container_name: uk-grocery-client
+    ports:
+      - "8080:8080"
+    depends_on:
+      - logic-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/health"]
       interval: 15s
       timeout: 5s
       retries: 3
