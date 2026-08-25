@@ -17,8 +17,8 @@ spec:
     spec:
       containers:
         - name: logic-api
-          image: ghcr.io/knowlesy/shopping-comparison-logic-api:latest
-          imagePullPolicy: Always
+          image: ghcr.io/knowlesy/shopping-comparison-logic-api:52b0889fb76726475ee06e92dac01748b92542fa
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3001
               name: http

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "kubernetes": {
+    "fileMatch": ["(^|/)deploy/k3s/.+\\.ya?ml$"]
+  },
+  "packageRules": [
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "ghcr.io/knowlesy/shopping-comparison-client",
+        "ghcr.io/knowlesy/shopping-comparison-logic-api",
+        "ghcr.io/knowlesy/shopping-comparison-scraper-pod"
+      ],
+      "groupName": "trolleywise-containers",
+      "automerge": false
+    }
+  ]
+}
