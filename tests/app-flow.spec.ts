@@ -42,12 +42,14 @@ test.describe('TrolleyWise UK Web App End-to-End Verification', () => {
     // 8. Verify Comparison View rendered
     await expect(page.locator('h1:has-text("Supermarket Price & Sizing Matrix")')).toBeVisible();
 
-    // Verify 5 Supermarket summary cards exist
+    // Verify all 7 Supermarket summary cards exist
     await expect(page.locator('span:has-text("Asda")').first()).toBeVisible();
     await expect(page.locator('span:has-text("Tesco")').first()).toBeVisible();
     await expect(page.locator("span:has-text(\"Sainsbury's\")").first()).toBeVisible();
     await expect(page.locator('span:has-text("Morrisons")').first()).toBeVisible();
     await expect(page.locator('span:has-text("Iceland")').first()).toBeVisible();
+    await expect(page.locator('span:has-text("Aldi")').first()).toBeVisible();
+    await expect(page.locator('span:has-text("Lidl")').first()).toBeVisible();
 
     // Verify Cheapest store badge
     const cheapestBadge = page.locator('text=Cheapest Overall').first();

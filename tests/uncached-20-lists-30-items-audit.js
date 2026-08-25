@@ -10,11 +10,35 @@ import {
   CONTAMINATION_RULES
 } from '../services/logic-api/src/services/contaminationRules.js';
 
+import { spawn } from 'child_process';
+
 const ARTIFACT_DIR =
   '/Users/peterknowles/.gemini/antigravity/brain/fb1ce239-2a37-4c30-a665-6c2e9a3628c8';
 const SCREENSHOTS_DIR = path.join(ARTIFACT_DIR, 'screenshots');
 if (!fs.existsSync(SCREENSHOTS_DIR)) {
   fs.mkdirSync(SCREENSHOTS_DIR, { recursive: true });
+}
+
+let previewServer = null;
+async function ensureServerRunning() {
+  try {
+    const res = await fetch('http://localhost:5173/');
+    if (res.ok) return;
+  } catch {}
+
+  console.log('  Starting local Vite preview server on port 5173...');
+  previewServer = spawn('npx', ['vite', 'preview', '--port', '5173', '--strictPort'], {
+    cwd: path.resolve('client'),
+    stdio: 'ignore'
+  });
+
+  for (let i = 0; i < 30; i++) {
+    await new Promise((r) => setTimeout(r, 200));
+    try {
+      const res = await fetch('http://localhost:5173/');
+      if (res.ok) return;
+    } catch {}
+  }
 }
 
 const SUPERMARKETS = ['asda', 'tesco', 'sainsburys', 'morrisons', 'iceland', 'aldi', 'lidl'];
@@ -229,6 +253,8 @@ async function runUncachedAudit() {
     '▶ PHASE 2: Running Real Browser Playwright E2E UI Test on 30-Item Uncached Shopping List...'
   );
 
+  await ensureServerRunning();
+
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({ viewport: { width: 1366, height: 950 } });
   const page = await context.newPage();
@@ -312,6 +338,9 @@ async function runUncachedAudit() {
     });
   } finally {
     await browser.close();
+    if (previewServer) {
+      previewServer.kill();
+    }
   }
 
   // -------------------------------------------------------------------------

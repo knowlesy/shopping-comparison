@@ -1,0 +1,379 @@
+[
+  {
+    "id": "recipe-1",
+    "title": "Classic British Sunday Beef Roast",
+    "cuisine": "British",
+    "servings": 4,
+    "items": [
+      "1.5kg beef roasting joint",
+      "2.5kg Maris Piper potatoes",
+      "1kg fresh carrots",
+      "500g parsnips",
+      "1 head fresh broccoli",
+      "1 head fresh cauliflower",
+      "6 free range large eggs",
+      "1L whole milk",
+      "1.5kg plain white flour",
+      "250g salted butter",
+      "900g frozen garden peas",
+      "3 pack garlic bulbs",
+      "250ml extra virgin olive oil",
+      "170g beef gravy granules"
+    ]
+  },
+  {
+    "id": "recipe-2",
+    "title": "Authentic Italian Spaghetti Bolognese",
+    "cuisine": "Italian",
+    "servings": 4,
+    "items": [
+      "900g 5% lean beef mince",
+      "500g spaghetti pasta",
+      "3 x 400g tinned chopped tomatoes",
+      "500g passata",
+      "200g tomato puree",
+      "1kg brown onions",
+      "1kg fresh carrots",
+      "1 bunch fresh celery",
+      "3 pack garlic bulbs",
+      "500ml extra virgin olive oil",
+      "200g Parmigiano Reggiano parmesan cheese",
+      "250g fresh button mushrooms"
+    ]
+  },
+  {
+    "id": "recipe-3",
+    "title": "Thai Green Chicken Curry & Jasmine Rice",
+    "cuisine": "Thai",
+    "servings": 4,
+    "items": [
+      "1kg fresh chicken breast fillets",
+      "1kg jasmine rice",
+      "2 x 400ml tinned coconut milk",
+      "200g Thai green curry paste",
+      "250g fresh baby spinach leaves",
+      "500g fresh courgettes",
+      "250g baby sweetcorn",
+      "250g sugar snap peas",
+      "3 pack garlic bulbs",
+      "150ml fish sauce",
+      "6 pack fresh limes"
+    ]
+  },
+  {
+    "id": "recipe-4",
+    "title": "Full Traditional British Breakfast",
+    "cuisine": "British",
+    "servings": 4,
+    "items": [
+      "8 pack thick pork sausages",
+      "8 pack unsmoked back bacon",
+      "12 British free range medium eggs",
+      "400g black pudding",
+      "2 x 415g baked beans in tomato sauce",
+      "500g fresh vine tomatoes",
+      "400g fresh chestnut mushrooms",
+      "800g wholemeal sliced bread",
+      "250g salted butter",
+      "4 pints whole milk"
+    ]
+  },
+  {
+    "id": "recipe-5",
+    "title": "Indian Chicken Tikka Masala & Pilau Rice",
+    "cuisine": "Indian",
+    "servings": 4,
+    "items": [
+      "1kg fresh chicken breast fillets",
+      "1kg authentic Greek yogurt 0%",
+      "1kg basmati rice",
+      "2 x 400g tinned chopped tomatoes",
+      "300ml double cream",
+      "250g salted butter",
+      "1kg brown onions",
+      "3 pack garlic bulbs",
+      "100g garam masala spice",
+      "100g ground turmeric",
+      "4 pack plain naan breads",
+      "500g fresh baby spinach"
+    ]
+  },
+  {
+    "id": "recipe-6",
+    "title": "Spanish Seafood Paella",
+    "cuisine": "Spanish",
+    "servings": 4,
+    "items": [
+      "500g raw peeled king prawns",
+      "500g fresh salmon fillets",
+      "1.6kg frozen cod loins",
+      "1kg paella rice",
+      "250g chorizo ring",
+      "2 x 400g tinned chopped tomatoes",
+      "3 pack mixed bell peppers",
+      "1kg brown onions",
+      "3 pack garlic bulbs",
+      "900g frozen garden peas",
+      "500ml extra virgin olive oil",
+      "6 pack fresh lemons"
+    ]
+  },
+  {
+    "id": "recipe-7",
+    "title": "Mexican Beef Birria & Street Tacos",
+    "cuisine": "Mexican",
+    "servings": 6,
+    "items": [
+      "1kg beef steak fillets",
+      "500g 12% standard beef mince",
+      "2 x 8 pack mini soft corn tortillas",
+      "2 x 400g tinned black beans",
+      "2 x 400g tinned chopped tomatoes",
+      "1kg red onions",
+      "3 pack garlic bulbs",
+      "6 pack fresh limes",
+      "400g mature British cheddar cheese",
+      "4 pack fresh avocados",
+      "300ml soured cream"
+    ]
+  },
+  {
+    "id": "recipe-8",
+    "title": "Greek Souvlaki & Authentic Tzatziki Mezze",
+    "cuisine": "Greek",
+    "servings": 4,
+    "items": [
+      "1kg fresh chicken breast fillets",
+      "1kg authentic Greek yogurt 0%",
+      "2 pack whole cucumbers",
+      "6 pack Greek style flatbreads",
+      "200g authentic Greek feta cheese",
+      "500g fresh cherry tomatoes",
+      "1kg red onions",
+      "3 pack garlic bulbs",
+      "500ml extra virgin olive oil",
+      "6 pack fresh lemons",
+      "250g pitted kalamata olives"
+    ]
+  },
+  {
+    "id": "recipe-9",
+    "title": "Slow Cooker Beef Bourguignon",
+    "cuisine": "French",
+    "servings": 4,
+    "items": [
+      "1kg beef braising steak",
+      "250g smoked bacon lardons",
+      "2.5kg Maris Piper potatoes",
+      "1kg fresh carrots",
+      "500g fresh shallots",
+      "400g chestnut mushrooms",
+      "3 pack garlic bulbs",
+      "200g tomato puree",
+      "1L beef stock",
+      "250g salted butter",
+      "400g fresh crusty French baguette"
+    ]
+  },
+  {
+    "id": "recipe-10",
+    "title": "Japanese Crispy Chicken Katsu Curry",
+    "cuisine": "Japanese",
+    "servings": 4,
+    "items": [
+      "1kg fresh chicken breast fillets",
+      "1kg sushi or short grain rice",
+      "6 free range medium eggs",
+      "1.5kg plain white flour",
+      "200g Japanese panko breadcrumbs",
+      "1kg fresh carrots",
+      "1kg brown onions",
+      "2kg baby new potatoes",
+      "200g Japanese katsu curry blocks",
+      "500ml vegetable oil"
+    ]
+  },
+  {
+    "id": "recipe-11",
+    "title": "Classic British Cottage Pie & Peas",
+    "cuisine": "British",
+    "servings": 4,
+    "items": [
+      "900g 5% lean beef mince",
+      "2.5kg Maris Piper potatoes",
+      "1kg fresh carrots",
+      "1kg brown onions",
+      "1 bunch fresh celery",
+      "900g frozen garden peas",
+      "200g tomato puree",
+      "250ml Worcestershire sauce",
+      "1L beef stock",
+      "250g salted butter",
+      "400g mature cheddar cheese",
+      "1L whole milk"
+    ]
+  },
+  {
+    "id": "recipe-12",
+    "title": "Creamy Garlic Tuscan Salmon & Linguine",
+    "cuisine": "Italian",
+    "servings": 4,
+    "items": [
+      "500g fresh salmon fillets",
+      "500g linguine pasta",
+      "250g fresh baby spinach leaves",
+      "500g fresh cherry tomatoes",
+      "300ml double cream",
+      "3 pack garlic bulbs",
+      "200g Parmigiano Reggiano parmesan cheese",
+      "500ml extra virgin olive oil",
+      "250g salted butter",
+      "6 pack fresh lemons"
+    ]
+  },
+  {
+    "id": "recipe-13",
+    "title": "Middle Eastern Shakshuka & Crusty Bread",
+    "cuisine": "Middle Eastern",
+    "servings": 4,
+    "items": [
+      "12 British free range large eggs",
+      "3 x 400g tinned chopped tomatoes",
+      "3 pack mixed bell peppers",
+      "1kg red onions",
+      "3 pack garlic bulbs",
+      "200g authentic Greek feta cheese",
+      "500ml extra virgin olive oil",
+      "100g ground cumin",
+      "100g smoked paprika",
+      "800g sourdough artisan bread"
+    ]
+  },
+  {
+    "id": "recipe-14",
+    "title": "Moroccan Lamb Tagine & Spiced Couscous",
+    "cuisine": "Moroccan",
+    "servings": 4,
+    "items": [
+      "800g diced British lamb",
+      "1kg dried couscous",
+      "2 x 400g tinned chickpeas in water",
+      "2 x 400g tinned chopped tomatoes",
+      "1kg fresh carrots",
+      "1kg red onions",
+      "3 pack garlic bulbs",
+      "250g dried apricots",
+      "150g flaked almonds",
+      "500ml extra virgin olive oil",
+      "100g ground cinnamon",
+      "100g ground cumin"
+    ]
+  },
+  {
+    "id": "recipe-15",
+    "title": "Asian Chicken Chow Mein & Veggies",
+    "cuisine": "Chinese",
+    "servings": 4,
+    "items": [
+      "1kg fresh chicken breast fillets",
+      "500g dried egg noodles",
+      "1 head fresh pak choi",
+      "1kg fresh carrots",
+      "3 pack mixed bell peppers",
+      "250g fresh beansprouts",
+      "1 bunch spring onions",
+      "3 pack garlic bulbs",
+      "250ml dark soy sauce",
+      "250ml toasted sesame oil",
+      "150ml oyster sauce"
+    ]
+  },
+  {
+    "id": "recipe-16",
+    "title": "Creamy Wild Mushroom Risotto",
+    "cuisine": "Italian",
+    "servings": 4,
+    "items": [
+      "1kg arborio risotto rice",
+      "500g fresh chestnut mushrooms",
+      "250g fresh portobello mushrooms",
+      "1kg brown onions",
+      "3 pack garlic bulbs",
+      "1L vegetable stock",
+      "250g salted butter",
+      "200g Parmigiano Reggiano parmesan cheese",
+      "500ml extra virgin olive oil",
+      "250g fresh baby spinach leaves"
+    ]
+  },
+  {
+    "id": "recipe-17",
+    "title": "Hearty Winter Leek, Potato & Bacon Soup",
+    "cuisine": "British",
+    "servings": 6,
+    "items": [
+      "2kg baby new potatoes",
+      "1kg fresh leeks",
+      "8 pack unsmoked back bacon",
+      "1kg brown onions",
+      "3 pack garlic bulbs",
+      "1L vegetable stock",
+      "300ml double cream",
+      "250g salted butter",
+      "800g wholemeal sliced bread"
+    ]
+  },
+  {
+    "id": "recipe-18",
+    "title": "Vegetarian Lentil, Sweet Potato & Spinach Dhal",
+    "cuisine": "Indian",
+    "servings": 4,
+    "items": [
+      "1kg dried red lentils",
+      "1kg sweet potatoes",
+      "250g fresh baby spinach leaves",
+      "2 x 400ml tinned coconut milk",
+      "2 x 400g tinned chopped tomatoes",
+      "1kg brown onions",
+      "3 pack garlic bulbs",
+      "1kg brown basmati rice",
+      "100g ground turmeric",
+      "100g garam masala",
+      "4 pack plain naan breads"
+    ]
+  },
+  {
+    "id": "recipe-19",
+    "title": "British Fish & Chips with Minted Mushy Peas",
+    "cuisine": "British",
+    "servings": 4,
+    "items": [
+      "1.6kg frozen cod loins",
+      "2.5kg Maris Piper potatoes",
+      "1.5kg plain white flour",
+      "6 free range eggs",
+      "900g frozen garden peas",
+      "250g salted butter",
+      "1L vegetable oil",
+      "6 pack fresh lemons",
+      "250g tartar sauce"
+    ]
+  },
+  {
+    "id": "recipe-20",
+    "title": "Classic British Bramley Apple Crumble & Custard",
+    "cuisine": "British Baking",
+    "servings": 6,
+    "items": [
+      "1.5kg fresh Bramley cooking apples",
+      "1.5kg plain white flour",
+      "1kg rolled oats",
+      "1kg caster sugar",
+      "1kg light brown soft sugar",
+      "250g salted butter",
+      "100g ground cinnamon",
+      "500ml ready-to-serve fresh vanilla custard",
+      "1L whole milk"
+    ]
+  }
+]

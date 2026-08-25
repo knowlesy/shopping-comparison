@@ -15,7 +15,8 @@
     "format": "prettier --write \"services/**/*.js\" \"tests/**/*.js\" \"data/catalog.json\"",
     "test": "node --test services/logic-api/src/services/*.test.js",
     "test:food-form": "node tests/food-form-and-variety-audit.js",
-    "test:uncached-20": "node tests/uncached-20-lists-30-items-audit.js"
+    "test:uncached-20": "node tests/uncached-20-lists-30-items-audit.js",
+    "test:recipes-20": "node tests/verify-20-recipes.js"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
