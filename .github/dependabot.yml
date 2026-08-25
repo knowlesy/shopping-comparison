@@ -1,0 +1,40 @@
+version: 2
+updates:
+  # Maintain dependencies for root npm packages
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  # Maintain dependencies for client
+  - package-ecosystem: "npm"
+    directory: "/client"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  # Maintain dependencies for logic-api microservice
+  - package-ecosystem: "npm"
+    directory: "/services/logic-api"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  # Maintain dependencies for scraper-pod microservice
+  - package-ecosystem: "npm"
+    directory: "/services/scraper-pod"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  # Maintain Docker base image dependencies
+  - package-ecosystem: "docker"
+    directory: "/services/logic-api"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "docker"
+    directory: "/services/scraper-pod"
+    schedule:
+      interval: "weekly"
