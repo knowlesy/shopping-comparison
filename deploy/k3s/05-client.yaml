@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trolleywise-client
+  namespace: trolleywise
+  labels:
+    app: trolleywise-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trolleywise-client
+  template:
+    metadata:
+      labels:
+        app: trolleywise-client
+    spec:
+      containers:
+        - name: client
+          image: ghcr.io/knowlesy/shopping-comparison-client:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              name: http
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trolleywise-client
+  namespace: trolleywise
+spec:
+  selector:
+    app: trolleywise-client
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      name: http

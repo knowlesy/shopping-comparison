@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: trolleywise-config
+  namespace: trolleywise
+data:
+  NODE_ENV: "production"
+  PORT_LOGIC: "3001"
+  PORT_SCRAPER: "3002"
+  PORT_CLIENT: "8080"
+  SCRAPER_SERVICE_URL: "http://trolleywise-scraper-pod:3002/scrape"
+  CLIENT_ORIGIN: "http://localhost:8080"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: trolleywise-secret
+  namespace: trolleywise
+type: Opaque
+stringData:
+  SCRAPE_TOKEN: "trolleywise-internal-scrape-token"
+  # Optional: GEMINI_API_KEY can be added here if AI candidate reviewer is used
+  GEMINI_API_KEY: ""

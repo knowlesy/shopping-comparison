@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trolleywise-scraper-pod
+  namespace: trolleywise
+  labels:
+    app: trolleywise-scraper-pod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trolleywise-scraper-pod
+  template:
+    metadata:
+      labels:
+        app: trolleywise-scraper-pod
+    spec:
+      containers:
+        - name: scraper-pod
+          image: ghcr.io/knowlesy/shopping-comparison-scraper-pod:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3002
+              name: http
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: trolleywise-config
+                  key: PORT_SCRAPER
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: trolleywise-config
+                  key: NODE_ENV
+            - name: SCRAPE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: trolleywise-secret
+                  key: SCRAPE_TOKEN
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "2Gi"
+              cpu: "1500m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3002
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3002
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          volumeMounts:
+            - name: dshm
+              mountPath: /dev/shm
+      volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trolleywise-scraper-pod
+  namespace: trolleywise
+spec:
+  selector:
+    app: trolleywise-scraper-pod
+  ports:
+    - protocol: TCP
+      port: 3002
+      targetPort: 3002
+      name: http

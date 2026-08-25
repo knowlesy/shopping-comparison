@@ -6,7 +6,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3002;
-const SCRAPE_TOKEN = process.env.SCRAPE_TOKEN;
+const SCRAPE_TOKEN = process.env.SCRAPE_TOKEN || 'trolleywise-internal-scrape-token';
 
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true, limit: '5mb' }));

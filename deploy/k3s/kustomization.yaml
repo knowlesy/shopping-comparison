@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: trolleywise
+
+resources:
+  - 01-namespace.yaml
+  - 02-config.yaml
+  - 03-scraper-pod.yaml
+  - 04-logic-api.yaml
+  - 05-client.yaml
+  - 06-ingress.yaml

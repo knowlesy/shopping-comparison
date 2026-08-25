@@ -121,7 +121,7 @@ function assignCategory(title = '') {
   return { category: 'general', subCategory: 'general' };
 }
 
-export class GeminiDomParser {
+class DomScraperParser {
   /**
    * Parse messy HTML string into typed SupermarketProduct array
    * Uses Cheerio DOM extractor + optional Google GenAI enhancement
@@ -129,7 +129,7 @@ export class GeminiDomParser {
    * @param {string} searchQuery - Original user query
    * @returns {Promise<Array<import('../types').SupermarketProduct>>}
    */
-  static async parseHtml(html, searchQuery) {
+  static async parseHtml(html, _searchQuery = '') {
     if (!html || typeof html !== 'string') {
       return [];
     }
@@ -183,38 +183,8 @@ export class GeminiDomParser {
     });
 
     console.log(
-      `[Logic-API -> GeminiDomParser] Extracted ${rawCards.length} raw product cards from DOM.`
+      `[Logic-API -> DomScraperParser] Extracted ${rawCards.length} raw product cards from DOM.`
     );
-
-    // If Google GenAI API key is present, valid, and not in quota cooldown, enhance extraction with Gemini
-    const rawKey =
-      process.env.GEMINI_API_KEY || process.env.GOOGLE_GENAI_API_KEY || process.env.GOOGLE_API_KEY;
-    const apiKey =
-      rawKey && typeof rawKey === 'string' && rawKey.trim().length > 10 ? rawKey.trim() : null;
-    const now = Date.now();
-
-    if (apiKey && rawCards.length > 0 && now > (GeminiDomParser.quotaCooldownUntil || 0)) {
-      try {
-        const enhanced = await this.enhanceWithGemini(rawCards.slice(0, 20), searchQuery, apiKey);
-        if (enhanced && enhanced.length > 0) {
-          return enhanced;
-        }
-      } catch (geminiErr) {
-        if (
-          geminiErr.message &&
-          (geminiErr.message.includes('429') || geminiErr.message.includes('RESOURCE_EXHAUSTED'))
-        ) {
-          GeminiDomParser.quotaCooldownUntil = Date.now() + 10 * 60 * 1000;
-          console.warn(
-            '[Logic-API -> GeminiDomParser] GenAI free tier rate limit reached. Cooldown for 10m; using native fast DOM parsing.'
-          );
-        } else {
-          console.warn(
-            `[Logic-API -> GeminiDomParser] GenAI parsing fallback: ${geminiErr.message}`
-          );
-        }
-      }
-    }
 
     // Direct DOM transformation pipeline
     const products = [];
@@ -303,73 +273,14 @@ export class GeminiDomParser {
     }
 
     console.log(
-      `[Logic-API -> GeminiDomParser] Successfully structured ${products.length} supermarket products.`
+      `[Logic-API -> DomScraperParser] Successfully structured ${products.length} supermarket products.`
     );
     return products;
   }
-
-  /**
-   * Use @google/genai SDK to parse and validate product cards with timeout
-   */
-  static async enhanceWithGemini(rawCards, query, apiKey) {
-    const geminiPromise = (async () => {
-      const { GoogleGenAI } = await import('@google/genai');
-      const ai = new GoogleGenAI({ apiKey });
-
-      const prompt = `You are a UK grocery data parser. Extract and normalise these raw product cards from a UK supermarket aggregator search for query: "${query}".
-Standardise strictly on UK English, GBP (£), metric weights (g, kg, ml, L), and assign to one of ['tesco', 'asda', 'sainsburys', 'morrisons', 'iceland'].
-
-Raw Cards:
-${JSON.stringify(rawCards, null, 2)}
-
-Return a JSON array of objects with schema:
-[
-  {
-    "id": "string",
-    "supermarket": "tesco" | "asda" | "sainsburys" | "morrisons" | "iceland",
-    "title": "string",
-    "brand": "string",
-    "tier": "value" | "standard" | "premium" | "branded",
-    "category": "meat" | "fish" | "dairy-eggs" | "produce" | "pantry" | "bakery" | "general",
-    "subCategory": "string",
-    "packageSize": number (in grams, ml, or units),
-    "packageUnit": "g" | "kg" | "ml" | "l" | "pack",
-    "packageDisplay": "string (e.g. 750g, 1kg, 2 Pints)",
-    "price": number,
-    "unitPrice": number,
-    "unitPriceMeasure": "£/kg" | "£/L" | "£/item",
-    "isHealthier": boolean,
-    "fatPercentage": number | null,
-    "isOrganic": boolean,
-    "isWholewheat": boolean,
-    "isFreeRange": boolean,
-    "inStock": true,
-    "productUrl": "string",
-    "imageUrl": "string"
-  }
-]`;
-
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-        config: {
-          responseMimeType: 'application/json'
-        }
-      });
-
-      const parsed = JSON.parse(response.text);
-      return Array.isArray(parsed) ? parsed : [];
-    })();
-
-    const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('Gemini API call timed out after 6000ms')), 6000)
-    );
-
-    return Promise.race([geminiPromise, timeoutPromise]);
-  }
 }
 
-GeminiDomParser.parseMetricSize = parseMetricSize;
-GeminiDomParser.normalizeSupermarket = normalizeSupermarket;
+const GeminiDomParser = DomScraperParser;
+DomScraperParser.parseMetricSize = parseMetricSize;
+DomScraperParser.normalizeSupermarket = normalizeSupermarket;
 
-export { parseMetricSize, normalizeSupermarket };
+export { DomScraperParser, GeminiDomParser, parseMetricSize, normalizeSupermarket };

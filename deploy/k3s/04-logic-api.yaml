@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trolleywise-logic-api
+  namespace: trolleywise
+  labels:
+    app: trolleywise-logic-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trolleywise-logic-api
+  template:
+    metadata:
+      labels:
+        app: trolleywise-logic-api
+    spec:
+      containers:
+        - name: logic-api
+          image: ghcr.io/knowlesy/shopping-comparison-logic-api:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3001
+              name: http
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: trolleywise-config
+                  key: PORT_LOGIC
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: trolleywise-config
+                  key: NODE_ENV
+            - name: SCRAPER_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: trolleywise-config
+                  key: SCRAPER_SERVICE_URL
+            - name: CLIENT_ORIGIN
+              valueFrom:
+                configMapKeyRef:
+                  name: trolleywise-config
+                  key: CLIENT_ORIGIN
+            - name: SCRAPE_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: trolleywise-secret
+                  key: SCRAPE_TOKEN
+            - name: GEMINI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: trolleywise-secret
+                  key: GEMINI_API_KEY
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 5
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trolleywise-logic-api
+  namespace: trolleywise
+spec:
+  selector:
+    app: trolleywise-logic-api
+  ports:
+    - protocol: TCP
+      port: 3001
+      targetPort: 3001
+      name: http
