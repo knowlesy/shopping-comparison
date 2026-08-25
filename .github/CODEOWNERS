@@ -1,0 +1,16 @@
+# Global code ownership
+* @knowlesy
+
+# Services
+/services/logic-api/ @knowlesy
+/services/scraper-pod/ @knowlesy
+
+# Frontend
+/client/ @knowlesy
+
+# Product Data & Contamination Rules
+/data/ @knowlesy
+
+# CI & DevOps
+/.github/ @knowlesy
+/docker-compose.yml @knowlesy

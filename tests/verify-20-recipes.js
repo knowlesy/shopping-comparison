@@ -5,7 +5,7 @@ import { FuzzyMatcher } from '../services/logic-api/src/services/fuzzyMatcher.js
 import { BasketCalculator } from '../services/logic-api/src/services/basketCalculator.js';
 import { isContaminated, CONTAMINATION_RULES } from '../services/logic-api/src/services/contaminationRules.js';
 
-const ARTIFACT_DIR = '/Users/peterknowles/.gemini/antigravity/brain/fb1ce239-2a37-4c30-a665-6c2e9a3628c8';
+const ARTIFACT_DIR = process.env.ARTIFACT_DIR || path.resolve('test-results');
 const REPORT_PATH = path.join(ARTIFACT_DIR, 'recipes-verification-report.json');
 
 const SUPERMARKETS = ['asda', 'tesco', 'sainsburys', 'morrisons', 'iceland', 'aldi', 'lidl'];

@@ -1,7 +1,7 @@
 import path from "path";
 import { chromium } from "@playwright/test";
 
-const ARTIFACT_DIR = "/Users/peterknowles/.gemini/antigravity/brain/fb1ce239-2a37-4c30-a665-6c2e9a3628c8";
+const ARTIFACT_DIR = process.env.ARTIFACT_DIR || path.resolve("test-results");
 const SCREENSHOTS_DIR = path.join(ARTIFACT_DIR, "screenshots");
 
 async function testSwapModals() {

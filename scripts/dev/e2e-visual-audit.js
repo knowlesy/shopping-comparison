@@ -4,7 +4,7 @@ import { chromium } from "@playwright/test";
 import { IngredientParser } from "../services/logic-api/src/services/ingredientParser.js";
 import { FuzzyMatcher } from "../services/logic-api/src/services/fuzzyMatcher.js";
 
-const ARTIFACT_DIR = "/Users/peterknowles/.gemini/antigravity/brain/fb1ce239-2a37-4c30-a665-6c2e9a3628c8";
+const ARTIFACT_DIR = process.env.ARTIFACT_DIR || path.resolve("test-results");
 const SCREENSHOTS_DIR = path.join(ARTIFACT_DIR, "screenshots");
 
 if (!fs.existsSync(SCREENSHOTS_DIR)) {
