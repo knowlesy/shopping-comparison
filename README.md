@@ -1,74 +1,80 @@
 # TrolleyWise UK 🛒
 
-A clean, modern, high-performance web application designed for UK supermarket shoppers to compare real product prices, packaging sizes, and healthier alternatives across **Asda**, **Sainsbury's**, **Tesco**, **Morrisons**, and **Iceland**.
+A clean, modern, high-performance grocery price comparison application for UK supermarket shoppers. Compare real product prices, packaging sizes, and healthier alternatives across 7 major UK supermarkets: **Asda**, **Tesco**, **Sainsbury's**, **Morrisons**, **Iceland**, **Aldi**, and **Lidl**.
 
 ---
 
-## ✨ Features
+## ✨ Key Features
 
-- **Split-Screen Comparison View**: Live shopping checklist on the left, side-by-side UK supermarket price matrix on the right.
-- **Smart NLP Item Parser**: Intelligently extracts quantities, units ($g$, $kg$, $ml$, $L$, packs, heads, bunches, cans), compound quantities ($3\times 400g$), and dietary health preferences ($5\%$ lean, $0\%$ Greek yogurt, wholewheat, free range, organic).
-- **Closest-Pack Sizing Engine**: Recommends the optimal packaging configuration (e.g. $900g$ mince $\rightarrow$ closest $750g$ single pack or $2\times 500g$ pack), displaying exact pack counts, total weights, and unit prices (£/kg, £/L).
-- **No Faking / Working Direct Links**: Every single product links directly to its official supermarket product or search page.
-- **Interactive "Swap Item" Picker**: Click any matched item to view and select alternative sizes, brands, or fat percentages with real-time total recalculation.
-- **Split Basket Optimizer**: Calculates the maximum possible savings if ordering across 2 supermarkets (e.g. frozen/seafood from Iceland + fresh produce/meat from Asda).
-- **Favorite Ingredients "Word Window / Idea Cloud"**: Interactive tag cloud of pantry staples, high-protein foods, and cleaning supplies for rapid 1-tap list addition.
-- **Past Shops & Price Inflation Archive**: Store previous shopping baskets with historical supermarket pricing and 1-click list reloading.
-- **Preferences & Settings**: Customize default health biasing, brand tiers (Value vs Standard vs Premium vs Branded), packaging rounding policies, and supermarket inclusions.
+- **Multi-Supermarket Comparison**: Live side-by-side price, unit-price (£/kg, £/L), and package sizing matrix across all 7 UK stores.
+- **Smart NLP Item Parser**: Extracts metric quantities ($g$, $kg$, $ml$, $L$, packs, heads, bunches, cans), compound formats ($3 \times 400g$), and dietary health preferences ($5\%$ lean, $0\%$ Greek yogurt, wholewheat, free range, organic).
+- **Closest-Pack Sizing Engine**: Recommends optimal packaging configurations, pack counts, and closest unit weights.
+- **Food Form & Contamination Filter**: Zero false matches (e.g. rejects Scotch eggs/mayo for fresh eggs, crisps for potatoes, milkshakes for milk, dessert drinks for Greek yogurt).
+- **Interactive "Swap Item" Picker**: Change brands, pack sizes, or fat percentages with real-time basket recalculation.
+- **Split-Basket Optimizer**: Identifies maximum combined savings when splitting shopping across 2 supermarkets.
+- **Offline Client Fallback**: Client-side parsing and catalog engine allows full functionality when offline.
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start (Docker Compose — Recommended)
 
-### 1. Install Dependencies
+The canonical backend stack consists of two isolated microservices:
+1. **`logic-api`**: Core comparison, NLP parsing, and basket optimization service (`http://localhost:3001`).
+2. **`scraper-pod`**: Sandboxed Chromium scraping engine (`http://scraper-pod:3002`).
+
+### 1. Launch Services via Docker Compose
 ```bash
-npm install
-cd server && npm install
-cd ../client && npm install
+docker compose up --build -d
 ```
 
-### 2. Run in Development Mode
-Runs both the Vite React frontend (`http://localhost:5173`) and Express backend (`http://localhost:3001`):
+### 2. Start the Frontend Client
 ```bash
+npm --prefix client install
+npm --prefix client run dev
+```
+Open **`http://localhost:5173`** in your browser.
+
+---
+
+## 💻 Local Development (Without Docker)
+
+You can run all services concurrently:
+```bash
+# Install root, client, and microservice dependencies
+npm install
+npm --prefix client install
+npm --prefix services/logic-api install
+npm --prefix services/scraper-pod install
+
+# Start all 3 services concurrently
 npm run dev
 ```
 
-### 3. Build & Run in Production Mode
+---
+
+## 🧪 Running Tests & Audits
+
 ```bash
-npm run build
-npm start
+# Pure unit tests
+npm test
+
+# Comprehensive food form sanity and catalog variety audit
+npm run test:food-form
+
+# 20 full uncached tests across 30-item lists
+npm run test:uncached-20
 ```
-Open `http://localhost:3001` in your browser.
 
 ---
 
-## 📋 Example 28-Item Shopping List Included
-The application is pre-seeded with the complete 28-item grocery list:
-- `900g 5% lean beef mince`
-- `1.6kg frozen cod loins`
-- `15 free range eggs`
-- `1kg authentic Greek yogurt 0%`
-- `800g tinned brown lentils`
-- `1.13L semi-skimmed milk`
-- `1kg wholewheat fusilli`
-- `2kg baby new potatoes`
-- `1kg Scottish rolled oats`
-- `800g wholemeal sliced bread`
-- `3 x 400g Mutti Polpa chopped tomatoes`
-- `200g tomato puree`
-- `500ml extra virgin olive oil`
-- `1kg courgettes`
-- `1kg mixed bell peppers`
-- `400g closed cup mushrooms`
-- `600g baby plum tomatoes`
-- `1kg carrots`
-- `1 head celery`
-- `1kg brown onions`
-- `1kg red onions`
-- `1 pack garlic bulbs`
-- `240g fresh baby spinach`
-- `1 bunch bananas`
-- `800g conference pears`
-- `600g clementines`
-- `200g walnut halves and whole almonds`
-- `150g chia seeds`
+## 📁 Repository Structure
+
+```
+├── client/              # React + Vite + TypeScript frontend
+├── data/                # Canonical product catalog (data/catalog.json)
+├── services/
+│   ├── logic-api/       # Business logic, fuzzy matcher, basket calculator
+│   └── scraper-pod/     # Headless Chromium scraper daemon
+├── tests/               # Playwright e2e specs and audit datasets
+└── docker-compose.yml   # Multi-container orchestration
+```
