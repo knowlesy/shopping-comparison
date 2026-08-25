@@ -8,6 +8,7 @@ on:
 
 jobs:
   test:
+    name: Lint, Test & Build
     runs-on: ubuntu-latest
 
     steps:
@@ -34,3 +35,34 @@ jobs:
 
       - name: Build client production bundle
         run: npm run build
+
+  docker-build:
+    name: Verify Docker Images
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build logic-api Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: services/logic-api/Dockerfile
+          push: false
+          tags: trolleywise-logic-api:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build scraper-pod Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./services/scraper-pod
+          file: services/scraper-pod/Dockerfile
+          push: false
+          tags: trolleywise-scraper-pod:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
