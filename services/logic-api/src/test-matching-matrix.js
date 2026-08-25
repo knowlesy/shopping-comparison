@@ -5,7 +5,7 @@ import { BasketCalculator } from './services/basketCalculator.js';
 // ANSI Colors for clean test output
 const RED = '\x1b[31m';
 const GREEN = '\x1b[32m';
-const YELLOW = '\x1b[33m';
+const _YELLOW = '\x1b[33m';
 const CYAN = '\x1b[36m';
 const BOLD = '\x1b[1m';
 const RESET = '\x1b[0m';
@@ -14,7 +14,7 @@ const STORES = ['asda', 'tesco', 'sainsburys', 'morrisons', 'iceland', 'aldi', '
 
 const CATALOG_BY_STORE = {};
 for (const s of STORES) {
-  CATALOG_BY_STORE[s] = CATALOG_PRODUCTS.filter(p => p.supermarket === s);
+  CATALOG_BY_STORE[s] = CATALOG_PRODUCTS.filter((p) => p.supermarket === s);
 }
 
 // Comprehensive test items covering all food staples, units, pack sizes, and health tags
@@ -29,7 +29,7 @@ const TEST_ITEMS = [
     category: 'meat',
     expectedNouns: ['mince', 'beef', 'steak'],
     forbiddenNouns: ['gravy', 'onion in gravy', 'pie', 'pear', 'bread'],
-    isHealthierPreferred: true,
+    isHealthierPreferred: true
   },
   {
     rawText: '1.6kg frozen cod loins',
@@ -40,7 +40,7 @@ const TEST_ITEMS = [
     isFrozen: true,
     category: 'fish',
     expectedNouns: ['cod', 'fish'],
-    forbiddenNouns: ['pear', 'pepper', 'mushroom', 'bread', 'onion'],
+    forbiddenNouns: ['pear', 'pepper', 'mushroom', 'bread', 'onion']
   },
   {
     rawText: '12 free range eggs',
@@ -51,7 +51,7 @@ const TEST_ITEMS = [
     isFreeRange: true,
     category: 'dairy-eggs',
     expectedNouns: ['egg', 'eggs'],
-    forbiddenNouns: ['yogurt', 'yoghurt', 'celery', 'banana', 'milk'],
+    forbiddenNouns: ['yogurt', 'yoghurt', 'celery', 'banana', 'milk']
   },
   {
     rawText: '1kg authentic Greek yogurt 0%',
@@ -62,7 +62,7 @@ const TEST_ITEMS = [
     fatPercentage: 0,
     category: 'dairy-eggs',
     expectedNouns: ['yogurt', 'yoghurt'],
-    forbiddenNouns: ['milk', 'egg', 'pear', 'bread'],
+    forbiddenNouns: ['milk', 'egg', 'pear', 'bread']
   },
   {
     rawText: '800g tinned brown lentils',
@@ -72,7 +72,7 @@ const TEST_ITEMS = [
     unit: 'g',
     category: 'pantry',
     expectedNouns: ['lentil', 'lentils', 'pulses', 'beans'],
-    forbiddenNouns: ['onion', 'bread', 'pear', 'milk'],
+    forbiddenNouns: ['onion', 'bread', 'pear', 'milk']
   },
   {
     rawText: '1.13L semi-skimmed milk',
@@ -82,7 +82,7 @@ const TEST_ITEMS = [
     unit: 'ml',
     category: 'dairy-eggs',
     expectedNouns: ['milk'],
-    forbiddenNouns: ['clementine', 'mushroom', 'tomato', 'pear', 'yogurt'],
+    forbiddenNouns: ['clementine', 'mushroom', 'tomato', 'pear', 'yogurt']
   },
   {
     rawText: '1kg wholewheat fusilli',
@@ -93,7 +93,7 @@ const TEST_ITEMS = [
     isWholewheat: true,
     category: 'pantry',
     expectedNouns: ['fusilli', 'pasta'],
-    forbiddenNouns: ['rice', 'bread', 'potato'],
+    forbiddenNouns: ['rice', 'bread', 'potato']
   },
   {
     rawText: '2kg baby new potatoes',
@@ -103,7 +103,7 @@ const TEST_ITEMS = [
     unit: 'g',
     category: 'produce',
     expectedNouns: ['potato', 'potatoes'],
-    forbiddenNouns: ['pasta', 'rice', 'bread'],
+    forbiddenNouns: ['pasta', 'rice', 'bread']
   },
   {
     rawText: '1kg Scottish rolled oats',
@@ -113,7 +113,7 @@ const TEST_ITEMS = [
     unit: 'g',
     category: 'pantry',
     expectedNouns: ['oat', 'oats', 'porridge'],
-    forbiddenNouns: ['bread', 'rice', 'pasta'],
+    forbiddenNouns: ['bread', 'rice', 'pasta']
   },
   {
     rawText: '800g wholemeal sliced bread',
@@ -124,7 +124,7 @@ const TEST_ITEMS = [
     isWholewheat: true,
     category: 'bakery',
     expectedNouns: ['bread', 'loaf'],
-    forbiddenNouns: ['lentil', 'oats', 'pasta'],
+    forbiddenNouns: ['lentil', 'oats', 'pasta']
   },
   {
     rawText: '3 x 400g Mutti Polpa chopped tomatoes',
@@ -134,7 +134,7 @@ const TEST_ITEMS = [
     unit: 'g',
     category: 'pantry',
     expectedNouns: ['tomato', 'tomatoes', 'polpa'],
-    forbiddenNouns: ['pepper', 'apple', 'milk'],
+    forbiddenNouns: ['pepper', 'apple', 'milk']
   },
   {
     rawText: '200g tomato puree',
@@ -144,7 +144,7 @@ const TEST_ITEMS = [
     unit: 'g',
     category: 'pantry',
     expectedNouns: ['puree', 'tomato'],
-    forbiddenNouns: ['oil', 'olive'],
+    forbiddenNouns: ['oil', 'olive']
   },
   {
     rawText: '500ml extra virgin olive oil',
@@ -154,7 +154,7 @@ const TEST_ITEMS = [
     unit: 'ml',
     category: 'pantry',
     expectedNouns: ['oil', 'olive'],
-    forbiddenNouns: ['milk', 'puree'],
+    forbiddenNouns: ['milk', 'puree']
   },
   {
     rawText: '1kg courgettes',
@@ -164,7 +164,7 @@ const TEST_ITEMS = [
     unit: 'g',
     category: 'produce',
     expectedNouns: ['courgette', 'courgettes', 'zucchini'],
-    forbiddenNouns: ['pepper', 'onion'],
+    forbiddenNouns: ['pepper', 'onion']
   },
   {
     rawText: '1kg mixed bell peppers',
@@ -174,7 +174,7 @@ const TEST_ITEMS = [
     unit: 'g',
     category: 'produce',
     expectedNouns: ['pepper', 'peppers'],
-    forbiddenNouns: ['cod', 'mushrooms', 'pear'],
+    forbiddenNouns: ['cod', 'mushrooms', 'pear']
   },
   {
     rawText: '400g closed cup mushrooms',
@@ -184,7 +184,7 @@ const TEST_ITEMS = [
     unit: 'g',
     category: 'produce',
     expectedNouns: ['mushroom', 'mushrooms'],
-    forbiddenNouns: ['pepper', 'milk', 'clementine'],
+    forbiddenNouns: ['pepper', 'milk', 'clementine']
   },
   {
     rawText: '600g baby plum tomatoes',
@@ -194,7 +194,7 @@ const TEST_ITEMS = [
     unit: 'g',
     category: 'produce',
     expectedNouns: ['tomato', 'tomatoes'],
-    forbiddenNouns: ['puree', 'oil'],
+    forbiddenNouns: ['puree', 'oil']
   },
   {
     rawText: '1kg carrots',
@@ -204,7 +204,7 @@ const TEST_ITEMS = [
     unit: 'g',
     category: 'produce',
     expectedNouns: ['carrot', 'carrots'],
-    forbiddenNouns: ['onion', 'potato'],
+    forbiddenNouns: ['onion', 'potato']
   },
   {
     rawText: '1 head celery',
@@ -214,7 +214,7 @@ const TEST_ITEMS = [
     unit: 'head',
     category: 'produce',
     expectedNouns: ['celery'],
-    forbiddenNouns: ['egg', 'banana', 'milk'],
+    forbiddenNouns: ['egg', 'banana', 'milk']
   },
   {
     rawText: '1kg brown onions',
@@ -224,7 +224,7 @@ const TEST_ITEMS = [
     unit: 'g',
     category: 'produce',
     expectedNouns: ['onion', 'onions'],
-    forbiddenNouns: ['lentil', 'bread', 'pear'],
+    forbiddenNouns: ['lentil', 'bread', 'pear']
   },
   {
     rawText: '1kg red onions',
@@ -234,7 +234,7 @@ const TEST_ITEMS = [
     unit: 'g',
     category: 'produce',
     expectedNouns: ['onion', 'onions'],
-    forbiddenNouns: ['lentil', 'bread'],
+    forbiddenNouns: ['lentil', 'bread']
   },
   {
     rawText: '1 pack garlic bulbs',
@@ -244,7 +244,7 @@ const TEST_ITEMS = [
     unit: 'pack',
     category: 'produce',
     expectedNouns: ['garlic'],
-    forbiddenNouns: ['onion', 'potato'],
+    forbiddenNouns: ['onion', 'potato']
   },
   {
     rawText: '200g baby spinach',
@@ -254,7 +254,7 @@ const TEST_ITEMS = [
     unit: 'g',
     category: 'produce',
     expectedNouns: ['spinach'],
-    forbiddenNouns: ['celery', 'carrot'],
+    forbiddenNouns: ['celery', 'carrot']
   },
   {
     rawText: '1kg bananas',
@@ -264,7 +264,7 @@ const TEST_ITEMS = [
     unit: 'g',
     category: 'produce',
     expectedNouns: ['banana', 'bananas'],
-    forbiddenNouns: ['egg', 'celery', 'pear'],
+    forbiddenNouns: ['egg', 'celery', 'pear']
   },
   {
     rawText: '800g sweet conference pears',
@@ -274,7 +274,7 @@ const TEST_ITEMS = [
     unit: 'g',
     category: 'produce',
     expectedNouns: ['pear', 'pears'],
-    forbiddenNouns: ['cod', 'milk', 'lentil', 'bread'],
+    forbiddenNouns: ['cod', 'milk', 'lentil', 'bread']
   },
   {
     rawText: '600g clementines',
@@ -284,7 +284,7 @@ const TEST_ITEMS = [
     unit: 'g',
     category: 'produce',
     expectedNouns: ['clementine', 'clementines', 'mandarin', 'satsuma', 'orange'],
-    forbiddenNouns: ['milk', 'cod', 'mushroom'],
+    forbiddenNouns: ['milk', 'cod', 'mushroom']
   },
   {
     rawText: '200g walnut halves',
@@ -294,7 +294,7 @@ const TEST_ITEMS = [
     unit: 'g',
     category: 'pantry',
     expectedNouns: ['walnut', 'walnuts', 'nuts'],
-    forbiddenNouns: ['seed', 'chia'],
+    forbiddenNouns: ['seed', 'chia']
   },
   {
     rawText: '200g whole chia seeds',
@@ -304,8 +304,8 @@ const TEST_ITEMS = [
     unit: 'g',
     category: 'pantry',
     expectedNouns: ['chia', 'seed', 'seeds'],
-    forbiddenNouns: ['walnut', 'oil'],
-  },
+    forbiddenNouns: ['walnut', 'oil']
+  }
 ];
 
 let totalAssertions = 0;
@@ -336,19 +336,22 @@ async function runTestSuite() {
     preferFreeRange: true,
     packSizingPolicy: 'closest',
     brandTierPriority: 'standard',
-    enabledSupermarkets: STORES,
+    enabledSupermarkets: STORES
   };
 
   // ==========================================
   // SUITE 1: Matching & Zero-Contamination Matrix
   // ==========================================
-  console.log(`${BOLD}1. Evaluating Product Matching & Alternative Contamination Matrix...${RESET}`);
+  console.log(
+    `${BOLD}1. Evaluating Product Matching & Alternative Contamination Matrix...${RESET}`
+  );
 
   for (const item of TEST_ITEMS) {
     item.id = `item-${Math.random().toString(36).slice(2, 8)}`;
-    
+
     for (const store of STORES) {
-      const storeCatalog = CATALOG_BY_STORE[store] || CATALOG_PRODUCTS.filter(p => p.supermarket === store);
+      const storeCatalog =
+        CATALOG_BY_STORE[store] || CATALOG_PRODUCTS.filter((p) => p.supermarket === store);
       const match = FuzzyMatcher.matchProduct(store, item, storeCatalog, preferences);
 
       // Check 1: Match must be found
@@ -363,7 +366,7 @@ async function runTestSuite() {
       const titleLower = match.product.title.toLowerCase();
 
       // Check 2: Core noun match (Must contain at least one expected noun)
-      const hasExpectedNoun = item.expectedNouns.some(noun => titleLower.includes(noun));
+      const hasExpectedNoun = item.expectedNouns.some((noun) => titleLower.includes(noun));
       assert(
         hasExpectedNoun,
         `[${store.toUpperCase()}] "${item.name}" matched core product`,
@@ -371,7 +374,7 @@ async function runTestSuite() {
       );
 
       // Check 3: Forbidden noun isolation (Raw staple should not match forbidden contaminants)
-      const hasForbiddenNoun = item.forbiddenNouns.some(f => titleLower.includes(f));
+      const hasForbiddenNoun = item.forbiddenNouns.some((f) => titleLower.includes(f));
       assert(
         !hasForbiddenNoun,
         `[${store.toUpperCase()}] "${item.name}" free from forbidden contaminants`,
@@ -391,7 +394,7 @@ async function runTestSuite() {
       if (match.alternatives && match.alternatives.length > 0) {
         for (const alt of match.alternatives) {
           const altTitle = alt.title.toLowerCase();
-          const altHasExpected = item.expectedNouns.some(noun => altTitle.includes(noun));
+          const altHasExpected = item.expectedNouns.some((noun) => altTitle.includes(noun));
           assert(
             altHasExpected,
             `[${store.toUpperCase()}] Alternative for "${item.name}" is true replacement`,
@@ -415,8 +418,9 @@ async function runTestSuite() {
 
   const storeMatchesMap = {};
   for (const store of STORES) {
-    const storeCatalog = CATALOG_BY_STORE[store] || CATALOG_PRODUCTS.filter(p => p.supermarket === store);
-    storeMatchesMap[store] = TEST_ITEMS.map(item =>
+    const storeCatalog =
+      CATALOG_BY_STORE[store] || CATALOG_PRODUCTS.filter((p) => p.supermarket === store);
+    storeMatchesMap[store] = TEST_ITEMS.map((item) =>
       FuzzyMatcher.matchProduct(store, item, storeCatalog, preferences)
     );
   }
@@ -424,13 +428,25 @@ async function runTestSuite() {
   const comparison = BasketCalculator.computeComparison(TEST_ITEMS, storeMatchesMap, STORES);
 
   assert(comparison !== null, 'Comparison response generated');
-  assert(comparison.cheapestStore && STORES.includes(comparison.cheapestStore), `Cheapest store identified: ${comparison.cheapestStore}`);
-  assert(comparison.highestStore && STORES.includes(comparison.highestStore), `Highest store identified: ${comparison.highestStore}`);
+  assert(
+    comparison.cheapestStore && STORES.includes(comparison.cheapestStore),
+    `Cheapest store identified: ${comparison.cheapestStore}`
+  );
+  assert(
+    comparison.highestStore && STORES.includes(comparison.highestStore),
+    `Highest store identified: ${comparison.highestStore}`
+  );
 
   for (const store of STORES) {
     const basket = comparison.supermarkets[store];
-    assert(basket.itemsFound === TEST_ITEMS.length, `[${store.toUpperCase()}] 100% basket coverage (${basket.itemsFound}/${TEST_ITEMS.length} items)`);
-    assert(basket.totalPrice > 0, `[${store.toUpperCase()}] Total price valid (£${basket.totalPrice})`);
+    assert(
+      basket.itemsFound === TEST_ITEMS.length,
+      `[${store.toUpperCase()}] 100% basket coverage (${basket.itemsFound}/${TEST_ITEMS.length} items)`
+    );
+    assert(
+      basket.totalPrice > 0,
+      `[${store.toUpperCase()}] Total price valid (£${basket.totalPrice})`
+    );
     assert(basket.subtotal > 0, `[${store.toUpperCase()}] Subtotal valid (£${basket.subtotal})`);
   }
 
@@ -438,7 +454,7 @@ async function runTestSuite() {
   // SUITE 3: Free Range Egg Pack Scaling
   // ==========================================
   console.log(`\n${BOLD}3. Evaluating Free Range Egg Packaging Sizing Logic...${RESET}`);
-  
+
   const eggTest12 = {
     id: 'test-egg-12',
     name: '12 free range eggs',
@@ -446,14 +462,17 @@ async function runTestSuite() {
     targetQuantity: 12,
     unit: 'item',
     isFreeRange: true,
-    category: 'dairy-eggs',
+    category: 'dairy-eggs'
   };
 
   for (const store of STORES) {
-    const storeCatalog = CATALOG_BY_STORE[store] || CATALOG_PRODUCTS.filter(p => p.supermarket === store);
+    const storeCatalog =
+      CATALOG_BY_STORE[store] || CATALOG_PRODUCTS.filter((p) => p.supermarket === store);
     const eggMatch = FuzzyMatcher.matchProduct(store, eggTest12, storeCatalog, preferences);
     assert(
-      eggMatch && eggMatch.product && (eggMatch.totalQuantity === 12 || eggMatch.totalQuantity === 15),
+      eggMatch &&
+        eggMatch.product &&
+        (eggMatch.totalQuantity === 12 || eggMatch.totalQuantity === 15),
       `[${store.toUpperCase()}] 12 eggs matches sensible pack size`,
       `Matched ${eggMatch?.packsNeeded}x ${eggMatch?.product?.title} (total: ${eggMatch?.totalQuantity} eggs)`
     );
@@ -464,9 +483,10 @@ async function runTestSuite() {
   // ==========================================
   console.log(`\n${BOLD}4. Evaluating 0% Yogurt & 5% Mince Specificity...${RESET}`);
 
-  const yogurtItem = TEST_ITEMS.find(i => i.baseItem === 'greek yogurt');
+  const yogurtItem = TEST_ITEMS.find((i) => i.baseItem === 'greek yogurt');
   for (const store of STORES) {
-    const storeCatalog = CATALOG_BY_STORE[store] || CATALOG_PRODUCTS.filter(p => p.supermarket === store);
+    const storeCatalog =
+      CATALOG_BY_STORE[store] || CATALOG_PRODUCTS.filter((p) => p.supermarket === store);
     const yogurtMatch = FuzzyMatcher.matchProduct(store, yogurtItem, storeCatalog, preferences);
     const title = yogurtMatch?.product?.title?.toLowerCase() || '';
     assert(
@@ -482,10 +502,14 @@ async function runTestSuite() {
   console.log(`${BOLD}${CYAN}======================================================${RESET}`);
   console.log(`Total Assertions Evaluated : ${BOLD}${totalAssertions}${RESET}`);
   console.log(`Passed Assertions          : ${BOLD}${GREEN}${passedAssertions}${RESET}`);
-  console.log(`Failed Assertions          : ${BOLD}${failedAssertions > 0 ? RED : GREEN}${failedAssertions}${RESET}`);
-  
+  console.log(
+    `Failed Assertions          : ${BOLD}${failedAssertions > 0 ? RED : GREEN}${failedAssertions}${RESET}`
+  );
+
   if (failedAssertions === 0) {
-    console.log(`\n${BOLD}${GREEN}🎉 100% OF TESTS PASSED! ZERO CROSS-CONTAMINATION DETECTED.${RESET}\n`);
+    console.log(
+      `\n${BOLD}${GREEN}🎉 100% OF TESTS PASSED! ZERO CROSS-CONTAMINATION DETECTED.${RESET}\n`
+    );
     process.exit(0);
   } else {
     console.log(`\n${BOLD}${RED}❌ ${failedAssertions} FAILURES DETECTED.${RESET}\n`);
@@ -493,7 +517,7 @@ async function runTestSuite() {
   }
 }
 
-runTestSuite().catch(err => {
+runTestSuite().catch((err) => {
   console.error('Test Suite Unhandled Error:', err);
   process.exit(1);
 });

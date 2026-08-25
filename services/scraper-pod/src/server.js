@@ -26,7 +26,8 @@ function authenticateScrapeToken(req, res, next) {
   if (!SCRAPE_TOKEN) {
     return res.status(401).json({
       success: false,
-      error: 'Unauthorized: SCRAPE_TOKEN environment variable is not configured on scraper-pod (failing closed).'
+      error:
+        'Unauthorized: SCRAPE_TOKEN environment variable is not configured on scraper-pod (failing closed).'
     });
   }
   const token = req.headers['x-scrape-token'];
@@ -63,7 +64,7 @@ function isAllowedUrl(urlString) {
     const parsed = new URL(urlString);
     if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false;
     const hostname = parsed.hostname.toLowerCase();
-    
+
     // Prevent SSRF against private networks / localhost / link-local / metadata
     if (
       hostname === 'localhost' ||
@@ -78,7 +79,9 @@ function isAllowedUrl(urlString) {
       return false;
     }
 
-    return ALLOWED_HOSTS.some(allowed => hostname === allowed || hostname.endsWith(`.${allowed}`));
+    return ALLOWED_HOSTS.some(
+      (allowed) => hostname === allowed || hostname.endsWith(`.${allowed}`)
+    );
   } catch {
     return false;
   }
@@ -139,13 +142,7 @@ async function getBrowser() {
 
 // Scrape endpoint
 app.post('/scrape', authenticateScrapeToken, async (req, res) => {
-  const {
-    url,
-    waitForSelector,
-    timeout = 35000,
-    delay = 1500,
-    turnstile = true
-  } = req.body;
+  const { url, waitForSelector, timeout = 35000, delay = 1500, turnstile = true } = req.body;
 
   if (!url || typeof url !== 'string' || !url.startsWith('http')) {
     return res.status(400).json({
@@ -157,7 +154,8 @@ app.post('/scrape', authenticateScrapeToken, async (req, res) => {
   if (!isAllowedUrl(url)) {
     return res.status(403).json({
       success: false,
-      error: 'Access denied: Target URL host is not on the allowed supermarket scraping domain list.'
+      error:
+        'Access denied: Target URL host is not on the allowed supermarket scraping domain list.'
     });
   }
 
@@ -174,7 +172,7 @@ app.post('/scrape', authenticateScrapeToken, async (req, res) => {
 
     // Set custom headers to reinforce UK locale
     await page.setExtraHTTPHeaders({
-      'Accept-Language': 'en-GB,en;q=0.9',
+      'Accept-Language': 'en-GB,en;q=0.9'
     });
 
     console.log(`[Scraper-Pod] Navigating to: ${url}`);
@@ -185,7 +183,7 @@ app.post('/scrape', authenticateScrapeToken, async (req, res) => {
 
     // If Turnstile or Cloudflare challenge is present, allow settling time
     if (turnstile) {
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
     }
 
     // If a specific selector was requested, wait for it
@@ -193,13 +191,15 @@ app.post('/scrape', authenticateScrapeToken, async (req, res) => {
       try {
         await page.waitForSelector(waitForSelector, { timeout: Math.min(8000, timeout) });
       } catch {
-        console.warn(`[Scraper-Pod] Selector "${waitForSelector}" not found before timeout. Proceeding.`);
+        console.warn(
+          `[Scraper-Pod] Selector "${waitForSelector}" not found before timeout. Proceeding.`
+        );
       }
     }
 
     // Additional settling delay for client-rendered SPA / search aggregators
     if (delay && delay > 0) {
-      await new Promise(resolve => setTimeout(resolve, Number(delay)));
+      await new Promise((resolve) => setTimeout(resolve, Number(delay)));
     }
 
     // Extract page metadata and contents (omit duplicate body payload to reduce bandwidth)
@@ -208,7 +208,9 @@ app.post('/scrape', authenticateScrapeToken, async (req, res) => {
     const html = await page.content();
 
     const elapsed = Date.now() - startTime;
-    console.log(`[Scraper-Pod] Scrape complete in ${elapsed}ms. Title: "${title}". HTML Length: ${html.length} bytes.`);
+    console.log(
+      `[Scraper-Pod] Scrape complete in ${elapsed}ms. Title: "${title}". HTML Length: ${html.length} bytes.`
+    );
 
     res.json({
       success: true,
@@ -219,7 +221,6 @@ app.post('/scrape', authenticateScrapeToken, async (req, res) => {
       length: html.length,
       elapsedMs: elapsed
     });
-
   } catch (err) {
     const elapsed = Date.now() - startTime;
     console.error(`[Scraper-Pod] Scrape error after ${elapsed}ms:`, err.message);

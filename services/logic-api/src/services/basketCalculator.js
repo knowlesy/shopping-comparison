@@ -10,7 +10,7 @@ export const SUPERMARKETS_INFO = {
     themeColor: '#78be20',
     accentColor: '#5c9417',
     deliveryMinOrder: 40,
-    deliveryFee: 3.50,
+    deliveryFee: 3.5,
     deliveryPassAvailable: true,
     searchBaseUrl: 'https://www.asda.com/groceries/search/'
   },
@@ -22,7 +22,7 @@ export const SUPERMARKETS_INFO = {
     themeColor: '#ee1c2e',
     accentColor: '#00539f',
     deliveryMinOrder: 50,
-    deliveryFee: 4.50,
+    deliveryFee: 4.5,
     deliveryPassAvailable: true,
     searchBaseUrl: 'https://www.tesco.com/groceries/en-GB/search?query='
   },
@@ -34,7 +34,7 @@ export const SUPERMARKETS_INFO = {
     themeColor: '#e05a00',
     accentColor: '#bf4c00',
     deliveryMinOrder: 40,
-    deliveryFee: 4.00,
+    deliveryFee: 4.0,
     deliveryPassAvailable: true,
     searchBaseUrl: 'https://www.sainsburys.co.uk/gol-ui/SearchResults/'
   },
@@ -46,7 +46,7 @@ export const SUPERMARKETS_INFO = {
     themeColor: '#ffbb00',
     accentColor: '#004a2f',
     deliveryMinOrder: 40,
-    deliveryFee: 3.50,
+    deliveryFee: 3.5,
     deliveryPassAvailable: true,
     searchBaseUrl: 'https://groceries.morrisons.com/search?entry='
   },
@@ -58,7 +58,7 @@ export const SUPERMARKETS_INFO = {
     themeColor: '#e31837',
     accentColor: '#b3122a',
     deliveryMinOrder: 40,
-    deliveryFee: 0.00,
+    deliveryFee: 0.0,
     deliveryPassAvailable: false,
     searchBaseUrl: 'https://www.iceland.co.uk/search?q='
   },
@@ -70,7 +70,7 @@ export const SUPERMARKETS_INFO = {
     themeColor: '#4f7942',
     accentColor: '#2b5120',
     deliveryMinOrder: 40,
-    deliveryFee: 3.50,
+    deliveryFee: 3.5,
     deliveryPassAvailable: true,
     searchBaseUrl: 'https://www.waitrose.com/ecom/shop/search?&searchTerm='
   },
@@ -94,7 +94,7 @@ export const SUPERMARKETS_INFO = {
     themeColor: '#00a3e0',
     accentColor: '#007ba8',
     deliveryMinOrder: 25,
-    deliveryFee: 3.00,
+    deliveryFee: 3.0,
     deliveryPassAvailable: false,
     searchBaseUrl: 'https://www.coop.co.uk/search?q='
   },
@@ -106,7 +106,7 @@ export const SUPERMARKETS_INFO = {
     themeColor: '#001e62',
     accentColor: '#e31b23',
     deliveryMinOrder: 0,
-    deliveryFee: 0.00,
+    deliveryFee: 0.0,
     deliveryPassAvailable: false,
     searchBaseUrl: 'https://groceries.aldi.co.uk/en-GB/Search?keywords='
   },
@@ -118,7 +118,7 @@ export const SUPERMARKETS_INFO = {
     themeColor: '#0050aa',
     accentColor: '#fff000',
     deliveryMinOrder: 0,
-    deliveryFee: 0.00,
+    deliveryFee: 0.0,
     deliveryPassAvailable: false,
     searchBaseUrl: 'https://www.lidl.co.uk/search?query='
   }
@@ -128,7 +128,11 @@ export class BasketCalculator {
   /**
    * Build complete comparison response across all enabled supermarkets
    */
-  static computeComparison(items, storeMatchesMap, enabledSupermarkets = ['asda', 'sainsburys', 'tesco', 'morrisons', 'iceland']) {
+  static computeComparison(
+    items,
+    storeMatchesMap,
+    enabledSupermarkets = ['asda', 'sainsburys', 'tesco', 'morrisons', 'iceland']
+  ) {
     const storeResults = {};
 
     for (const store of enabledSupermarkets) {
@@ -140,7 +144,7 @@ export class BasketCalculator {
         themeColor: '#333333',
         accentColor: '#555555',
         deliveryMinOrder: 40,
-        deliveryFee: 3.50,
+        deliveryFee: 3.5,
         deliveryPassAvailable: false,
         searchBaseUrl: `https://www.google.co.uk/search?q=${store}`
       };
@@ -175,15 +179,19 @@ export class BasketCalculator {
         itemsTotal: items.length,
         missingItems,
         isCheapest: false,
-        averageHealthScore: items.length > 0 ? Math.round((totalHealthScore / items.length) * 100) : 0
+        averageHealthScore:
+          items.length > 0 ? Math.round((totalHealthScore / items.length) * 100) : 0
       };
     }
 
     // Rank stores by item coverage first, then lowest total price (stores with 0 items cannot be cheapest)
-    const storesWithItems = Object.values(storeResults).filter(s => s.itemsFound > 0);
-    const ranked = storesWithItems.length > 0
-      ? [...storesWithItems].sort((a, b) => (b.itemsFound - a.itemsFound) || (a.totalPrice - b.totalPrice))
-      : Object.values(storeResults);
+    const storesWithItems = Object.values(storeResults).filter((s) => s.itemsFound > 0);
+    const ranked =
+      storesWithItems.length > 0
+        ? [...storesWithItems].sort(
+            (a, b) => b.itemsFound - a.itemsFound || a.totalPrice - b.totalPrice
+          )
+        : Object.values(storeResults);
 
     const cheapestStore = ranked[0]?.supermarket || 'asda';
     const highestStore = ranked[ranked.length - 1]?.supermarket || 'tesco';
@@ -191,7 +199,10 @@ export class BasketCalculator {
 
     for (const storeRes of Object.values(storeResults)) {
       storeRes.isCheapest = storeRes.itemsFound > 0 && storeRes.supermarket === cheapestStore;
-      storeRes.savingsVsHighest = storeRes.itemsFound > 0 ? Math.max(0, Number((highestTotal - storeRes.totalPrice).toFixed(2))) : 0;
+      storeRes.savingsVsHighest =
+        storeRes.itemsFound > 0
+          ? Math.max(0, Number((highestTotal - storeRes.totalPrice).toFixed(2)))
+          : 0;
       if (storeRes.isCheapest) {
         storeRes.badge = '🏆 Cheapest Overall';
       }
@@ -251,14 +262,20 @@ export class BasketCalculator {
       }))
       .sort((a, b) => b.items.length - a.items.length);
 
-    const combinedTotal = Number(activeStores.reduce((sum, s) => sum + s.storeSubtotal, 0).toFixed(2));
+    const combinedTotal = Number(
+      activeStores.reduce((sum, s) => sum + s.storeSubtotal, 0).toFixed(2)
+    );
     const singleBestTotal = storeResults[cheapestSingleStore]?.totalPrice || combinedTotal;
     const savingsVsSingleBest = Math.max(0, Number((singleBestTotal - combinedTotal).toFixed(2)));
 
-    const topStoreNames = activeStores.slice(0, 2).map(s => s.info?.name || s.supermarket).join(' & ');
-    const explanation = activeStores.length > 1
-      ? `Splitting your shop between ${topStoreNames} saves an extra £${savingsVsSingleBest.toFixed(2)} compared to single-store checkout at ${SUPERMARKETS_INFO[cheapestSingleStore]?.name || 'Cheapest Store'}.`
-      : `Single-store checkout at ${SUPERMARKETS_INFO[cheapestSingleStore]?.name || 'Cheapest Store'} already delivers the best price.`;
+    const topStoreNames = activeStores
+      .slice(0, 2)
+      .map((s) => s.info?.name || s.supermarket)
+      .join(' & ');
+    const explanation =
+      activeStores.length > 1
+        ? `Splitting your shop between ${topStoreNames} saves an extra £${savingsVsSingleBest.toFixed(2)} compared to single-store checkout at ${SUPERMARKETS_INFO[cheapestSingleStore]?.name || 'Cheapest Store'}.`
+        : `Single-store checkout at ${SUPERMARKETS_INFO[cheapestSingleStore]?.name || 'Cheapest Store'} already delivers the best price.`;
 
     return {
       stores: activeStores,

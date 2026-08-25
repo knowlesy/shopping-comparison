@@ -5,18 +5,24 @@
 export const CONTAMINATION_RULES = [
   {
     category: 'eggs',
-    matchQuery: (q) => /\b(?:egg|eggs)\b/i.test(q) && !/\b(?:scotch|mayo|salad in mayo|custard|noodle)\b/i.test(q),
-    prohibited: /\b(?:scotch|mayo|salad in mayo|custard|creme egg|easter|chocolate egg|noodles?|sandwich|fried egg sweets|sweets)\b/i
+    matchQuery: (q) =>
+      /\b(?:egg|eggs)\b/i.test(q) && !/\b(?:scotch|mayo|salad in mayo|custard|noodle)\b/i.test(q),
+    prohibited:
+      /\b(?:scotch|mayo|salad in mayo|mayonnaise|custard|creme egg|easter|chocolate egg|noodles?|sandwich|fried egg sweets|sweets)\b/i
   },
   {
     category: 'potatoes',
-    matchQuery: (q) => /\b(?:potato|potatoes)\b/i.test(q) && !/\b(?:crisp|crisps|chip|chips|waffle)\b/i.test(q),
-    prohibited: /\b(?:crisps?|chips?|waffles?|croquettes?|salad in mayo|ready meal|snack)\b/i
+    matchQuery: (q) =>
+      /\b(?:potato|potatoes)\b/i.test(q) && !/\b(?:crisp|crisps|chip|chips|waffle)\b/i.test(q),
+    prohibited:
+      /\b(?:crisps?|chips?|waffles?|croquettes?|salad in mayo|mayonnaise|ready meal|snack)\b/i
   },
   {
     category: 'milk',
-    matchQuery: (q) => /\b(?:milk)\b/i.test(q) && !/\b(?:chocolate|milkshake|condensed|evaporated|powder)\b/i.test(q),
-    prohibited: /\b(?:chocolate milk|milkshake|condensed|evaporated|powdered|flavoured)\b/i
+    matchQuery: (q) =>
+      /\b(?:milk)\b/i.test(q) &&
+      !/\b(?:chocolate|milkshake|condensed|evaporated|powder)\b/i.test(q),
+    prohibited: /\b(?:chocolate milk|milkshake|condensed|evaporated|powder|powdered|flavoured)\b/i
   },
   {
     category: 'yogurt',
@@ -25,18 +31,26 @@ export const CONTAMINATION_RULES = [
   },
   {
     category: 'raw-meat',
-    matchQuery: (q) => /\b(?:mince|steak|beef|chicken|pork|lamb|turkey|breast|fillet)\b/i.test(q) && !/\b(?:canned|tinned|gravy|pie|stew|meal)\b/i.test(q),
-    prohibited: /\b(?:in gravy|& gravy|and gravy|& onions|and onions|canned|tinned|pie filling|cat food|dog food|pet food)\b/i
+    matchQuery: (q) =>
+      /\b(?:mince|steak|beef|chicken|pork|lamb|turkey|breast|fillet)\b/i.test(q) &&
+      !/\b(?:canned|tinned|gravy|pie|stew|meal)\b/i.test(q),
+    prohibited:
+      /\b(?:in gravy|& gravy|and gravy|& onions|and onions|canned|tinned|pie filling|pie\b|cat food|dog food|pet food)\b/i
   },
   {
     category: 'garlic',
-    matchQuery: (q) => /\b(?:garlic|garlic bulb|cloves of garlic)\b/i.test(q) && !/\b(?:bread|baguette|butter|sauce|dip)\b/i.test(q),
-    prohibited: /\b(?:garlic bread|baguette|garlic doughball|garlic mayonnaise|garlic sauce|garlic dip|garlic butter|crisps)\b/i
+    matchQuery: (q) =>
+      /\b(?:garlic|garlic bulb|cloves of garlic)\b/i.test(q) &&
+      !/\b(?:bread|baguette|butter|sauce|dip)\b/i.test(q),
+    prohibited:
+      /\b(?:garlic bread|baguette|garlic doughballs?|garlic mayonnaise|garlic sauce|garlic dip|garlic butter|crisps)\b/i
   },
   {
     category: 'spinach',
-    matchQuery: (q) => /\b(?:spinach|baby spinach|spinach leaves)\b/i.test(q) && !/\b(?:pasta|pie|bake|soup)\b/i.test(q),
-    prohibited: /\b(?:pasta bake|lasagne|ricotta tortelloni|spinach & ricotta pie|spinach soup|dip)\b/i
+    matchQuery: (q) =>
+      /\b(?:spinach|baby spinach|spinach leaves)\b/i.test(q) &&
+      !/\b(?:pasta|pie|bake|soup)\b/i.test(q),
+    prohibited: /\b(?:pasta bake|lasagne|ricotta tortelloni|spinach.*pie|spinach soup|dip)\b/i
   }
 ];
 

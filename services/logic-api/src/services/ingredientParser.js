@@ -4,19 +4,50 @@
 
 export function detectItemCategory(text) {
   const lower = text.toLowerCase();
-  if (/\b(?:beef|mince|chicken|pork|lamb|steak|bacon|sausage|sausages|meat|turkey|duck|gammon|veal|burgers?|meatballs?)\b/i.test(lower)) return 'meat';
-  if (/\b(?:cod|salmon|haddock|tuna|prawn|prawns|fish|seafood|trout|mackerel|sea bass|pollock|basa)\b/i.test(lower)) return 'fish';
-  if (/\b(?:milk|yogurt|yoghurt|cheese|egg|eggs|butter|cream|cheddar|dairy)\b/i.test(lower)) return 'dairy-eggs';
-  if (/\b(?:potato|potatoes|carrot|carrots|onion|onions|garlic|courgette|courgettes|pepper|peppers|mushroom|mushrooms|tomato|tomatoes|spinach|apple|apples|banana|bananas|orange|oranges|berry|berries|lettuce|cucumber|salad|parsnip|parsnips|cabbage|peas|broccoli|celery|avocado|avocados|lemon|lemons|lime|limes|vegetables?|fruits?)\b/i.test(lower)) return 'produce';
-  if (/\b(?:pasta|fusilli|penne|spaghetti|rice|oat|oats|porridge|lentil|lentils|chia|walnut|walnuts|almond|almonds|nut|nuts|flour|sugar|oil|olive oil|salt|sauce|tin|tins|tinned|can|canned|beans|passata|puree|noodles?|gravy|yeast|cocoa|honey|syrup|spices?|seasoning)\b/i.test(lower)) return 'pantry';
-  if (/\b(?:bread|loaf|loaves|roll|rolls|bagel|bagels|pitta|wrap|wraps|bakery|croissant|muffin|buns?)\b/i.test(lower)) return 'bakery';
-  if (/\b(?:fairy|flash|spray|cleaner|detergent|bleach|tissue|toilet roll|kitchen roll|sponge|scourers?|soap)\b/i.test(lower)) return 'household';
+  if (
+    /\b(?:beef|mince|chicken|pork|lamb|steak|bacon|sausage|sausages|meat|turkey|duck|gammon|veal|burgers?|meatballs?)\b/i.test(
+      lower
+    )
+  )
+    return 'meat';
+  if (
+    /\b(?:cod|salmon|haddock|tuna|prawn|prawns|fish|seafood|trout|mackerel|sea bass|pollock|basa)\b/i.test(
+      lower
+    )
+  )
+    return 'fish';
+  if (/\b(?:milk|yogurt|yoghurt|cheese|egg|eggs|butter|cream|cheddar|dairy)\b/i.test(lower))
+    return 'dairy-eggs';
+  if (
+    /\b(?:potato|potatoes|carrot|carrots|onion|onions|garlic|courgette|courgettes|pepper|peppers|mushroom|mushrooms|tomato|tomatoes|spinach|apple|apples|banana|bananas|orange|oranges|berry|berries|lettuce|cucumber|salad|parsnip|parsnips|cabbage|peas|broccoli|celery|avocado|avocados|lemon|lemons|lime|limes|vegetables?|fruits?)\b/i.test(
+      lower
+    )
+  )
+    return 'produce';
+  if (
+    /\b(?:pasta|fusilli|penne|spaghetti|rice|oat|oats|porridge|lentil|lentils|chia|walnut|walnuts|almond|almonds|nut|nuts|flour|sugar|oil|olive oil|salt|sauce|tin|tins|tinned|can|canned|beans|passata|puree|noodles?|gravy|yeast|cocoa|honey|syrup|spices?|seasoning)\b/i.test(
+      lower
+    )
+  )
+    return 'pantry';
+  if (
+    /\b(?:bread|loaf|loaves|roll|rolls|bagel|bagels|pitta|wrap|wraps|bakery|croissant|muffin|buns?)\b/i.test(
+      lower
+    )
+  )
+    return 'bakery';
+  if (
+    /\b(?:fairy|flash|spray|cleaner|detergent|bleach|tissue|toilet roll|kitchen roll|sponge|scourers?|soap)\b/i.test(
+      lower
+    )
+  )
+    return 'household';
   return 'general';
 }
 
 export class IngredientParser {
   static parseItem(line, idx = 0) {
-    let text = line.replace(/^(\d+[\.\)\-]\s+|[-*•]\s*|\s*\[[\sxX]?\]\s*)+/i, '').trim();
+    let text = line.replace(/^(\d+[.)-]\s+|[-*•]\s*|\s*\[[\sxX]?\]\s*)+/i, '').trim();
 
     const parsed = {
       id: `item-${Date.now()}-${idx}`,
@@ -67,7 +98,9 @@ export class IngredientParser {
     }
 
     // Multiplier: e.g. "3 x 400g", "2 x 500ml"
-    const multiMatch = text.match(/^(\d+)\s*[xX*]\s*([\d.]+)\s*(kg|g|l|lt|litre|litres|ml|oz|lb|pack|can|tin|tins|bottle|bulbs?)\s+(.*)$/i);
+    const multiMatch = text.match(
+      /^(\d+)\s*[xX*]\s*([\d.]+)\s*(kg|g|l|lt|litre|litres|ml|oz|lb|pack|can|tin|tins|bottle|bulbs?)\s+(.*)$/i
+    );
     if (multiMatch) {
       const count = parseInt(multiMatch[1], 10);
       const size = parseFloat(multiMatch[2]);
@@ -83,7 +116,9 @@ export class IngredientParser {
     }
 
     // Standard Quantity: e.g. "900g 5% lean beef mince", "1.6kg frozen cod loins"
-    const qtyMatch = text.match(/^([\d.]+)\s*(kg|g|l|lt|litre|litres|ml|pack|packs|head|heads|bunch|bunches|bottle|bottles|tin|tins|tub|tubs|loaves|loaf|box|boxes|pints?)?\s+(.*)$/i);
+    const qtyMatch = text.match(
+      /^([\d.]+)\s*(kg|g|l|lt|litre|litres|ml|pack|packs|head|heads|bunch|bunches|bottle|bottles|tin|tins|tub|tubs|loaves|loaf|box|boxes|pints?)?\s+(.*)$/i
+    );
     if (qtyMatch) {
       const qty = parseFloat(qtyMatch[1]);
       let u = (qtyMatch[2] || '').toLowerCase();
@@ -103,7 +138,10 @@ export class IngredientParser {
   static parseList(lines) {
     if (!Array.isArray(lines)) {
       if (typeof lines === 'string') {
-        lines = lines.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+        lines = lines
+          .split(/\r?\n/)
+          .map((l) => l.trim())
+          .filter((l) => l.length > 0);
       } else {
         return [];
       }

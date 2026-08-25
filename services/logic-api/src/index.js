@@ -7,6 +7,7 @@ import { FuzzyMatcher } from './services/fuzzyMatcher.js';
 import { BasketCalculator } from './services/basketCalculator.js';
 import { PriceCache } from './services/priceCache.js';
 import { isContaminated } from './services/contaminationRules.js';
+import { CATALOG_PRODUCTS } from './services/catalogData.js';
 
 dotenv.config();
 
@@ -14,10 +15,12 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
 
-app.use(cors({
-  origin: CLIENT_ORIGIN,
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: CLIENT_ORIGIN,
+    credentials: true
+  })
+);
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true, limit: '5mb' }));
 
@@ -37,16 +40,86 @@ let userSettings = {
 let shopHistory = PriceCache.loadShopHistory();
 let userFavorites = [];
 let ingredientIdeas = [
-  { id: 'idea-1', name: '5% Lean Beef Steak Mince', category: 'protein', defaultFormat: '750g 5% lean beef mince', icon: '🥩', isPopular: true },
-  { id: 'idea-2', name: 'Frozen Cod Loins', category: 'protein', defaultFormat: '1.6kg frozen cod loins', icon: '🐟', isPopular: true },
-  { id: 'idea-3', name: 'Free Range Eggs', category: 'dairy', defaultFormat: '15 free range eggs', icon: '🥚', isPopular: true },
-  { id: 'idea-4', name: '0% Authentic Greek Yogurt', category: 'dairy', defaultFormat: '1kg authentic Greek yogurt 0% fat', icon: '🥛', isPopular: true },
-  { id: 'idea-5', name: 'Wholewheat Fusilli', category: 'pantry', defaultFormat: '1kg wholewheat fusilli', icon: '🌾', isPopular: true },
-  { id: 'idea-6', name: 'Mutti Polpa Finely Chopped Tomatoes', category: 'pantry', defaultFormat: '3 x 400g Mutti Polpa chopped tomatoes', icon: '🥫', isPopular: true },
-  { id: 'idea-7', name: 'Extra Virgin Olive Oil', category: 'pantry', defaultFormat: '500ml extra virgin olive oil', icon: '🫒', isPopular: true },
-  { id: 'idea-8', name: 'Baby New Potatoes', category: 'produce', defaultFormat: '2kg baby new potatoes', icon: '🥔', isPopular: true },
-  { id: 'idea-9', name: 'Semi-Skimmed Milk', category: 'dairy', defaultFormat: '2 Pints semi-skimmed milk', icon: '🥛', isPopular: true },
-  { id: 'idea-10', name: 'Tinned Brown Lentils', category: 'pantry', defaultFormat: '2 x 400g tinned brown lentils', icon: '🍲', isPopular: true }
+  {
+    id: 'idea-1',
+    name: '5% Lean Beef Steak Mince',
+    category: 'protein',
+    defaultFormat: '750g 5% lean beef mince',
+    icon: '🥩',
+    isPopular: true
+  },
+  {
+    id: 'idea-2',
+    name: 'Frozen Cod Loins',
+    category: 'protein',
+    defaultFormat: '1.6kg frozen cod loins',
+    icon: '🐟',
+    isPopular: true
+  },
+  {
+    id: 'idea-3',
+    name: 'Free Range Eggs',
+    category: 'dairy',
+    defaultFormat: '15 free range eggs',
+    icon: '🥚',
+    isPopular: true
+  },
+  {
+    id: 'idea-4',
+    name: '0% Authentic Greek Yogurt',
+    category: 'dairy',
+    defaultFormat: '1kg authentic Greek yogurt 0% fat',
+    icon: '🥛',
+    isPopular: true
+  },
+  {
+    id: 'idea-5',
+    name: 'Wholewheat Fusilli',
+    category: 'pantry',
+    defaultFormat: '1kg wholewheat fusilli',
+    icon: '🌾',
+    isPopular: true
+  },
+  {
+    id: 'idea-6',
+    name: 'Mutti Polpa Finely Chopped Tomatoes',
+    category: 'pantry',
+    defaultFormat: '3 x 400g Mutti Polpa chopped tomatoes',
+    icon: '🥫',
+    isPopular: true
+  },
+  {
+    id: 'idea-7',
+    name: 'Extra Virgin Olive Oil',
+    category: 'pantry',
+    defaultFormat: '500ml extra virgin olive oil',
+    icon: '🫒',
+    isPopular: true
+  },
+  {
+    id: 'idea-8',
+    name: 'Baby New Potatoes',
+    category: 'produce',
+    defaultFormat: '2kg baby new potatoes',
+    icon: '🥔',
+    isPopular: true
+  },
+  {
+    id: 'idea-9',
+    name: 'Semi-Skimmed Milk',
+    category: 'dairy',
+    defaultFormat: '2 Pints semi-skimmed milk',
+    icon: '🥛',
+    isPopular: true
+  },
+  {
+    id: 'idea-10',
+    name: 'Tinned Brown Lentils',
+    category: 'pantry',
+    defaultFormat: '2 x 400g tinned brown lentils',
+    icon: '🍲',
+    isPopular: true
+  }
 ];
 
 // Health check
@@ -77,12 +150,38 @@ app.post('/api/cache/clear', (req, res) => {
  */
 function detectItemCategory(text) {
   const lower = text.toLowerCase();
-  if (/\b(?:beef|mince|chicken|pork|lamb|steak|bacon|sausage|meat|turkey|duck|gammon|veal|burgers?|meatballs?)\b/i.test(lower)) return 'meat';
-  if (/\b(?:cod|salmon|haddock|tuna|prawn|prawns|fish|seafood|trout|mackerel|sea bass|pollock|basa)\b/i.test(lower)) return 'fish';
-  if (/\b(?:milk|yogurt|yoghurt|cheese|egg|eggs|butter|cream|cheddar|dairy)\b/i.test(lower)) return 'dairy-eggs';
-  if (/\b(?:potato|potatoes|carrot|carrots|onion|onions|garlic|courgette|pepper|peppers|mushroom|mushrooms|tomato|tomatoes|spinach|apple|apples|banana|bananas|orange|oranges|berry|berries|lettuce|cucumber|salad|vegetables?|fruits?)\b/i.test(lower)) return 'produce';
-  if (/\b(?:pasta|fusilli|penne|spaghetti|rice|oat|oats|porridge|lentil|lentils|chia|walnut|walnuts|flour|sugar|oil|olive oil|salt|sauce|tin|tins|tinned|can|canned|beans|passata|puree|noodles?)\b/i.test(lower)) return 'pantry';
-  if (/\b(?:bread|loaf|loaves|roll|rolls|bagel|bagels|pitta|wrap|wraps|bakery|croissant|muffin)\b/i.test(lower)) return 'bakery';
+  if (
+    /\b(?:beef|mince|chicken|pork|lamb|steak|bacon|sausage|meat|turkey|duck|gammon|veal|burgers?|meatballs?)\b/i.test(
+      lower
+    )
+  )
+    return 'meat';
+  if (
+    /\b(?:cod|salmon|haddock|tuna|prawn|prawns|fish|seafood|trout|mackerel|sea bass|pollock|basa)\b/i.test(
+      lower
+    )
+  )
+    return 'fish';
+  if (/\b(?:milk|yogurt|yoghurt|cheese|egg|eggs|butter|cream|cheddar|dairy)\b/i.test(lower))
+    return 'dairy-eggs';
+  if (
+    /\b(?:potato|potatoes|carrot|carrots|onion|onions|garlic|courgette|pepper|peppers|mushroom|mushrooms|tomato|tomatoes|spinach|apple|apples|banana|bananas|orange|oranges|berry|berries|lettuce|cucumber|salad|vegetables?|fruits?)\b/i.test(
+      lower
+    )
+  )
+    return 'produce';
+  if (
+    /\b(?:pasta|fusilli|penne|spaghetti|rice|oat|oats|porridge|lentil|lentils|chia|walnut|walnuts|flour|sugar|oil|olive oil|salt|sauce|tin|tins|tinned|can|canned|beans|passata|puree|noodles?)\b/i.test(
+      lower
+    )
+  )
+    return 'pantry';
+  if (
+    /\b(?:bread|loaf|loaves|roll|rolls|bagel|bagels|pitta|wrap|wraps|bakery|croissant|muffin)\b/i.test(
+      lower
+    )
+  )
+    return 'bakery';
   return 'general';
 }
 
@@ -94,11 +193,11 @@ app.post('/api/parse-list', (req, res) => {
 
   const lines = rawText
     .split(/\r?\n/)
-    .map(l => l.trim())
-    .filter(l => l.length > 0 && !l.startsWith('#') && !l.startsWith('//'));
+    .map((l) => l.trim())
+    .filter((l) => l.length > 0 && !l.startsWith('#') && !l.startsWith('//'));
 
   const items = lines.map((line, idx) => {
-    let text = line.replace(/^(\d+[\.\)\-]\s+|[-*•]\s*|\s*\[[\sxX]?\]\s*)+/i, '').trim();
+    let text = line.replace(/^(\d+[.)-]\s+|[-*•]\s*|\s*\[[\sxX]?\]\s*)+/i, '').trim();
 
     const parsed = {
       id: `item-${Date.now()}-${idx}`,
@@ -144,7 +243,9 @@ app.post('/api/parse-list', (req, res) => {
     }
 
     // Multiplier: e.g. "3 x 400g", "2 x 500ml"
-    const multiMatch = text.match(/^(\d+)\s*[xX*]\s*([\d.]+)\s*(kg|g|l|lt|litre|litres|ml|oz|lb|pack|can|tin|tins|bottle|bulbs?)\s+(.*)$/i);
+    const multiMatch = text.match(
+      /^(\d+)\s*[xX*]\s*([\d.]+)\s*(kg|g|l|lt|litre|litres|ml|oz|lb|pack|can|tin|tins|bottle|bulbs?)\s+(.*)$/i
+    );
     if (multiMatch) {
       const count = parseInt(multiMatch[1], 10);
       const size = parseFloat(multiMatch[2]);
@@ -160,7 +261,9 @@ app.post('/api/parse-list', (req, res) => {
     }
 
     // Standard Quantity: e.g. "900g 5% lean beef mince", "1.6kg frozen cod loins"
-    const qtyMatch = text.match(/^([\d.]+)\s*(kg|g|l|lt|litre|litres|ml|pack|packs|head|heads|bunch|bunches|bottle|bottles|tin|tins|tub|tubs|loaves|loaf|box|boxes|pints?)?\s+(.*)$/i);
+    const qtyMatch = text.match(
+      /^([\d.]+)\s*(kg|g|l|lt|litre|litres|ml|pack|packs|head|heads|bunch|bunches|bottle|bottles|tin|tins|tub|tubs|loaves|loaf|box|boxes|pints?)?\s+(.*)$/i
+    );
     if (qtyMatch) {
       const qty = parseFloat(qtyMatch[1]);
       let u = (qtyMatch[2] || '').toLowerCase();
@@ -184,8 +287,14 @@ function getCoreSearchQuery(item) {
   const raw = (item.baseItem || item.name || '').toLowerCase();
   const cleaned = raw
     .replace(/\b\d+%\s*(?:fat|lean)\b/gi, '')
-    .replace(/\b(?:lean|fresh|organic|free\s*range|wholewheat|wholegrain|wholemeal|frozen|tinned|canned|authentic|sliced|salted|unsalted|smoked|unsmoked)\b/gi, '')
-    .replace(/\b\d+(?:\.\d+)?\s*(?:kg|g|l|lt|ml|pints?|pt|pack|packs|tin|tins|tub|tubs|loaves|loaf)\b/gi, '')
+    .replace(
+      /\b(?:lean|fresh|organic|free\s*range|wholewheat|wholegrain|wholemeal|frozen|tinned|canned|authentic|sliced|salted|unsalted|smoked|unsmoked)\b/gi,
+      ''
+    )
+    .replace(
+      /\b\d+(?:\.\d+)?\s*(?:kg|g|l|lt|ml|pints?|pt|pack|packs|tin|tins|tub|tubs|loaves|loaf)\b/gi,
+      ''
+    )
     .replace(/[^\w\s]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
@@ -220,7 +329,7 @@ async function getOrFetchCandidates(coreQuery, enabledStores, forceRefresh = fal
 
     const { html } = await Promise.race([scrapePromise, timeoutPromise]);
     candidateProducts = await GeminiDomParser.parseHtml(html, coreQuery);
-  } catch (err) {
+  } catch (_err) {
     // Gracefully proceed with verified catalog products
     // console.log(`[Logic-API] Fast catalog fallback for "${coreQuery}": ${err.message}`);
   }
@@ -243,8 +352,18 @@ app.post('/api/compare', async (req, res) => {
     return res.status(400).json({ error: 'No shopping items provided for comparison' });
   }
 
-  console.log(`[Logic-API] Comparing ${items.length} items across UK supermarkets (forceRefresh: ${forceRefresh})...`);
-  const enabledStores = preferences.enabledSupermarkets || ['asda', 'sainsburys', 'tesco', 'morrisons', 'iceland', 'aldi', 'lidl'];
+  console.log(
+    `[Logic-API] Comparing ${items.length} items across UK supermarkets (forceRefresh: ${forceRefresh})...`
+  );
+  const enabledStores = preferences.enabledSupermarkets || [
+    'asda',
+    'sainsburys',
+    'tesco',
+    'morrisons',
+    'iceland',
+    'aldi',
+    'lidl'
+  ];
 
   const storeMatchesMap = {};
   for (const s of enabledStores) {
@@ -266,9 +385,10 @@ app.post('/api/compare', async (req, res) => {
     // Step 4: Compute store totals, delivery fees, and split basket optimization
     const comparison = BasketCalculator.computeComparison(items, storeMatchesMap, enabledStores);
 
-    console.log(`[Logic-API] Comparison complete. Cheapest store: ${comparison.cheapestStore.toUpperCase()}`);
+    console.log(
+      `[Logic-API] Comparison complete. Cheapest store: ${comparison.cheapestStore.toUpperCase()}`
+    );
     res.json(comparison);
-
   } catch (err) {
     console.error('[Logic-API] Compare endpoint error:', err);
     res.status(500).json({
@@ -293,7 +413,15 @@ app.post('/api/compare/stream', async (req, res) => {
   res.setHeader('Connection', 'keep-alive');
   if (res.flushHeaders) res.flushHeaders();
 
-  const enabledStores = preferences.enabledSupermarkets || ['asda', 'sainsburys', 'tesco', 'morrisons', 'iceland', 'aldi', 'lidl'];
+  const enabledStores = preferences.enabledSupermarkets || [
+    'asda',
+    'sainsburys',
+    'tesco',
+    'morrisons',
+    'iceland',
+    'aldi',
+    'lidl'
+  ];
   const totalChecks = items.length * enabledStores.length;
 
   // Periodic SSE heartbeat comment to prevent proxy or browser socket timeouts
@@ -312,15 +440,17 @@ app.post('/api/compare/stream', async (req, res) => {
     clearInterval(heartbeat);
   });
 
-  res.write(`data: ${JSON.stringify({
-    type: 'init',
-    totalItems: items.length,
-    totalStores: enabledStores.length,
-    totalChecks,
-    completedChecks: 0,
-    percent: 0,
-    status: `Initialized comparison for ${items.length} items across ${enabledStores.length} supermarkets...`
-  })}\n\n`);
+  res.write(
+    `data: ${JSON.stringify({
+      type: 'init',
+      totalItems: items.length,
+      totalStores: enabledStores.length,
+      totalChecks,
+      completedChecks: 0,
+      percent: 0,
+      status: `Initialized comparison for ${items.length} items across ${enabledStores.length} supermarkets...`
+    })}\n\n`
+  );
 
   const storeMatchesMap = {};
   for (const s of enabledStores) {
@@ -333,16 +463,18 @@ app.post('/api/compare/stream', async (req, res) => {
       const item = items[i];
       const coreQuery = getCoreSearchQuery(item);
 
-      res.write(`data: ${JSON.stringify({
-        type: 'progress',
-        currentItemIndex: i + 1,
-        totalItems: items.length,
-        totalChecks,
-        completedChecks: i * enabledStores.length,
-        percent: Math.round((i / items.length) * 100),
-        itemName: item.name,
-        status: `[${i + 1}/${items.length}] Checking prices for "${item.name}"...`
-      })}\n\n`);
+      res.write(
+        `data: ${JSON.stringify({
+          type: 'progress',
+          currentItemIndex: i + 1,
+          totalItems: items.length,
+          totalChecks,
+          completedChecks: i * enabledStores.length,
+          percent: Math.round((i / items.length) * 100),
+          itemName: item.name,
+          status: `[${i + 1}/${items.length}] Checking prices for "${item.name}"...`
+        })}\n\n`
+      );
 
       const candidateProducts = await getOrFetchCandidates(coreQuery, enabledStores, forceRefresh);
 
@@ -355,37 +487,42 @@ app.post('/api/compare/stream', async (req, res) => {
 
       if (isClosed) break;
 
-      res.write(`data: ${JSON.stringify({
-        type: 'item_matched',
-        currentItemIndex: i + 1,
-        totalItems: items.length,
-        totalChecks,
-        completedChecks: (i + 1) * enabledStores.length,
-        percent: Math.round(((i + 1) / items.length) * 100),
-        itemName: item.name,
-        status: `[${i + 1}/${items.length}] Matched "${item.name}" across supermarkets.`
-      })}\n\n`);
+      res.write(
+        `data: ${JSON.stringify({
+          type: 'item_matched',
+          currentItemIndex: i + 1,
+          totalItems: items.length,
+          totalChecks,
+          completedChecks: (i + 1) * enabledStores.length,
+          percent: Math.round(((i + 1) / items.length) * 100),
+          itemName: item.name,
+          status: `[${i + 1}/${items.length}] Matched "${item.name}" across supermarkets.`
+        })}\n\n`
+      );
     }
 
     if (!isClosed) {
       const comparison = BasketCalculator.computeComparison(items, storeMatchesMap, enabledStores);
 
-      res.write(`data: ${JSON.stringify({
-        type: 'complete',
-        comparison
-      })}\n\n`);
+      res.write(
+        `data: ${JSON.stringify({
+          type: 'complete',
+          comparison
+        })}\n\n`
+      );
     }
     clearInterval(heartbeat);
     res.end();
-
   } catch (err) {
     clearInterval(heartbeat);
     console.error('[Logic-API] Stream compare error:', err);
     if (!isClosed) {
-      res.write(`data: ${JSON.stringify({
-        type: 'error',
-        error: err.message || 'Stream processing failed'
-      })}\n\n`);
+      res.write(
+        `data: ${JSON.stringify({
+          type: 'error',
+          error: err.message || 'Stream processing failed'
+        })}\n\n`
+      );
       res.end();
     }
   }
@@ -414,7 +551,7 @@ app.get('/api/products/alternatives', async (req, res) => {
     const coreLower = (coreQuery || '').toLowerCase();
 
     // 1. Get baseline catalog products immediately for 0ms responsiveness
-    const catalogForStore = (CATALOG_PRODUCTS || []).filter(p => {
+    const catalogForStore = (CATALOG_PRODUCTS || []).filter((p) => {
       if (p.supermarket !== store) return false;
       const titleLower = p.title.toLowerCase();
       const catLower = (p.category || '').toLowerCase();
@@ -423,10 +560,12 @@ app.get('/api/products/alternatives', async (req, res) => {
       // Negative filters for non-staples / contaminated items
       if (isContaminated(queryLower, p.title)) return false;
 
-      return titleLower.includes(coreLower) || 
-             coreLower.split(' ').some(w => w.length > 2 && titleLower.includes(w)) ||
-             (catLower && queryLower.includes(catLower)) ||
-             (subLower && queryLower.includes(subLower));
+      return (
+        titleLower.includes(coreLower) ||
+        coreLower.split(' ').some((w) => w.length > 2 && titleLower.includes(w)) ||
+        (catLower && queryLower.includes(catLower)) ||
+        (subLower && queryLower.includes(subLower))
+      );
     });
 
     let scrapedForStore = [];
@@ -443,12 +582,12 @@ app.get('/api/products/alternatives', async (req, res) => {
         );
         const { html } = await Promise.race([scrapePromise, timeoutPromise]);
         const products = await GeminiDomParser.parseHtml(html, coreQuery);
-        scrapedForStore = products.filter(p => {
+        scrapedForStore = products.filter((p) => {
           if (p.supermarket !== store) return false;
           if (isContaminated(queryLower, p.title)) return false;
           return true;
         });
-      } catch (scrapeErr) {
+      } catch (_scrapeErr) {
         // Fast catalog fallback
       }
     }
@@ -524,7 +663,7 @@ app.post('/api/history', (req, res) => {
 });
 
 app.delete('/api/history/:id', (req, res) => {
-  shopHistory = shopHistory.filter(s => s.id !== req.params.id);
+  shopHistory = shopHistory.filter((s) => s.id !== req.params.id);
   PriceCache.saveShopHistory(shopHistory);
   res.json({ success: true });
 });
@@ -547,7 +686,7 @@ app.post('/api/favorites', (req, res) => {
 });
 
 app.delete('/api/favorites/:id', (req, res) => {
-  userFavorites = userFavorites.filter(f => f.id !== req.params.id);
+  userFavorites = userFavorites.filter((f) => f.id !== req.params.id);
   res.json({ success: true });
 });
 
@@ -568,11 +707,13 @@ app.post('/api/ingredient-ideas', (req, res) => {
 });
 
 app.delete('/api/ingredient-ideas/:id', (req, res) => {
-  ingredientIdeas = ingredientIdeas.filter(i => i.id !== req.params.id);
+  ingredientIdeas = ingredientIdeas.filter((i) => i.id !== req.params.id);
   res.json({ success: true });
 });
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 [Logic-API] Service B listening on http://0.0.0.0:${PORT}`);
-  console.log(`   Scraper Endpoint Target: ${process.env.SCRAPER_SERVICE_URL || 'http://127.0.0.1:3002/scrape'}`);
+  console.log(
+    `   Scraper Endpoint Target: ${process.env.SCRAPER_SERVICE_URL || 'http://127.0.0.1:3002/scrape'}`
+  );
 });

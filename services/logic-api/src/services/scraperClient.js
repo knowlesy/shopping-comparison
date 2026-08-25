@@ -37,7 +37,9 @@ export class ScraperClient {
       }
 
       const elapsed = Date.now() - startTime;
-      console.log(`[Logic-API -> ScraperClient] Successfully received ${data.length || data.html?.length || 0} bytes in ${elapsed}ms`);
+      console.log(
+        `[Logic-API -> ScraperClient] Successfully received ${data.length || data.html?.length || 0} bytes in ${elapsed}ms`
+      );
 
       return {
         html: data.html || '',
@@ -47,7 +49,7 @@ export class ScraperClient {
       };
     } catch (err) {
       console.error(`[Logic-API -> ScraperClient] Scraping failed for "${url}":`, err.message);
-      throw new Error(`Failed to scrape live data from aggregator: ${err.message}`);
+      throw new Error(`Failed to scrape live data from aggregator: ${err.message}`, { cause: err });
     }
   }
 }

@@ -33,7 +33,9 @@ export class PriceCache {
             loadedCount++;
           }
         }
-        console.log(`[PriceCache] Loaded ${loadedCount} active price cache entries from disk (72h TTL).`);
+        console.log(
+          `[PriceCache] Loaded ${loadedCount} active price cache entries from disk (72h TTL).`
+        );
       }
     } catch (err) {
       console.warn('[PriceCache] Warning: Could not initialize cache from disk:', err.message);

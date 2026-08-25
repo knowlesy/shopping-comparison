@@ -21,7 +21,15 @@ async function testLogicApi() {
     body: JSON.stringify({ rawText: rawList })
   });
   const parsedData = await parseRes.json();
-  console.log('Parsed Items:', parsedData.items.map(i => ({ name: i.name, targetQty: i.targetQuantity, unit: i.unit, fatPct: i.fatPercentage })));
+  console.log(
+    'Parsed Items:',
+    parsedData.items.map((i) => ({
+      name: i.name,
+      targetQty: i.targetQuantity,
+      unit: i.unit,
+      fatPct: i.fatPercentage
+    }))
+  );
 
   // 3. Live Compare
   console.log('\n--- 2. Testing /api/compare (Live Scrape + AI/DOM Parsing + Fuzzy Matching) ---');
@@ -47,10 +55,14 @@ async function testLogicApi() {
     console.log(`Cheapest Single Store: ${compData.cheapestStore.toUpperCase()}`);
     console.log('\nSTORE TOTALS:');
     for (const [store, res] of Object.entries(compData.supermarkets)) {
-      console.log(`- [${store.toUpperCase()}] Subtotal: £${res.subtotal} | Delivery: £${res.deliveryFee} | Total: £${res.totalPrice} | Items Found: ${res.itemsFound}/${res.itemsTotal}`);
+      console.log(
+        `- [${store.toUpperCase()}] Subtotal: £${res.subtotal} | Delivery: £${res.deliveryFee} | Total: £${res.totalPrice} | Items Found: ${res.itemsFound}/${res.itemsTotal}`
+      );
       for (const item of res.items) {
         if (item.product) {
-          console.log(`    ↳ "${item.product.title}" (${item.product.packageDisplay}) x${item.packsNeeded} = £${item.totalPrice} | Live Link: ${item.product.productUrl}`);
+          console.log(
+            `    ↳ "${item.product.title}" (${item.product.packageDisplay}) x${item.packsNeeded} = £${item.totalPrice} | Live Link: ${item.product.productUrl}`
+          );
         } else {
           console.log(`    ↳ [MISSING] ${item.parsedItem.name}`);
         }

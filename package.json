@@ -11,12 +11,17 @@
     "build": "npm --prefix client run build",
     "docker:up": "docker compose up --build",
     "docker:down": "docker compose down",
-    "test": "node --test tests/*.test.js services/logic-api/src/services/*.test.js || echo 'No unit tests yet'",
+    "lint": "eslint services/",
+    "format": "prettier --write \"services/**/*.js\" \"tests/**/*.js\" \"data/catalog.json\"",
+    "test": "node --test services/logic-api/src/services/*.test.js",
     "test:food-form": "node tests/food-form-and-variety-audit.js",
     "test:uncached-20": "node tests/uncached-20-lists-30-items-audit.js"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.62.1",
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "eslint": "^10.9.1",
+    "prettier": "^3.9.6"
   }
 }

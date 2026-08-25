@@ -24,9 +24,9 @@ export class FuzzyMatcher {
    * @returns {object} ItemMatch
    */
   static matchProduct(supermarket, item, candidateProducts = [], preferences = {}) {
-    const scrapedForStore = (candidateProducts || []).filter(p => p.supermarket === supermarket);
+    const scrapedForStore = (candidateProducts || []).filter((p) => p.supermarket === supermarket);
     const catalogForStore = CATALOG_BY_STORE[supermarket] || [];
-    
+
     // Merge scraped live products with verified baseline catalog products
     const storeProducts = [...scrapedForStore, ...catalogForStore];
 
@@ -49,8 +49,14 @@ export class FuzzyMatcher {
 
     const keywords = this.extractKeywords(item);
 
-    const scored = storeProducts.map(prod => {
-      const { score, packs, totalQty, totalPrice, weightDiffPct } = this.scoreCandidate(prod, item, keywords, preferences, storeProducts);
+    const scored = storeProducts.map((prod) => {
+      const { score, packs, totalQty, totalPrice, weightDiffPct } = this.scoreCandidate(
+        prod,
+        item,
+        keywords,
+        preferences,
+        storeProducts
+      );
       return {
         product: prod,
         score,
@@ -62,7 +68,7 @@ export class FuzzyMatcher {
     });
 
     // Sort strictly by highest match score, then lowest total price
-    scored.sort((a, b) => (b.score - a.score) || (a.totalPrice - b.totalPrice));
+    scored.sort((a, b) => b.score - a.score || a.totalPrice - b.totalPrice);
 
     const best = scored[0];
 
@@ -86,17 +92,78 @@ export class FuzzyMatcher {
     // Identify primary noun terms from search item
     const itemText = `${item.baseItem || ''} ${item.name || ''}`.toLowerCase();
     const CORE_NOUNS = [
-      'milk', 'egg', 'eggs', 'yogurt', 'yoghurt', 'lentil', 'lentils', 'cod', 'salmon',
-      'haddock', 'tuna', 'prawn', 'prawns', 'fish', 'mince', 'beef', 'chicken', 'pork', 'lamb',
-      'steak', 'bacon', 'sausage', 'fusilli', 'pasta', 'penne', 'spaghetti', 'rice',
-      'oats', 'porridge', 'bread', 'loaf', 'potato', 'potatoes', 'carrot', 'carrots',
-      'onion', 'onions', 'garlic', 'spinach', 'celery', 'banana', 'bananas', 'pear',
-      'pears', 'clementine', 'clementines', 'apple', 'apples', 'orange', 'oranges',
-      'mushroom', 'mushrooms', 'pepper', 'peppers', 'courgette', 'courgettes',
-      'tomato', 'tomatoes', 'polpa', 'puree', 'oil', 'olive oil', 'walnut', 'almond',
-      'chia', 'seed', 'seeds', 'cheese', 'cheddar', 'butter'
+      'milk',
+      'egg',
+      'eggs',
+      'yogurt',
+      'yoghurt',
+      'lentil',
+      'lentils',
+      'cod',
+      'salmon',
+      'haddock',
+      'tuna',
+      'prawn',
+      'prawns',
+      'fish',
+      'mince',
+      'beef',
+      'chicken',
+      'pork',
+      'lamb',
+      'steak',
+      'bacon',
+      'sausage',
+      'fusilli',
+      'pasta',
+      'penne',
+      'spaghetti',
+      'rice',
+      'oats',
+      'porridge',
+      'bread',
+      'loaf',
+      'potato',
+      'potatoes',
+      'carrot',
+      'carrots',
+      'onion',
+      'onions',
+      'garlic',
+      'spinach',
+      'celery',
+      'banana',
+      'bananas',
+      'pear',
+      'pears',
+      'clementine',
+      'clementines',
+      'apple',
+      'apples',
+      'orange',
+      'oranges',
+      'mushroom',
+      'mushrooms',
+      'pepper',
+      'peppers',
+      'courgette',
+      'courgettes',
+      'tomato',
+      'tomatoes',
+      'polpa',
+      'puree',
+      'oil',
+      'olive oil',
+      'walnut',
+      'almond',
+      'chia',
+      'seed',
+      'seeds',
+      'cheese',
+      'cheddar',
+      'butter'
     ];
-    const targetNouns = CORE_NOUNS.filter(n => itemText.includes(n));
+    const targetNouns = CORE_NOUNS.filter((n) => itemText.includes(n));
 
     // Filter alternatives:
     // 1. Must not be the selected best product
@@ -105,9 +172,9 @@ export class FuzzyMatcher {
     // 4. Must match at least one of the item's primary nouns
     // 5. Must not be prohibited processed food (e.g. scotch eggs, crisps)
     const alternatives = scored
-      .filter(s => s.product.id !== best.product.id)
-      .filter(s => s.score >= 20)
-      .filter(s => {
+      .filter((s) => s.product.id !== best.product.id)
+      .filter((s) => s.score >= 20)
+      .filter((s) => {
         const prodTitle = s.product.title.toLowerCase();
 
         // Hard negative exclusions on alternatives
@@ -115,16 +182,21 @@ export class FuzzyMatcher {
           return false;
         }
 
-        if (item.category && s.product.category && item.category !== 'general' && s.product.category !== 'general') {
+        if (
+          item.category &&
+          s.product.category &&
+          item.category !== 'general' &&
+          s.product.category !== 'general'
+        ) {
           if (item.category !== s.product.category) return false;
         }
         if (targetNouns.length > 0) {
-          return targetNouns.some(n => prodTitle.includes(n));
+          return targetNouns.some((n) => prodTitle.includes(n));
         }
         return true;
       })
       .slice(0, 16)
-      .map(s => s.product);
+      .map((s) => s.product);
 
     return {
       parsedItem: item,
@@ -141,10 +213,16 @@ export class FuzzyMatcher {
     };
   }
 
-  static scoreCandidate(prod, item, keywords, preferences = {}, storeProducts = []) {
+  static scoreCandidate(prod, item, keywords, preferences = {}, _storeProducts = []) {
     // 0. Hard Category Guard: Prevent Cross-Category Contamination (e.g. Bread/Fruit matching Fish)
     // Only enforce when both item and product have specific non-general categories
-    if (item.category && prod.category && item.category !== 'general' && prod.category !== 'general' && item.category !== prod.category) {
+    if (
+      item.category &&
+      prod.category &&
+      item.category !== 'general' &&
+      prod.category !== 'general' &&
+      item.category !== prod.category
+    ) {
       return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
     }
 
@@ -154,20 +232,37 @@ export class FuzzyMatcher {
 
     // 1. Semantic Cut & Form Flexibility (Respecting user cutMatchingStrategy setting)
     const isStrictCut = preferences.cutMatchingStrategy === 'strict_cut';
-    const FISH_CUT_TERMS = ['loin', 'loins', 'fillet', 'fillets', 'portion', 'portions', 'steak', 'steaks'];
-    const MEAT_CUT_TERMS = ['mince', 'minced', 'steak mince', 'breast', 'breasts', 'diced', 'chops'];
+    const FISH_CUT_TERMS = [
+      'loin',
+      'loins',
+      'fillet',
+      'fillets',
+      'portion',
+      'portions',
+      'steak',
+      'steaks'
+    ];
+    const MEAT_CUT_TERMS = [
+      'mince',
+      'minced',
+      'steak mince',
+      'breast',
+      'breasts',
+      'diced',
+      'chops'
+    ];
 
     let effectiveTitle = titleLower;
     if (!isStrictCut) {
       // Best Value mode: expand cuts so equivalent forms compete for lowest price
       if (item.category === 'fish') {
-        const hasFishCut = FISH_CUT_TERMS.some(cut => titleLower.includes(cut));
+        const hasFishCut = FISH_CUT_TERMS.some((cut) => titleLower.includes(cut));
         if (hasFishCut) {
           effectiveTitle += ' loin loins fillet fillets portion portions';
         }
       }
       if (item.category === 'meat') {
-        const hasMeatCut = MEAT_CUT_TERMS.some(cut => titleLower.includes(cut));
+        const hasMeatCut = MEAT_CUT_TERMS.some((cut) => titleLower.includes(cut));
         if (hasMeatCut) {
           effectiveTitle += ' mince minced steak breast fillets';
         }
@@ -181,8 +276,8 @@ export class FuzzyMatcher {
     }
 
     const effectiveAttributes = `${effectiveTitle} ${prod.fatPercentage !== undefined ? `${prod.fatPercentage} ${prod.fatPercentage}% lean fat` : ''} ${prod.isFrozen ? 'frozen' : 'fresh'} ${prod.isOrganic ? 'organic' : ''}`;
-    const matchCount = keywords.filter(kw => effectiveAttributes.includes(kw)).length;
-    
+    const matchCount = keywords.filter((kw) => effectiveAttributes.includes(kw)).length;
+
     // If absolutely zero keywords match the product title/attributes, heavily penalize to prevent size/tier leakage
     if (matchCount === 0) {
       return { score: -200, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
@@ -192,7 +287,10 @@ export class FuzzyMatcher {
     score += textScore;
 
     // 2. Brand Preference Match
-    if (item.brandPreference && prod.brand.toLowerCase().includes(item.brandPreference.toLowerCase())) {
+    if (
+      item.brandPreference &&
+      prod.brand.toLowerCase().includes(item.brandPreference.toLowerCase())
+    ) {
       score += 40;
     }
 
@@ -207,60 +305,71 @@ export class FuzzyMatcher {
     }
 
     // Supplements / Vitamins / Oil / Pet Food penalties
-    const isSupplementOrOil = titleLower.includes('liver oil') ||
-                              titleLower.includes('multivitamins') ||
-                              titleLower.includes('supplements') ||
-                              titleLower.includes('capsules') ||
-                              titleLower.includes('tablets') ||
-                              titleLower.includes('in sauce') ||
-                              titleLower.includes('parsley sauce') ||
-                              titleLower.includes('butter sauce');
-    const isExplicitlyRequestedSupplement = itemLower.includes('oil') || itemLower.includes('vitamin') || itemLower.includes('supplement') || itemLower.includes('sauce');
+    const isSupplementOrOil =
+      titleLower.includes('liver oil') ||
+      titleLower.includes('multivitamins') ||
+      titleLower.includes('supplements') ||
+      titleLower.includes('capsules') ||
+      titleLower.includes('tablets') ||
+      titleLower.includes('in sauce') ||
+      titleLower.includes('parsley sauce') ||
+      titleLower.includes('butter sauce');
+    const isExplicitlyRequestedSupplement =
+      itemLower.includes('oil') ||
+      itemLower.includes('vitamin') ||
+      itemLower.includes('supplement') ||
+      itemLower.includes('sauce');
     if (isSupplementOrOil && !isExplicitlyRequestedSupplement) {
       score -= 150; // Completely exclude vitamins/supplements/sauced ready meals from plain staple matches
     }
 
     // Processed / Breaded / Fish Fingers / Battered penalties for plain staples
-    const isProcessedOrBreaded = titleLower.includes('finger') ||
-                                 titleLower.includes('fish finger') ||
-                                 titleLower.includes('battered') ||
-                                 titleLower.includes('breaded') ||
-                                 titleLower.includes('crumbed') ||
-                                 titleLower.includes('fish cake') ||
-                                 titleLower.includes('fishcake');
-    const isExplicitlyBreaded = itemLower.includes('finger') || itemLower.includes('breaded') || itemLower.includes('battered');
+    const isProcessedOrBreaded =
+      titleLower.includes('finger') ||
+      titleLower.includes('fish finger') ||
+      titleLower.includes('battered') ||
+      titleLower.includes('breaded') ||
+      titleLower.includes('crumbed') ||
+      titleLower.includes('fish cake') ||
+      titleLower.includes('fishcake');
+    const isExplicitlyBreaded =
+      itemLower.includes('finger') ||
+      itemLower.includes('breaded') ||
+      itemLower.includes('battered');
     if (isProcessedOrBreaded && !isExplicitlyBreaded) {
       score -= 80; // Heavy penalty on fish fingers / battered fish when plain fish was requested
     }
 
     // Breaded / seasoned / sauce / ready-meal penalties for plain staples
-    const isReadyMealOrGravy = titleLower.includes('gravy') || 
-                               titleLower.includes('in gravy') ||
-                               titleLower.includes('& gravy') ||
-                               titleLower.includes('and gravy') ||
-                               titleLower.includes('ready meal') ||
-                               titleLower.includes('meal for one') ||
-                               titleLower.includes('hotpot') ||
-                               titleLower.includes('lasagne') ||
-                               titleLower.includes('lasagna') ||
-                               titleLower.includes('cottage pie') ||
-                               titleLower.includes('shepherd') ||
-                               titleLower.includes('pasta bake') ||
-                               titleLower.includes('chilli con carne') ||
-                               titleLower.includes('bolognese ready') ||
-                               titleLower.includes('casserole') ||
-                               titleLower.includes('stew') ||
-                               titleLower.includes('pet food') ||
-                               titleLower.includes('cat food') ||
-                               titleLower.includes('dog food') ||
-                               titleLower.includes('pie');
+    const isReadyMealOrGravy =
+      titleLower.includes('gravy') ||
+      titleLower.includes('in gravy') ||
+      titleLower.includes('& gravy') ||
+      titleLower.includes('and gravy') ||
+      titleLower.includes('ready meal') ||
+      titleLower.includes('meal for one') ||
+      titleLower.includes('hotpot') ||
+      titleLower.includes('lasagne') ||
+      titleLower.includes('lasagna') ||
+      titleLower.includes('cottage pie') ||
+      titleLower.includes('shepherd') ||
+      titleLower.includes('pasta bake') ||
+      titleLower.includes('chilli con carne') ||
+      titleLower.includes('bolognese ready') ||
+      titleLower.includes('casserole') ||
+      titleLower.includes('stew') ||
+      titleLower.includes('pet food') ||
+      titleLower.includes('cat food') ||
+      titleLower.includes('dog food') ||
+      titleLower.includes('pie');
 
-    const isExplicitlyRequestedReadyMeal = itemLower.includes('gravy') || 
-                                          itemLower.includes('ready meal') || 
-                                          itemLower.includes('hotpot') ||
-                                          itemLower.includes('lasagne') ||
-                                          itemLower.includes('pie') ||
-                                          itemLower.includes('stew');
+    const isExplicitlyRequestedReadyMeal =
+      itemLower.includes('gravy') ||
+      itemLower.includes('ready meal') ||
+      itemLower.includes('hotpot') ||
+      itemLower.includes('lasagne') ||
+      itemLower.includes('pie') ||
+      itemLower.includes('stew');
 
     if (isReadyMealOrGravy && !isExplicitlyRequestedReadyMeal) {
       score -= 250; // Completely exclude ready meals/gravy cans from raw staple matches
@@ -271,10 +380,20 @@ export class FuzzyMatcher {
       score -= 500;
     }
 
-    if (!itemLower.includes('breaded') && (titleLower.includes('breaded') || titleLower.includes('battered') || titleLower.includes('crumbed'))) {
+    if (
+      !itemLower.includes('breaded') &&
+      (titleLower.includes('breaded') ||
+        titleLower.includes('battered') ||
+        titleLower.includes('crumbed'))
+    ) {
       score -= 35;
     }
-    if (!itemLower.includes('butter') && (titleLower.includes('butter') || titleLower.includes('seasoned') || titleLower.includes('marinade'))) {
+    if (
+      !itemLower.includes('butter') &&
+      (titleLower.includes('butter') ||
+        titleLower.includes('seasoned') ||
+        titleLower.includes('marinade'))
+    ) {
       score -= 30;
     }
 
@@ -314,10 +433,14 @@ export class FuzzyMatcher {
     }
 
     // 5. Pack Sizing & Weight Distance
-    const { packs, totalQty, totalPrice, weightDiffPct } = this.calculatePacks(prod, item, preferences);
+    const { packs, totalQty, totalPrice, weightDiffPct } = this.calculatePacks(
+      prod,
+      item,
+      preferences
+    );
 
     const absDiff = Math.abs(weightDiffPct);
-    const distanceScore = Math.max(-10, Math.round(30 - (absDiff * 0.8)));
+    const distanceScore = Math.max(-10, Math.round(30 - absDiff * 0.8));
     score += distanceScore;
 
     // Deficit penalty: Under-delivering recipe target (e.g. 750g for 900g = -16.7%) is penalized (-30)
@@ -359,7 +482,7 @@ export class FuzzyMatcher {
     }
 
     const ratio = targetAmount / (prodAmount || 1);
-    let packs = 1;
+    let packs;
     const policy = preferences.packSizingPolicy || 'closest';
 
     if (policy === 'cover') {
@@ -394,12 +517,16 @@ export class FuzzyMatcher {
   }
 
   static extractKeywords(item) {
-    const raw = `${item.baseItem || ''} ${item.name || ''} ${item.brandPreference || ''}`.toLowerCase();
+    const raw =
+      `${item.baseItem || ''} ${item.name || ''} ${item.brandPreference || ''}`.toLowerCase();
     const clean = raw
       .replace(/[^\w\s]/g, ' ')
-      .replace(/\b(approx|fresh|sliced|tinned|frozen|natural|pack|packs|head|bunch|tin|tins|bulbs?|loaves|loaf|whole|halves|piece|pieces|portion|portions|target|item|items|mix)\b/g, '')
+      .replace(
+        /\b(approx|fresh|sliced|tinned|frozen|natural|pack|packs|head|bunch|tin|tins|bulbs?|loaves|loaf|whole|halves|piece|pieces|portion|portions|target|item|items|mix)\b/g,
+        ''
+      )
       .trim();
 
-    return clean.split(/\s+/).filter(k => k.length > 1);
+    return clean.split(/\s+/).filter((k) => k.length > 1);
   }
 }

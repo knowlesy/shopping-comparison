@@ -30,5 +30,6 @@ if (!catalogData) {
 }
 
 export const SUPERMARKETS_INFO = catalogData.supermarkets || {};
-export const CATALOG_PRODUCTS = catalogData.products || (Array.isArray(catalogData) ? catalogData : []);
+export const CATALOG_PRODUCTS =
+  catalogData.products || (Array.isArray(catalogData) ? catalogData : []);
 export const DEFAULT_INGREDIENT_IDEAS = catalogData.ingredientIdeas || [];

@@ -13,7 +13,8 @@ function normalizeSupermarket(rawBrand, rawTitle = '') {
   if (text.includes('morrison')) return 'morrisons';
   if (text.includes('iceland')) return 'iceland';
   if (text.includes('waitrose')) return 'waitrose';
-  if (text.includes('ocado') || text.includes('marks and spencer') || text.includes('m&s')) return 'ocado';
+  if (text.includes('ocado') || text.includes('marks and spencer') || text.includes('m&s'))
+    return 'ocado';
   if (text.includes('co-op') || text.includes('coop')) return 'coop';
   if (text.includes('aldi')) return 'aldi';
   if (text.includes('lidl')) return 'lidl';
@@ -25,7 +26,7 @@ function normalizeSupermarket(rawBrand, rawTitle = '') {
  */
 function parseMetricSize(sizeStr, title = '') {
   const combined = `${sizeStr} ${title}`.toLowerCase();
-  
+
   // Multipliers: e.g. "2 x 400g"
   const multiMatch = combined.match(/(\d+)\s*[xX]\s*([\d.]+)\s*(kg|g|l|ml|pints?|pack)/i);
   if (multiMatch) {
@@ -82,7 +83,10 @@ function parseMetricSize(sizeStr, title = '') {
   }
 
   // Default mince fallback if size omitted
-  if (/(?:beef|pork|lamb|turkey|chicken)\s+mince/i.test(combined) || /steak mince/i.test(combined)) {
+  if (
+    /(?:beef|pork|lamb|turkey|chicken)\s+mince/i.test(combined) ||
+    /steak mince/i.test(combined)
+  ) {
     return { size: 500, unit: 'g', display: '500g' };
   }
 
@@ -94,12 +98,26 @@ function parseMetricSize(sizeStr, title = '') {
  */
 function assignCategory(title = '') {
   const lower = title.toLowerCase();
-  if (/beef|mince|chicken|pork|lamb|steak|bacon|sausage|meat/i.test(lower)) return { category: 'meat', subCategory: 'beef' };
-  if (/cod|salmon|haddock|tuna|prawn|fish|seafood/i.test(lower)) return { category: 'fish', subCategory: 'frozen fish' };
-  if (/milk|yogurt|yoghurt|cheese|egg|eggs|butter|cream|cheddar/i.test(lower)) return { category: 'dairy-eggs', subCategory: 'dairy' };
-  if (/potato|potatoes|carrot|carrots|onion|onions|garlic|courgette|pepper|mushroom|tomato|tomatoes|spinach/i.test(lower)) return { category: 'produce', subCategory: 'vegetables' };
-  if (/pasta|fusilli|penne|spaghetti|rice|oat|oats|porridge|lentil|lentils|chia|walnut|flour/i.test(lower)) return { category: 'pantry', subCategory: 'staples' };
-  if (/bread|loaf|roll|bagel|pitta|wrap|bakery/i.test(lower)) return { category: 'bakery', subCategory: 'bread' };
+  if (/beef|mince|chicken|pork|lamb|steak|bacon|sausage|meat/i.test(lower))
+    return { category: 'meat', subCategory: 'beef' };
+  if (/cod|salmon|haddock|tuna|prawn|fish|seafood/i.test(lower))
+    return { category: 'fish', subCategory: 'frozen fish' };
+  if (/milk|yogurt|yoghurt|cheese|egg|eggs|butter|cream|cheddar/i.test(lower))
+    return { category: 'dairy-eggs', subCategory: 'dairy' };
+  if (
+    /potato|potatoes|carrot|carrots|onion|onions|garlic|courgette|pepper|mushroom|tomato|tomatoes|spinach/i.test(
+      lower
+    )
+  )
+    return { category: 'produce', subCategory: 'vegetables' };
+  if (
+    /pasta|fusilli|penne|spaghetti|rice|oat|oats|porridge|lentil|lentils|chia|walnut|flour/i.test(
+      lower
+    )
+  )
+    return { category: 'pantry', subCategory: 'staples' };
+  if (/bread|loaf|roll|bagel|pitta|wrap|bakery/i.test(lower))
+    return { category: 'bakery', subCategory: 'bread' };
   return { category: 'general', subCategory: 'general' };
 }
 
@@ -123,23 +141,27 @@ export class GeminiDomParser {
     $('.product-item, [data-product], .products-grid .product').each((idx, el) => {
       const $el = $(el);
       const id = $el.attr('data-id') || `item-${idx}`;
-      
+
       const linkEl = $el.find('a[href^="/product/"]').first();
       const href = linkEl.attr('href') || '';
-      const fullUrl = href ? (href.startsWith('http') ? href : `https://www.trolley.co.uk${href}`) : '';
-      
+      const fullUrl = href
+        ? href.startsWith('http')
+          ? href
+          : `https://www.trolley.co.uk${href}`
+        : '';
+
       const brand = $el.find('._brand, .brand').text().trim();
       const desc = $el.find('._desc, .description, .title').text().trim();
       const rawTitle = linkEl.attr('title') || `${brand} ${desc}`.trim();
-      
+
       const sizeStr = $el.find('._size, .size, ._tag').text().trim();
-      
+
       const priceText = $el.find('._price, .price').text().trim();
       const priceMatch = priceText.match(/£([\d.]+)/);
       const price = priceMatch ? parseFloat(priceMatch[1]) : 0;
-      
+
       const perItemText = $el.find('._per-item, .unit-price').text().trim();
-      
+
       const imgEl = $el.find('img').first();
       let imgSrc = imgEl.attr('src') || imgEl.attr('data-src') || '';
       if (imgSrc && !imgSrc.startsWith('http')) {
@@ -160,11 +182,15 @@ export class GeminiDomParser {
       }
     });
 
-    console.log(`[Logic-API -> GeminiDomParser] Extracted ${rawCards.length} raw product cards from DOM.`);
+    console.log(
+      `[Logic-API -> GeminiDomParser] Extracted ${rawCards.length} raw product cards from DOM.`
+    );
 
     // If Google GenAI API key is present, valid, and not in quota cooldown, enhance extraction with Gemini
-    const rawKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENAI_API_KEY || process.env.GOOGLE_API_KEY;
-    const apiKey = (rawKey && typeof rawKey === 'string' && rawKey.trim().length > 10) ? rawKey.trim() : null;
+    const rawKey =
+      process.env.GEMINI_API_KEY || process.env.GOOGLE_GENAI_API_KEY || process.env.GOOGLE_API_KEY;
+    const apiKey =
+      rawKey && typeof rawKey === 'string' && rawKey.trim().length > 10 ? rawKey.trim() : null;
     const now = Date.now();
 
     if (apiKey && rawCards.length > 0 && now > (GeminiDomParser.quotaCooldownUntil || 0)) {
@@ -174,11 +200,18 @@ export class GeminiDomParser {
           return enhanced;
         }
       } catch (geminiErr) {
-        if (geminiErr.message && (geminiErr.message.includes('429') || geminiErr.message.includes('RESOURCE_EXHAUSTED'))) {
+        if (
+          geminiErr.message &&
+          (geminiErr.message.includes('429') || geminiErr.message.includes('RESOURCE_EXHAUSTED'))
+        ) {
           GeminiDomParser.quotaCooldownUntil = Date.now() + 10 * 60 * 1000;
-          console.warn('[Logic-API -> GeminiDomParser] GenAI free tier rate limit reached. Cooldown for 10m; using native fast DOM parsing.');
+          console.warn(
+            '[Logic-API -> GeminiDomParser] GenAI free tier rate limit reached. Cooldown for 10m; using native fast DOM parsing.'
+          );
         } else {
-          console.warn(`[Logic-API -> GeminiDomParser] GenAI parsing fallback: ${geminiErr.message}`);
+          console.warn(
+            `[Logic-API -> GeminiDomParser] GenAI parsing fallback: ${geminiErr.message}`
+          );
         }
       }
     }
@@ -209,10 +242,14 @@ export class GeminiDomParser {
       // Detect dietary / health attributes
       const titleLower = card.title.toLowerCase();
       const urlLower = (card.url || '').toLowerCase();
-      let fatMatch = titleLower.match(/(\d+)%\s*(?:fat|lean)/i) || urlLower.match(/(\d+)-(?:fat|lean)/i);
+      let fatMatch =
+        titleLower.match(/(\d+)%\s*(?:fat|lean)/i) || urlLower.match(/(\d+)-(?:fat|lean)/i);
       let fatPercentage = fatMatch ? parseInt(fatMatch[1], 10) : undefined;
 
-      if (fatPercentage === undefined && (titleLower.includes('lean') || titleLower.includes('steak mince'))) {
+      if (
+        fatPercentage === undefined &&
+        (titleLower.includes('lean') || titleLower.includes('steak mince'))
+      ) {
         fatPercentage = 5;
       }
 
@@ -220,13 +257,22 @@ export class GeminiDomParser {
       const isFreeRange = /free range/i.test(titleLower);
       const isOrganic = /organic/i.test(titleLower);
       const isFrozen = /frozen/i.test(titleLower) || /frozen/i.test(urlLower);
-      const isHealthier = (fatPercentage !== undefined && fatPercentage <= 5) || isWholewheat || isFreeRange || isOrganic;
+      const isHealthier =
+        (fatPercentage !== undefined && fatPercentage <= 5) ||
+        isWholewheat ||
+        isFreeRange ||
+        isOrganic;
 
       // Tier detection
       let tier = 'standard';
       if (/essential|smart price|just essentials|savers|everyday/i.test(titleLower)) tier = 'value';
-      else if (/finest|taste the difference|extra special|the best|organic/i.test(titleLower)) tier = 'premium';
-      else if (card.brand && !['Tesco', 'ASDA', "Sainsbury's", 'Morrisons', 'Iceland'].includes(card.brand)) tier = 'branded';
+      else if (/finest|taste the difference|extra special|the best|organic/i.test(titleLower))
+        tier = 'premium';
+      else if (
+        card.brand &&
+        !['Tesco', 'ASDA', "Sainsbury's", 'Morrisons', 'Iceland'].includes(card.brand)
+      )
+        tier = 'branded';
 
       products.push({
         id: `${supermarket}-${card.id}`,
@@ -250,11 +296,15 @@ export class GeminiDomParser {
         isFrozen,
         inStock: true,
         productUrl: card.url,
-        imageUrl: card.imageUrl || 'https://images.unsplash.com/photo-1588168333986-5078d3ae3976?w=200&auto=format&fit=crop&q=60'
+        imageUrl:
+          card.imageUrl ||
+          'https://images.unsplash.com/photo-1588168333986-5078d3ae3976?w=200&auto=format&fit=crop&q=60'
       });
     }
 
-    console.log(`[Logic-API -> GeminiDomParser] Successfully structured ${products.length} supermarket products.`);
+    console.log(
+      `[Logic-API -> GeminiDomParser] Successfully structured ${products.length} supermarket products.`
+    );
     return products;
   }
 
@@ -318,3 +368,8 @@ Return a JSON array of objects with schema:
     return Promise.race([geminiPromise, timeoutPromise]);
   }
 }
+
+GeminiDomParser.parseMetricSize = parseMetricSize;
+GeminiDomParser.normalizeSupermarket = normalizeSupermarket;
+
+export { parseMetricSize, normalizeSupermarket };
