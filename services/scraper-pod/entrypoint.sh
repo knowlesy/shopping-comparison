@@ -2,4 +2,4 @@
 set -e
 
 echo "[Scraper-Pod] Starting Xvfb virtual display..."
-exec xvfb-run -a --server-args="-screen 0 1920x1080x24 -ac -nolisten tcp -dpi 96" node src/server.js "$@"
+xvfb-run -a --server-args="-screen 0 1920x1080x24 -ac -nolisten tcp -dpi 96" node src/server.js "$@"

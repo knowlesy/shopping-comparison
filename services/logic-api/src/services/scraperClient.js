@@ -15,11 +15,18 @@ export class ScraperClient {
     const startTime = Date.now();
 
     try {
+      const scrapeToken = process.env.SCRAPE_TOKEN;
+      if (!scrapeToken) {
+        throw new Error(
+          'Missing SCRAPE_TOKEN environment variable: logic-api cannot authenticate with scraper-pod.'
+        );
+      }
+
       const response = await fetch(SCRAPER_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-scrape-token': process.env.SCRAPE_TOKEN || ''
+          'x-scrape-token': scrapeToken
         },
         body: JSON.stringify({
           url,
