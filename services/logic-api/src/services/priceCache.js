@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const DATA_DIR = path.resolve(__dirname, '../../data');
+const DATA_DIR = process.env.DATA_DIR || path.resolve(__dirname, '../../data');
 const CACHE_FILE = path.join(DATA_DIR, 'price_cache.json');
 const HISTORY_FILE = path.join(DATA_DIR, 'shop_history.json');
 const RECENT_SEARCHES_FILE = path.join(DATA_DIR, 'recent_searches.json');

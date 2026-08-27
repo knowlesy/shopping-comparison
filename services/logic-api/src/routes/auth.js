@@ -5,9 +5,11 @@ export const authRouter = express.Router();
 /**
  * Authentication & Supermarket Account Integration Scaffolding
  *
- * FEATURE FLAG CONDITION:
- * Kept strictly disabled by default (ENABLE_AUTH = false).
- * Can be enabled via process.env.ENABLE_AUTH === 'true' when OAuth / credential vaults are provisioned.
+ * ⚠️ CAUTION / WARNING:
+ * ENABLE_AUTH is disabled by default (false).
+ * Flipping ENABLE_AUTH=true activates scaffolded FAKE authentication (mock JWTs and stub users)
+ * for testing and UI integration only. It is NOT real authentication and does not store credentials securely.
+ * See TODO.md for future production milestones (OAuth 2.0 / Vault / Supermarket Direct Connect).
  */
 const ENABLE_AUTH = process.env.ENABLE_AUTH === 'true';
 

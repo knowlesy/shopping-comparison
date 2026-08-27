@@ -32,6 +32,9 @@ services:
       - SCRAPE_TOKEN=${SCRAPE_TOKEN}
       - CLIENT_ORIGIN=${CLIENT_ORIGIN:-http://localhost:8080}
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - DATA_DIR=/usr/src/app/data/runtime
+    volumes:
+      - logic-data:/usr/src/app/data/runtime
     depends_on:
       - scraper-pod
     restart: unless-stopped
@@ -58,3 +61,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
+
+volumes:
+  logic-data:
+

@@ -1,6 +1,7 @@
 import { GoogleGenAI } from '@google/genai';
 import { PriceCache } from './priceCache.js';
 import { getUserSettings } from '../routes/settings.js';
+import { formatConfidence } from './confidence.js';
 
 /**
  * AI Decision Reviewer (Hybrid Matching Engine)
@@ -64,7 +65,7 @@ export class AiDecisionReviewer {
       if (match) {
         return {
           ...match,
-          confidence: '95% verified (Gemini AI Match - Cached)',
+          ...formatConfidence(0.95, 'ai-cached'),
           aiReasoning: cachedDecision.reasoning
         };
       }
@@ -131,7 +132,7 @@ Respond with JSON only in this exact format:
 
       return {
         ...chosen,
-        confidence: '95% verified (Gemini AI Match)',
+        ...formatConfidence(0.95, 'ai'),
         aiReasoning: parsed.reasoning
       };
     } catch (err) {

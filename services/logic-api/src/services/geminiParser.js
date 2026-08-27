@@ -1,5 +1,6 @@
 import * as cheerio from 'cheerio';
 import { DealCalculator } from './dealCalculator.js';
+import { formatConfidence } from './confidence.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -273,7 +274,7 @@ class DomScraperParser {
         deal: deal || undefined,
         promoText: card.promoText || undefined,
         clubcardPrice,
-        confidence: '80% likely (Aggregator match)',
+        ...formatConfidence(0.8, 'aggregator'),
         isHealthier,
         fatPercentage,
         isOrganic,

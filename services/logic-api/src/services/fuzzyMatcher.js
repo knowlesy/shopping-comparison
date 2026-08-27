@@ -1,6 +1,7 @@
 import { CATALOG_PRODUCTS } from './catalogData.js';
 import { isContaminated } from './contaminationRules.js';
 import { DealCalculator } from './dealCalculator.js';
+import { formatConfidence } from './confidence.js';
 
 // Pre-index catalog products by supermarket once at startup to avoid repeated O(N) filtering in loops
 const CATALOG_BY_STORE = {};
@@ -43,7 +44,7 @@ export class FuzzyMatcher {
         weightDifferencePercent: 0,
         isClosestPack: false,
         matchScore: 0,
-        confidence: '80% likely (Aggregator match)',
+        ...formatConfidence(0.8, 'aggregator'),
         reason: 'Item not currently listed in live search results.',
         alternatives: []
       };
@@ -209,7 +210,11 @@ export class FuzzyMatcher {
       weightDifferencePercent: best.weightDiffPct,
       isClosestPack: Math.abs(best.weightDiffPct) < 25,
       matchScore: best.score,
-      confidence: best.product.confidence || '80% likely (Aggregator match)',
+      ...formatConfidence(
+        best.product.confidenceScore || (best.product.source === 'catalog' ? 1.0 : 0.8),
+        best.product.confidenceSource || (best.product.source === 'catalog' ? 'catalog' : 'aggregator'),
+        best.product.confidence
+      ),
       dealApplied: best.dealApplied || undefined,
       alternatives
     };

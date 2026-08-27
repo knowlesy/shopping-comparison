@@ -71,6 +71,8 @@ export interface SupermarketProduct {
   deal?: ProductDeal;
   promoText?: string;
   confidence?: string;
+  confidenceScore?: number;
+  confidenceSource?: 'aggregator' | 'ai' | 'ai-cached' | 'catalog';
   isHealthier: boolean;
   isFrozen?: boolean;
   fatPercentage?: number;
@@ -97,6 +99,8 @@ export interface ItemMatch {
   isClosestPack: boolean;
   matchScore: number;
   confidence?: string;
+  confidenceScore?: number;
+  confidenceSource?: 'aggregator' | 'ai' | 'ai-cached' | 'catalog';
   dealApplied?: DealApplied;
   reason?: string;
   alternatives?: SupermarketProduct[];
