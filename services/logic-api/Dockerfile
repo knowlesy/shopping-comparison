@@ -13,6 +13,7 @@ RUN npm install --omit=dev
 
 COPY services/logic-api/src/ ./src/
 COPY data/ ./data/
+COPY CHANGELOG.md ./
 
 EXPOSE 3001
 
