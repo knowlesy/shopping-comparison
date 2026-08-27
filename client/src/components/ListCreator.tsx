@@ -13,8 +13,11 @@ import {
   Search,
   BookOpen,
   Loader2,
+  Pin,
+  History,
 } from 'lucide-react';
-import { ParsedItem, IngredientIdea, SupermarketName } from '../types';
+import { ParsedItem, IngredientIdea, SupermarketName, RecentSearchItem } from '../types';
+import { api } from '../services/api';
 
 interface ListCreatorProps {
   items: ParsedItem[];
@@ -69,6 +72,38 @@ export const ListCreator: React.FC<ListCreatorProps> = ({
   const [quickInput, setQuickInput] = useState('');
   const [activeCategoryFilter, setActiveCategoryFilter] = useState<string>('all');
   const [ideaSearch, setIdeaSearch] = useState('');
+  const [recentSearches, setRecentSearches] = useState<RecentSearchItem[]>([]);
+  const [showRecentDropdown, setShowRecentDropdown] = useState(false);
+
+  // Load recent searches from 72h cache on mount
+  React.useEffect(() => {
+    api.getRecentSearches().then(data => {
+      if (Array.isArray(data)) setRecentSearches(data);
+    }).catch(() => {});
+  }, []);
+
+  const handleTogglePin = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      const updated = await api.pinSearch(id);
+      if (Array.isArray(updated)) setRecentSearches(updated);
+    } catch {}
+  };
+
+  const handleDeleteRecentSearch = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      const updated = await api.deleteRecentSearch(id);
+      if (Array.isArray(updated)) setRecentSearches(updated);
+    } catch {}
+  };
+
+  const handleRestoreSearch = async (s: RecentSearchItem) => {
+    setRawText(s.rawList);
+    await onParseRawList(s.rawList);
+    setInputMode('checklist');
+    setShowRecentDropdown(false);
+  };
 
   // Handle parse
   const handleParseAndBuild = async () => {
@@ -201,6 +236,75 @@ export const ListCreator: React.FC<ListCreatorProps> = ({
                 </button>
               </div>
 
+              {/* Action Buttons: Recent Searches (72h) & Sample Loader */}
+              <div className="flex items-center space-x-2 relative">
+                {recentSearches.length > 0 && (
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setShowRecentDropdown(!showRecentDropdown)}
+                      className="px-3 py-1.5 rounded-xl border border-indigo-200 dark:border-indigo-800/60 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 text-xs font-bold hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition flex items-center space-x-1.5"
+                    >
+                      <History className="w-3.5 h-3.5" />
+                      <span>Past Searches (72h)</span>
+                      <span className="px-1.5 py-0.2 rounded-full bg-indigo-200 dark:bg-indigo-800 text-[10px] font-extrabold">
+                        {recentSearches.length}
+                      </span>
+                    </button>
+
+                    {showRecentDropdown && (
+                      <div className="absolute right-0 top-full mt-2 w-72 sm:w-80 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl z-50 p-2 space-y-1 animate-in fade-in zoom-in-95">
+                        <div className="px-2 py-1.5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                          <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+                            📌 72h Search History
+                          </span>
+                          <span className="text-[10px] text-slate-400">Cached</span>
+                        </div>
+                        <div className="max-h-56 overflow-y-auto space-y-1 pr-1">
+                          {recentSearches.map((s) => (
+                            <div
+                              key={s.id}
+                              onClick={() => handleRestoreSearch(s)}
+                              className="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer flex items-center justify-between text-left group transition"
+                            >
+                              <div className="truncate pr-2">
+                                <div className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
+                                  {s.query}
+                                </div>
+                                <div className="text-[10px] text-slate-400">
+                                  {s.itemsCount} items • {new Date(s.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </div>
+                              </div>
+                              <div className="flex items-center space-x-1 shrink-0">
+                                <button
+                                  type="button"
+                                  title={s.pinned ? 'Unpin search' : 'Pin search'}
+                                  onClick={(e) => handleTogglePin(s.id, e)}
+                                  className={`p-1 rounded-lg transition ${
+                                    s.pinned
+                                      ? 'text-amber-500 bg-amber-50 dark:bg-amber-950/40'
+                                      : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
+                                  }`}
+                                >
+                                  <Pin className="w-3.5 h-3.5 fill-current" />
+                                </button>
+                                <button
+                                  type="button"
+                                  title="Delete search"
+                                  onClick={(e) => handleDeleteRecentSearch(s.id, e)}
+                                  className="p-1 rounded-lg text-slate-400 hover:text-rose-600 transition"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
               {/* Sample loader button */}
               <button
                 onClick={handleLoadSample}
@@ -210,6 +314,7 @@ export const ListCreator: React.FC<ListCreatorProps> = ({
                 <span>Load 28-Item Sample List</span>
               </button>
             </div>
+          </div>
 
             {/* Mode 1: Paste Textarea */}
             {inputMode === 'paste' ? (

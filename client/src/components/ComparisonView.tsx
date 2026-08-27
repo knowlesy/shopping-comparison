@@ -510,6 +510,17 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({
                                           {product.unitPrice > 0 && `(£${product.unitPrice.toFixed(2)} ${product.unitPriceMeasure})`}
                                         </div>
                                       </div>
+
+                                      {/* Deal / Multibuy Banner */}
+                                      {match.dealApplied ? (
+                                        <div className="px-1.5 py-0.5 mt-1 rounded bg-amber-100 dark:bg-amber-950/80 border border-amber-300/60 dark:border-amber-800/60 text-amber-900 dark:text-amber-200 text-[10px] font-extrabold truncate" title={match.dealApplied.summary || match.dealApplied.dealText}>
+                                          🏷️ {match.dealApplied.dealText}
+                                        </div>
+                                      ) : product.deal ? (
+                                        <div className="px-1.5 py-0.5 mt-1 rounded bg-amber-50 dark:bg-amber-950/40 border border-amber-200/50 dark:border-amber-800/40 text-amber-800 dark:bg-amber-300/10 text-[10px] font-semibold truncate" title={product.deal.rawText}>
+                                          🏷️ {product.deal.badge || product.deal.rawText}
+                                        </div>
+                                      ) : null}
                                     </div>
 
                                     {/* Price & Chg Action */}
@@ -518,6 +529,16 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({
                                         <div className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
                                           £{match.totalPrice.toFixed(2)}
                                         </div>
+                                        {match.dealApplied && match.dealApplied.savings > 0 && (
+                                          <div className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                                            Saved £{match.dealApplied.savings.toFixed(2)}
+                                          </div>
+                                        )}
+                                        {match.confidence && (
+                                          <div className="text-[9px] text-slate-400 dark:text-slate-500 truncate" title={match.confidence}>
+                                            {match.confidence}
+                                          </div>
+                                        )}
                                         {match.packsNeeded > 1 && (
                                           <div className="text-[10px] text-slate-400 font-medium">
                                             ({match.packsNeeded} × £{(product.clubcardPrice || product.price).toFixed(2)})

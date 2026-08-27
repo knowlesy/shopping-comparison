@@ -2,6 +2,12 @@ import express from 'express';
 
 export const settingsRouter = express.Router();
 
+const isAiConfiguredExternally = Boolean(
+  process.env.GEMINI_API_KEY ||
+  process.env.GOOGLE_GENAI_API_KEY ||
+  process.env.ENABLE_GEMINI_MATCHING === 'true'
+);
+
 let userSettings = {
   healthierDefault: true,
   fatPercentagePreference: 5,
@@ -11,7 +17,11 @@ let userSettings = {
   cutMatchingStrategy: 'best_value',
   brandTierPriority: 'standard',
   packSizingPolicy: 'closest',
-  enabledSupermarkets: ['asda', 'sainsburys', 'tesco', 'morrisons', 'iceland', 'aldi', 'lidl']
+  enabledSupermarkets: ['asda', 'sainsburys', 'tesco', 'morrisons', 'iceland', 'aldi', 'lidl'],
+  enablePastSearches: true,
+  aiMatchingEnabled: process.env.ENABLE_GEMINI_MATCHING === 'true' || isAiConfiguredExternally,
+  aiMatchingExternallyConfigured: isAiConfiguredExternally,
+  geminiApiKey: ''
 };
 
 export function getUserSettings() {
@@ -19,7 +29,10 @@ export function getUserSettings() {
 }
 
 settingsRouter.get('/', (req, res) => {
-  res.json(userSettings);
+  res.json({
+    ...userSettings,
+    aiMatchingExternallyConfigured: isAiConfiguredExternally
+  });
 });
 
 settingsRouter.put('/', (req, res) => {
@@ -33,7 +46,10 @@ settingsRouter.put('/', (req, res) => {
     'brandTierPriority',
     'packSizingPolicy',
     'enabledSupermarkets',
-    'devMode'
+    'devMode',
+    'enablePastSearches',
+    'aiMatchingEnabled',
+    'geminiApiKey'
   ];
 
   const sanitized = {};
@@ -44,5 +60,8 @@ settingsRouter.put('/', (req, res) => {
   }
 
   userSettings = { ...userSettings, ...sanitized };
-  res.json(userSettings);
+  res.json({
+    ...userSettings,
+    aiMatchingExternallyConfigured: isAiConfiguredExternally
+  });
 });

@@ -1,9 +1,12 @@
-import { ShoppingCart, Sparkles, History, BookmarkCheck, Settings, Moon, Sun, Search, Loader2 } from 'lucide-react';
+import { ShoppingCart, Sparkles, History, BookmarkCheck, Settings, Moon, Sun, Search, Loader2, ArrowUpCircle } from 'lucide-react';
 
 interface HeaderProps {
   activeTab: 'list' | 'compare' | 'history' | 'favorites' | 'quickcheck';
   setActiveTab: (tab: 'list' | 'compare' | 'history' | 'favorites' | 'quickcheck') => void;
   onOpenSettings: () => void;
+  onOpenChangelog?: () => void;
+  updateAvailable?: boolean;
+  updateVersion?: string;
   isDark: boolean;
   setIsDark: (dark: boolean) => void;
   itemCount: number;
@@ -15,6 +18,9 @@ export const Header: React.FC<HeaderProps> = ({
   activeTab,
   setActiveTab,
   onOpenSettings,
+  onOpenChangelog,
+  updateAvailable = false,
+  updateVersion = '1.1.0',
   isDark,
   setIsDark,
   itemCount,
@@ -23,6 +29,24 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   return (
     <header className="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors w-full">
+      {/* 24-hour Update Notification Banner */}
+      {updateAvailable && (
+        <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs font-semibold py-1.5 px-3 sm:px-6 flex items-center justify-between shadow-xs">
+          <div className="flex items-center space-x-2 truncate">
+            <ArrowUpCircle className="w-4 h-4 text-purple-200 shrink-0" />
+            <span className="truncate">
+              🚀 A newer container image is available (v{updateVersion}).
+            </span>
+          </div>
+          <button
+            onClick={onOpenChangelog}
+            className="px-2.5 py-0.5 rounded-full bg-white/20 hover:bg-white/30 text-[11px] font-bold text-white transition shrink-0 ml-2 cursor-pointer"
+          >
+            Click here for changes & pull guide →
+          </button>
+        </div>
+      )}
+
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-2 sm:py-0 sm:h-16 gap-2 sm:gap-0">
           {/* Top Row on Mobile: Logo on Left, Actions on Right */}
@@ -40,9 +64,16 @@ export const Header: React.FC<HeaderProps> = ({
                   <span className="font-extrabold text-lg sm:text-xl tracking-tight bg-gradient-to-r from-slate-900 via-slate-800 to-emerald-700 dark:from-white dark:via-slate-200 dark:to-emerald-400 bg-clip-text text-transparent">
                     TrolleyWise
                   </span>
-                  <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-                    UK
-                  </span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (onOpenChangelog) onOpenChangelog();
+                    }}
+                    title="View Changelog & Release Notes"
+                    className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 hover:bg-emerald-200 transition cursor-pointer"
+                  >
+                    UK v1.1
+                  </button>
                 </div>
               </div>
             </div>

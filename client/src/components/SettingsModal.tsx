@@ -383,7 +383,76 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             </div>
           </div>
 
-          {/* Section 6: Dev Mode */}
+          {/* Section 6: Past Searches (72h Cache) */}
+          <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+            <label className="flex items-center justify-between p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40 cursor-pointer">
+              <div>
+                <span className="text-xs font-bold text-slate-800 dark:text-slate-200 block">
+                  📌 Record & Display Past Searches (72h Cache)
+                </span>
+                <span className="text-[11px] text-slate-500 block mt-0.5">
+                  Remembers your searches for 72 hours so closing tabs won't lose your work. Toggle off for testing.
+                </span>
+              </div>
+              <input
+                type="checkbox"
+                checked={localPrefs.enablePastSearches !== false}
+                onChange={e => setLocalPrefs({ ...localPrefs, enablePastSearches: e.target.checked })}
+                className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500"
+              />
+            </label>
+          </div>
+
+          {/* Section 7: Hybrid Matching (Gemini 2.5 Flash Fallback) */}
+          <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+            <div className={`p-3.5 rounded-xl border transition-all space-y-3 ${
+              localPrefs.aiMatchingEnabled
+                ? 'border-purple-400 bg-purple-50/50 dark:bg-purple-950/20'
+                : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40'
+            }`}>
+              <label className="flex items-center justify-between cursor-pointer">
+                <div>
+                  <span className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center space-x-1.5">
+                    <span>✨ Google Gemini AI Fallback Matching</span>
+                    {localPrefs.aiMatchingExternallyConfigured && (
+                      <span className="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-purple-200 dark:bg-purple-900 text-purple-800 dark:text-purple-200 uppercase">
+                        Container ENV Active
+                      </span>
+                    )}
+                  </span>
+                  <span className="text-[11px] text-slate-500 block mt-0.5">
+                    Off by default. Uses <code>gemini-2.5-flash</code> when local fuzzy matching returns borderline or thin candidates.
+                  </span>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={localPrefs.aiMatchingEnabled || false}
+                  onChange={e => setLocalPrefs({ ...localPrefs, aiMatchingEnabled: e.target.checked })}
+                  className="w-4 h-4 text-purple-600 rounded focus:ring-purple-500"
+                />
+              </label>
+
+              {localPrefs.aiMatchingEnabled && (
+                <div className="pt-2 border-t border-purple-200 dark:border-purple-800/50 space-y-2 animate-in fade-in">
+                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block">
+                    Gemini API Key (Optional if configured via ENV):
+                  </label>
+                  <input
+                    type="password"
+                    placeholder="AIzaSy... (leave blank if GEMINI_API_KEY is set in container)"
+                    value={localPrefs.geminiApiKey || ''}
+                    onChange={e => setLocalPrefs({ ...localPrefs, geminiApiKey: e.target.value })}
+                    className="w-full px-3 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  />
+                  <span className="text-[10px] text-slate-400 block">
+                    Model: <strong>gemini-2.5-flash</strong> • Cached for 72h to minimize API tokens.
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Section 8: Dev Mode */}
           <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
             <label className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${
               localPrefs.devMode

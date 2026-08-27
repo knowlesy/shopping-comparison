@@ -9,6 +9,7 @@ import { FavoritesManager } from './components/FavoritesManager';
 import { SettingsModal } from './components/SettingsModal';
 import { ItemSwapModal } from './components/ItemSwapModal';
 import { QuickPriceCheck } from './components/QuickPriceCheck';
+import { ChangelogModal } from './components/ChangelogModal';
 import {
   ParsedItem,
   ComparisonResponse,
@@ -129,6 +130,10 @@ export default function App() {
     currentMatch: null,
   });
 
+  const [isChangelogOpen, setIsChangelogOpen] = useState(false);
+  const [updateAvailable, setUpdateAvailable] = useState(false);
+  const [updateVersion, setUpdateVersion] = useState('1.1.0');
+
   // Dark mode effect
   useEffect(() => {
     if (isDark) {
@@ -137,6 +142,30 @@ export default function App() {
       document.documentElement.classList.remove('dark');
     }
   }, [isDark]);
+
+  // 24-Hour Docker Image Update Lookup
+  useEffect(() => {
+    const checkDockerUpdate = async () => {
+      try {
+        const lastCheck = Number(localStorage.getItem('trolleywise_last_update_check') || '0');
+        const now = Date.now();
+        const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+
+        // Check if 24h elapsed or first time
+        if (now - lastCheck >= ONE_DAY_MS || lastCheck === 0) {
+          const res = await api.checkUpdate();
+          if (res && res.updateAvailable) {
+            setUpdateAvailable(true);
+            setUpdateVersion(res.latestVersion || '1.1.0');
+          }
+          localStorage.setItem('trolleywise_last_update_check', String(now));
+        }
+      } catch (err) {
+        console.warn('Update check failed:', err);
+      }
+    };
+    checkDockerUpdate();
+  }, []);
 
   // Initial data loading (non-blocking)
   useEffect(() => {
@@ -503,6 +532,9 @@ export default function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onOpenSettings={() => setIsSettingsOpen(true)}
+        onOpenChangelog={() => setIsChangelogOpen(true)}
+        updateAvailable={updateAvailable}
+        updateVersion={updateVersion}
         isDark={isDark}
         setIsDark={setIsDark}
         itemCount={items.length}
@@ -697,6 +729,12 @@ export default function App() {
         onClose={() => setIsSettingsOpen(false)}
         preferences={preferences}
         onSavePreferences={handleSavePreferences}
+      />
+
+      {/* Changelog & Update Modal */}
+      <ChangelogModal
+        isOpen={isChangelogOpen}
+        onClose={() => setIsChangelogOpen(false)}
       />
 
       {/* Footer */}

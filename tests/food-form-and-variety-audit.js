@@ -411,9 +411,8 @@ async function runExpandedTestSuite() {
       await page.screenshot({ path: eggsPath });
       results.uiPlaywright.screenshots.push(eggsPath);
 
-      const closeBtn = await page.$('button:has-text("Close"), button:has-text("✕")');
-      if (closeBtn) await closeBtn.click();
-      await page.waitForTimeout(500);
+      await page.click('button[data-testid="modal-close-btn"], button:has-text("Close")');
+      await page.waitForTimeout(600);
     }
 
     // 2. Greek Yogurt Modal UI Assertion
@@ -440,9 +439,8 @@ async function runExpandedTestSuite() {
       await page.screenshot({ path: yogurtPath });
       results.uiPlaywright.screenshots.push(yogurtPath);
 
-      const closeBtn = await page.$('button:has-text("Close"), button:has-text("✕")');
-      if (closeBtn) await closeBtn.click();
-      await page.waitForTimeout(500);
+      await page.click('button[data-testid="modal-close-btn"], button:has-text("Close")');
+      await page.waitForTimeout(600);
     }
 
     // 3. Milk Modal UI Assertion
@@ -467,9 +465,8 @@ async function runExpandedTestSuite() {
       await page.screenshot({ path: milkPath });
       results.uiPlaywright.screenshots.push(milkPath);
 
-      const closeBtn = await page.$('button:has-text("Close"), button:has-text("✕")');
-      if (closeBtn) await closeBtn.click();
-      await page.waitForTimeout(500);
+      await page.click('button[data-testid="modal-close-btn"], button:has-text("Close")');
+      await page.waitForTimeout(600);
     }
 
     // 4. Potatoes Modal UI Assertion

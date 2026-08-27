@@ -1,6 +1,7 @@
 import express from 'express';
 import { FuzzyMatcher } from '../services/fuzzyMatcher.js';
 import { BasketCalculator } from '../services/basketCalculator.js';
+import { PriceCache } from '../services/priceCache.js';
 import {
   getCoreSearchQuery,
   getOrFetchCandidatesWithSource
@@ -18,6 +19,15 @@ compareRouter.post('/', async (req, res) => {
 
   if (!Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: 'No shopping items provided for comparison' });
+  }
+
+  if (preferences.enablePastSearches !== false && items.length > 0) {
+    const rawList = items.map((i) => i.rawText || i.name).join('\n');
+    PriceCache.recordSearch({
+      query: items[0]?.name || 'Shopping List',
+      rawList,
+      itemsCount: items.length
+    });
   }
 
   console.log(
@@ -89,6 +99,15 @@ compareRouter.post('/stream', async (req, res) => {
 
   if (!Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: 'No shopping items provided for comparison' });
+  }
+
+  if (preferences.enablePastSearches !== false && items.length > 0) {
+    const rawList = items.map((i) => i.rawText || i.name).join('\n');
+    PriceCache.recordSearch({
+      query: items[0]?.name || 'Shopping List',
+      rawList,
+      itemsCount: items.length
+    });
   }
 
   res.setHeader('Content-Type', 'text/event-stream');

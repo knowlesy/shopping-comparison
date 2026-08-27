@@ -269,11 +269,23 @@ export const QuickPriceCheck: React.FC<QuickPriceCheckProps> = ({ enabledSuperma
                                 )}
                               </div>
                             </div>
-                            {product.packageSize > 0 && (
-                              <span className="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-500">
-                                {product.packageSize}{product.packageUnit || 'g'}
-                              </span>
-                            )}
+                            <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                              {product.packageSize > 0 && (
+                                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-500">
+                                  {product.packageSize}{product.packageUnit || 'g'}
+                                </span>
+                              )}
+                              {product.deal && (
+                                <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300">
+                                  🏷️ {product.deal.badge || product.deal.rawText}
+                                </span>
+                              )}
+                              {product.confidence && (
+                                <span className="text-[9px] text-slate-400 dark:text-slate-500">
+                                  {product.confidence}
+                                </span>
+                              )}
+                            </div>
                           </div>
                         );
                       })}

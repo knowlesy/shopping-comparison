@@ -60,7 +60,7 @@ test.describe('TrolleyWise UK Web App End-to-End Verification', () => {
     await expect(splitBanner).toBeVisible();
 
     // 9. Test "Swap Item" Modal
-    const swapBtn = page.locator('button:has-text("Swap Item")').first();
+    const swapBtn = page.locator('button:has-text("Chg"), button:has-text("Swap Item")').first();
     await expect(swapBtn).toBeVisible();
     await swapBtn.click();
     await page.waitForTimeout(500);
@@ -80,19 +80,19 @@ test.describe('TrolleyWise UK Web App End-to-End Verification', () => {
     }
 
     // 10. Test Save to Archive
-    const saveArchiveBtn = page.locator('button:has-text("Save Archive")');
+    const saveArchiveBtn = page.locator('button:has-text("Lock In Weekly Shop"), button:has-text("Save Archive")').first();
     await expect(saveArchiveBtn).toBeVisible();
     await saveArchiveBtn.click();
     await page.waitForTimeout(500);
-    await expect(page.locator('text=Saved to Archive!')).toBeVisible();
+    await expect(page.locator('text=Weekly Shop Locked In!').first()).toBeVisible();
 
     // 11. Navigate to Past Shops Tab
-    const historyTab = page.locator('button:has-text("Past Shops")').first();
+    const historyTab = page.locator('button:has-text("Past Shops"), button:has-text("Past")').first();
     await historyTab.click();
     await page.waitForTimeout(400);
 
     // Verify archived shop exists
-    const archivedShop = page.locator('h1:has-text("Past Shopping Trips & Supermarket Prices")');
+    const archivedShop = page.locator('h1:has-text("Past Shopping Trips")');
     await expect(archivedShop).toBeVisible();
     const reloadBtn = page.locator('button:has-text("Reload List")').first();
     await expect(reloadBtn).toBeVisible();

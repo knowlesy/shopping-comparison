@@ -1,5 +1,6 @@
 import { CATALOG_PRODUCTS } from './catalogData.js';
 import { isContaminated } from './contaminationRules.js';
+import { DealCalculator } from './dealCalculator.js';
 
 // Pre-index catalog products by supermarket once at startup to avoid repeated O(N) filtering in loops
 const CATALOG_BY_STORE = {};
@@ -42,6 +43,7 @@ export class FuzzyMatcher {
         weightDifferencePercent: 0,
         isClosestPack: false,
         matchScore: 0,
+        confidence: '80% likely (Aggregator match)',
         reason: 'Item not currently listed in live search results.',
         alternatives: []
       };
@@ -50,20 +52,16 @@ export class FuzzyMatcher {
     const keywords = this.extractKeywords(item);
 
     const scored = storeProducts.map((prod) => {
-      const { score, packs, totalQty, totalPrice, weightDiffPct } = this.scoreCandidate(
-        prod,
-        item,
-        keywords,
-        preferences,
-        storeProducts
-      );
+      const { score, packs, totalQty, totalPrice, weightDiffPct, dealApplied } =
+        this.scoreCandidate(prod, item, keywords, preferences, storeProducts);
       return {
         product: prod,
         score,
         packs,
         totalQty,
         totalPrice: Number(totalPrice.toFixed(2)),
-        weightDiffPct
+        weightDiffPct,
+        dealApplied
       };
     });
 
@@ -205,10 +203,14 @@ export class FuzzyMatcher {
       packsNeeded: best.packs,
       totalQuantity: best.totalQty,
       totalPrice: best.totalPrice,
-      effectiveUnitPrice: best.product.unitPrice,
+      effectiveUnitPrice: best.dealApplied
+        ? best.dealApplied.effectiveUnitPrice
+        : best.product.unitPrice,
       weightDifferencePercent: best.weightDiffPct,
       isClosestPack: Math.abs(best.weightDiffPct) < 25,
       matchScore: best.score,
+      confidence: best.product.confidence || '80% likely (Aggregator match)',
+      dealApplied: best.dealApplied || undefined,
       alternatives
     };
   }
@@ -510,10 +512,31 @@ export class FuzzyMatcher {
     packs = Math.min(packs, 12);
 
     const totalQty = packs * prodAmount;
-    const totalPrice = Number((packs * (prod.clubcardPrice || prod.price)).toFixed(2));
+    let totalPrice = Number((packs * (prod.clubcardPrice || prod.price)).toFixed(2));
+    let dealApplied = undefined;
+
+    if (prod.deal) {
+      const dealCalc = DealCalculator.calculateDealPrice(
+        prod.clubcardPrice || prod.price,
+        packs,
+        prod.deal
+      );
+      if (dealCalc.isDealApplied) {
+        totalPrice = dealCalc.totalPrice;
+        dealApplied = {
+          dealText: prod.deal.badge || prod.deal.rawText,
+          originalPrice: dealCalc.standardPrice,
+          discountedPrice: dealCalc.totalPrice,
+          savings: dealCalc.savings,
+          effectiveUnitPrice: dealCalc.effectiveUnitPrice,
+          summary: dealCalc.dealSummary
+        };
+      }
+    }
+
     const weightDiffPct = Math.round(((totalQty - targetAmount) / (targetAmount || 1)) * 100);
 
-    return { packs, totalQty, totalPrice, weightDiffPct };
+    return { packs, totalQty, totalPrice, weightDiffPct, dealApplied };
   }
 
   static extractKeywords(item) {

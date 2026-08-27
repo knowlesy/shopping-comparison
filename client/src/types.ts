@@ -32,6 +32,28 @@ export interface ParsedItem {
   checked?: boolean;
 }
 
+export interface ProductDeal {
+  rawText: string;
+  type: 'multibuy_fixed' | 'buy_x_get_y_free' | 'bundle_discount' | 'loyalty_price' | 'generic_deal';
+  bundleQuantity?: number;
+  bundlePrice?: number;
+  buyQuantity?: number;
+  freeQuantity?: number;
+  discountAmount?: number;
+  loyaltyPrice?: number;
+  loyaltyScheme?: string;
+  badge?: string;
+}
+
+export interface DealApplied {
+  dealText: string;
+  originalPrice: number;
+  discountedPrice: number;
+  savings: number;
+  effectiveUnitPrice: number;
+  summary?: string;
+}
+
 export interface SupermarketProduct {
   id: string;
   supermarket: SupermarketName;
@@ -46,6 +68,9 @@ export interface SupermarketProduct {
   price: number;
   unitPrice: number;
   unitPriceMeasure: string;
+  deal?: ProductDeal;
+  promoText?: string;
+  confidence?: string;
   isHealthier: boolean;
   isFrozen?: boolean;
   fatPercentage?: number;
@@ -71,8 +96,19 @@ export interface ItemMatch {
   weightDifferencePercent: number;
   isClosestPack: boolean;
   matchScore: number;
+  confidence?: string;
+  dealApplied?: DealApplied;
   reason?: string;
   alternatives?: SupermarketProduct[];
+}
+
+export interface RecentSearchItem {
+  id: string;
+  query: string;
+  rawList: string;
+  itemsCount: number;
+  timestamp: number;
+  pinned: boolean;
 }
 
 export interface StoreBasketResult {
@@ -113,6 +149,13 @@ export interface ComparisonResponse {
   highestStore: SupermarketName;
   splitOptimization: SplitBasketOptimization;
   timestamp: string;
+  meta?: {
+    sources?: {
+      live: number;
+      cache: number;
+      catalog: number;
+    };
+  };
 }
 
 export interface UserPreferences {
@@ -127,6 +170,10 @@ export interface UserPreferences {
   enabledSupermarkets: SupermarketName[];
   defaultPostcode?: string;
   devMode?: boolean;
+  enablePastSearches?: boolean;
+  aiMatchingEnabled?: boolean;
+  aiMatchingExternallyConfigured?: boolean;
+  geminiApiKey?: string;
 }
 
 export interface FavoriteItem {

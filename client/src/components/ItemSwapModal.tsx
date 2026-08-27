@@ -205,6 +205,8 @@ export const ItemSwapModal: React.FC<ItemSwapModalProps> = ({
           </div>
           <button
             onClick={onClose}
+            aria-label="Close"
+            data-testid="modal-close-btn"
             className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition"
           >
             <X className="w-5 h-5" />
@@ -376,12 +378,28 @@ export const ItemSwapModal: React.FC<ItemSwapModalProps> = ({
                           </span>
                         )}
                       </div>
-                      <div className="flex items-center space-x-2 text-xs text-slate-500">
+                      <div className="flex items-center space-x-2 text-xs text-slate-500 flex-wrap gap-y-1">
                         <span>{prod.packageDisplay}</span>
                         <span>•</span>
                         <span>{prod.tier} tier</span>
                         <span>•</span>
                         <span>£{prod.unitPrice.toFixed(2)} {prod.unitPriceMeasure}</span>
+                        {prod.deal && (
+                          <>
+                            <span>•</span>
+                            <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 font-extrabold shrink-0">
+                              🏷️ {prod.deal.badge || prod.deal.rawText}
+                            </span>
+                          </>
+                        )}
+                        {prod.confidence && (
+                          <>
+                            <span>•</span>
+                            <span className="text-[10px] text-slate-400 dark:text-slate-500">
+                              {prod.confidence}
+                            </span>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>

@@ -350,4 +350,76 @@ export const api = {
     } catch {}
     return true;
   },
+
+  // 72-Hour Recent Searches & Pinning
+  getRecentSearches: async (): Promise<any[]> => {
+    try {
+      const res = await fetch(`${API_BASE}/cache/recent-searches`);
+      if (res.ok) return await res.json();
+    } catch {}
+    try {
+      const local = localStorage.getItem('trolleywise_recent_searches');
+      return local ? JSON.parse(local) : [];
+    } catch {}
+    return [];
+  },
+
+  recordSearch: async (query: string, rawList: string, itemsCount: number): Promise<any[]> => {
+    try {
+      const res = await fetch(`${API_BASE}/cache/record-search`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, rawList, itemsCount }),
+      });
+      if (res.ok) return await res.json();
+    } catch {}
+    return [];
+  },
+
+  pinSearch: async (id: string): Promise<any[]> => {
+    try {
+      const res = await fetch(`${API_BASE}/cache/pin-search`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      if (res.ok) return await res.json();
+    } catch {}
+    return [];
+  },
+
+  deleteRecentSearch: async (id: string): Promise<any[]> => {
+    try {
+      const res = await fetch(`${API_BASE}/cache/recent-searches/${id}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) return await res.json();
+    } catch {}
+    return [];
+  },
+
+  // System & Update Checker (every 24h)
+  checkUpdate: async (): Promise<{ currentVersion: string; latestVersion: string; updateAvailable: boolean; pullCommand: string }> => {
+    try {
+      const res = await fetch(`${API_BASE}/system/check-update`);
+      if (res.ok) return await res.json();
+    } catch {}
+    return {
+      currentVersion: '1.1.0',
+      latestVersion: '1.1.0',
+      updateAvailable: false,
+      pullCommand: 'docker compose pull && docker compose up -d',
+    };
+  },
+
+  getChangelog: async (): Promise<{ version: string; content: string }> => {
+    try {
+      const res = await fetch(`${API_BASE}/system/changelog`);
+      if (res.ok) return await res.json();
+    } catch {}
+    return {
+      version: '1.1.0',
+      content: '# TrolleyWise Changelog\n\n## v1.1.0 - Multibuy Deals & Hybrid Gemini Matching',
+    };
+  },
 };

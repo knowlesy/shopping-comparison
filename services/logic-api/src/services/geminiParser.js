@@ -1,4 +1,5 @@
 import * as cheerio from 'cheerio';
+import { DealCalculator } from './dealCalculator.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -157,8 +158,14 @@ class DomScraperParser {
       const sizeStr = $el.find('._size, .size, ._tag').text().trim();
 
       const priceText = $el.find('._price, .price').text().trim();
-      const priceMatch = priceText.match(/£([\d.]+)/);
-      const price = priceMatch ? parseFloat(priceMatch[1]) : 0;
+      const price = this.parsePrice(priceText);
+      const promoText =
+        $el
+          .find('._tag, ._deal, ._promo, ._multibuy, .promo, .deal, .tag, [data-deal]')
+          .text()
+          .trim() ||
+        $el.attr('data-deal') ||
+        '';
 
       const perItemText = $el.find('._per-item, .unit-price').text().trim();
 
@@ -176,6 +183,7 @@ class DomScraperParser {
           sizeStr,
           price,
           perItemText,
+          promoText,
           url: fullUrl,
           imageUrl: imgSrc
         });
@@ -244,6 +252,10 @@ class DomScraperParser {
       )
         tier = 'branded';
 
+      const deal = card.promoText ? DealCalculator.parseDeal(card.promoText) : undefined;
+      const clubcardPrice =
+        deal?.type === 'loyalty_price' ? deal.loyaltyPrice : undefined;
+
       products.push({
         id: `${supermarket}-${card.id}`,
         supermarket,
@@ -258,6 +270,10 @@ class DomScraperParser {
         price: card.price,
         unitPrice,
         unitPriceMeasure,
+        deal: deal || undefined,
+        promoText: card.promoText || undefined,
+        clubcardPrice,
+        confidence: '80% likely (Aggregator match)',
         isHealthier,
         fatPercentage,
         isOrganic,

@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-08-27
+
+### Added
+- **Multibuy & Deal Pricing Engine**: Full promotional deal parser and calculation engine supporting fixed multibuy ("3 for £2"), BOGOF / Buy X Get Y Free ("Buy 2 Get 1 Free"), bundle savings ("Save £1 on 2"), and loyalty member card pricing (Clubcard, Nectar, Morrisons More).
+- **Strict Deal Test Suite**: Dedicated automated fixture verification suite `test_deals.js` verifying edge quantities (under-quantity, exact quantity, remainder quantity, multi-bundles).
+- **Confidence Level Metric**: Added `confidence` field to all product and match results (defaulting to `"80% likely (Aggregator match)"` for aggregator data).
+- **72-Hour Search Pinning & Recent Searches History**: Persistent 72-hour search history with search pinning, allowing shoppers to restore or pin recent searches after closing tabs. Added `enablePastSearches` toggle in Settings for testing.
+- **Hybrid Matching Engine (Fuzzy + Gemini 2.5 Flash Fallback)**: Local high-speed deterministic fuzzy matching with an optional Gemini 2.5 Flash fallback for ambiguous or low-confidence matches. Results cached in 72h price cache for token minimisation. Configurable via UI settings or container environment variable `ENABLE_GEMINI_MATCHING=true`.
+- **Matching Benchmark**: Benchmark script `compare_matching.js` evaluating 10 sample UK grocery items across all 7 supermarkets.
+- **Scaffolded Auth & Supermarket Login Routes**: Added stubbed authentication and supermarket loyalty/account connection endpoints in `/api/auth`, strictly disabled by default (`ENABLE_AUTH = false`).
+- **24-Hour Docker Image Update Notifier & Changelog Viewer**: Automatic 24-hour update checker with top notification banner and modal viewing the changelog.
+- **Project Roadmap**: Added `TODO.md` outlining direct scraping, automated basket composition, and credential storage.
+
 ## [1.0.0] - 2026-08-25
 
 ### Added
