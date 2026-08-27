@@ -434,18 +434,26 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               {localPrefs.aiMatchingEnabled && (
                 <div className="pt-2 border-t border-purple-200 dark:border-purple-800/50 space-y-2 animate-in fade-in">
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block">
-                    Gemini API Key (Optional if configured via ENV):
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block">
+                      Gemini API Key (Optional if configured via ENV):
+                    </label>
+                    {localPrefs.hasGeminiKey && (
+                      <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center space-x-1">
+                        <Check className="w-3 h-3" />
+                        <span>Key saved ✓</span>
+                      </span>
+                    )}
+                  </div>
                   <input
                     type="password"
-                    placeholder="AIzaSy... (leave blank if GEMINI_API_KEY is set in container)"
+                    placeholder={localPrefs.hasGeminiKey ? '•••••••••••••••• (Key saved — enter new key to replace)' : 'AIzaSy... (leave blank if configured via ENV)'}
                     value={localPrefs.geminiApiKey || ''}
                     onChange={e => setLocalPrefs({ ...localPrefs, geminiApiKey: e.target.value })}
                     className="w-full px-3 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   />
                   <span className="text-[10px] text-slate-400 block">
-                    Model: <strong>gemini-2.5-flash</strong> • Cached for 72h to minimize API tokens.
+                    Model: <strong>gemini-2.5-flash</strong> • Write-only (never exposed to browser) • Cached for 72h to minimize API tokens.
                   </span>
                 </div>
               )}

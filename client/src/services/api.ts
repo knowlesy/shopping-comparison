@@ -42,6 +42,12 @@ export interface ComparisonProgress {
   error?: string;
 }
 
+function stripApiKey(prefs?: UserPreferences): UserPreferences | undefined {
+  if (!prefs) return undefined;
+  const { geminiApiKey, ...safe } = prefs;
+  return safe;
+}
+
 export const api = {
   // Parse raw text shopping list
   parseList: async (rawText: string): Promise<ParsedItem[]> => {
@@ -70,11 +76,12 @@ export const api = {
     onProgress?: (progress: ComparisonProgress) => void,
     forceRefresh: boolean = false
   ): Promise<ComparisonResponse> => {
+    const safePrefs = stripApiKey(preferences);
     try {
       const response = await fetch(`${API_BASE}/compare/stream`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items, preferences, forceRefresh }),
+        body: JSON.stringify({ items, preferences: safePrefs, forceRefresh }),
       });
 
       if (response.ok && response.body) {
@@ -116,16 +123,17 @@ export const api = {
     } catch (e) {
       console.warn('Stream failed, falling back to standard compare:', e);
     }
-    return api.compare(items, preferences, forceRefresh);
+    return api.compare(items, safePrefs, forceRefresh);
   },
 
   // Compare items across supermarkets (standard fallback)
   compare: async (items: ParsedItem[], preferences?: UserPreferences, forceRefresh: boolean = false): Promise<ComparisonResponse> => {
+    const safePrefs = stripApiKey(preferences);
     try {
       const res = await fetch(`${API_BASE}/compare`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items, preferences, forceRefresh }),
+        body: JSON.stringify({ items, preferences: safePrefs, forceRefresh }),
       });
       if (res.ok) {
         return await res.json();
@@ -133,7 +141,7 @@ export const api = {
     } catch {
       // Fall through to client comparison
     }
-    return ClientSupermarketComparisonService.compare(items, preferences || DEFAULT_PREFERENCES);
+    return ClientSupermarketComparisonService.compare(items, safePrefs || DEFAULT_PREFERENCES);
   },
 
   // Cache Management

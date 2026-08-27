@@ -173,6 +173,7 @@ export interface UserPreferences {
   enablePastSearches?: boolean;
   aiMatchingEnabled?: boolean;
   aiMatchingExternallyConfigured?: boolean;
+  hasGeminiKey?: boolean;
   geminiApiKey?: string;
 }
 

@@ -1,5 +1,6 @@
 import { GoogleGenAI } from '@google/genai';
 import { PriceCache } from './priceCache.js';
+import { getUserSettings } from '../routes/settings.js';
 
 /**
  * AI Decision Reviewer (Hybrid Matching Engine)
@@ -16,17 +17,19 @@ import { PriceCache } from './priceCache.js';
 export class AiDecisionReviewer {
   /**
    * Check if AI candidate reviewing is configured and active
-   * @param {object} preferences - User preferences containing aiMatchingEnabled and geminiApiKey
+   * @param {object} preferences - User preferences containing aiMatchingEnabled
    * @returns {boolean}
    */
   static isEnabled(preferences = {}) {
+    const settings = getUserSettings();
     if (preferences.aiMatchingEnabled === false) return false;
     const key =
-      preferences.geminiApiKey ||
+      settings.geminiApiKey ||
       process.env.GEMINI_API_KEY ||
       process.env.GOOGLE_GENAI_API_KEY;
     const isExplicitlyEnabled =
       preferences.aiMatchingEnabled === true ||
+      settings.aiMatchingEnabled === true ||
       process.env.ENABLE_GEMINI_MATCHING === 'true';
 
     return Boolean(isExplicitlyEnabled && key && typeof key === 'string' && key.trim().length > 5);
@@ -67,8 +70,9 @@ export class AiDecisionReviewer {
       }
     }
 
+    const settings = getUserSettings();
     const apiKey =
-      preferences.geminiApiKey ||
+      settings.geminiApiKey ||
       process.env.GEMINI_API_KEY ||
       process.env.GOOGLE_GENAI_API_KEY;
 

@@ -28,11 +28,18 @@ export function getUserSettings() {
   return userSettings;
 }
 
-settingsRouter.get('/', (req, res) => {
-  res.json({
-    ...userSettings,
+export function getSafeUserSettings() {
+  const { geminiApiKey, ...safe } = userSettings;
+  const hasKey = Boolean(geminiApiKey && geminiApiKey.trim().length > 0) || isAiConfiguredExternally;
+  return {
+    ...safe,
+    hasGeminiKey: hasKey,
     aiMatchingExternallyConfigured: isAiConfiguredExternally
-  });
+  };
+}
+
+settingsRouter.get('/', (req, res) => {
+  res.json(getSafeUserSettings());
 });
 
 settingsRouter.put('/', (req, res) => {
@@ -55,13 +62,14 @@ settingsRouter.put('/', (req, res) => {
   const sanitized = {};
   for (const key of allowedKeys) {
     if (req.body && req.body[key] !== undefined) {
-      sanitized[key] = req.body[key];
+      if (key === 'geminiApiKey') {
+        sanitized[key] = typeof req.body[key] === 'string' ? req.body[key].trim() : '';
+      } else {
+        sanitized[key] = req.body[key];
+      }
     }
   }
 
   userSettings = { ...userSettings, ...sanitized };
-  res.json({
-    ...userSettings,
-    aiMatchingExternallyConfigured: isAiConfiguredExternally
-  });
+  res.json(getSafeUserSettings());
 });
