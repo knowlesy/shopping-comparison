@@ -1,8 +1,12 @@
 {
   "name": "uk-supermarket-shopping-app",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/knowlesy/shopping-comparison"
+  },
   "scripts": {
     "dev": "concurrently -n \"scraper,logic,client\" -c \"blue,green,magenta\" \"npm run dev:scraper\" \"npm run dev:logic\" \"npm run dev:client\"",
     "dev:scraper": "node services/scraper-pod/src/server.js",

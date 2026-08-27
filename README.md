@@ -142,6 +142,15 @@ npm run test:food-form
 
 ---
 
+## 📦 Releases & Versioning
+
+Releases follow [Semantic Versioning](https://semver.org/). To cut a new release:
+1. Bump `"version": "x.y.z"` in all `package.json` files (`package.json`, `client/package.json`, `services/logic-api/package.json`, `services/scraper-pod/package.json`).
+2. Add a new `## [x.y.z] - YYYY-MM-DD` release section to `CHANGELOG.md` detailing all additions and improvements.
+3. Commit, tag (`git tag vx.y.z`), and push. CI builds and publishes matching container tags automatically.
+
+---
+
 ## 📄 License
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.

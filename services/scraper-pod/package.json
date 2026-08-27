@@ -1,6 +1,6 @@
 {
   "name": "scraper-pod",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Headless Scraper Pod using puppeteer-real-browser for Cloudflare/Turnstile bypass",
   "main": "src/server.js",
   "type": "module",
