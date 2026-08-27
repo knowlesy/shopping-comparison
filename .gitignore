@@ -19,6 +19,22 @@ playwright/.cache/
 tests/*-report*.json
 tests/recipes-verification-report.json
 
+# Audit & Context reports
+context.md
+*context.md
+*-context.md
+*-context/
+*audit-report*.json
+*audit-report*.md
+*audit_report*.json
+*audit_report*.md
+report.md
+report*.md
+!scripts/*audit*.ts
+!scripts/*audit*.js
+!tests/*audit*.js
+!.github/ISSUE_TEMPLATE/bug_report.md
+
 # Environment files
 .env
 .env.local
@@ -42,7 +58,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Blog & Internal Audit Notes
+# Blog & Internal Notes
 blog.md
 docs/blog_assets/
-report*.md
