@@ -7,3 +7,7 @@ tests
 scripts
 .git
 *.md
+!CHANGELOG.md
+
+
+

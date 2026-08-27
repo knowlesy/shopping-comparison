@@ -2,6 +2,7 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { AiDecisionReviewer } from "./aiDecisionReviewer.js";
 import { PriceCache } from "./priceCache.js";
+import { getUserSettings } from "../routes/settings.js";
 
 describe("AiDecisionReviewer (Hybrid Fallback Gate)", () => {
   const dummyItem = { name: "beef mince", targetQuantity: 500, unit: "g" };
@@ -36,20 +37,31 @@ describe("AiDecisionReviewer (Hybrid Fallback Gate)", () => {
   });
 
   it("should return cached AI decision when available in PriceCache", async () => {
-    const candidates = [
-      { score: 45, product: { id: "p-target", title: "Tesco Lean Beef Mince 500g", price: 2.80, supermarket: "tesco" } },
-      { score: 30, product: { id: "p-other", title: "Tesco Meatballs 400g", price: 2.50, supermarket: "tesco" } }
-    ];
+    const internalSettings = getUserSettings();
+    const prevKey = internalSettings.geminiApiKey;
+    const prevEnabled = internalSettings.aiMatchingEnabled;
+    internalSettings.geminiApiKey = "AIzaSyTestMockKey123";
+    internalSettings.aiMatchingEnabled = true;
 
-    PriceCache.set("ai-match:beef mince:500:g:tesco", {
-      productId: "p-target",
-      selectedIndex: 0,
-      reasoning: "Matched by target weight 500g"
-    });
+    try {
+      const candidates = [
+        { score: 45, product: { id: "p-target", title: "Tesco Lean Beef Mince 500g", price: 2.80, supermarket: "tesco" } },
+        { score: 30, product: { id: "p-other", title: "Tesco Meatballs 400g", price: 2.50, supermarket: "tesco" } }
+      ];
 
-    const res = await AiDecisionReviewer.reviewCandidates("beef mince", dummyItem, candidates, { aiMatchingEnabled: true });
-    assert.equal(res.product.id, "p-target");
-    assert.match(res.confidence, /Gemini AI Match - Cached/i);
-    assert.equal(res.aiReasoning, "Matched by target weight 500g");
+      PriceCache.set("ai-match:beef mince:500:g:tesco", {
+        productId: "p-target",
+        selectedIndex: 0,
+        reasoning: "Matched by target weight 500g"
+      });
+
+      const res = await AiDecisionReviewer.reviewCandidates("beef mince", dummyItem, candidates, { aiMatchingEnabled: true });
+      assert.equal(res.product.id, "p-target");
+      assert.match(res.confidence, /Gemini AI Match - Cached/i);
+      assert.equal(res.aiReasoning, "Matched by target weight 500g");
+    } finally {
+      internalSettings.geminiApiKey = prevKey;
+      internalSettings.aiMatchingEnabled = prevEnabled;
+    }
   });
 });
