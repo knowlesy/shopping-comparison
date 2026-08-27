@@ -50,7 +50,7 @@ export class AiDecisionReviewer {
     }
 
     // If AI matching is not enabled or top fuzzy candidate is already high confidence (score >= 65), use fuzzy top match
-    if (!this.isEnabled(preferences) || (scoredCandidates[0]?.score >= 65 && scoredCandidates.length === 1)) {
+    if (!this.isEnabled(preferences) || scoredCandidates[0]?.score >= 65) {
       return scoredCandidates[0];
     }
 
