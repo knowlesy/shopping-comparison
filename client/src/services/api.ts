@@ -9,6 +9,7 @@ import {
   IngredientIdea,
   CacheStats,
   PriceHistoryStats,
+  SystemVersionInfo,
 } from '../types';
 import {
   ClientShoppingParser,
@@ -442,6 +443,24 @@ export const api = {
     return {
       version: '1.1.0',
       content: '# TrolleyWise Changelog\n\n## v1.1.0 - Multibuy Deals & Hybrid Gemini Matching',
+    };
+  },
+
+  getSystemVersion: async (): Promise<SystemVersionInfo> => {
+    try {
+      const res = await fetch(`${API_BASE}/system/version`);
+      if (res.ok) return await res.json();
+    } catch {}
+    return {
+      version: '1.1.0',
+      releaseDate: new Date().toISOString().split('T')[0],
+      latestImageTag: 'ghcr.io/knowlesy/shopping-comparison:latest',
+      imageTag: 'ghcr.io/knowlesy/shopping-comparison:v1.1.0',
+      clientImage: 'ghcr.io/knowlesy/shopping-comparison-client:v1.1.0',
+      logicApiImage: 'ghcr.io/knowlesy/shopping-comparison-logic-api:v1.1.0',
+      scraperPodImage: 'ghcr.io/knowlesy/shopping-comparison-scraper-pod:v1.1.0',
+      imageRepo: 'https://github.com/knowlesy/shopping-comparison/pkgs/container/shopping-comparison-client',
+      environment: 'production',
     };
   },
 };

@@ -261,3 +261,15 @@ export interface PriceHistoryStats {
     meta?: { sources?: { live: number; cache: number; catalog: number } };
   }>;
 }
+
+export interface SystemVersionInfo {
+  version: string;
+  releaseDate: string;
+  imageTag?: string;
+  latestImageTag?: string;
+  clientImage?: string;
+  logicApiImage?: string;
+  scraperPodImage?: string;
+  imageRepo?: string;
+  environment?: string;
+}

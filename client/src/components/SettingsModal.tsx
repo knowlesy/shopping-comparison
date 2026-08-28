@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, Sliders, Heart, Shield, Package, Store, Check, RefreshCw, Sparkles } from 'lucide-react';
-import { UserPreferences, SupermarketName, CacheStats } from '../types';
+import { X, Sliders, Heart, Shield, Package, Store, Check, RefreshCw, Sparkles, Info, ExternalLink, Layers, Cpu, GitBranch } from 'lucide-react';
+import { UserPreferences, SupermarketName, CacheStats, SystemVersionInfo } from '../types';
 import { api } from '../services/api';
 
 interface SettingsModalProps {
@@ -23,15 +23,32 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [cacheClearedSuccess, setCacheClearedSuccess] = useState(false);
   const [testingAi, setTestingAi] = useState(false);
   const [aiTestResult, setAiTestResult] = useState<{ success: boolean; passedCount: number; totalCount: number; error?: string } | null>(null);
+  const [versionInfo, setVersionInfo] = useState<SystemVersionInfo | null>(null);
+  const [checkingUpdate, setCheckingUpdate] = useState(false);
+  const [updateResult, setUpdateResult] = useState<{ updateAvailable: boolean; latestVersion: string } | null>(null);
 
   useEffect(() => {
     setLocalPrefs(preferences);
     if (isOpen) {
       api.getCacheStats().then(setCacheStats).catch(() => {});
+      api.getSystemVersion().then(setVersionInfo).catch(() => {});
       setCacheClearedSuccess(false);
       setAiTestResult(null);
+      setUpdateResult(null);
     }
   }, [preferences, isOpen]);
+
+  const handleCheckUpdate = async () => {
+    try {
+      setCheckingUpdate(true);
+      const res = await api.checkUpdate();
+      setUpdateResult({ updateAvailable: res.updateAvailable, latestVersion: res.latestVersion });
+    } catch {
+      setUpdateResult(null);
+    } finally {
+      setCheckingUpdate(false);
+    }
+  };
 
   const handleTestAi = async () => {
     try {
@@ -555,6 +572,101 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 className="w-4 h-4 text-amber-600 rounded focus:ring-amber-500"
               />
             </label>
+          </div>
+
+          {/* Section 9: About & Image Build Version */}
+          <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+            <div className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <div className="w-6 h-6 rounded-lg bg-indigo-100 dark:bg-indigo-950 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                    <Info className="w-3.5 h-3.5" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-800 dark:text-slate-200 block">
+                      About & Container Build Version
+                    </span>
+                    <span className="text-[11px] text-slate-500">
+                      TrolleyWise v{versionInfo?.version || '1.1.0'} • Released {versionInfo?.releaseDate || '2026-08-28'}
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleCheckUpdate}
+                  disabled={checkingUpdate}
+                  className="px-2.5 py-1 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 text-[11px] font-bold transition flex items-center space-x-1.5 cursor-pointer disabled:opacity-50"
+                >
+                  <RefreshCw className={`w-3 h-3 ${checkingUpdate ? 'animate-spin' : ''}`} />
+                  <span>{checkingUpdate ? 'Checking...' : 'Check Updates'}</span>
+                </button>
+              </div>
+
+              {updateResult && (
+                <div className={`p-2 rounded-lg text-xs font-semibold flex items-center justify-between ${
+                  updateResult.updateAvailable
+                    ? 'bg-amber-100 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-800 text-amber-900 dark:text-amber-200'
+                    : 'bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200'
+                }`}>
+                  <span>
+                    {updateResult.updateAvailable
+                      ? `🔔 Update available: v${updateResult.latestVersion} (Run: docker compose pull)`
+                      : `✅ Running latest build (v${versionInfo?.version || '1.1.0'})`}
+                  </span>
+                </div>
+              )}
+
+              {/* Build Image Details */}
+              <div className="space-y-1.5 pt-1 text-[11px]">
+                <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
+                  <span className="flex items-center space-x-1">
+                    <Layers className="w-3 h-3 text-slate-400" />
+                    <span>Client Image:</span>
+                  </span>
+                  <code className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-900 text-[10px] font-mono text-slate-800 dark:text-slate-300">
+                    {versionInfo?.clientImage || `ghcr.io/knowlesy/shopping-comparison-client:v${versionInfo?.version || '1.1.0'}`}
+                  </code>
+                </div>
+
+                <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
+                  <span className="flex items-center space-x-1">
+                    <Cpu className="w-3 h-3 text-slate-400" />
+                    <span>Logic API Image:</span>
+                  </span>
+                  <code className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-900 text-[10px] font-mono text-slate-800 dark:text-slate-300">
+                    {versionInfo?.logicApiImage || `ghcr.io/knowlesy/shopping-comparison-logic-api:v${versionInfo?.version || '1.1.0'}`}
+                  </code>
+                </div>
+
+                <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
+                  <span className="flex items-center space-x-1">
+                    <GitBranch className="w-3 h-3 text-slate-400" />
+                    <span>Scraper Pod Image:</span>
+                  </span>
+                  <code className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-900 text-[10px] font-mono text-slate-800 dark:text-slate-300">
+                    {versionInfo?.scraperPodImage || `ghcr.io/knowlesy/shopping-comparison-scraper-pod:v${versionInfo?.version || '1.1.0'}`}
+                  </code>
+                </div>
+              </div>
+
+              {versionInfo?.imageRepo && (
+                <div className="pt-1.5 border-t border-slate-200 dark:border-slate-700/60 flex items-center justify-between">
+                  <a
+                    href={versionInfo.imageRepo}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[11px] text-indigo-600 dark:text-indigo-400 hover:underline flex items-center space-x-1 font-semibold"
+                  >
+                    <span>View Container Registry on GitHub</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                  <span className="text-[10px] text-slate-400">
+                    Runtime: {versionInfo?.environment === 'development' ? 'Dev (Vite / Node)' : 'Production Docker Container'}
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 

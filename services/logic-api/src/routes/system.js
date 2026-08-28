@@ -97,8 +97,13 @@ systemRouter.get('/version', (req, res) => {
   res.json({
     version,
     releaseDate,
+    imageTag: `${registryHost}/${repoSlug}:v${version}`,
     latestImageTag: `${registryHost}/${repoSlug}:latest`,
-    imageRepo: `https://github.com/${repoSlug}/pkgs/container/shopping-comparison-client`
+    clientImage: `${registryHost}/${repoSlug}-client:v${version}`,
+    logicApiImage: `${registryHost}/${repoSlug}-logic-api:v${version}`,
+    scraperPodImage: `${registryHost}/${repoSlug}-scraper-pod:v${version}`,
+    imageRepo: `https://github.com/${repoSlug}/pkgs/container/shopping-comparison-client`,
+    environment: process.env.NODE_ENV || 'development'
   });
 });
 
