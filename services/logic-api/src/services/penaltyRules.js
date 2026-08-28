@@ -17,7 +17,8 @@ let rules = {
   meatCuts: ['mince', 'minced', 'steak mince', 'breast', 'breasts', 'diced', 'chops'],
   speciesRules: [
     { trigger: 'cod', mustContain: 'cod', penalty: 80 },
-    { trigger: 'beef', mustContain: 'beef', penalty: 80 }
+    { trigger: 'beef', mustContain: 'beef', penalty: 80 },
+    { trigger: 'sweet potato', mustContain: 'sweet potato', penalty: 150 }
   ],
   pulseRules: [
     { trigger: 'beans', mustContain: 'bean', penalty: 80 },
@@ -103,7 +104,7 @@ export class PenaltyRules {
     }
 
     const effectiveAttributes = `${effectiveTitle} ${prod.fatPercentage !== undefined ? `${prod.fatPercentage} ${prod.fatPercentage}% lean fat` : ''} ${prod.isFrozen ? 'frozen' : 'fresh'} ${prod.isOrganic ? 'organic' : ''}`;
-    const matchCount = keywords.filter((kw) => effectiveAttributes.includes(kw)).length;
+    const matchCount = keywords.filter((kw) => KeywordExtractor.wordMatches(kw, effectiveAttributes)).length;
 
     if (matchCount === 0) {
       return { score: -200, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
@@ -118,7 +119,7 @@ export class PenaltyRules {
       baseItem: item.baseItem,
       brandPreference: item.brandPreference
     });
-    if (primaryKeywords.length > 0 && primaryKeywords.some((kw) => effectiveAttributes.includes(kw))) {
+    if (primaryKeywords.length > 0 && primaryKeywords.some((kw) => KeywordExtractor.wordMatches(kw, effectiveAttributes))) {
       score += 10;
     }
 

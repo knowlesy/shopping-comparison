@@ -176,6 +176,15 @@ describe('FuzzyMatcher', () => {
     const oatsMatch = FuzzyMatcher.matchProduct('asda', oats, [], preferences);
     assert.ok(oatsMatch.product, 'Expected oats product match');
     assert.match(oatsMatch.product.title, /oat/i);
+
+    const courgette = IngredientParser.parseItem('Courgette 1');
+    const courgetteMatch = FuzzyMatcher.matchProduct('tesco', courgette, [], preferences);
+    assert.ok(courgetteMatch.product, 'Expected courgettes product match');
+    assert.match(courgetteMatch.product.title, /courgette/i);
+
+    const sweetPotato = IngredientParser.parseItem('Sweet potato 1');
+    const sweetPotatoMatch = FuzzyMatcher.matchProduct('tesco', sweetPotato, [], preferences);
+    assert.equal(sweetPotatoMatch.product, null, 'Sweet potato should remain honest no-match without catalog entry');
   });
 
   describe('Preference Options Matrix', () => {

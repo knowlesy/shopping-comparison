@@ -20,7 +20,8 @@
   ],
   "speciesRules": [
     { "trigger": "cod", "mustContain": "cod", "penalty": 80 },
-    { "trigger": "beef", "mustContain": "beef", "penalty": 80 }
+    { "trigger": "beef", "mustContain": "beef", "penalty": 80 },
+    { "trigger": "sweet potato", "mustContain": "sweet potato", "penalty": 150 }
   ],
   "pulseRules": [
     { "trigger": "beans", "mustContain": "bean", "penalty": 80 },

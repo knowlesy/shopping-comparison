@@ -43,8 +43,43 @@ export class KeywordExtractor {
   }
 
   /**
+   * Evaluates if a term matches a target text using whole-word matching,
+   * bidirectional singular/plural stemming, and -o/-es morphological variants.
+   * @param {string} term - Keyword / ingredient term
+   * @param {string} text - Target product title / attributes text
+   * @returns {boolean}
+   */
+  static wordMatches(term, text) {
+    if (!term || !text) return false;
+    const termLower = String(term).toLowerCase().trim();
+    const textLower = String(text).toLowerCase();
+
+    // 1. Exact whole word match
+    if (new RegExp(`\\b${termLower}\\b`, 'i').test(textLower)) return true;
+
+    // 2. De-pluralized stem match (e.g. "tomatoes" -> "tomato", "courgettes" -> "courgette", "eggs" -> "egg")
+    if (termLower.endsWith('es') && termLower.length > 3) {
+      const stem = termLower.slice(0, -2);
+      if (new RegExp(`\\b${stem}\\b`, 'i').test(textLower)) return true;
+    }
+    if (termLower.endsWith('s') && termLower.length > 2) {
+      const stem = termLower.slice(0, -1);
+      if (new RegExp(`\\b${stem}\\b`, 'i').test(textLower)) return true;
+    }
+
+    // 3. Pluralized forms (e.g. "courgette" -> "courgettes", "potato" -> "potatoes", "tomato" -> "tomatoes")
+    if (termLower.endsWith('o') && termLower.length >= 3) {
+      if (new RegExp(`\\b${termLower}es\\b`, 'i').test(textLower)) return true;
+    }
+    if (new RegExp(`\\b${termLower}s\\b`, 'i').test(textLower)) return true;
+    if (new RegExp(`\\b${termLower}es\\b`, 'i').test(textLower)) return true;
+
+    return false;
+  }
+
+  /**
    * Check if a product title contains sufficient noun evidence matching the keywords.
-   * Uses word-boundary checks so substring matches within other words/food compounds don't false-trigger.
+   * Uses word-boundary checks and bidirectional singular/plural matching.
    * @param {string[]} keywords - Extracted item keywords
    * @param {string} productTitle - Candidate product title
    * @returns {boolean}
@@ -52,20 +87,6 @@ export class KeywordExtractor {
   static hasNounEvidence(keywords, productTitle) {
     if (!keywords || keywords.length === 0) return true;
     if (!productTitle) return false;
-    const titleLower = productTitle.toLowerCase();
-
-    return keywords.some((kw) => {
-      // Whole word regex match for exact keyword
-      const kwRegex = new RegExp(`\\b${kw}\\b`, 'i');
-      if (kwRegex.test(titleLower)) return true;
-
-      // Whole word regex match for stem (e.g. "tomatoes" -> "tomato", "potatoes" -> "potato", "eggs" -> "egg")
-      const stem = kw.endsWith('es') ? kw.slice(0, -2) : (kw.endsWith('s') ? kw.slice(0, -1) : kw);
-      if (stem.length >= 3) {
-        const stemRegex = new RegExp(`\\b${stem}\\b`, 'i');
-        if (stemRegex.test(titleLower)) return true;
-      }
-      return false;
-    });
+    return keywords.some((kw) => this.wordMatches(kw, productTitle));
   }
 }
