@@ -132,6 +132,7 @@ export default function App() {
   });
 
   const [isChangelogOpen, setIsChangelogOpen] = useState(false);
+  const [appVersion, setAppVersion] = useState('1.1.0');
   const [updateAvailable, setUpdateAvailable] = useState(false);
   const [updateVersion, setUpdateVersion] = useState('1.1.0');
 
@@ -176,13 +177,17 @@ export default function App() {
         const prefs = await api.getSettings().catch(() => DEFAULT_PREFS);
         setPreferences(prefs);
 
-        // 2. Fetch favorites and ideas
-        const [favs, ideas] = await Promise.all([
+        // 2. Fetch favorites, ideas, and system version
+        const [favs, ideas, versionInfo] = await Promise.all([
           api.getFavorites().catch(() => []),
           api.getIngredientIdeas().catch(() => []),
+          api.getSystemVersion().catch(() => null),
         ]);
         setFavorites(favs);
         setIngredientIdeas(ideas);
+        if (versionInfo && versionInfo.version) {
+          setAppVersion(versionInfo.version);
+        }
 
         // Auto-archive safety net: check for stale pending comparison (>71h old)
         if (!prefs.devMode) {
@@ -534,6 +539,7 @@ export default function App() {
         setActiveTab={setActiveTab}
         onOpenSettings={() => setIsSettingsOpen(true)}
         onOpenChangelog={() => setIsChangelogOpen(true)}
+        version={appVersion}
         updateAvailable={updateAvailable}
         updateVersion={updateVersion}
         isDark={isDark}

@@ -5,6 +5,7 @@ interface HeaderProps {
   setActiveTab: (tab: 'list' | 'compare' | 'history' | 'favorites' | 'quickcheck' | 'stats') => void;
   onOpenSettings: () => void;
   onOpenChangelog?: () => void;
+  version?: string;
   updateAvailable?: boolean;
   updateVersion?: string;
   isDark: boolean;
@@ -19,6 +20,7 @@ export const Header: React.FC<HeaderProps> = ({
   setActiveTab,
   onOpenSettings,
   onOpenChangelog,
+  version = '1.1.0',
   updateAvailable = false,
   updateVersion = '1.1.0',
   isDark,
@@ -72,7 +74,7 @@ export const Header: React.FC<HeaderProps> = ({
                     title="View Changelog & Release Notes"
                     className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 hover:bg-emerald-200 transition cursor-pointer"
                   >
-                    UK v1.1
+                    UK v{version}
                   </button>
                 </div>
               </div>
