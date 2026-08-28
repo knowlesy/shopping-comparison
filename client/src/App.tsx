@@ -9,6 +9,7 @@ import { FavoritesManager } from './components/FavoritesManager';
 import { SettingsModal } from './components/SettingsModal';
 import { ItemSwapModal } from './components/ItemSwapModal';
 import { QuickPriceCheck } from './components/QuickPriceCheck';
+import { StatsPage } from './components/StatsPage';
 import { ChangelogModal } from './components/ChangelogModal';
 import {
   ParsedItem,
@@ -37,17 +38,17 @@ const DEFAULT_PREFS: UserPreferences = {
 
 export default function App() {
   // Persistent active tab
-  const [activeTab, setActiveTabState] = useState<'list' | 'compare' | 'history' | 'favorites' | 'quickcheck'>(() => {
+  const [activeTab, setActiveTabState] = useState<'list' | 'compare' | 'history' | 'favorites' | 'quickcheck' | 'stats'>(() => {
     try {
       const savedTab = localStorage.getItem('trolleywise_active_tab');
-      if (savedTab && ['list', 'compare', 'history', 'favorites', 'quickcheck'].includes(savedTab)) {
+      if (savedTab && ['list', 'compare', 'history', 'favorites', 'quickcheck', 'stats'].includes(savedTab)) {
         return savedTab as any;
       }
     } catch {}
     return 'list';
   });
 
-  const setActiveTab = (tab: 'list' | 'compare' | 'history' | 'favorites' | 'quickcheck') => {
+  const setActiveTab = (tab: 'list' | 'compare' | 'history' | 'favorites' | 'quickcheck' | 'stats') => {
     setActiveTabState(tab);
     try {
       localStorage.setItem('trolleywise_active_tab', tab);
@@ -710,6 +711,10 @@ export default function App() {
             ingredientIdeas={ingredientIdeas}
             setIngredientIdeas={setIngredientIdeas}
           />
+        )}
+
+        {activeTab === 'stats' && (
+          <StatsPage />
         )}
       </main>
 
