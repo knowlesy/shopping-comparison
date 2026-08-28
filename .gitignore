@@ -49,6 +49,7 @@ report*.md
 !tests/*owasp*.js
 !scripts/*owasp*.js
 !.github/ISSUE_TEMPLATE/bug_report.md
+!data/ai-matching-context.md
 
 # Environment files
 .env
