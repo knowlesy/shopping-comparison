@@ -39,5 +39,11 @@
     "matchPattern": "\\b(?:spinach|baby spinach|spinach leaves)\\b",
     "matchNegatePattern": "\\b(?:pasta|pie|bake|soup)\\b",
     "prohibitedPattern": "\\b(?:pasta bake|lasagne|ricotta tortelloni|spinach.*pie|spinach soup|dip)\\b"
+  },
+  {
+    "category": "plums",
+    "matchPattern": "\\b(?:plum|plums)\\b",
+    "matchNegatePattern": "\\b(?:tomato|tomatoes)\\b",
+    "prohibitedPattern": "\\b(?:plum tomatoes?|tomato|tomatoes)\\b"
   }
 ]

@@ -112,6 +112,16 @@ export class PenaltyRules {
     const textScore = keywords.length > 0 ? (matchCount / keywords.length) * 60 : 0;
     score += textScore;
 
+    // Primary term preference over alternateTerms on tie-break
+    const primaryKeywords = KeywordExtractor.extractKeywords({
+      name: item.name,
+      baseItem: item.baseItem,
+      brandPreference: item.brandPreference
+    });
+    if (primaryKeywords.length > 0 && primaryKeywords.some((kw) => effectiveAttributes.includes(kw))) {
+      score += 10;
+    }
+
     // 2. Brand Preference Match
     if (
       item.brandPreference &&

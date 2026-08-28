@@ -24,7 +24,8 @@ export class KeywordExtractor {
    */
   static extractKeywords(item) {
     if (!item) return [];
-    const raw = `${item.baseItem || ''} ${item.name || ''} ${item.brandPreference || ''}`.toLowerCase();
+    const alternates = Array.isArray(item.alternateTerms) ? item.alternateTerms.join(' ') : '';
+    const raw = `${item.baseItem || ''} ${item.name || ''} ${item.brandPreference || ''} ${alternates}`.toLowerCase();
     
     // Replace non-alphanumerics with spaces
     const clean = raw.replace(/[^\w\s]/g, ' ');
@@ -43,6 +44,7 @@ export class KeywordExtractor {
 
   /**
    * Check if a product title contains sufficient noun evidence matching the keywords.
+   * Uses word-boundary checks so substring matches within other words/food compounds don't false-trigger.
    * @param {string[]} keywords - Extracted item keywords
    * @param {string} productTitle - Candidate product title
    * @returns {boolean}
@@ -53,10 +55,17 @@ export class KeywordExtractor {
     const titleLower = productTitle.toLowerCase();
 
     return keywords.some((kw) => {
-      if (titleLower.includes(kw)) return true;
-      // Stem check (e.g. "tomatoes" -> "tomato", "potatoes" -> "potato", "eggs" -> "egg")
+      // Whole word regex match for exact keyword
+      const kwRegex = new RegExp(`\\b${kw}\\b`, 'i');
+      if (kwRegex.test(titleLower)) return true;
+
+      // Whole word regex match for stem (e.g. "tomatoes" -> "tomato", "potatoes" -> "potato", "eggs" -> "egg")
       const stem = kw.endsWith('es') ? kw.slice(0, -2) : (kw.endsWith('s') ? kw.slice(0, -1) : kw);
-      return stem.length >= 3 && titleLower.includes(stem);
+      if (stem.length >= 3) {
+        const stemRegex = new RegExp(`\\b${stem}\\b`, 'i');
+        if (stemRegex.test(titleLower)) return true;
+      }
+      return false;
     });
   }
 }

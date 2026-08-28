@@ -27,4 +27,15 @@ describe('KeywordExtractor', () => {
     assert.equal(KeywordExtractor.hasNounEvidence(keywords, 'ASDA Chopped Tomatoes in Juice 400g'), true);
     assert.equal(KeywordExtractor.hasNounEvidence(keywords, 'Sainsbury Baby Spinach 250g'), false);
   });
+
+  it('should extract alternateTerms into keywords for multi-fruit or alternative items', () => {
+    const item = {
+      name: 'Plums',
+      baseItem: 'Plums or pears',
+      alternateTerms: ['pears']
+    };
+    const kws = KeywordExtractor.extractKeywords(item);
+    assert.deepEqual(kws, ['plums', 'pears']);
+    assert.equal(KeywordExtractor.hasNounEvidence(kws, 'Tesco Conference Pears 600g'), true);
+  });
 });
