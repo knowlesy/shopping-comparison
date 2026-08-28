@@ -20,7 +20,7 @@ export const ChangelogModal: React.FC<ChangelogModalProps> = ({ isOpen, onClose 
         setContent(res.content);
         setVersion(res.version);
       }).catch(() => {
-        setContent('# TrolleyWise v1.1.0\n\n- Multibuy & Deal Price Parsing\n- 72-Hour Search Pinning\n- Hybrid Gemini AI Fallback\n- 24h Update Notifier');
+        setContent('# ShoppingWise v1.1.0\n\n- Multibuy & Deal Price Parsing\n- 72-Hour Search Pinning\n- Hybrid Gemini AI Fallback\n- 24h Update Notifier');
       }).finally(() => setLoading(false));
     }
   }, [isOpen]);
@@ -46,7 +46,7 @@ export const ChangelogModal: React.FC<ChangelogModalProps> = ({ isOpen, onClose 
             </div>
             <div>
               <h3 className="font-extrabold text-base text-slate-900 dark:text-white flex items-center space-x-2">
-                <span>TrolleyWise Release Notes & Changelog</span>
+                <span>ShoppingWise Release Notes & Changelog</span>
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200">
                   v{version}
                 </span>

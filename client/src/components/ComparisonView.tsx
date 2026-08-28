@@ -62,7 +62,7 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({
 
   // Copy shareable summary
   const handleCopySummary = () => {
-    const summary = `🛒 UK Supermarket Price Comparison (TrolleyWise UK)\n` +
+    const summary = `🛒 UK Supermarket Price Comparison (ShoppingWise UK)\n` +
       `Items: ${items.length}\n` +
       `Cheapest Store: ${supermarkets[cheapestStore]?.info.name} (£${supermarkets[cheapestStore]?.totalPrice.toFixed(2)})\n` +
       `Split Basket Savings: £${splitOptimization.combinedTotal.toFixed(2)} (${splitOptimization.explanation})\n` +

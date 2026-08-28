@@ -8,7 +8,7 @@
 
 ## Reporting a Vulnerability
 
-We take the security of TrolleyWise UK seriously.
+We take the security of ShoppingWise UK seriously.
 
 If you discover a security vulnerability, please do NOT open a public issue. Instead, please report it directly by email or via GitHub Private Vulnerability Reporting to `@knowlesy`.
 

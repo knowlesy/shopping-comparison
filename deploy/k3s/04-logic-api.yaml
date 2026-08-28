@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: trolleywise-logic-api
-  namespace: trolleywise
+  name: shoppingwise-logic-api
+  namespace: shoppingwise
   labels:
-    app: trolleywise-logic-api
+    app: shoppingwise-logic-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: trolleywise-logic-api
+      app: shoppingwise-logic-api
   template:
     metadata:
       labels:
-        app: trolleywise-logic-api
+        app: shoppingwise-logic-api
     spec:
       containers:
         - name: logic-api
@@ -26,32 +26,32 @@ spec:
             - name: PORT
               valueFrom:
                 configMapKeyRef:
-                  name: trolleywise-config
+                  name: shoppingwise-config
                   key: PORT_LOGIC
             - name: NODE_ENV
               valueFrom:
                 configMapKeyRef:
-                  name: trolleywise-config
+                  name: shoppingwise-config
                   key: NODE_ENV
             - name: SCRAPER_SERVICE_URL
               valueFrom:
                 configMapKeyRef:
-                  name: trolleywise-config
+                  name: shoppingwise-config
                   key: SCRAPER_SERVICE_URL
             - name: CLIENT_ORIGIN
               valueFrom:
                 configMapKeyRef:
-                  name: trolleywise-config
+                  name: shoppingwise-config
                   key: CLIENT_ORIGIN
             - name: SCRAPE_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: trolleywise-secret
+                  name: shoppingwise-secret
                   key: SCRAPE_TOKEN
             - name: GEMINI_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: trolleywise-secret
+                  name: shoppingwise-secret
                   key: GEMINI_API_KEY
           resources:
             requests:
@@ -76,11 +76,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: trolleywise-logic-api
-  namespace: trolleywise
+  name: shoppingwise-logic-api
+  namespace: shoppingwise
 spec:
   selector:
-    app: trolleywise-logic-api
+    app: shoppingwise-logic-api
   ports:
     - protocol: TCP
       port: 3001

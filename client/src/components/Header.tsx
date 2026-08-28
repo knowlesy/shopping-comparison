@@ -62,7 +62,7 @@ export const Header: React.FC<HeaderProps> = ({
               <div>
                 <div className="flex items-center space-x-1.5">
                   <span className="font-extrabold text-lg sm:text-xl tracking-tight bg-gradient-to-r from-slate-900 via-slate-800 to-emerald-700 dark:from-white dark:via-slate-200 dark:to-emerald-400 bg-clip-text text-transparent">
-                    TrolleyWise
+                    ShoppingWise
                   </span>
                   <button
                     onClick={(e) => {

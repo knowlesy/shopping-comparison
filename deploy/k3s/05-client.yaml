@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: trolleywise-client
-  namespace: trolleywise
+  name: shoppingwise-client
+  namespace: shoppingwise
   labels:
-    app: trolleywise-client
+    app: shoppingwise-client
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: trolleywise-client
+      app: shoppingwise-client
   template:
     metadata:
       labels:
-        app: trolleywise-client
+        app: shoppingwise-client
     spec:
       containers:
         - name: client
@@ -45,11 +45,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: trolleywise-client
-  namespace: trolleywise
+  name: shoppingwise-client
+  namespace: shoppingwise
 spec:
   selector:
-    app: trolleywise-client
+    app: shoppingwise-client
   ports:
     - protocol: TCP
       port: 8080

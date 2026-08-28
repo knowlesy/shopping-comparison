@@ -587,7 +587,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                       About & Container Build Version
                     </span>
                     <span className="text-[11px] text-slate-500">
-                      TrolleyWise v{versionInfo?.version || '1.1.0'} • Released {versionInfo?.releaseDate || '2026-08-28'}
+                      ShoppingWise v{versionInfo?.version || '1.1.0'} • Released {versionInfo?.releaseDate || '2026-08-28'}
                     </span>
                   </div>
                 </div>

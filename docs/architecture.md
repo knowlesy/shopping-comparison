@@ -1,6 +1,6 @@
-# TrolleyWise UK System Architecture & Technical Specifications 📐
+# ShoppingWise UK System Architecture & Technical Specifications 📐
 
-TrolleyWise UK is an agentic, high-performance grocery price comparison and basket optimization engine designed to evaluate product prices, package sizing, and healthier dietary alternatives across 7 major UK supermarkets: **ASDA**, **Tesco**, **Sainsbury's**, **Morrisons**, **Iceland**, **Aldi**, and **Lidl**.
+ShoppingWise UK is an agentic, high-performance grocery price comparison and basket optimization engine designed to evaluate product prices, package sizing, and healthier dietary alternatives across 7 major UK supermarkets: **ASDA**, **Tesco**, **Sainsbury's**, **Morrisons**, **Iceland**, **Aldi**, and **Lidl**.
 
 ---
 

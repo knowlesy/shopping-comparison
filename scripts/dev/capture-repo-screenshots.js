@@ -41,7 +41,7 @@ async function captureScreenshots() {
   const page = await context.newPage();
 
   try {
-    console.log('1. Navigating to TrolleyWise web app...');
+    console.log('1. Navigating to ShoppingWise web app...');
     await page.goto('http://localhost:5173/', { waitUntil: 'networkidle' });
 
     // Clear storage

@@ -1,4 +1,4 @@
-# TrolleyWise Project Roadmap 🛒
+# ShoppingWise Project Roadmap 🛒
 
 ## Core Roadmap Items
 - [ ] Direct supermarket scraping (Tesco, Asda, Sainsbury's, Morrisons, Iceland)

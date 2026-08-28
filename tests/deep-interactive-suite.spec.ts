@@ -7,8 +7,8 @@ test.describe('🔬 Deep Interactive Link & Workflow Verification Suite', () => 
     await page.waitForLoadState('networkidle');
 
     // 2. Check title and brand
-    await expect(page).toHaveTitle(/TrolleyWise UK/i);
-    const brand = page.locator('span:has-text("TrolleyWise")').first();
+    await expect(page).toHaveTitle(/ShoppingWise UK/i);
+    const brand = page.locator('span:has-text("ShoppingWise")').first();
     await expect(brand).toBeVisible();
 
     // 3. Verify Header Navigation tabs

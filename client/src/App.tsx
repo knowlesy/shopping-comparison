@@ -40,7 +40,7 @@ export default function App() {
   // Persistent active tab
   const [activeTab, setActiveTabState] = useState<'list' | 'compare' | 'history' | 'favorites' | 'quickcheck' | 'stats'>(() => {
     try {
-      const savedTab = localStorage.getItem('trolleywise_active_tab');
+      const savedTab = localStorage.getItem('shoppingwise_active_tab');
       if (savedTab && ['list', 'compare', 'history', 'favorites', 'quickcheck', 'stats'].includes(savedTab)) {
         return savedTab as any;
       }
@@ -51,14 +51,14 @@ export default function App() {
   const setActiveTab = (tab: 'list' | 'compare' | 'history' | 'favorites' | 'quickcheck' | 'stats') => {
     setActiveTabState(tab);
     try {
-      localStorage.setItem('trolleywise_active_tab', tab);
+      localStorage.setItem('shoppingwise_active_tab', tab);
     } catch {}
   };
 
   // Persistent theme
   const [isDark, setIsDarkState] = useState(() => {
     try {
-      return localStorage.getItem('trolleywise_theme') === 'dark';
+      return localStorage.getItem('shoppingwise_theme') === 'dark';
     } catch {}
     return false;
   });
@@ -66,14 +66,14 @@ export default function App() {
   const setIsDark = (dark: boolean) => {
     setIsDarkState(dark);
     try {
-      localStorage.setItem('trolleywise_theme', dark ? 'dark' : 'light');
+      localStorage.setItem('shoppingwise_theme', dark ? 'dark' : 'light');
     } catch {}
   };
 
   // Persistent items list
   const [items, setItemsState] = useState<ParsedItem[]>(() => {
     try {
-      const saved = localStorage.getItem('trolleywise_items');
+      const saved = localStorage.getItem('shoppingwise_items');
       if (saved) return JSON.parse(saved);
     } catch {}
     return [];
@@ -83,7 +83,7 @@ export default function App() {
     setItemsState(prev => {
       const next = typeof updater === 'function' ? updater(prev) : updater;
       try {
-        localStorage.setItem('trolleywise_items', JSON.stringify(next));
+        localStorage.setItem('shoppingwise_items', JSON.stringify(next));
       } catch {}
       return next;
     });
@@ -92,7 +92,7 @@ export default function App() {
   // Persistent comparison result
   const [comparison, setComparisonState] = useState<ComparisonResponse | null>(() => {
     try {
-      const saved = localStorage.getItem('trolleywise_active_comparison');
+      const saved = localStorage.getItem('shoppingwise_active_comparison');
       if (saved) return JSON.parse(saved);
     } catch {}
     return null;
@@ -103,9 +103,9 @@ export default function App() {
       const next = typeof comp === 'function' ? comp(prev) : comp;
       try {
         if (next) {
-          localStorage.setItem('trolleywise_active_comparison', JSON.stringify(next));
+          localStorage.setItem('shoppingwise_active_comparison', JSON.stringify(next));
         } else {
-          localStorage.removeItem('trolleywise_active_comparison');
+          localStorage.removeItem('shoppingwise_active_comparison');
         }
       } catch {}
       return next;
@@ -148,7 +148,7 @@ export default function App() {
   useEffect(() => {
     const checkDockerUpdate = async () => {
       try {
-        const lastCheck = Number(localStorage.getItem('trolleywise_last_update_check') || '0');
+        const lastCheck = Number(localStorage.getItem('shoppingwise_last_update_check') || '0');
         const now = Date.now();
         const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -159,7 +159,7 @@ export default function App() {
             setUpdateAvailable(true);
             setUpdateVersion(res.latestVersion || '1.1.0');
           }
-          localStorage.setItem('trolleywise_last_update_check', String(now));
+          localStorage.setItem('shoppingwise_last_update_check', String(now));
         }
       } catch (err) {
         console.warn('Update check failed:', err);
@@ -187,7 +187,7 @@ export default function App() {
         // Auto-archive safety net: check for stale pending comparison (>71h old)
         if (!prefs.devMode) {
           try {
-            const pendingRaw = localStorage.getItem('trolleywise_pending_comparison');
+            const pendingRaw = localStorage.getItem('shoppingwise_pending_comparison');
             if (pendingRaw) {
               const pending = JSON.parse(pendingRaw);
               const ageMs = Date.now() - (pending.timestamp || 0);
@@ -199,11 +199,11 @@ export default function App() {
                   ...pending.shopData,
                   name: `⏰ Auto-saved: ${pending.shopData.name}`,
                 });
-                localStorage.removeItem('trolleywise_pending_comparison');
+                localStorage.removeItem('shoppingwise_pending_comparison');
               } else if (hoursOld >= 96) {
                 // Too old, cache is gone anyway — discard the stale pending
                 console.log(`[Auto-Archive] Pending comparison is ${hoursOld.toFixed(1)}h old. Too stale, discarding.`);
-                localStorage.removeItem('trolleywise_pending_comparison');
+                localStorage.removeItem('shoppingwise_pending_comparison');
               }
             }
           } catch (err) {
@@ -313,7 +313,7 @@ export default function App() {
       if (!preferences.devMode && listToCompare.length >= 3) {
         try {
           const shopData = buildShopSnapshot(comp, listToCompare);
-          localStorage.setItem('trolleywise_pending_comparison', JSON.stringify({
+          localStorage.setItem('shoppingwise_pending_comparison', JSON.stringify({
             timestamp: Date.now(),
             shopData,
           }));
@@ -500,7 +500,7 @@ export default function App() {
       await api.saveShop(shopData);
 
       // Clear pending stash — user explicitly saved, no need for auto-archive
-      localStorage.removeItem('trolleywise_pending_comparison');
+      localStorage.removeItem('shoppingwise_pending_comparison');
     } catch (err) {
       console.error('Error saving shop to archive:', err);
     }
@@ -744,7 +744,7 @@ export default function App() {
 
       {/* Footer */}
       <footer className="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500 space-y-1">
-        <p>TrolleyWise UK • Comparing {(() => {
+        <p>ShoppingWise UK • Comparing {(() => {
           const nameMap: Record<string, string> = {
             asda: 'Asda', sainsburys: "Sainsbury's", tesco: 'Tesco', morrisons: 'Morrisons',
             iceland: 'Iceland', aldi: 'Aldi', lidl: 'Lidl', waitrose: 'Waitrose',

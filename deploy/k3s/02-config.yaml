@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: trolleywise-config
-  namespace: trolleywise
+  name: shoppingwise-config
+  namespace: shoppingwise
 data:
   NODE_ENV: "production"
   PORT_LOGIC: "3001"
   PORT_SCRAPER: "3002"
   PORT_CLIENT: "8080"
-  SCRAPER_SERVICE_URL: "http://trolleywise-scraper-pod:3002/scrape"
+  SCRAPER_SERVICE_URL: "http://shoppingwise-scraper-pod:3002/scrape"
   CLIENT_ORIGIN: "http://localhost:8080"

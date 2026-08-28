@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: trolleywise-ingress
-  namespace: trolleywise
+  name: shoppingwise-ingress
+  namespace: shoppingwise
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
@@ -13,7 +13,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: trolleywise-client
+                name: shoppingwise-client
                 port:
                   number: 8080
 ---

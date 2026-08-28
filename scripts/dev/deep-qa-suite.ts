@@ -48,7 +48,7 @@ const SAMPLE_LIST = `900g 5% lean beef mince
 
 async function runDeepQA() {
   console.log('═════════════════════════════════════════════════════════════════════');
-  console.log('       🔬 TROLLEYWISE UK — DEEP QA VERIFICATION SUITE (ALL ITEMS)     ');
+  console.log('       🔬 SHOPPINGWISE UK — DEEP QA VERIFICATION SUITE (ALL ITEMS)     ');
   console.log('═════════════════════════════════════════════════════════════════════\n');
 
   const defaultPrefs: UserPreferences = {

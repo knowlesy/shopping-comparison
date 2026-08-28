@@ -1,4 +1,4 @@
-# TrolleyWise UK 🛒
+# ShoppingWise UK 🛒
 
 [![CI](https://github.com/knowlesy/shopping-comparison/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/knowlesy/shopping-comparison/actions/workflows/ci.yml)
 [![OWASP Security Audit](https://github.com/knowlesy/shopping-comparison/actions/workflows/owasp.yml/badge.svg?branch=master)](https://github.com/knowlesy/shopping-comparison/actions/workflows/owasp.yml)

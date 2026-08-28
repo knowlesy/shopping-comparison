@@ -1,9 +1,9 @@
-# TrolleyWise k3s & GitOps Reference Guide ☸️
+# ShoppingWise k3s & GitOps Reference Guide ☸️
 
-This directory contains reference Kubernetes manifests for deploying the TrolleyWise stack to a k3s cluster.
+This directory contains reference Kubernetes manifests for deploying the ShoppingWise stack to a k3s cluster.
 
 > [!WARNING]
-> These manifests define a standalone `trolleywise` namespace, unencrypted placeholder secrets, and a default local ingress. **Do not apply this directory directly over an existing production deployment** without reviewing your ingress hostnames, TLS certificates, and secret management strategy.
+> These manifests define a standalone `shoppingwise` namespace, unencrypted placeholder secrets, and a default local ingress. **Do not apply this directory directly over an existing production deployment** without reviewing your ingress hostnames, TLS certificates, and secret management strategy.
 
 ---
 
@@ -13,11 +13,11 @@ Never commit production authentication tokens to Git. Before applying the stack,
 
 ```bash
 # 1. Create namespace
-kubectl create namespace trolleywise
+kubectl create namespace shoppingwise
 
 # 2. Generate a 48-char random token for inter-service scraper authentication
-kubectl create secret generic trolleywise-secret \
-  --namespace trolleywise \
+kubectl create secret generic shoppingwise-secret \
+  --namespace shoppingwise \
   --from-literal=SCRAPE_TOKEN="$(openssl rand -hex 24)" \
   --from-literal=GEMINI_API_KEY=""
 ```

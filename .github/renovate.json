@@ -14,7 +14,7 @@
         "ghcr.io/knowlesy/shopping-comparison-logic-api",
         "ghcr.io/knowlesy/shopping-comparison-scraper-pod"
       ],
-      "groupName": "trolleywise-containers",
+      "groupName": "shoppingwise-containers",
       "automerge": false
     }
   ]

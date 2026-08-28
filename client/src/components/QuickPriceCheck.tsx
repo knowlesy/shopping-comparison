@@ -40,7 +40,7 @@ export const QuickPriceCheck: React.FC<QuickPriceCheckProps> = ({ enabledSuperma
   const [searchedQuery, setSearchedQuery] = useState('');
   const [recentSearches, setRecentSearches] = useState<string[]>(() => {
     try {
-      const stored = localStorage.getItem('trolleywise_quick_searches');
+      const stored = localStorage.getItem('shoppingwise_quick_searches');
       return stored ? JSON.parse(stored) : [];
     } catch {
       return [];
@@ -74,7 +74,7 @@ export const QuickPriceCheck: React.FC<QuickPriceCheckProps> = ({ enabledSuperma
 
       const updated = [q, ...recentSearches.filter(s => s.toLowerCase() !== q.toLowerCase())].slice(0, 8);
       setRecentSearches(updated);
-      localStorage.setItem('trolleywise_quick_searches', JSON.stringify(updated));
+      localStorage.setItem('shoppingwise_quick_searches', JSON.stringify(updated));
     } catch (err) {
       console.error('Quick price check failed:', err);
     } finally {

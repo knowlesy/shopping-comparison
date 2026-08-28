@@ -151,7 +151,7 @@ systemRouter.get('/check-update', async (req, res) => {
     const apiUrl = `https://api.github.com/repos/${repo}/releases/latest`;
     const response = await fetch(apiUrl, {
       headers: {
-        'User-Agent': 'TrolleyWise-System-Notifier',
+        'User-Agent': 'ShoppingWise-System-Notifier',
         Accept: 'application/vnd.github.v3+json'
       }
     });

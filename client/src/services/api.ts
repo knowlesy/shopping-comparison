@@ -197,7 +197,7 @@ export const api = {
   // Settings
   getSettings: async (): Promise<UserPreferences> => {
     try {
-      const local = localStorage.getItem('trolleywise_settings');
+      const local = localStorage.getItem('shoppingwise_settings');
       if (local) return JSON.parse(local);
       const res = await fetch(`${API_BASE}/settings`);
       if (res.ok) return await res.json();
@@ -209,7 +209,7 @@ export const api = {
     const current = await api.getSettings();
     const updated = { ...current, ...prefs };
     try {
-      localStorage.setItem('trolleywise_settings', JSON.stringify(updated));
+      localStorage.setItem('shoppingwise_settings', JSON.stringify(updated));
       fetch(`${API_BASE}/settings`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -222,7 +222,7 @@ export const api = {
   // History
   getHistory: async (): Promise<SavedShop[]> => {
     try {
-      const local = localStorage.getItem('trolleywise_history');
+      const local = localStorage.getItem('shoppingwise_history');
       if (local) {
         const parsed = JSON.parse(local);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -231,12 +231,12 @@ export const api = {
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data) && data.length > 0) {
-          localStorage.setItem('trolleywise_history', JSON.stringify(data));
+          localStorage.setItem('shoppingwise_history', JSON.stringify(data));
           return data;
         }
       }
     } catch {}
-    const local = localStorage.getItem('trolleywise_history');
+    const local = localStorage.getItem('shoppingwise_history');
     return local ? JSON.parse(local) : [];
   },
 
@@ -247,10 +247,10 @@ export const api = {
       createdAt: new Date().toISOString(),
     };
     try {
-      const local = localStorage.getItem('trolleywise_history');
+      const local = localStorage.getItem('shoppingwise_history');
       const history: SavedShop[] = local ? JSON.parse(local) : [];
       history.unshift(newShop);
-      localStorage.setItem('trolleywise_history', JSON.stringify(history.slice(0, 50)));
+      localStorage.setItem('shoppingwise_history', JSON.stringify(history.slice(0, 50)));
 
       fetch(`${API_BASE}/history`, {
         method: 'POST',
@@ -263,11 +263,11 @@ export const api = {
 
   deleteShop: async (id: string): Promise<boolean> => {
     try {
-      const local = localStorage.getItem('trolleywise_history');
+      const local = localStorage.getItem('shoppingwise_history');
       if (local) {
         const history: SavedShop[] = JSON.parse(local);
         const filtered = history.filter(s => s.id !== id);
-        localStorage.setItem('trolleywise_history', JSON.stringify(filtered));
+        localStorage.setItem('shoppingwise_history', JSON.stringify(filtered));
       }
       fetch(`${API_BASE}/history/${id}`, { method: 'DELETE' }).catch(() => {});
     } catch {}
@@ -290,7 +290,7 @@ export const api = {
   // Favorites
   getFavorites: async (): Promise<FavoriteItem[]> => {
     try {
-      const local = localStorage.getItem('trolleywise_favorites');
+      const local = localStorage.getItem('shoppingwise_favorites');
       if (local) {
         const parsed = JSON.parse(local);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -298,7 +298,7 @@ export const api = {
       const res = await fetch(`${API_BASE}/favorites`);
       if (res.ok) return await res.json();
     } catch {}
-    const local = localStorage.getItem('trolleywise_favorites');
+    const local = localStorage.getItem('shoppingwise_favorites');
     return local ? JSON.parse(local) : [];
   },
 
@@ -311,7 +311,7 @@ export const api = {
     try {
       const favs = await api.getFavorites();
       favs.push(newFav);
-      localStorage.setItem('trolleywise_favorites', JSON.stringify(favs));
+      localStorage.setItem('shoppingwise_favorites', JSON.stringify(favs));
       fetch(`${API_BASE}/favorites`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -325,7 +325,7 @@ export const api = {
     try {
       const favs = await api.getFavorites();
       const filtered = favs.filter(f => f.id !== id);
-      localStorage.setItem('trolleywise_favorites', JSON.stringify(filtered));
+      localStorage.setItem('shoppingwise_favorites', JSON.stringify(filtered));
       fetch(`${API_BASE}/favorites/${id}`, { method: 'DELETE' }).catch(() => {});
     } catch {}
     return true;
@@ -334,7 +334,7 @@ export const api = {
   // Ingredient Ideas
   getIngredientIdeas: async (): Promise<IngredientIdea[]> => {
     try {
-      const local = localStorage.getItem('trolleywise_ideas');
+      const local = localStorage.getItem('shoppingwise_ideas');
       if (local) {
         const parsed = JSON.parse(local);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -342,7 +342,7 @@ export const api = {
       const res = await fetch(`${API_BASE}/ingredient-ideas`);
       if (res.ok) return await res.json();
     } catch {}
-    const local = localStorage.getItem('trolleywise_ideas');
+    const local = localStorage.getItem('shoppingwise_ideas');
     return local ? JSON.parse(local) : DEFAULT_INGREDIENT_IDEAS;
   },
 
@@ -354,7 +354,7 @@ export const api = {
     try {
       const ideas = await api.getIngredientIdeas();
       ideas.push(newIdea);
-      localStorage.setItem('trolleywise_ideas', JSON.stringify(ideas));
+      localStorage.setItem('shoppingwise_ideas', JSON.stringify(ideas));
       fetch(`${API_BASE}/ingredient-ideas`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -368,7 +368,7 @@ export const api = {
     try {
       const ideas = await api.getIngredientIdeas();
       const filtered = ideas.filter(i => i.id !== id);
-      localStorage.setItem('trolleywise_ideas', JSON.stringify(filtered));
+      localStorage.setItem('shoppingwise_ideas', JSON.stringify(filtered));
       fetch(`${API_BASE}/ingredient-ideas/${id}`, { method: 'DELETE' }).catch(() => {});
     } catch {}
     return true;
@@ -381,7 +381,7 @@ export const api = {
       if (res.ok) return await res.json();
     } catch {}
     try {
-      const local = localStorage.getItem('trolleywise_recent_searches');
+      const local = localStorage.getItem('shoppingwise_recent_searches');
       return local ? JSON.parse(local) : [];
     } catch {}
     return [];
@@ -442,7 +442,7 @@ export const api = {
     } catch {}
     return {
       version: '1.1.0',
-      content: '# TrolleyWise Changelog\n\n## v1.1.0 - Multibuy Deals & Hybrid Gemini Matching',
+      content: '# ShoppingWise Changelog\n\n## v1.1.0 - Multibuy Deals & Hybrid Gemini Matching',
     };
   },
 

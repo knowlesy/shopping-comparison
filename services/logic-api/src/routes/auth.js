@@ -75,7 +75,7 @@ authRouter.post('/logout', (req, res) => {
 authRouter.get('/me', (req, res) => {
   res.json({
     authenticated: true,
-    user: { id: 'usr-stub-123', email: 'user@trolleywise.co.uk', name: 'Shopper' }
+    user: { id: 'usr-stub-123', email: 'user@shoppingwise.co.uk', name: 'Shopper' }
   });
 });
 

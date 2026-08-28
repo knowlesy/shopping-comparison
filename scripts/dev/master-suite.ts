@@ -32,7 +32,7 @@ function assert(condition: boolean, suite: string, name: string, details?: strin
 
 async function runMasterTestSuite() {
   console.log('═════════════════════════════════════════════════════════════════════');
-  console.log('       🛒 TROLLEYWISE UK — FULL MASTER TEST SUITE (A TO Z)          ');
+  console.log('       🛒 SHOPPINGWISE UK — FULL MASTER TEST SUITE (A TO Z)          ');
   console.log('═════════════════════════════════════════════════════════════════════\n');
 
   // ==========================================

@@ -1,14 +1,14 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('TrolleyWise UK Web App End-to-End Verification', () => {
+test.describe('ShoppingWise UK Web App End-to-End Verification', () => {
   test('Complete Shopping & Supermarket Comparison Flow', async ({ page }) => {
     // 1. Open the application
     await page.goto('http://localhost:5173');
     await page.waitForLoadState('networkidle');
 
     // 2. Check title and brand
-    await expect(page).toHaveTitle(/TrolleyWise UK/i);
-    const brand = page.locator('span:has-text("TrolleyWise")').first();
+    await expect(page).toHaveTitle(/ShoppingWise UK/i);
+    const brand = page.locator('span:has-text("ShoppingWise")').first();
     await expect(brand).toBeVisible();
 
     // 3. Navigate to Shopping List tab

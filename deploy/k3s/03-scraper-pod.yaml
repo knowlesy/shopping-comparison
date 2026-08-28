@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: trolleywise-scraper-pod
-  namespace: trolleywise
+  name: shoppingwise-scraper-pod
+  namespace: shoppingwise
   labels:
-    app: trolleywise-scraper-pod
+    app: shoppingwise-scraper-pod
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: trolleywise-scraper-pod
+      app: shoppingwise-scraper-pod
   template:
     metadata:
       labels:
-        app: trolleywise-scraper-pod
+        app: shoppingwise-scraper-pod
     spec:
       containers:
         - name: scraper-pod
@@ -26,17 +26,17 @@ spec:
             - name: PORT
               valueFrom:
                 configMapKeyRef:
-                  name: trolleywise-config
+                  name: shoppingwise-config
                   key: PORT_SCRAPER
             - name: NODE_ENV
               valueFrom:
                 configMapKeyRef:
-                  name: trolleywise-config
+                  name: shoppingwise-config
                   key: NODE_ENV
             - name: SCRAPE_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: trolleywise-secret
+                  name: shoppingwise-secret
                   key: SCRAPE_TOKEN
           resources:
             requests:
@@ -69,11 +69,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: trolleywise-scraper-pod
-  namespace: trolleywise
+  name: shoppingwise-scraper-pod
+  namespace: shoppingwise
 spec:
   selector:
-    app: trolleywise-scraper-pod
+    app: shoppingwise-scraper-pod
   ports:
     - protocol: TCP
       port: 3002
