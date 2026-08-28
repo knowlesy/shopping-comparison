@@ -24,11 +24,20 @@ const preferences = {
 };
 
 async function runRecipesVerification() {
+  const isCatalogMode = process.argv.includes('--catalog-mode');
   const isLiveMode = process.argv.includes('--live-mode');
-  console.log('===============================================================================');
-  console.log('   20 UNIQUE RECIPE LISTS VERIFICATION & CONTAMINATION AUDIT SUITE             ');
-  console.log(`   [Test Mode: ${isLiveMode ? 'Live Aggregator Mode' : 'Catalog Benchmark Mode (Offline)'}]`);
-  console.log('===============================================================================\n');
+
+  if (isCatalogMode) {
+    console.log('===============================================================================');
+    console.log('   ⚠️ RUNNING IN CATALOG/ESTIMATED BENCHMARK MODE (--catalog-mode)            ');
+    console.log('   Offline evaluation using estimated benchmark catalog data.                  ');
+    console.log('===============================================================================\n');
+  } else {
+    console.log('===============================================================================');
+    console.log('   20 UNIQUE RECIPE LISTS VERIFICATION & CONTAMINATION AUDIT SUITE             ');
+    console.log(`   [Test Mode: ${isLiveMode ? 'Live Aggregator Mode' : 'Standard Mode (Requires Live API)'}]`);
+    console.log('===============================================================================\n');
+  }
 
   const report = {
     totalRecipes: recipes.length,
@@ -201,6 +210,9 @@ async function runRecipesVerification() {
 
   if (report.failedRecipes > 0 || report.contaminationViolations.length > 0 || report.pricingAnomalies.length > 0) {
     console.error('❌ Recipe verification detected issues that need fixing.');
+    process.exit(1);
+  } else if (!isCatalogMode && report.apiVerification.passedHits === 0) {
+    console.error('❌ FAIL: Live API hits = 0 and --catalog-mode was not specified. Run with --catalog-mode for offline estimated benchmark runs.');
     process.exit(1);
   } else {
     console.log('✅ ALL 20 UNIQUE RECIPES PASSED WITH ZERO ANOMALIES & ZERO CONTAMINATION!');
