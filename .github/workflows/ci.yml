@@ -73,9 +73,37 @@ jobs:
       - name: Build client production bundle
         run: npm run build
 
+  version:
+    name: Compute & Derive Version
+    needs: test
+    if: |
+      github.ref == 'refs/heads/master' ||
+      github.ref == 'refs/heads/main' ||
+      startsWith(github.ref, 'refs/tags/v') ||
+      github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.bump.outputs.version }}
+      tag: ${{ steps.bump.outputs.tag }}
+      bump: ${{ steps.bump.outputs.bump }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Compute Semantic Version
+        id: bump
+        run: node scripts/release/auto-version.js
+
   docker-build:
     name: Build & Publish Container Images
-    needs: test
+    needs: [test, version]
     if: |
       github.ref == 'refs/heads/master' ||
       github.ref == 'refs/heads/main' ||
@@ -105,8 +133,12 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/shopping-comparison-client:latest
+            ghcr.io/${{ github.repository_owner }}/shopping-comparison-client:v${{ needs.version.outputs.version || '1.2.0' }}
+            ghcr.io/${{ github.repository_owner }}/shopping-comparison-client:${{ needs.version.outputs.version || '1.2.0' }}
             ghcr.io/${{ github.repository_owner }}/shopping-comparison-client:${{ github.sha }}
             ghcr.io/${{ github.repository_owner }}/shopping-comparison/client:latest
+            ghcr.io/${{ github.repository_owner }}/shopping-comparison/client:v${{ needs.version.outputs.version || '1.2.0' }}
+            ghcr.io/${{ github.repository_owner }}/shopping-comparison/client:${{ needs.version.outputs.version || '1.2.0' }}
             ghcr.io/${{ github.repository_owner }}/shopping-comparison/client:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -119,11 +151,15 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/shopping-comparison-logic-api:latest
+            ghcr.io/${{ github.repository_owner }}/shopping-comparison-logic-api:v${{ needs.version.outputs.version || '1.2.0' }}
+            ghcr.io/${{ github.repository_owner }}/shopping-comparison-logic-api:${{ needs.version.outputs.version || '1.2.0' }}
             ghcr.io/${{ github.repository_owner }}/shopping-comparison-logic-api:${{ github.sha }}
             ghcr.io/${{ github.repository_owner }}/shopping-comparison/logic-api:latest
+            ghcr.io/${{ github.repository_owner }}/shopping-comparison/logic-api:v${{ needs.version.outputs.version || '1.2.0' }}
+            ghcr.io/${{ github.repository_owner }}/shopping-comparison/logic-api:${{ needs.version.outputs.version || '1.2.0' }}
             ghcr.io/${{ github.repository_owner }}/shopping-comparison/logic-api:${{ github.sha }}
           build-args: |
-            APP_VERSION=1.1.0
+            APP_VERSION=${{ needs.version.outputs.version || '1.2.0' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -135,8 +171,12 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/shopping-comparison-scraper-pod:latest
+            ghcr.io/${{ github.repository_owner }}/shopping-comparison-scraper-pod:v${{ needs.version.outputs.version || '1.2.0' }}
+            ghcr.io/${{ github.repository_owner }}/shopping-comparison-scraper-pod:${{ needs.version.outputs.version || '1.2.0' }}
             ghcr.io/${{ github.repository_owner }}/shopping-comparison-scraper-pod:${{ github.sha }}
             ghcr.io/${{ github.repository_owner }}/shopping-comparison/scraper-pod:latest
+            ghcr.io/${{ github.repository_owner }}/shopping-comparison/scraper-pod:v${{ needs.version.outputs.version || '1.2.0' }}
+            ghcr.io/${{ github.repository_owner }}/shopping-comparison/scraper-pod:${{ needs.version.outputs.version || '1.2.0' }}
             ghcr.io/${{ github.repository_owner }}/shopping-comparison/scraper-pod:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

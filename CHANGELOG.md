@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-08-28
+
+### Added
+- **ShoppingWise Rebrand & BSL 1.1 Licensing**: Rebranded application to ShoppingWise UK and adopted the Business Source License 1.1 (BSL 1.1) granting free personal/home use while reserving commercial and rebranding rights to the author.
+- **Automated Semantic Release & Container Versioning**: Pipeline automatically derives SemVer version from Conventional Commits, tags releases, and tags container images with release versions.
+- **Data-Driven Matching Rules Engine (`data/matching-rules.json`)**: Replaced hardcoded logic checks with an external JSON rules matrix for food species, packaging forms, and primary term bonuses.
+- **Full Multibuy & Loyalty Card Pricing Invariants**: Verified 4 deal types (Clubcard, Nectar, multibuy fixed, bundle discounts) across 5 major UK supermarkets in offline benchmark catalog and deal calculator engine.
+- **Per-Item 90-Day Price Series Tracking & Stats UI**: Added per-item daily price history (strictly omitting estimated catalog items), `/api/stats/item/:itemKey` series endpoint, and dedicated frontend Stats view.
+- **About & Container Build Version in Settings**: Settings modal now displays application release version, container image build tags, runtime status, and a live GitHub release update checker.
+- **Mermaid Architecture & User Workflow Docs**: Added comprehensive user journey and CI/CD workflow diagrams in `docs/user-journey.md` and `docs/workflows.md`.
+- **CI/CD Concurrency Optimization & Ephemeral OWASP Audits**: Fast ~35s verification builds, automatic cancellation of superseded commits, and zero-artifact security audits.
+
 ## [1.1.0] - 2026-08-27
 
 ### Added
