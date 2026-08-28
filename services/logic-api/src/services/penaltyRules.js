@@ -10,9 +10,27 @@ import { PackSelector } from './packSelector.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const rulesPath = path.resolve(__dirname, 'matching-rules.json');
+const candidatePaths = [
+  process.env.MATCHING_RULES_PATH,
+  path.resolve(__dirname, '../../../../data/matching-rules.json'),
+  path.resolve(__dirname, '../../data/matching-rules.json'),
+  path.resolve(process.cwd(), 'data/matching-rules.json'),
+  path.resolve(__dirname, 'matching-rules.json')
+].filter(Boolean);
 
-let rules = {
+let rawRules = null;
+for (const p of candidatePaths) {
+  if (fs.existsSync(p)) {
+    try {
+      rawRules = JSON.parse(fs.readFileSync(p, 'utf8'));
+      break;
+    } catch (e) {
+      console.warn('[PenaltyRules] Failed parsing matching-rules.json from', p, e.message);
+    }
+  }
+}
+
+export const rules = rawRules || {
   fishCuts: ['loin', 'loins', 'fillet', 'fillets', 'portion', 'portions', 'steak', 'steaks'],
   meatCuts: ['mince', 'minced', 'steak mince', 'breast', 'breasts', 'diced', 'chops'],
   speciesRules: [
@@ -32,17 +50,17 @@ let rules = {
   ],
   readyMealTerms: [
     'gravy', 'in gravy', '& gravy', 'and gravy', 'ready meal', 'meal for one', 'hotpot',
-    'lasagne', 'lasagna', 'cottage pie', 'shepherd', 'pasta bake', 'chilli con carne', 'bolognese ready', 'casserole', 'stew'
-  ]
+    'lasagne', 'lasagna', 'cottage pie', 'shepherd', 'pasta bake', 'chilli con carne', 'bolognese ready', 'casserole', 'stew',
+    'pet food', 'cat food', 'dog food', 'pie'
+  ],
+  unitApproximations: {
+    bunch: 5,
+    head: 1,
+    bulb: 1
+  }
 };
 
-if (fs.existsSync(rulesPath)) {
-  try {
-    rules = JSON.parse(fs.readFileSync(rulesPath, 'utf8'));
-  } catch (e) {
-    console.warn('[PenaltyRules] Failed parsing matching-rules.json, using defaults:', e.message);
-  }
-}
+const hasAny = (text, terms) => Array.isArray(terms) && terms.some((t) => text.indexOf(t) !== -1);
 
 export class PenaltyRules {
   /**
@@ -90,17 +108,18 @@ export class PenaltyRules {
     let effectiveTitle = titleLower;
 
     if (!isStrictCut) {
-      if (item.category === 'fish' && rules.fishCuts.some((cut) => titleLower.includes(cut))) {
+      if (item.category === 'fish' && rules.fishCuts.some((cut) => titleLower.indexOf(cut) !== -1)) {
         effectiveTitle += ' loin loins fillet fillets portion portions';
       }
-      if (item.category === 'meat' && rules.meatCuts.some((cut) => titleLower.includes(cut))) {
+      if (item.category === 'meat' && rules.meatCuts.some((cut) => titleLower.indexOf(cut) !== -1)) {
         effectiveTitle += ' mince minced steak breast fillets';
       }
     } else {
-      if (itemLower.includes('loin') && !titleLower.includes('loin')) score -= 50;
-      if (itemLower.includes('fillet') && !titleLower.includes('fillet')) score -= 50;
-      if (itemLower.includes('breast') && !titleLower.includes('breast')) score -= 50;
-      if (itemLower.includes('thigh') && !titleLower.includes('thigh')) score -= 50;
+      for (const cut of ['loin', 'fillet', 'breast', 'thigh']) {
+        if (itemLower.indexOf(cut) !== -1 && titleLower.indexOf(cut) === -1) {
+          score -= 50;
+        }
+      }
     }
 
     const effectiveAttributes = `${effectiveTitle} ${prod.fatPercentage !== undefined ? `${prod.fatPercentage} ${prod.fatPercentage}% lean fat` : ''} ${prod.isFrozen ? 'frozen' : 'fresh'} ${prod.isOrganic ? 'organic' : ''}`;
@@ -126,7 +145,7 @@ export class PenaltyRules {
     // 2. Brand Preference Match
     if (
       item.brandPreference &&
-      prod.brand.toLowerCase().includes(item.brandPreference.toLowerCase())
+      prod.brand.toLowerCase().indexOf(item.brandPreference.toLowerCase()) !== -1
     ) {
       score += 40;
     }
@@ -144,60 +163,31 @@ export class PenaltyRules {
     }
 
     // Supplements / Vitamins / Oil / Pet Food penalties
-    const isSupplementOrOil = rules.supplementTerms.some((t) => titleLower.includes(t));
-    const isExplicitlyRequestedSupplement =
-      itemLower.includes('oil') ||
-      itemLower.includes('vitamin') ||
-      itemLower.includes('supplement') ||
-      itemLower.includes('sauce');
+    const isSupplementOrOil = hasAny(titleLower, rules.supplementTerms);
+    const isExplicitlyRequestedSupplement = hasAny(itemLower, ['oil', 'vitamin', 'supplement', 'sauce']);
     if (isSupplementOrOil && !isExplicitlyRequestedSupplement) {
       score -= 150;
     }
 
     // Processed / Breaded / Fish Fingers penalties
-    const isProcessedOrBreaded = rules.processedBreadedTerms.some((t) => titleLower.includes(t));
-    const isExplicitlyBreaded =
-      itemLower.includes('finger') ||
-      itemLower.includes('breaded') ||
-      itemLower.includes('battered');
+    const isProcessedOrBreaded = hasAny(titleLower, rules.processedBreadedTerms);
+    const isExplicitlyBreaded = hasAny(itemLower, ['finger', 'breaded', 'battered']);
     if (isProcessedOrBreaded && !isExplicitlyBreaded) {
       score -= 80;
     }
 
     // Ready meal / Gravy penalties
-    const isReadyMealOrGravy = rules.readyMealTerms.some((t) => titleLower.includes(t)) ||
-      titleLower.includes('pet food') ||
-      titleLower.includes('cat food') ||
-      titleLower.includes('dog food') ||
-      titleLower.includes('pie');
-
-    const isExplicitlyRequestedReadyMeal =
-      itemLower.includes('gravy') ||
-      itemLower.includes('ready meal') ||
-      itemLower.includes('hotpot') ||
-      itemLower.includes('lasagne') ||
-      itemLower.includes('pie') ||
-      itemLower.includes('stew');
-
+    const isReadyMealOrGravy = hasAny(titleLower, rules.readyMealTerms);
+    const isExplicitlyRequestedReadyMeal = hasAny(itemLower, ['gravy', 'ready meal', 'hotpot', 'lasagne', 'pie', 'stew']);
     if (isReadyMealOrGravy && !isExplicitlyRequestedReadyMeal) {
       score -= 250;
     }
 
     // Specific breaded & butter exclusions
-    if (
-      !itemLower.includes('breaded') &&
-      (titleLower.includes('breaded') ||
-        titleLower.includes('battered') ||
-        titleLower.includes('crumbed'))
-    ) {
+    if (!/\bbreaded\b/i.test(itemLower) && /\b(?:breaded|battered|crumbed)\b/i.test(titleLower)) {
       score -= 35;
     }
-    if (
-      !itemLower.includes('butter') &&
-      (titleLower.includes('butter') ||
-        titleLower.includes('seasoned') ||
-        titleLower.includes('marinade'))
-    ) {
+    if (!/\bbutter\b/i.test(itemLower) && /\b(?:butter|seasoned|marinade)\b/i.test(titleLower)) {
       score -= 30;
     }
 
@@ -232,11 +222,12 @@ export class PenaltyRules {
     }
 
     // Fresh vs Frozen matching
-    const isFrozenRequested = itemLower.includes('frozen');
-    if (!isFrozenRequested && (prod.isFrozen || titleLower.includes('frozen'))) {
+    const isFrozenRequested = /\bfrozen\b/i.test(itemLower);
+    const isProdFrozen = prod.isFrozen || /\bfrozen\b/i.test(titleLower);
+    if (!isFrozenRequested && isProdFrozen) {
       score -= 5;
     }
-    if (isFrozenRequested && (prod.isFrozen || titleLower.includes('frozen'))) {
+    if (isFrozenRequested && isProdFrozen) {
       score += 30;
     }
 
@@ -266,3 +257,4 @@ export class PenaltyRules {
     return { score, packs, totalQty, totalPrice, weightDiffPct, dealApplied };
   }
 }
+
