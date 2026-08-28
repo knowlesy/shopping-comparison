@@ -1,108 +1,97 @@
 /**
- * AI Intent Helper & Rule-Based Matcher Evaluation Harness
+ * AI Intent Helper & Candidate Matcher Evaluation Harness
  */
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { IngredientParser } from '../services/logic-api/src/services/ingredientParser.js';
+import { AiDecisionReviewer } from '../services/logic-api/src/services/aiDecisionReviewer.js';
+import { FuzzyMatcher } from '../services/logic-api/src/services/fuzzyMatcher.js';
+import { KeywordExtractor } from '../services/logic-api/src/services/keywordExtractor.js';
+import { PenaltyRules } from '../services/logic-api/src/services/penaltyRules.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const REAL_52_LINE_LIST = `
-Chicken breast fillets 1.4 kg
-Beef mince 5% 1.9 kg
-Pork sausages 12-pack
-Salmon fillets 4 portions
-Cod loin 500 g
-Tinned tuna in spring water 4 x 160 g
-Tofu firm 400 g
-Eggs large free range 18
-Greek yogurt 0% fat 1 kg
-Whole milk 4 pints
-Cheddar cheese mature 400 g
-Butter salted 250 g
-Mozzarella 2 x 125 g
-Oat milk barista 2 L
-Broccoli 2 heads
-Carrots 1 kg
-Brown onions 1 kg
-Garlic 3 bulbs
-Baby spinach 250 g
-Red bell peppers 3
-Cucumber 1
-Avocados ripe 4-pack
-Mushrooms chestnut 400 g
-Baking potatoes 2.5 kg
-Sweet potatoes 1 kg
-Bananas 6
-Apples Pink Lady 6-pack
-Lemons 4
-Fresh blueberries 200 g
-Satsumas or easy peelers 600 g
-Basmati rice 1 kg
-Rolled porridge oats 1 kg
-Penne pasta 1 kg
-Tinned chopped tomatoes 4 x 400 g
-Tinned chickpeas in water 2 x 400 g
-Tinned black beans 2 x 400 g
-Red split lentils 500 g
-Olive oil extra virgin 750 ml
-Rapeseed oil 1 L
-Soy sauce reduced salt 150 ml
-Peanut butter crunchy 1 kg
-Wholewheat sliced bread 800 g
-Sourdough loaf 1
-Tortilla wraps 8-pack
-Ground cumin 40 g
-Smoked paprika 45 g
-Dried oregano 25 g
-Vegetable stock cubes 8-pack
-Dark chocolate 70% 100 g
-Honey clear 340 g
-Walnuts 200 g
-Frozen garden peas 1 kg
-`.trim();
-
 async function runAiEval() {
+  const isRulesMode = process.argv.includes('--rules');
+
   console.log('===============================================================================');
-  console.log('   AI INTENT HELPER & RULE-BASED MATCHER EVALUATION HARNESS                     ');
+  console.log(`   AI INTENT & MATCHING EVALUATION HARNESS (${isRulesMode ? 'OFFLINE --RULES MODE' : 'LIVE AI REVIEWER MODE'})`);
   console.log('===============================================================================\n');
 
-  const lines = REAL_52_LINE_LIST.split('\n').map((l) => l.trim()).filter(Boolean);
-  const parsed = IngredientParser.parseList(REAL_52_LINE_LIST);
+  const fixturesPath = path.resolve(__dirname, '../tests/fixtures/ai-matching-fixtures.json');
+  if (!fs.existsSync(fixturesPath)) {
+    throw new Error(`Fixtures file not found at: ${fixturesPath}`);
+  }
 
-  console.log(`Evaluating ${lines.length} raw shopping entries against rule-based parser & intent engine...`);
+  const fixtures = JSON.parse(fs.readFileSync(fixturesPath, 'utf8'));
+  console.log(`Loaded ${fixtures.length} ambiguous test fixtures from owner's real-world shopping list.\n`);
 
-  let validCount = 0;
+  let correctPicks = 0;
   const results = [];
 
-  for (const item of parsed) {
-    const hasValidName = Boolean(item.name && item.name.length > 0);
-    const hasValidCategory = Boolean(item.category && item.category !== 'unknown');
-    const hasValidQuantity = item.targetQuantity > 0;
-    const isSuccess = hasValidName && hasValidCategory && hasValidQuantity;
+  for (const fixture of fixtures) {
+    const { id, query, item, candidates, expectedPick, expected } = fixture;
+    const targetExpected = expectedPick || expected;
+    let chosenId = null;
+    let reasoning = '';
 
-    if (isSuccess) validCount++;
+    if (isRulesMode) {
+      // Score fixture candidate set directly using deterministic PenaltyRules
+      const keywords = KeywordExtractor.extractKeywords(item);
+      let best = null;
+      let highestScore = -Infinity;
+      for (const prod of candidates) {
+        const { score } = PenaltyRules.scoreCandidate(prod, item, keywords, { brandTierPriority: 'standard' });
+        if (score > highestScore) {
+          highestScore = score;
+          best = prod;
+        }
+      }
+      chosenId = best?.id || null;
+      reasoning = `Matched via local rules score: ${highestScore}`;
+    } else {
+      // Evaluate candidates using AiDecisionReviewer (or fallback)
+      const scoredCandidates = candidates.map((prod) => ({
+        product: prod,
+        score: 50,
+        packs: 1,
+        totalPrice: prod.price
+      }));
+
+      const reviewed = await AiDecisionReviewer.reviewCandidates(
+        query,
+        item,
+        scoredCandidates,
+        { aiMatchingEnabled: true }
+      );
+      chosenId = reviewed?.product?.id || reviewed?.id || null;
+      reasoning = reviewed?.aiReasoning || 'AI decision reviewer';
+    }
+
+    const isMatch = chosenId === targetExpected;
+    if (isMatch) correctPicks++;
+
+    console.log(`Fixture [${id}] "${query}":`);
+    console.log(`  - Expected Pick: ${targetExpected}`);
+    console.log(`  - Result Pick:   ${chosenId}`);
+    console.log(`  - Status:        ${isMatch ? '✅ PASS' : '❌ FAIL'}`);
+    console.log(`  - Reasoning:     ${reasoning}\n`);
 
     results.push({
-      input: item.name,
-      baseItem: item.baseItem,
-      targetQuantity: item.targetQuantity,
-      unit: item.unit,
-      category: item.category,
-      fatPercentage: item.fatPercentage,
-      isFreeRange: item.isFreeRange,
-      status: isSuccess ? 'pass' : 'fail'
+      id,
+      query,
+      expected: targetExpected,
+      chosen: chosenId,
+      status: isMatch ? 'pass' : 'fail',
+      reasoning
     });
   }
 
-  const accuracy = Number(((validCount / parsed.length) * 100).toFixed(1));
-
-  console.log(`\nResults Summary:`);
-  console.log(`- Raw Input Lines: ${lines.length}`);
-  console.log(`- Parsed Output Items: ${parsed.length}`);
-  console.log(`- Valid Intent Extractions: ${validCount}/${parsed.length} (${accuracy}% accuracy)`);
+  const accuracy = Number(((correctPicks / fixtures.length) * 100).toFixed(1));
+  console.log('-------------------------------------------------------------------------------');
+  console.log(`Final Accuracy: ${correctPicks}/${fixtures.length} (${accuracy}%)`);
+  console.log('-------------------------------------------------------------------------------\n');
 
   const reportDir = path.resolve(__dirname, '../test-results');
   if (!fs.existsSync(reportDir)) {
@@ -110,17 +99,22 @@ async function runAiEval() {
   }
 
   const reportPath = path.join(reportDir, 'ai-eval-report.json');
-  const report = {
-    timestamp: new Date().toISOString(),
-    totalInputs: lines.length,
-    totalParsed: parsed.length,
-    validIntentCount: validCount,
-    accuracyPercentage: accuracy,
-    results
-  };
-
-  fs.writeFileSync(reportPath, JSON.stringify(report, null, 2), 'utf-8');
-  console.log(`\n✅ Saved evaluation report to: ${reportPath}\n`);
+  fs.writeFileSync(
+    reportPath,
+    JSON.stringify(
+      {
+        timestamp: new Date().toISOString(),
+        mode: isRulesMode ? 'rules' : 'ai',
+        totalFixtures: fixtures.length,
+        correctPicks,
+        accuracy,
+        results
+      },
+      null,
+      2
+    ),
+    'utf8'
+  );
 }
 
 runAiEval().catch((err) => {

@@ -21,14 +21,38 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [cacheStats, setCacheStats] = useState<CacheStats | null>(null);
   const [clearingCache, setClearingCache] = useState(false);
   const [cacheClearedSuccess, setCacheClearedSuccess] = useState(false);
+  const [testingAi, setTestingAi] = useState(false);
+  const [aiTestResult, setAiTestResult] = useState<{ success: boolean; passedCount: number; totalCount: number; error?: string } | null>(null);
 
   useEffect(() => {
     setLocalPrefs(preferences);
     if (isOpen) {
       api.getCacheStats().then(setCacheStats).catch(() => {});
       setCacheClearedSuccess(false);
+      setAiTestResult(null);
     }
   }, [preferences, isOpen]);
+
+  const handleTestAi = async () => {
+    try {
+      setTestingAi(true);
+      setAiTestResult(null);
+      if (localPrefs.geminiApiKey) {
+        await onSavePreferences({ geminiApiKey: localPrefs.geminiApiKey, aiMatchingEnabled: true });
+      }
+      const res = await fetch('/api/settings/ai-test', { method: 'POST' });
+      const data = await res.json();
+      if (!res.ok) {
+        setAiTestResult({ success: false, passedCount: 0, totalCount: 0, error: data.error || 'AI test failed' });
+      } else {
+        setAiTestResult({ success: data.success, passedCount: data.passedCount, totalCount: data.totalCount });
+      }
+    } catch (err: any) {
+      setAiTestResult({ success: false, passedCount: 0, totalCount: 0, error: err.message });
+    } finally {
+      setTestingAi(false);
+    }
+  };
 
   const handleNukeCache = async () => {
     try {
@@ -480,6 +504,25 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <span className="text-[10px] text-slate-400 block">
                     Model: <strong>gemini-2.5-flash</strong> • Write-only (never exposed to browser) • Cached for 72h to minimize API tokens.
                   </span>
+
+                  <div className="pt-2 flex flex-wrap items-center justify-between gap-2 border-t border-purple-200/50 dark:border-purple-800/40">
+                    <button
+                      type="button"
+                      onClick={handleTestAi}
+                      disabled={testingAi}
+                      className="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold shadow-xs transition flex items-center space-x-1.5 disabled:opacity-50 cursor-pointer"
+                    >
+                      <Sparkles className={`w-3.5 h-3.5 ${testingAi ? 'animate-spin' : ''}`} />
+                      <span>{testingAi ? 'Testing Live AI...' : 'Test AI matching'}</span>
+                    </button>
+                    {aiTestResult && (
+                      <span className={`text-[11px] font-bold ${aiTestResult.success ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+                        {aiTestResult.success
+                          ? `✅ Passed (${aiTestResult.passedCount}/${aiTestResult.totalCount} fixtures)`
+                          : `❌ ${aiTestResult.error || 'Failed'}`}
+                      </span>
+                    )}
+                  </div>
                 </div>
               )}
             </div>

@@ -1,0 +1,255 @@
+[
+  {
+    "id": "fix-1",
+    "query": "Beef mince 5% 1.9 kg",
+    "item": {
+      "name": "Beef mince 5%",
+      "baseItem": "Beef mince",
+      "targetQuantity": 1.9,
+      "unit": "kg",
+      "fatPercentage": 5,
+      "category": "meat"
+    },
+    "candidates": [
+      {
+        "id": "tesco-beef-5pct-500g",
+        "supermarket": "tesco",
+        "title": "Tesco Lean Beef Steak Mince 5% Fat 500g",
+        "price": 3.49,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "fatPercentage": 5,
+        "category": "meat"
+      },
+      {
+        "id": "tesco-beef-20pct-500g",
+        "supermarket": "tesco",
+        "title": "Tesco Beef Mince 20% Fat 500g",
+        "price": 2.49,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "fatPercentage": 20,
+        "category": "meat"
+      },
+      {
+        "id": "tesco-baby-spinach-250g",
+        "supermarket": "tesco",
+        "title": "Tesco Baby Spinach 250g",
+        "price": 1.10,
+        "packageSize": 250,
+        "packageUnit": "g",
+        "category": "produce"
+      }
+    ],
+    "expectedPick": "tesco-beef-5pct-500g",
+    "expected": "tesco-beef-5pct-500g",
+    "reasoning": "Should pick 5% fat lean beef mince matching requested cut and fat percentage."
+  },
+  {
+    "id": "fix-2",
+    "query": "Little gem lettuce 2-pack",
+    "item": {
+      "name": "Little gem lettuce",
+      "baseItem": "Little gem lettuce",
+      "targetQuantity": 2,
+      "unit": "item",
+      "category": "produce"
+    },
+    "candidates": [
+      {
+        "id": "sainsburys-little-gem-2pk",
+        "supermarket": "sainsburys",
+        "title": "Sainsbury's Little Gem Lettuce 2 Pack",
+        "price": 0.95,
+        "packageSize": 2,
+        "packageUnit": "pack",
+        "category": "produce"
+      },
+      {
+        "id": "sainsburys-iceberg-lettuce",
+        "supermarket": "sainsburys",
+        "title": "Sainsbury's Crisp Iceberg Lettuce Each",
+        "price": 0.80,
+        "packageSize": 1,
+        "packageUnit": "item",
+        "category": "produce"
+      },
+      {
+        "id": "sainsburys-tomato-puree-200g",
+        "supermarket": "sainsburys",
+        "title": "Sainsbury's Tomato Puree 200g",
+        "price": 0.65,
+        "packageSize": 200,
+        "packageUnit": "g",
+        "category": "store-cupboard"
+      }
+    ],
+    "expectedPick": "sainsburys-little-gem-2pk",
+    "expected": "sainsburys-little-gem-2pk",
+    "reasoning": "Should pick Little Gem lettuce rather than Iceberg or tomato puree."
+  },
+  {
+    "id": "fix-3",
+    "query": "Green/Puy lentils 500 g",
+    "item": {
+      "name": "Green/Puy lentils",
+      "baseItem": "Green/Puy lentils",
+      "targetQuantity": 500,
+      "unit": "g",
+      "category": "store-cupboard"
+    },
+    "candidates": [
+      {
+        "id": "asda-green-lentils-500g",
+        "supermarket": "asda",
+        "title": "ASDA Green Lentils 500g",
+        "price": 1.20,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "category": "store-cupboard"
+      },
+      {
+        "id": "asda-fusilli-500g",
+        "supermarket": "asda",
+        "title": "ASDA Wholewheat Fusilli Pasta 500g",
+        "price": 0.85,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "category": "pasta-rice"
+      },
+      {
+        "id": "asda-red-onions-1kg",
+        "supermarket": "asda",
+        "title": "ASDA Red Onions 1kg",
+        "price": 1.00,
+        "packageSize": 1000,
+        "packageUnit": "g",
+        "category": "produce"
+      }
+    ],
+    "expectedPick": "asda-green-lentils-500g",
+    "expected": "asda-green-lentils-500g",
+    "reasoning": "Should match green lentils rather than pasta or onions."
+  },
+  {
+    "id": "fix-4",
+    "query": "Smooth peanut butter 300 g",
+    "item": {
+      "name": "Smooth peanut butter",
+      "baseItem": "Smooth peanut butter",
+      "targetQuantity": 300,
+      "unit": "g",
+      "category": "store-cupboard"
+    },
+    "candidates": [
+      {
+        "id": "tesco-smooth-peanut-butter-300g",
+        "supermarket": "tesco",
+        "title": "Tesco 100% Pure Smooth Peanut Butter 300g",
+        "price": 1.65,
+        "packageSize": 300,
+        "packageUnit": "g",
+        "category": "store-cupboard"
+      },
+      {
+        "id": "tesco-eggs-15pk",
+        "supermarket": "tesco",
+        "title": "Tesco Free Range Eggs 15 Pack",
+        "price": 2.85,
+        "packageSize": 15,
+        "packageUnit": "item",
+        "category": "dairy-eggs"
+      },
+      {
+        "id": "tesco-butter-blocks-250g",
+        "supermarket": "tesco",
+        "title": "Tesco British Salted Butter 250g",
+        "price": 1.90,
+        "packageSize": 250,
+        "packageUnit": "g",
+        "category": "dairy-eggs"
+      }
+    ],
+    "expectedPick": "tesco-smooth-peanut-butter-300g",
+    "expected": "tesco-smooth-peanut-butter-300g",
+    "reasoning": "Should select peanut butter and never match eggs or dairy butter."
+  },
+  {
+    "id": "fix-5",
+    "query": "Butter beans in water 2 x 400 g",
+    "item": {
+      "name": "Butter beans in water",
+      "baseItem": "Butter beans in water",
+      "targetQuantity": 800,
+      "unit": "g",
+      "category": "store-cupboard"
+    },
+    "candidates": [
+      {
+        "id": "morrisons-butter-beans-400g",
+        "supermarket": "morrisons",
+        "title": "Morrisons Butter Beans in Water 400g",
+        "price": 0.79,
+        "packageSize": 400,
+        "packageUnit": "g",
+        "category": "store-cupboard"
+      },
+      {
+        "id": "morrisons-semi-skimmed-milk-1pt",
+        "supermarket": "morrisons",
+        "title": "Morrisons British Semi Skimmed Milk 1 Pint",
+        "price": 0.90,
+        "packageSize": 568,
+        "packageUnit": "ml",
+        "category": "dairy-eggs"
+      }
+    ],
+    "expectedPick": "morrisons-butter-beans-400g",
+    "expected": "morrisons-butter-beans-400g",
+    "reasoning": "Should select tinned butter beans in water and never misclassify into dairy milk."
+  },
+  {
+    "id": "fix-6",
+    "query": "Plums or pears 600 g",
+    "item": {
+      "name": "Plums",
+      "baseItem": "Plums or pears",
+      "alternateTerms": ["pears"],
+      "targetQuantity": 600,
+      "unit": "g",
+      "category": "produce"
+    },
+    "candidates": [
+      {
+        "id": "iceland-conference-pears-600g",
+        "supermarket": "iceland",
+        "title": "Iceland Conference Pears 600g",
+        "price": 1.35,
+        "packageSize": 600,
+        "packageUnit": "g",
+        "category": "produce"
+      },
+      {
+        "id": "iceland-porridge-oats-1kg",
+        "supermarket": "iceland",
+        "title": "Iceland Rolled Porridge Oats 1kg",
+        "price": 1.10,
+        "packageSize": 1000,
+        "packageUnit": "g",
+        "category": "store-cupboard"
+      },
+      {
+        "id": "iceland-baby-plum-tomatoes-250g",
+        "supermarket": "iceland",
+        "title": "Iceland Baby Plum Tomatoes 250g",
+        "price": 1.00,
+        "packageSize": 250,
+        "packageUnit": "g",
+        "category": "produce"
+      }
+    ],
+    "expectedPick": "iceland-conference-pears-600g",
+    "expected": "iceland-conference-pears-600g",
+    "reasoning": "Should select Conference Pears via alternateTerms and avoid oats or plum tomatoes."
+  }
+]
