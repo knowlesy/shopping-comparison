@@ -24,8 +24,10 @@ const preferences = {
 };
 
 async function runRecipesVerification() {
+  const isLiveMode = process.argv.includes('--live-mode');
   console.log('===============================================================================');
   console.log('   20 UNIQUE RECIPE LISTS VERIFICATION & CONTAMINATION AUDIT SUITE             ');
+  console.log(`   [Test Mode: ${isLiveMode ? 'Live Aggregator Mode' : 'Catalog Benchmark Mode (Offline)'}]`);
   console.log('===============================================================================\n');
 
   const report = {

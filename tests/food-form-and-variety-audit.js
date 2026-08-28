@@ -61,8 +61,10 @@ const NEGATIVE_RULES = CONTAMINATION_RULES.map((r) => ({
 }));
 
 async function runExpandedTestSuite() {
+  const isLiveMode = process.argv.includes('--live-mode');
   console.log('===============================================================================');
   console.log('   EXPANDED GROCERY SUITE: FOOD FORM SANITY, CATALOG VARIETY & SWAP AUDIT       ');
+  console.log(`   [Test Mode: ${isLiveMode ? 'Live Aggregator Mode' : 'Catalog Benchmark Mode (Offline)'}]`);
   console.log('===============================================================================\n');
 
   const results = {

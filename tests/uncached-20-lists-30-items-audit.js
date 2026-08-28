@@ -63,8 +63,10 @@ const NEGATIVE_RULES = CONTAMINATION_RULES.map((r) => ({
 }));
 
 async function runUncachedAudit() {
+  const isLiveMode = process.argv.includes('--live-mode');
   console.log('===============================================================================');
   console.log('   20 UNCACHED FULL TESTS: 30-ITEM INGREDIENT LISTS ACROSS 7 SUPERMARKETS      ');
+  console.log(`   [Test Mode: ${isLiveMode ? 'Live Aggregator Mode' : 'Catalog Benchmark Mode (Offline)'}]`);
   console.log('===============================================================================\n');
 
   const report = {
