@@ -199,8 +199,12 @@ export class PenaltyRules {
     }
 
     // 4. Brand Tier Priority
-    if (preferences.brandTierPriority && prod.tier === preferences.brandTierPriority) {
-      score += 25;
+    if (preferences.brandTierPriority) {
+      if (prod.tier === preferences.brandTierPriority) {
+        score += 35;
+      } else {
+        score -= 20;
+      }
     } else if (prod.tier === 'standard' || prod.tier === 'value') {
       score += 25;
     } else if (prod.tier === 'premium') {

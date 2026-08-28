@@ -160,4 +160,186 @@ describe('FuzzyMatcher', () => {
     assert.equal(match.weightShortfall.supplied, 1.5);
     assert.equal(match.weightShortfall.unit, 'kg');
   });
+
+  describe('Preference Options Matrix', () => {
+    const candidates = [
+      {
+        id: 'beef-500g-value',
+        supermarket: 'asda',
+        title: 'ASDA Just Essentials Beef Mince 500g',
+        brand: 'ASDA',
+        tier: 'value',
+        category: 'meat',
+        packageSize: 500,
+        packageUnit: 'g',
+        price: 2.50,
+        unitPrice: 5.00,
+        unitPriceMeasure: '£/kg',
+        fatPercentage: 20,
+        inStock: true
+      },
+      {
+        id: 'beef-500g-std',
+        supermarket: 'asda',
+        title: 'ASDA British 5% Lean Beef Steak Mince 500g',
+        brand: 'ASDA',
+        tier: 'standard',
+        category: 'meat',
+        packageSize: 500,
+        packageUnit: 'g',
+        price: 3.50,
+        unitPrice: 7.00,
+        unitPriceMeasure: '£/kg',
+        fatPercentage: 5,
+        inStock: true
+      },
+      {
+        id: 'beef-500g-prem',
+        supermarket: 'asda',
+        title: 'ASDA Extra Special Aberdeen Angus Beef Mince 500g',
+        brand: 'ASDA',
+        tier: 'premium',
+        category: 'meat',
+        packageSize: 500,
+        packageUnit: 'g',
+        price: 4.80,
+        unitPrice: 9.60,
+        unitPriceMeasure: '£/kg',
+        fatPercentage: 5,
+        inStock: true
+      }
+    ];
+
+    it('1. Pack Sizing Policy: closest vs cover', () => {
+      const item = IngredientParser.parseItem('1.4kg beef mince');
+      const prod = candidates[1]; // 500g pack
+
+      // Closest: 1400g / 500g = 2.8 -> closest is 3 packs (1500g)
+      const closest = FuzzyMatcher.calculatePacks(prod, item, { packSizingPolicy: 'closest' });
+      assert.equal(closest.packs, 3);
+      assert.equal(closest.totalQty, 1500);
+
+      // Cover: ensures at least 1400g is fulfilled -> 3 packs (1500g)
+      const cover = FuzzyMatcher.calculatePacks(prod, item, { packSizingPolicy: 'cover' });
+      assert.equal(cover.packs, 3);
+      assert.equal(cover.totalQty, 1500);
+    });
+
+    it('2. Cut Matching Strategy: best_value vs strict_cut', () => {
+      const fishItem = IngredientParser.parseItem('500g cod loin');
+      const filletProd = {
+        id: 'cod-fillet',
+        supermarket: 'tesco',
+        title: 'Tesco Skinless Cod Fillets 500g',
+        brand: 'Tesco',
+        tier: 'standard',
+        category: 'fish',
+        packageSize: 500,
+        packageUnit: 'g',
+        price: 4.50,
+        unitPrice: 9.00,
+        unitPriceMeasure: '£/kg',
+        inStock: true
+      };
+
+      // In best_value (equivalent cuts), cod fillets compete freely for loin request
+      const bestValueScore = FuzzyMatcher.scoreCandidate(
+        filletProd,
+        fishItem,
+        ['cod', 'loin'],
+        { cutMatchingStrategy: 'best_value' }
+      );
+      assert.ok(bestValueScore.score > 25);
+
+      // In strict_cut, missing requested cut gets penalized
+      const strictScore = FuzzyMatcher.scoreCandidate(
+        filletProd,
+        fishItem,
+        ['cod', 'loin'],
+        { cutMatchingStrategy: 'strict_cut' }
+      );
+      assert.ok(strictScore.score < bestValueScore.score);
+    });
+
+    it('3. Brand Tier Priority: value vs standard vs premium', () => {
+      const item = IngredientParser.parseItem('500g beef mince');
+      const keywords = ['beef', 'mince'];
+
+      const scoreValueWhenValuePreferred = FuzzyMatcher.scoreCandidate(
+        candidates[0],
+        item,
+        keywords,
+        { brandTierPriority: 'value' }
+      );
+      const scoreStdWhenValuePreferred = FuzzyMatcher.scoreCandidate(
+        candidates[1],
+        item,
+        keywords,
+        { brandTierPriority: 'value' }
+      );
+      assert.ok(scoreValueWhenValuePreferred.score > scoreStdWhenValuePreferred.score);
+
+      const scoreStdWhenStdPreferred = FuzzyMatcher.scoreCandidate(
+        candidates[1],
+        item,
+        keywords,
+        { brandTierPriority: 'standard' }
+      );
+      const scoreValueWhenStdPreferred = FuzzyMatcher.scoreCandidate(
+        candidates[0],
+        item,
+        keywords,
+        { brandTierPriority: 'standard' }
+      );
+      assert.ok(scoreStdWhenStdPreferred.score > scoreValueWhenStdPreferred.score);
+
+      const scorePremWhenPremPreferred = FuzzyMatcher.scoreCandidate(
+        candidates[2],
+        item,
+        keywords,
+        { brandTierPriority: 'premium' }
+      );
+      const scoreStdWhenPremPreferred = FuzzyMatcher.scoreCandidate(
+        candidates[1],
+        item,
+        keywords,
+        { brandTierPriority: 'premium' }
+      );
+      assert.ok(scorePremWhenPremPreferred.score > scoreStdWhenPremPreferred.score);
+    });
+
+    it('4. Deals Toggle: includeDeals true vs false', () => {
+      const dealProd = {
+        id: 'tins-deal',
+        supermarket: 'asda',
+        title: 'ASDA Chopped Tomatoes in Juice 400g',
+        brand: 'ASDA',
+        tier: 'standard',
+        category: 'pantry',
+        packageSize: 400,
+        packageUnit: 'g',
+        price: 0.80,
+        unitPrice: 2.00,
+        unitPriceMeasure: '£/kg',
+        deal: {
+          type: 'multibuy_fixed',
+          bundleQuantity: 3,
+          bundlePrice: 2.00,
+          badge: '3 for £2'
+        },
+        inStock: true
+      };
+
+      const item = IngredientParser.parseItem('3 x 400g chopped tomatoes');
+
+      const withDeals = FuzzyMatcher.calculatePacks(dealProd, item, { includeDeals: true });
+      assert.equal(withDeals.totalPrice, 2.00);
+      assert.ok(withDeals.dealApplied);
+      assert.equal(withDeals.dealApplied.savings, 0.40);
+
+      const withoutDeals = FuzzyMatcher.calculatePacks(dealProd, item, { includeDeals: false });
+      assert.equal(withoutDeals.totalPrice, 2.40); // 3 * £0.80
+      assert.equal(withoutDeals.dealApplied, undefined);
+    });
+  });
 });
