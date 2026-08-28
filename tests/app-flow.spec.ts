@@ -66,18 +66,21 @@ test.describe('TrolleyWise UK Web App End-to-End Verification', () => {
     await page.waitForTimeout(500);
 
     // Verify Swap Modal is open
+    const swapModal = page.locator('[data-testid="item-swap-modal"]');
+    await expect(swapModal).toBeVisible();
     const swapModalTitle = page.locator('h3:has-text("Choose replacement for")');
     await expect(swapModalTitle).toBeVisible();
 
-    // Pick an alternative or close
-    const chooseBtn = page.locator('button:has-text("Choose")').first();
+    // Pick an alternative or close inside the modal
+    const chooseBtn = swapModal.locator('button:has-text("Choose"), button:has-text("Update"), [data-testid="modal-choose-btn"]').first();
     if (await chooseBtn.isVisible()) {
       await chooseBtn.click();
       await page.waitForTimeout(300);
     } else {
-      const closeBtn = page.locator('button:has-text("Close")');
+      const closeBtn = swapModal.locator('button:has-text("Close"), [data-testid="modal-close-btn"]').first();
       await closeBtn.click();
     }
+    await expect(swapModal).not.toBeVisible();
 
     // 10. Test Save to Archive
     const saveArchiveBtn = page.locator('button:has-text("Lock In Weekly Shop"), button:has-text("Save Archive")').first();

@@ -188,7 +188,7 @@ export const ItemSwapModal: React.FC<ItemSwapModalProps> = ({
   const filterChips = getFilterChips(item);
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div data-testid="item-swap-modal" className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-2xl w-full border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
         {/* Header */}
         <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
@@ -438,6 +438,7 @@ export const ItemSwapModal: React.FC<ItemSwapModalProps> = ({
                     </div>
 
                     <button
+                      data-testid="modal-choose-btn"
                       onClick={() => {
                         onSelectAlternative(store, item, prod, packs);
                         onClose();
