@@ -1,6 +1,13 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { DealCalculator } from './dealCalculator.js';
+import { PackSelector } from './packSelector.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 describe('DealCalculator Strict Multibuy & Promotion Engine', () => {
   describe('1. Multibuy Fixed Price (e.g. "3 for £2" @ £0.80 single)', () => {
@@ -150,6 +157,80 @@ describe('DealCalculator Strict Multibuy & Promotion Engine', () => {
       assert.equal(result.savings, 2.0);
       assert.equal(result.effectiveUnitPrice, 1.5);
       assert.equal(result.isDealApplied, true);
+    });
+  });
+
+  describe('5. Real Promo Strings Corpus from deal-strings.json', () => {
+    const corpusPath = path.resolve(__dirname, '../../../../tests/fixtures/deal-strings.json');
+    const corpus = JSON.parse(fs.readFileSync(corpusPath, 'utf8'));
+
+    it('should correctly process all valid and garbage promo strings in corpus', () => {
+      for (const entry of corpus) {
+        const parsed = DealCalculator.parseDeal(entry.rawText);
+        if (entry.expectedType) {
+          assert.ok(parsed, `Valid string "${entry.rawText}" must produce parsed deal object`);
+          assert.equal(parsed.type, entry.expectedType);
+        }
+
+        for (const tc of entry.testCases || []) {
+          const res = DealCalculator.calculateDealPrice(tc.unitPrice, tc.qty, entry.rawText);
+          assert.equal(
+            res.totalPrice,
+            tc.expectedTotal,
+            `deal="${entry.rawText}" price=${tc.unitPrice} qty=${tc.qty} totalPrice expected ${tc.expectedTotal}, got ${res.totalPrice}`
+          );
+          assert.equal(
+            res.isDealApplied,
+            tc.dealApplied,
+            `deal="${entry.rawText}" qty=${tc.qty} isDealApplied expected ${tc.dealApplied}, got ${res.isDealApplied}`
+          );
+        }
+      }
+    });
+  });
+
+  describe('6. Deal Provenance & Leak Isolation (Own Deal Invariant)', () => {
+    it('should assert applied deal belongs strictly to matched product without candidate deal leak', () => {
+      const candidateWithDeal = {
+        id: 'tesco-soup-deal',
+        supermarket: 'tesco',
+        title: 'Tesco Tomato Soup 400g',
+        price: 1.00,
+        packageSize: 400,
+        packageUnit: 'g',
+        category: 'store-cupboard',
+        deal: { rawText: '3 for £2', type: 'multibuy_fixed', bundleQuantity: 3, bundlePrice: 2.00 }
+      };
+
+      const candidateNoDeal = {
+        id: 'tesco-soup-plain',
+        supermarket: 'tesco',
+        title: 'Tesco Vegetable Soup 400g',
+        price: 0.90,
+        packageSize: 400,
+        packageUnit: 'g',
+        category: 'store-cupboard'
+      };
+
+      // Item specifically targets vegetable soup -> candidateNoDeal wins
+      const vegItem = { name: 'vegetable soup 400g', baseItem: 'vegetable soup', targetQuantity: 1200, unit: 'g' };
+      const vegMatch = PackSelector.calculatePacks(candidateNoDeal, vegItem, { includeDeals: true });
+
+      // Invariant: chosen candidate has no deal, so no deal must leak from candidateWithDeal
+      assert.equal(Boolean(vegMatch.dealApplied), false, 'Un-dealed candidate must never leak deal from another candidate');
+      assert.equal(vegMatch.totalPrice, 2.70, 'Must charge 3 x 0.90 = 2.70 without deal leak');
+
+      // Item targets tomato soup -> candidateWithDeal wins and applies its own deal
+      const tomatoItem = { name: 'tomato soup 400g', baseItem: 'tomato soup', targetQuantity: 1200, unit: 'g' };
+      const tomatoMatch = PackSelector.calculatePacks(candidateWithDeal, tomatoItem, { includeDeals: true });
+      assert.ok(tomatoMatch.dealApplied, 'Candidate with deal must apply its own deal when quantity threshold met');
+      assert.equal(tomatoMatch.totalPrice, 2.00, '3 x 1.00 with 3 for £2 deal must equal 2.00');
+
+      // Below threshold check: qty 1 of tomato soup shows raw price
+      const singleItem = { name: 'tomato soup 400g', baseItem: 'tomato soup', targetQuantity: 400, unit: 'g' };
+      const singleMatch = PackSelector.calculatePacks(candidateWithDeal, singleItem, { includeDeals: true });
+      assert.equal(Boolean(singleMatch.dealApplied), false, 'Under-quantity purchase must have dealApplied: null/falsey');
+      assert.equal(singleMatch.totalPrice, 1.00, 'Single pack must be raw price 1.00');
     });
   });
 });

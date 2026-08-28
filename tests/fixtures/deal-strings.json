@@ -1,0 +1,93 @@
+[
+  {
+    "rawText": "3 for £2",
+    "expectedType": "multibuy_fixed",
+    "isValid": true,
+    "minQuantity": 3,
+    "bundlePrice": 2.00,
+    "testCases": [
+      { "unitPrice": 0.80, "qty": 1, "expectedTotal": 0.80, "dealApplied": false },
+      { "unitPrice": 0.80, "qty": 2, "expectedTotal": 1.60, "dealApplied": false },
+      { "unitPrice": 0.80, "qty": 3, "expectedTotal": 2.00, "dealApplied": true, "savings": 0.40 },
+      { "unitPrice": 0.80, "qty": 4, "expectedTotal": 2.80, "dealApplied": true, "savings": 0.40 },
+      { "unitPrice": 0.80, "qty": 6, "expectedTotal": 4.00, "dealApplied": true, "savings": 0.80 }
+    ]
+  },
+  {
+    "rawText": "Any 2 for £5",
+    "expectedType": "multibuy_fixed",
+    "isValid": true,
+    "minQuantity": 2,
+    "bundlePrice": 5.00,
+    "testCases": [
+      { "unitPrice": 3.00, "qty": 1, "expectedTotal": 3.00, "dealApplied": false },
+      { "unitPrice": 3.00, "qty": 2, "expectedTotal": 5.00, "dealApplied": true, "savings": 1.00 }
+    ]
+  },
+  {
+    "rawText": "Buy 2 Get 1 Free",
+    "expectedType": "buy_x_get_y_free",
+    "isValid": true,
+    "buyQuantity": 2,
+    "freeQuantity": 1,
+    "testCases": [
+      { "unitPrice": 1.50, "qty": 1, "expectedTotal": 1.50, "dealApplied": false },
+      { "unitPrice": 1.50, "qty": 2, "expectedTotal": 3.00, "dealApplied": false },
+      { "unitPrice": 1.50, "qty": 3, "expectedTotal": 3.00, "dealApplied": true, "savings": 1.50 }
+    ]
+  },
+  {
+    "rawText": "Save £1 when you buy 2",
+    "expectedType": "bundle_discount",
+    "isValid": true,
+    "minQuantity": 2,
+    "discountAmount": 1.00,
+    "testCases": [
+      { "unitPrice": 2.50, "qty": 1, "expectedTotal": 2.50, "dealApplied": false },
+      { "unitPrice": 2.50, "qty": 2, "expectedTotal": 4.00, "dealApplied": true, "savings": 1.00 }
+    ]
+  },
+  {
+    "rawText": "£1.50 Clubcard Price",
+    "expectedType": "loyalty_price",
+    "isValid": true,
+    "loyaltyPrice": 1.50,
+    "testCases": [
+      { "unitPrice": 2.00, "qty": 1, "expectedTotal": 1.50, "dealApplied": true, "savings": 0.50 },
+      { "unitPrice": 2.00, "qty": 3, "expectedTotal": 4.50, "dealApplied": true, "savings": 1.50 }
+    ]
+  },
+  {
+    "rawText": "Nectar Price £2.00",
+    "expectedType": "loyalty_price",
+    "isValid": true,
+    "loyaltyPrice": 2.00,
+    "testCases": [
+      { "unitPrice": 2.60, "qty": 1, "expectedTotal": 2.00, "dealApplied": true, "savings": 0.60 }
+    ]
+  },
+  {
+    "rawText": "50% off selected lines this weekend only!!",
+    "expectedType": null,
+    "isValid": false,
+    "testCases": [
+      { "unitPrice": 4.00, "qty": 2, "expectedTotal": 8.00, "dealApplied": false }
+    ]
+  },
+  {
+    "rawText": "was £3 now cheaper",
+    "expectedType": null,
+    "isValid": false,
+    "testCases": [
+      { "unitPrice": 2.50, "qty": 1, "expectedTotal": 2.50, "dealApplied": false }
+    ]
+  },
+  {
+    "rawText": "",
+    "expectedType": null,
+    "isValid": false,
+    "testCases": [
+      { "unitPrice": 1.20, "qty": 2, "expectedTotal": 2.40, "dealApplied": false }
+    ]
+  }
+]
