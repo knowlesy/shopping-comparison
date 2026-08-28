@@ -182,6 +182,7 @@ export interface UserPreferences {
   cutMatchingStrategy?: 'best_value' | 'strict_cut';
   brandTierPriority: 'value' | 'standard' | 'premium' | 'branded';
   packSizingPolicy: 'closest' | 'cover' | 'cheapest_per_unit';
+  includeDeals?: boolean;
   enabledSupermarkets: SupermarketName[];
   defaultPostcode?: string;
   devMode?: boolean;

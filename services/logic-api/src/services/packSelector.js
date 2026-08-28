@@ -63,13 +63,15 @@ export class PackSelector {
     // Safeguard: grocery pack cap
     packs = Math.min(packs, 12);
 
+    const includeDeals = preferences.includeDeals !== false;
+    const basePrice = includeDeals ? (prod.clubcardPrice || prod.price) : prod.price;
     const totalQty = packs * prodAmount;
-    let totalPrice = Number((packs * (prod.clubcardPrice || prod.price)).toFixed(2));
+    let totalPrice = Number((packs * basePrice).toFixed(2));
     let dealApplied = undefined;
 
-    if (prod.deal) {
+    if (includeDeals && prod.deal) {
       const dealCalc = DealCalculator.calculateDealPrice(
-        prod.clubcardPrice || prod.price,
+        basePrice,
         packs,
         prod.deal
       );

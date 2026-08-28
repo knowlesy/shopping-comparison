@@ -57,7 +57,8 @@ compareRouter.post('/', async (req, res) => {
       const { products: candidateProducts, source, error: scrapeErr } =
         await getOrFetchCandidatesWithSource(coreQuery, {
           forceRefresh,
-          enabledStores
+          enabledStores,
+          includeDeals: preferences.includeDeals !== false
         });
 
       if (scrapeErr && !firstScrapeError) {
@@ -194,7 +195,8 @@ compareRouter.post('/stream', async (req, res) => {
       const { products: candidateProducts, source, error: scrapeErr } =
         await getOrFetchCandidatesWithSource(coreQuery, {
           forceRefresh,
-          enabledStores
+          enabledStores,
+          includeDeals: preferences.includeDeals !== false
         });
 
       if (scrapeErr && !firstScrapeError) {

@@ -27,29 +27,31 @@ export function getCoreSearchQuery(item) {
 }
 
 /**
- * Builds a deterministic scrape cache key incorporating the query and sorted enabled stores.
+ * Builds a deterministic scrape cache key incorporating the query, sorted enabled stores, and deals mode.
  * @param {string} coreQuery
  * @param {string[]} enabledStores
+ * @param {boolean} includeDeals
  * @returns {string}
  */
-export function buildScrapeCacheKey(coreQuery, enabledStores = []) {
+export function buildScrapeCacheKey(coreQuery, enabledStores = [], includeDeals = true) {
   const normalizedQuery = (coreQuery || '').toLowerCase().trim();
   const sortedStores =
     Array.isArray(enabledStores) && enabledStores.length > 0
       ? [...enabledStores].map((s) => String(s).toLowerCase().trim()).sort().join(',')
       : 'all';
-  return `cache:v2:scrape:${normalizedQuery}:${sortedStores}`;
+  const dealsTag = includeDeals ? 'deals' : 'raw';
+  return `cache:v2:scrape:${normalizedQuery}:${sortedStores}:${dealsTag}`;
 }
 
 /**
  * Shared candidate pipeline for fetching candidates with 72h PriceCache check, bounded scraping, and source tracking.
  * @param {string} coreQuery - Normalized ingredient search query
- * @param {object} options - { forceRefresh, timeoutMs, enabledStores }
- * @returns {Promise<{ products: Array, source: 'live' | 'cache' | 'catalog' }>}
+ * @param {object} options - { forceRefresh, timeoutMs, enabledStores, includeDeals }
+ * @returns {Promise<{ products: Array, source: 'live' | 'cache' | 'catalog', error?: string }>}
  */
 export async function getOrFetchCandidatesWithSource(coreQuery, options = {}) {
-  const { forceRefresh = false, timeoutMs = 15000, enabledStores = [] } = options;
-  const cacheKey = buildScrapeCacheKey(coreQuery, enabledStores);
+  const { forceRefresh = false, timeoutMs = 15000, enabledStores = [], includeDeals = true } = options;
+  const cacheKey = buildScrapeCacheKey(coreQuery, enabledStores, includeDeals);
 
   if (!forceRefresh && PriceCache.has(cacheKey)) {
     return {

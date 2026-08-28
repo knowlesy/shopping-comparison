@@ -13,17 +13,19 @@ describe('candidatePipeline', () => {
   });
 
   describe('buildScrapeCacheKey', () => {
-    it('should generate namespaced cache key with sorted stores', () => {
-      const key1 = buildScrapeCacheKey('Beef Mince', ['tesco', 'asda', 'sainsburys']);
-      const key2 = buildScrapeCacheKey('beef mince', ['asda', 'sainsburys', 'tesco']);
+    it('should generate namespaced cache key with sorted stores and deals tag', () => {
+      const key1 = buildScrapeCacheKey('Beef Mince', ['tesco', 'asda', 'sainsburys'], true);
+      const key2 = buildScrapeCacheKey('beef mince', ['asda', 'sainsburys', 'tesco'], true);
+      const keyRaw = buildScrapeCacheKey('beef mince', ['asda', 'sainsburys', 'tesco'], false);
 
-      assert.equal(key1, 'cache:v2:scrape:beef mince:asda,sainsburys,tesco');
+      assert.equal(key1, 'cache:v2:scrape:beef mince:asda,sainsburys,tesco:deals');
       assert.equal(key1, key2, 'Key should be deterministic and case-insensitive');
+      assert.equal(keyRaw, 'cache:v2:scrape:beef mince:asda,sainsburys,tesco:raw');
     });
 
     it('should handle empty or omitted stores parameter', () => {
       const key = buildScrapeCacheKey('milk');
-      assert.equal(key, 'cache:v2:scrape:milk:all');
+      assert.equal(key, 'cache:v2:scrape:milk:all:deals');
     });
 
     it('should differentiate cache keys when enabled store sets differ', () => {

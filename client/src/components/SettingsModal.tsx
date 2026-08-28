@@ -272,6 +272,31 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             </div>
           </div>
 
+          {/* Section: Promotional Deals & Multibuys */}
+          <div className="space-y-3">
+            <h4 className="text-xs font-extrabold uppercase text-slate-400 tracking-wider flex items-center space-x-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <span>Promotions & Multibuy Deals</span>
+            </h4>
+
+            <label className="flex items-center justify-between p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40 cursor-pointer">
+              <div>
+                <span className="text-xs font-bold text-slate-800 dark:text-slate-200 block">
+                  Include Multibuy & Loyalty Card Pricing (Clubcard / Nectar / Deals)
+                </span>
+                <span className="text-[11px] text-slate-500">
+                  When enabled, calculates multibuy bundle savings and loyalty prices. When disabled, compares raw base prices strictly.
+                </span>
+              </div>
+              <input
+                type="checkbox"
+                checked={localPrefs.includeDeals ?? true}
+                onChange={e => setLocalPrefs({ ...localPrefs, includeDeals: e.target.checked })}
+                className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500"
+              />
+            </label>
+          </div>
+
           {/* Section 3: Brand Tier Priority */}
           <div className="space-y-3">
             <h4 className="text-xs font-extrabold uppercase text-slate-400 tracking-wider flex items-center space-x-1.5">
