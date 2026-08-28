@@ -43,6 +43,8 @@ context.md
 *audit_report*.md
 report.md
 report*.md
+response*.md
+*response*.md
 !scripts/*audit*.ts
 !scripts/*audit*.js
 !tests/*audit*.js
