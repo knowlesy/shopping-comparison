@@ -1,6 +1,17 @@
-MIT License
+Business Source License 1.1
 
-Copyright (c) 2026 Peter Knowles
+Parameters
+
+Licensor:                     Peter Knowles
+Licensed Work:                ShoppingWise UK and associated services, microservices, clients, algorithms, and documentation.
+Additional Use Grant:         You may make use of the Licensed Work for personal, home, private, educational, evaluation, and internal non-commercial testing purposes. You may not rebrand, white-label, sell, distribute as a paid commercial product or service, or host as a paid commercial SaaS without obtaining a prior written commercial license from the Licensor.
+Change Date:                  2030-08-28
+Change License:               Apache License, Version 2.0
+
+Notice
+
+The Business Source License 1.1 (the "License") is not an Open Source license,
+but is a source-available license.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -9,8 +20,18 @@ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. The above copyright notice, this list of conditions, and the following
+   disclaimer shall be included in all copies or substantial portions of the
+   Software.
+
+2. You may use the Software only in compliance with the Additional Use Grant
+   specified above. Any use of the Software that is not permitted under the
+   Additional Use Grant constitutes a breach of this License and requires a
+   separate written commercial license agreement from the Licensor.
+
+3. Effective on the Change Date specified above, or four years from the release
+   date of this version, the Software shall automatically convert to the Change
+   License specified above, without the restrictions of the Additional Use Grant.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,

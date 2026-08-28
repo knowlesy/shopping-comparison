@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/knowlesy/shopping-comparison/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/knowlesy/shopping-comparison/actions/workflows/ci.yml)
 [![OWASP Security Audit](https://github.com/knowlesy/shopping-comparison/actions/workflows/owasp.yml/badge.svg?branch=master)](https://github.com/knowlesy/shopping-comparison/actions/workflows/owasp.yml)
+[![License: BSL 1.1](https://img.shields.io/badge/License-BSL%201.1-emerald.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-22.x-green.svg)](https://nodejs.org/)
 [![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg)](docker-compose.yml)
 
@@ -119,4 +120,7 @@ Releases follow [Semantic Versioning](https://semver.org/). To cut a new release
 
 ## 📄 License
 
-See the [LICENSE](LICENSE) file for details.
+This project is licensed under the **Business Source License 1.1 (BSL 1.1)** — see the [LICENSE](LICENSE) file for complete terms:
+- **Personal & Non-Commercial Use**: **100% Free** for personal home use, private shopping comparisons, educational purposes, and internal testing.
+- **Commercial & Rebranding Restrictions**: Rebranding, white-labeling, selling, or hosting as a paid commercial service is prohibited without prior written commercial licensing from the copyright holder (Peter Knowles).
+- Converts automatically to the standard open-source **Apache License, Version 2.0** on **2030-08-28**.
