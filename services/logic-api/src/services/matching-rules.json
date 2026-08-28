@@ -1,0 +1,66 @@
+{
+  "fishCuts": [
+    "loin",
+    "loins",
+    "fillet",
+    "fillets",
+    "portion",
+    "portions",
+    "steak",
+    "steaks"
+  ],
+  "meatCuts": [
+    "mince",
+    "minced",
+    "steak mince",
+    "breast",
+    "breasts",
+    "diced",
+    "chops"
+  ],
+  "speciesRules": [
+    { "trigger": "cod", "mustContain": "cod", "penalty": 80 },
+    { "trigger": "beef", "mustContain": "beef", "penalty": 80 }
+  ],
+  "pulseRules": [
+    { "trigger": "beans", "mustContain": "bean", "penalty": 80 },
+    { "trigger": "lentils", "mustContain": "lentil", "penalty": 80 }
+  ],
+  "supplementTerms": [
+    "liver oil",
+    "multivitamins",
+    "supplements",
+    "capsules",
+    "tablets",
+    "in sauce",
+    "parsley sauce",
+    "butter sauce"
+  ],
+  "processedBreadedTerms": [
+    "finger",
+    "fish finger",
+    "battered",
+    "breaded",
+    "crumbed",
+    "fish cake",
+    "fishcake"
+  ],
+  "readyMealTerms": [
+    "gravy",
+    "in gravy",
+    "& gravy",
+    "and gravy",
+    "ready meal",
+    "meal for one",
+    "hotpot",
+    "lasagne",
+    "lasagna",
+    "cottage pie",
+    "shepherd",
+    "pasta bake",
+    "chilli con carne",
+    "bolognese ready",
+    "casserole",
+    "stew"
+  ]
+}
