@@ -52,4 +52,75 @@ describe('PriceCache & Search Lifecycle', () => {
     assert.equal(recent[0].query, 'Search Item 15', 'Most recent search should be at top');
     assert.equal(recent[9].query, 'Search Item 6', 'Oldest search in window should be #6 (1-5 dropped)');
   });
+
+  it('should auto-promote expiring unsaved search and replace previous auto-promoted list', () => {
+    PriceCache.saveRecentSearches([]);
+    const now = Date.now();
+    const fourDaysAgo = now - 4 * 24 * 60 * 60 * 1000;
+    const fiveDaysAgo = now - 5 * 24 * 60 * 60 * 1000;
+
+    // Seed searches: 1 pinned, 2 expired unsaved
+    const initial = [
+      {
+        id: 'pinned-shop',
+        query: 'Weekly Staples',
+        rawList: 'Eggs\nMilk',
+        itemsCount: 2,
+        timestamp: fiveDaysAgo,
+        pinned: true,
+        status: 'saved'
+      },
+      {
+        id: 'old-search-1',
+        query: 'Old List 1',
+        rawList: 'Apples 1kg\nBananas',
+        itemsCount: 2,
+        timestamp: fiveDaysAgo,
+        pinned: false,
+        status: 'unsaved'
+      },
+      {
+        id: 'old-search-2',
+        query: 'Old List 2',
+        rawList: 'Beef mince\nPotatoes',
+        itemsCount: 2,
+        timestamp: fourDaysAgo,
+        pinned: false,
+        status: 'unsaved'
+      }
+    ];
+    PriceCache.saveRecentSearches(initial);
+
+    // Run promotion sweep
+    PriceCache.promoteExpiredSearches(now);
+
+    let searches = PriceCache.loadRecentSearches();
+    const promoted = searches.find((s) => s.status === 'promoted');
+    assert.ok(promoted, 'Should have an auto-promoted search');
+    assert.equal(promoted.id, 'old-search-2', 'Should promote most recent expiring unsaved search');
+
+    const pinned = searches.find((s) => s.id === 'pinned-shop');
+    assert.ok(pinned, 'Pinned saved shop must survive and never be replaced');
+
+    // Add another newer expiring unsaved search and verify it replaces previous promotion
+    const threeDaysAgo = now - 3.5 * 24 * 60 * 60 * 1000;
+    searches.unshift({
+      id: 'newer-search-3',
+      query: 'Newer List 3',
+      rawList: 'Greek Yogurt\nOats',
+      itemsCount: 2,
+      timestamp: threeDaysAgo,
+      pinned: false,
+      status: 'unsaved'
+    });
+    PriceCache.saveRecentSearches(searches);
+
+    // Second promotion sweep replaces previous promotion
+    PriceCache.promoteExpiredSearches(now);
+
+    searches = PriceCache.loadRecentSearches();
+    const promotedList = searches.filter((s) => s.status === 'promoted');
+    assert.equal(promotedList.length, 1, 'Only ONE auto-promoted list can exist (new promotion replaces previous auto-promoted list)');
+    assert.equal(promotedList[0].id, 'newer-search-3');
+  });
 });

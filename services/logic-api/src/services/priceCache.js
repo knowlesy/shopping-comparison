@@ -124,8 +124,7 @@ export class PriceCache {
     };
   }
 
-  static sweepExpiredEntries() {
-    const now = Date.now();
+  static sweepExpiredEntries(now = Date.now()) {
     let evictedCount = 0;
     for (const [key, entry] of this.memoryCache.entries()) {
       if (entry && entry.expiresAt && entry.expiresAt <= now) {
@@ -136,6 +135,7 @@ export class PriceCache {
     if (evictedCount > 0) {
       this.syncToDiskSync();
     }
+    this.promoteExpiredSearches(now);
     return { evictedCount, activeCount: this.memoryCache.size };
   }
 
@@ -164,21 +164,29 @@ export class PriceCache {
     }, 1000);
   }
 
-  // Persistent 72-hour recent searches & pinning
-  static loadRecentSearches() {
+  static loadAllSearchesRaw() {
     try {
       if (fs.existsSync(RECENT_SEARCHES_FILE)) {
         const raw = fs.readFileSync(RECENT_SEARCHES_FILE, 'utf-8');
-        const list = JSON.parse(raw) || [];
-        const cutoff = Date.now() - DEFAULT_TTL_MS;
-        // Keep searches within 72h or if pinned
-        const valid = list.filter((s) => s.pinned || s.timestamp > cutoff);
-        return valid.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || b.timestamp - a.timestamp);
+        return JSON.parse(raw) || [];
       }
     } catch (err) {
-      console.warn('[PriceCache] Error reading recent searches:', err.message);
+      console.warn('[PriceCache] Error reading raw searches:', err.message);
     }
     return [];
+  }
+
+  // Persistent 72-hour recent searches & pinning & auto-promotion
+  static loadRecentSearches() {
+    const list = this.loadAllSearchesRaw();
+    const cutoff = Date.now() - DEFAULT_TTL_MS;
+    // Keep searches within 72h, or if pinned/saved or promoted
+    const valid = list.filter((s) => s.pinned || s.status === 'saved' || s.status === 'promoted' || s.timestamp > cutoff);
+    return valid.sort((a, b) => {
+      if (b.pinned !== a.pinned) return (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0);
+      if ((b.status === 'promoted') !== (a.status === 'promoted')) return (b.status === 'promoted' ? 1 : 0) - (a.status === 'promoted' ? 1 : 0);
+      return b.timestamp - a.timestamp;
+    });
   }
 
   static saveRecentSearches(searches) {
@@ -190,6 +198,39 @@ export class PriceCache {
     } catch (err) {
       console.warn('[PriceCache] Error writing recent searches:', err.message);
     }
+  }
+
+  /**
+   * Promotes expiring unsaved searches to tracked list during 72h sweep.
+   * A new promotion replaces any previous auto-promoted list; saved/pinned searches are never replaced.
+   */
+  static promoteExpiredSearches(now = Date.now()) {
+    const searches = this.loadAllSearchesRaw();
+    const cutoff = now - DEFAULT_TTL_MS;
+
+    const expiringUnsaved = searches.filter(
+      (s) => (s.status === 'unsaved' || !s.status) && !s.pinned && s.timestamp <= cutoff
+    );
+
+    if (expiringUnsaved.length === 0) {
+      return this.loadRecentSearches();
+    }
+
+    expiringUnsaved.sort((a, b) => b.timestamp - a.timestamp);
+    const toPromote = expiringUnsaved[0];
+
+    // Replace previous auto-promoted list; saved/pinned searches survive
+    const updated = searches.filter(
+      (s) => s.status !== 'promoted' && !expiringUnsaved.some((e) => e.id === s.id)
+    );
+
+    toPromote.status = 'promoted';
+    toPromote.timestamp = now;
+    updated.unshift(toPromote);
+
+    const trimmed = updated.slice(0, 10);
+    this.saveRecentSearches(trimmed);
+    return trimmed;
   }
 
   static recordSearch({ query, rawList, itemsCount }) {
@@ -204,6 +245,7 @@ export class PriceCache {
     if (existingIndex >= 0) {
       searches[existingIndex].timestamp = now;
       searches[existingIndex].itemsCount = itemsCount || searches[existingIndex].itemsCount;
+      if (!searches[existingIndex].status) searches[existingIndex].status = 'unsaved';
     } else {
       searches.unshift({
         id: id || `search-${now}`,
@@ -211,7 +253,8 @@ export class PriceCache {
         rawList: cleanText,
         itemsCount: itemsCount || (cleanText.split('\n').filter(Boolean).length),
         timestamp: now,
-        pinned: false
+        pinned: false,
+        status: 'unsaved'
       });
     }
 
@@ -226,6 +269,7 @@ export class PriceCache {
     const item = searches.find((s) => s.id === id);
     if (item) {
       item.pinned = !item.pinned;
+      item.status = item.pinned ? 'saved' : 'unsaved';
       this.saveRecentSearches(searches);
     }
     return searches;
