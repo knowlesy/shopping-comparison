@@ -30,14 +30,14 @@ graph TB
   end
 
   subgraph "External Scrape Targets"
-    TrolleyLive["Supermarket Live Search Targets"]
+    SupermarketLive["Supermarket Live Search Targets"]
   end
 
   Browser -->|"POST /api/compare<br/>POST /api/compare/stream (SSE)"| LogicAPI
   LogicAPI --> CandidatePipe
   CandidatePipe --> PriceCache
   PriceCache -.->|"Cache Miss"| ScraperPod
-  ScraperPod -->|"Headless Chromium Scrape"| TrolleyLive
+  ScraperPod -->|"Headless Chromium Scrape"| SupermarketLive
   CandidatePipe --> CatalogJSON
   CandidatePipe --> RulesJSON
   LogicAPI --> FuzzyMatcher
