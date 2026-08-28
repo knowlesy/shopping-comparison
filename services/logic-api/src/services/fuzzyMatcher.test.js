@@ -161,6 +161,23 @@ describe('FuzzyMatcher', () => {
     assert.equal(match.weightShortfall.unit, 'kg');
   });
 
+  it('should positively match single-noun real-world items (Bananas 10, Red lentils 500 g, Porridge oats 1 kg)', () => {
+    const bananas = IngredientParser.parseItem('Bananas 10');
+    const bananasMatch = FuzzyMatcher.matchProduct('tesco', bananas, [], preferences);
+    assert.ok(bananasMatch.product, 'Expected bananas product match');
+    assert.match(bananasMatch.product.title, /banana/i);
+
+    const lentils = IngredientParser.parseItem('Red lentils 500 g');
+    const lentilsMatch = FuzzyMatcher.matchProduct('tesco', lentils, [], preferences);
+    assert.ok(lentilsMatch.product, 'Expected lentils product match');
+    assert.match(lentilsMatch.product.title, /lentil/i);
+
+    const oats = IngredientParser.parseItem('Rolled porridge oats 1 kg');
+    const oatsMatch = FuzzyMatcher.matchProduct('asda', oats, [], preferences);
+    assert.ok(oatsMatch.product, 'Expected oats product match');
+    assert.match(oatsMatch.product.title, /oat/i);
+  });
+
   describe('Preference Options Matrix', () => {
     const candidates = [
       {

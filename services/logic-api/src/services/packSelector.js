@@ -18,6 +18,14 @@ export class PackSelector {
     if (prod.packageUnit === 'kg') prodAmount *= 1000;
     if (prod.packageUnit === 'l') prodAmount *= 1000;
 
+    // Bunch of bananas / produce handling (approx 5 items per bunch)
+    if (
+      (item.unit === 'item' || item.unit === 'piece' || !item.unit) &&
+      (prod.packageUnit === 'bunch' || (prod.title && prod.title.toLowerCase().includes('bunch')))
+    ) {
+      prodAmount = 5;
+    }
+
     if ((item.unit === 'g' || item.unit === 'kg') && prodAmount <= 1) {
       prodAmount = 500;
     }

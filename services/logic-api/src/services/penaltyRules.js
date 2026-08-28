@@ -47,6 +47,15 @@ export class PenaltyRules {
   /**
    * Evaluates and scores candidate products against parsed user items.
    */
+  /**
+   * SCORING SCALE SPECIFICATION:
+   * - Range: -500 (hard veto) to ~120 (perfect multi-attribute match)
+   * - Floor: 25 (minimum score required for acceptance as match/alternative)
+   * - 0 to 24: Unrelated, marginal, or heavily penalized items (rejected by floor)
+   * - 25 to 49: Acceptable fallback/partial matches
+   * - 50 to 79: Solid match on primary food noun and sensible pack size
+   * - 80+: Highly accurate match matching dietary, tier, and specific cuts
+   */
   static scoreCandidate(prod, item, keywords, preferences = {}) {
     // 0. Hard Category Guard: Prevent Cross-Category Contamination
     if (
@@ -113,12 +122,12 @@ export class PenaltyRules {
 
     // Species / ingredient enforcement from matching-rules.json
     for (const rule of rules.speciesRules || []) {
-      if (itemLower.includes(rule.trigger) && !titleLower.includes(rule.mustContain)) {
+      if (new RegExp(`\\b${rule.trigger}s?\\b`, 'i').test(itemLower) && !new RegExp(`\\b${rule.mustContain}s?\\b`, 'i').test(titleLower)) {
         score -= rule.penalty;
       }
     }
     for (const rule of rules.pulseRules || []) {
-      if (new RegExp(`\\b${rule.trigger}\\b`, 'i').test(itemLower) && !new RegExp(`\\b${rule.mustContain}\\b`, 'i').test(titleLower)) {
+      if (new RegExp(`\\b${rule.trigger}s?\\b`, 'i').test(itemLower) && !new RegExp(`\\b${rule.mustContain}s?\\b`, 'i').test(titleLower)) {
         score -= rule.penalty;
       }
     }
@@ -228,19 +237,19 @@ export class PenaltyRules {
     );
 
     const absDiff = Math.abs(weightDiffPct);
-    const distanceScore = Math.max(-10, Math.round(30 - absDiff * 0.8));
+    const distanceScore = Math.max(-10, Math.round(20 - absDiff * 0.4));
     score += distanceScore;
 
-    if (weightDiffPct < -10) {
-      score -= 30;
+    if (weightDiffPct < -25) {
+      score -= 15;
     }
 
     if (packs === 1) {
-      score += 20;
+      score += 15;
     } else if (packs === 2) {
       score += 5;
     } else if (packs > 2 && !item.multiplier) {
-      score -= (packs - 1) * 15;
+      score -= Math.min(25, (packs - 1) * 5);
     }
 
     return { score, packs, totalQty, totalPrice, weightDiffPct, dealApplied };
