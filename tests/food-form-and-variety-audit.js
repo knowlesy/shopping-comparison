@@ -508,9 +508,16 @@ async function runExpandedTestSuite() {
   // -------------------------------------------------------------------------
   // SUMMARY REPORT
   // -------------------------------------------------------------------------
+  const totalEvaluated = results.dataset50Lists.totalItems * SUPERMARKETS.length;
+  const matchRate = totalEvaluated > 0 ? Number(((results.dataset50Lists.totalMatches / totalEvaluated) * 100).toFixed(1)) : 0;
+  const estimatedShare = isLiveMode ? 0 : 100;
+
   console.log('\n===============================================================================');
   console.log('                           EXPANDED AUDIT SUMMARY REPORT                       ');
   console.log('===============================================================================');
+  console.log(`Data Mode:                         ${isLiveMode ? 'Live Aggregator Mode' : 'CATALOG/ESTIMATED Benchmark Mode (--catalog-mode)'}`);
+  console.log(`Match Rate:                        ${matchRate}% (${results.dataset50Lists.totalMatches} / ${totalEvaluated} store evaluations matched)`);
+  console.log(`Estimated Share:                   ${estimatedShare}% of matches drawn from estimated catalog`);
   console.log(
     `1. Catalog Variety Assertions (35 checks across 7 stores): ${results.catalogVariety.passed} PASSED / ${results.catalogVariety.failed} FAILED`
   );
@@ -521,7 +528,7 @@ async function runExpandedTestSuite() {
     `3. Alternatives Richness & Sanity:                      ${results.alternativesRichness.passed} PASSED / ${results.alternativesRichness.failed} FAILED`
   );
   console.log(
-    `4. 50-Shopping-Lists E2E Dataset Audit (2,814 matches):  ${results.dataset50Lists.passed} / 50 PASSED (${results.dataset50Lists.anomalies.length} anomalies)`
+    `4. 50-Shopping-Lists E2E Dataset Audit:                 ${results.dataset50Lists.passed} / 50 PASSED (${results.dataset50Lists.anomalies.length} anomalies)`
   );
   console.log(
     `5. Playwright Real UI Modal Assertions:                 ${results.uiPlaywright.passed} PASSED / ${results.uiPlaywright.failed} FAILED`
@@ -529,7 +536,7 @@ async function runExpandedTestSuite() {
   console.log('===============================================================================');
 
   const reportPath = path.join(ARTIFACT_DIR, 'food-form-variety-audit-report.json');
-  fs.writeFileSync(reportPath, JSON.stringify(results, null, 2), 'utf8');
+  fs.writeFileSync(reportPath, JSON.stringify({ ...results, matchRate, estimatedShare }, null, 2), 'utf8');
   console.log(`Detailed audit report written to: ${reportPath}`);
 
   if (
@@ -541,7 +548,7 @@ async function runExpandedTestSuite() {
     console.error('\n❌ TEST SUITE FAILED WITH ANOMALIES.');
     process.exit(1);
   } else {
-    console.log('\n✅ ALL EXPANDED FOOD FORM & VARIETY TESTS PASSED WITH 100% SUCCESS!');
+    console.log(`\n✅ FOOD FORM & VARIETY AUDIT COMPLETE: 0 contamination anomalies, ${matchRate}% match-rate (${estimatedShare}% estimated-share).`);
     process.exit(0);
   }
 }

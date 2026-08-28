@@ -72,14 +72,15 @@ export class PackSelector {
     packs = Math.min(packs, 12);
 
     const includeDeals = preferences.includeDeals !== false;
-    const basePrice = includeDeals ? (prod.clubcardPrice || prod.price) : prod.price;
+    const loyaltyPrice = prod.clubcardPrice || prod.nectarPrice || prod.loyaltyPrice;
+    const basePrice = (includeDeals && loyaltyPrice) ? loyaltyPrice : prod.price;
     const totalQty = packs * prodAmount;
     let totalPrice = Number((packs * basePrice).toFixed(2));
     let dealApplied = undefined;
 
     if (includeDeals && prod.deal) {
       const dealCalc = DealCalculator.calculateDealPrice(
-        basePrice,
+        prod.price,
         packs,
         prod.deal
       );
@@ -92,6 +93,22 @@ export class PackSelector {
           savings: dealCalc.savings,
           effectiveUnitPrice: dealCalc.effectiveUnitPrice,
           summary: dealCalc.dealSummary
+        };
+      }
+    }
+
+    if (includeDeals && !dealApplied && basePrice < prod.price) {
+      const standardPrice = Number((packs * prod.price).toFixed(2));
+      const savings = Number((standardPrice - totalPrice).toFixed(2));
+      if (savings > 0) {
+        const scheme = prod.clubcardPrice ? 'Clubcard' : (prod.nectarPrice ? 'Nectar' : 'Loyalty');
+        dealApplied = {
+          dealText: `${scheme} Price`,
+          originalPrice: standardPrice,
+          discountedPrice: totalPrice,
+          savings,
+          effectiveUnitPrice: basePrice,
+          summary: `${scheme} Price: £${basePrice.toFixed(2)}/item`
         };
       }
     }

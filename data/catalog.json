@@ -823,6 +823,13 @@
       "inStock": true,
       "productUrl": "",
       "imageUrl": "https://images.unsplash.com/photo-1534482421-64566f976cfa?w=200&auto=format&fit=crop&q=60",
+      "deal": {
+        "rawText": "Buy 2 Get 1 Free",
+        "type": "buy_x_get_y_free",
+        "buyQuantity": 2,
+        "freeQuantity": 1,
+        "badge": "Buy 2 Get 1 Free"
+      },
       "source": "catalog"
     },
     {
@@ -1369,6 +1376,13 @@
       "inStock": true,
       "productUrl": "",
       "imageUrl": "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=200&auto=format&fit=crop&q=60",
+      "deal": {
+        "rawText": "Any 2 for £5",
+        "type": "multibuy_fixed",
+        "bundleQuantity": 2,
+        "bundlePrice": 5.00,
+        "badge": "2 for £5"
+      },
       "source": "catalog"
     },
     {
@@ -1555,6 +1569,13 @@
       "inStock": true,
       "productUrl": "",
       "imageUrl": "https://images.unsplash.com/photo-1543362906-acfc16c67564?w=200&auto=format&fit=crop&q=60",
+      "deal": {
+        "rawText": "3 for £1.50",
+        "type": "multibuy_fixed",
+        "bundleQuantity": 3,
+        "bundlePrice": 1.50,
+        "badge": "3 for £1.50"
+      },
       "source": "catalog"
     },
     {
@@ -1859,6 +1880,13 @@
       "inStock": true,
       "productUrl": "",
       "imageUrl": "https://images.unsplash.com/photo-1551462147-ff29053bfc14?w=200&auto=format&fit=crop&q=60",
+      "deal": {
+        "rawText": "Save £1 when you buy 2",
+        "type": "bundle_discount",
+        "bundleQuantity": 2,
+        "discountAmount": 1.00,
+        "badge": "Save £1 on 2"
+      },
       "source": "catalog"
     },
     {
@@ -2348,6 +2376,13 @@
       "inStock": true,
       "productUrl": "",
       "imageUrl": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=200&auto=format&fit=crop&q=60",
+      "deal": {
+        "rawText": "3 for £2",
+        "type": "multibuy_fixed",
+        "bundleQuantity": 3,
+        "bundlePrice": 2.00,
+        "badge": "3 for £2"
+      },
       "source": "catalog"
     },
     {
@@ -2368,6 +2403,15 @@
       "inStock": true,
       "productUrl": "",
       "imageUrl": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=200&auto=format&fit=crop&q=60",
+      "nectarPrice": 1.15,
+      "loyaltyPrice": 1.15,
+      "deal": {
+        "rawText": "£1.15 Nectar Price",
+        "type": "loyalty_price",
+        "loyaltyPrice": 1.15,
+        "loyaltyScheme": "Nectar",
+        "badge": "£1.15 Nectar Price"
+      },
       "source": "catalog"
     },
     {

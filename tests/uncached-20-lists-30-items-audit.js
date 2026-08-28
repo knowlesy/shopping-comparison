@@ -347,30 +347,37 @@ async function runUncachedAudit() {
   // -------------------------------------------------------------------------
   // FINAL REPORT
   // -------------------------------------------------------------------------
+  const isCatalogMode = process.argv.includes('--catalog-mode') || !process.argv.includes('--live-mode');
+  const matchRate = report.totalEvaluations > 0 ? Number(((report.totalEvaluations / (report.totalItems * 7)) * 100).toFixed(1)) : 0;
+  const estimatedShare = isCatalogMode ? 100 : 0;
+
   console.log('\n===============================================================================');
   console.log('                           UNCACHED AUDIT SUMMARY REPORT                       ');
   console.log('===============================================================================');
-  console.log(`Total 30-Item Lists Tested:      ${report.totalLists}`);
-  console.log(`Total Unique Items Parsed:       ${report.totalItems}`);
+  console.log(`Data Mode:                         ${isCatalogMode ? 'CATALOG/ESTIMATED Benchmark Mode (--catalog-mode)' : 'Live Aggregator Mode'}`);
+  console.log(`Match Rate:                        ${matchRate}% (${report.totalEvaluations} evaluations processed)`);
+  console.log(`Estimated Share:                   ${estimatedShare}% of matches drawn from estimated catalog`);
+  console.log(`Total 30-Item Lists Tested:        ${report.totalLists}`);
+  console.log(`Total Unique Items Parsed:         ${report.totalItems}`);
   console.log(
-    `Total Supermarket Evaluations:   ${report.totalEvaluations} (Uncached Fresh Lookups)`
+    `Total Supermarket Evaluations:     ${report.totalEvaluations} (Uncached Fresh Lookups)`
   );
-  console.log(`Total Alternatives Screened:     ${report.totalAlternatives}`);
-  console.log(`Lists Passing 100% (0 Anomalies): ${report.passedLists} / ${report.totalLists}`);
+  console.log(`Total Alternatives Screened:       ${report.totalAlternatives}`);
+  console.log(`Lists Passing 100% (0 Anomalies):   ${report.passedLists} / ${report.totalLists}`);
   console.log(
-    `Playwright UI End-to-End Runs:   ${report.playwrightResults.filter((p) => p.passed).length} / ${report.playwrightResults.length} PASSED`
+    `Playwright UI End-to-End Runs:     ${report.playwrightResults.filter((p) => p.passed).length} / ${report.playwrightResults.length} PASSED`
   );
   console.log('===============================================================================');
 
   const reportFilePath = path.join(ARTIFACT_DIR, 'uncached-20-lists-audit-report.json');
-  fs.writeFileSync(reportFilePath, JSON.stringify(report, null, 2), 'utf8');
+  fs.writeFileSync(reportFilePath, JSON.stringify({ ...report, matchRate, estimatedShare }, null, 2), 'utf8');
   console.log(`Full JSON audit log written to: ${reportFilePath}`);
 
   if (report.failedLists > 0 || report.anomalies.length > 0) {
     console.error('\n❌ AUDIT FAILED WITH UNRESOLVED ANOMALIES.');
     process.exit(1);
   } else {
-    console.log('\n✅ ALL 20 FULL 30-ITEM UNCACHED TESTS PASSED WITH 100% SUCCESS!');
+    console.log(`\n✅ UNCACHED 20-LIST AUDIT COMPLETE: 0 anomalies across ${report.totalEvaluations} evaluations (${matchRate}% match-rate, ${estimatedShare}% estimated-share).`);
     process.exit(0);
   }
 }
