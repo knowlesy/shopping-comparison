@@ -27,37 +27,50 @@ export function getCoreSearchQuery(item) {
 }
 
 /**
- * Builds a deterministic scrape cache key incorporating the query, sorted enabled stores, and deals mode.
+ * Builds a deterministic scrape cache key incorporating the query and sorted enabled stores.
  * @param {string} coreQuery
  * @param {string[]} enabledStores
- * @param {boolean} includeDeals
  * @returns {string}
  */
-export function buildScrapeCacheKey(coreQuery, enabledStores = [], includeDeals = true) {
+export function buildScrapeCacheKey(coreQuery, enabledStores = []) {
   const normalizedQuery = (coreQuery || '').toLowerCase().trim();
   const sortedStores =
     Array.isArray(enabledStores) && enabledStores.length > 0
       ? [...enabledStores].map((s) => String(s).toLowerCase().trim()).sort().join(',')
       : 'all';
-  const dealsTag = includeDeals ? 'deals' : 'raw';
-  return `cache:v2:scrape:${normalizedQuery}:${sortedStores}:${dealsTag}`;
+  return `cache:v2:scrape:${normalizedQuery}:${sortedStores}`;
 }
 
 /**
  * Shared candidate pipeline for fetching candidates with 72h PriceCache check, bounded scraping, and source tracking.
  * @param {string} coreQuery - Normalized ingredient search query
- * @param {object} options - { forceRefresh, timeoutMs, enabledStores, includeDeals }
+ * @param {object} options - { forceRefresh, timeoutMs, enabledStores }
  * @returns {Promise<{ products: Array, source: 'live' | 'cache' | 'catalog', error?: string }>}
  */
 export async function getOrFetchCandidatesWithSource(coreQuery, options = {}) {
-  const { forceRefresh = false, timeoutMs = 15000, enabledStores = [], includeDeals = true } = options;
-  const cacheKey = buildScrapeCacheKey(coreQuery, enabledStores, includeDeals);
+  const { forceRefresh = false, timeoutMs = 15000, enabledStores = [] } = options;
+  const cacheKey = buildScrapeCacheKey(coreQuery, enabledStores);
 
-  if (!forceRefresh && PriceCache.has(cacheKey)) {
-    return {
-      products: [...PriceCache.get(cacheKey)],
-      source: 'cache'
-    };
+  if (!forceRefresh) {
+    if (PriceCache.has(cacheKey)) {
+      return {
+        products: [...PriceCache.get(cacheKey)],
+        source: 'cache'
+      };
+    }
+    // Backward compatibility with legacy dual-tagged keys
+    if (PriceCache.has(`${cacheKey}:deals`)) {
+      return {
+        products: [...PriceCache.get(`${cacheKey}:deals`)],
+        source: 'cache'
+      };
+    }
+    if (PriceCache.has(`${cacheKey}:raw`)) {
+      return {
+        products: [...PriceCache.get(`${cacheKey}:raw`)],
+        source: 'cache'
+      };
+    }
   }
 
   let candidateProducts = [];
