@@ -19,6 +19,7 @@
     "format": "prettier --write \"services/**/*.js\" \"tests/**/*.js\"",
     "test": "node --test services/logic-api/src/services/*.test.js",
     "test:owasp": "node tests/owasp-security-audit.js",
+    "test:live": "node tests/test-live-scraper.js",
     "bench:matching": "node scripts/dev/compare_matching.js",
     "test:food-form": "node tests/food-form-and-variety-audit.js",
     "test:uncached-20": "node tests/uncached-20-lists-30-items-audit.js",

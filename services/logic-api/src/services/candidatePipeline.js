@@ -48,7 +48,7 @@ export function buildScrapeCacheKey(coreQuery, enabledStores = []) {
  * @returns {Promise<{ products: Array, source: 'live' | 'cache' | 'catalog' }>}
  */
 export async function getOrFetchCandidatesWithSource(coreQuery, options = {}) {
-  const { forceRefresh = false, timeoutMs = 3500, enabledStores = [] } = options;
+  const { forceRefresh = false, timeoutMs = 15000, enabledStores = [] } = options;
   const cacheKey = buildScrapeCacheKey(coreQuery, enabledStores);
 
   if (!forceRefresh && PriceCache.has(cacheKey)) {
