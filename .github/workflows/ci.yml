@@ -3,6 +3,7 @@ name: CI
 on:
   push:
     branches: [ master, main ]
+    tags: [ 'v*' ]
     paths-ignore:
       - 'docs/**'
       - '*.md'
@@ -21,6 +22,16 @@ on:
       - '.dockerignore'
       - 'TODO.md'
       - 'CHANGELOG.md'
+  workflow_dispatch:
+    inputs:
+      publish_containers:
+        description: 'Build and push Docker containers to GitHub Container Registry'
+        type: boolean
+        default: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -64,6 +75,10 @@ jobs:
 
   docker-build:
     name: Build & Publish Container Images
+    needs: test
+    if: |
+      startsWith(github.ref, 'refs/tags/v') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.publish_containers == 'true')
     runs-on: ubuntu-latest
 
     steps:
@@ -74,7 +89,6 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Log in to GitHub Container Registry
-        if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -86,7 +100,7 @@ jobs:
         with:
           context: .
           file: client/Dockerfile
-          push: ${{ github.event_name != 'pull_request' }}
+          push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/shopping-comparison-client:latest
             ghcr.io/${{ github.repository_owner }}/shopping-comparison-client:${{ github.sha }}
@@ -100,7 +114,7 @@ jobs:
         with:
           context: .
           file: services/logic-api/Dockerfile
-          push: ${{ github.event_name != 'pull_request' }}
+          push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/shopping-comparison-logic-api:latest
             ghcr.io/${{ github.repository_owner }}/shopping-comparison-logic-api:${{ github.sha }}
@@ -116,7 +130,7 @@ jobs:
         with:
           context: ./services/scraper-pod
           file: services/scraper-pod/Dockerfile
-          push: ${{ github.event_name != 'pull_request' }}
+          push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/shopping-comparison-scraper-pod:latest
             ghcr.io/${{ github.repository_owner }}/shopping-comparison-scraper-pod:${{ github.sha }}

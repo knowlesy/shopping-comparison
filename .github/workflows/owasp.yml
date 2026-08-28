@@ -21,6 +21,11 @@ on:
       - ".dockerignore"
       - "TODO.md"
       - "CHANGELOG.md"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
