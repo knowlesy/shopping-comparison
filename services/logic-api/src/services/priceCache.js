@@ -124,24 +124,43 @@ export class PriceCache {
     };
   }
 
+  static sweepExpiredEntries() {
+    const now = Date.now();
+    let evictedCount = 0;
+    for (const [key, entry] of this.memoryCache.entries()) {
+      if (entry && entry.expiresAt && entry.expiresAt <= now) {
+        this.memoryCache.delete(key);
+        evictedCount++;
+      }
+    }
+    if (evictedCount > 0) {
+      this.syncToDiskSync();
+    }
+    return { evictedCount, activeCount: this.memoryCache.size };
+  }
+
+  static syncToDiskSync() {
+    try {
+      if (!fs.existsSync(DATA_DIR)) {
+        fs.mkdirSync(DATA_DIR, { recursive: true });
+      }
+      const obj = {};
+      const now = Date.now();
+      for (const [key, entry] of this.memoryCache.entries()) {
+        if (entry.expiresAt > now) {
+          obj[key] = entry;
+        }
+      }
+      fs.writeFileSync(CACHE_FILE, JSON.stringify(obj, null, 2), 'utf-8');
+    } catch (err) {
+      console.warn('[PriceCache] Error syncing cache synchronously to disk:', err.message);
+    }
+  }
+
   static scheduleDiskSync() {
     if (this.diskSyncTimeout) clearTimeout(this.diskSyncTimeout);
     this.diskSyncTimeout = setTimeout(() => {
-      try {
-        if (!fs.existsSync(DATA_DIR)) {
-          fs.mkdirSync(DATA_DIR, { recursive: true });
-        }
-        const obj = {};
-        const now = Date.now();
-        for (const [key, entry] of this.memoryCache.entries()) {
-          if (entry.expiresAt > now) {
-            obj[key] = entry;
-          }
-        }
-        fs.writeFileSync(CACHE_FILE, JSON.stringify(obj, null, 2), 'utf-8');
-      } catch (err) {
-        console.warn('[PriceCache] Error syncing cache to disk:', err.message);
-      }
+      this.syncToDiskSync();
     }, 1000);
   }
 
@@ -196,8 +215,8 @@ export class PriceCache {
       });
     }
 
-    // Keep max 50 searches
-    const trimmed = searches.slice(0, 50);
+    // Keep max 10 recent searches (FIFO drop)
+    const trimmed = searches.slice(0, 10);
     this.saveRecentSearches(trimmed);
     return trimmed;
   }
