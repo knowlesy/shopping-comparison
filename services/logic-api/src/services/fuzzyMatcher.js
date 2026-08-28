@@ -77,12 +77,13 @@ export class FuzzyMatcher {
         supermarket,
         product: null,
         packsNeeded: 1,
-        totalQuantity: item.targetQuantity,
+        totalQuantity: item.targetQuantity || 1,
         totalPrice: 0,
         effectiveUnitPrice: 0,
         weightDifferencePercent: 0,
         isClosestPack: false,
         matchScore: 0,
+        ...formatConfidence(0.4, 'catalog', undefined),
         reason: 'Item not found in catalog; clickable live search provided.',
         alternatives: []
       };
@@ -90,93 +91,15 @@ export class FuzzyMatcher {
 
     // Identify primary noun terms from search item
     const itemText = `${item.baseItem || ''} ${item.name || ''}`.toLowerCase();
-    const CORE_NOUNS = [
-      'milk',
-      'egg',
-      'eggs',
-      'yogurt',
-      'yoghurt',
-      'lentil',
-      'lentils',
-      'cod',
-      'salmon',
-      'haddock',
-      'tuna',
-      'prawn',
-      'prawns',
-      'fish',
-      'mince',
-      'beef',
-      'chicken',
-      'pork',
-      'lamb',
-      'steak',
-      'bacon',
-      'sausage',
-      'fusilli',
-      'pasta',
-      'penne',
-      'spaghetti',
-      'rice',
-      'oats',
-      'porridge',
-      'bread',
-      'loaf',
-      'potato',
-      'potatoes',
-      'carrot',
-      'carrots',
-      'onion',
-      'onions',
-      'garlic',
-      'spinach',
-      'celery',
-      'banana',
-      'bananas',
-      'pear',
-      'pears',
-      'clementine',
-      'clementines',
-      'apple',
-      'apples',
-      'orange',
-      'oranges',
-      'mushroom',
-      'mushrooms',
-      'pepper',
-      'peppers',
-      'courgette',
-      'courgettes',
-      'tomato',
-      'tomatoes',
-      'polpa',
-      'puree',
-      'oil',
-      'olive oil',
-      'walnut',
-      'almond',
-      'chia',
-      'seed',
-      'seeds',
-      'cheese',
-      'cheddar',
-      'butter'
-    ];
-    const targetNouns = CORE_NOUNS.filter((n) => itemText.includes(n));
+    const targetNouns = keywords;
 
-    // Filter alternatives:
-    // 1. Must not be the selected best product
-    // 2. Must have a valid relevance score (score >= 20)
-    // 3. Must match the item's category (if specific)
-    // 4. Must match at least one of the item's primary nouns
-    // 5. Must not be prohibited processed food (e.g. scotch eggs, crisps)
+    // Filter and sanitize alternatives for the interactive Swap Picker modal
     const alternatives = scored
-      .filter((s) => s.product.id !== best.product.id)
-      .filter((s) => s.score >= 20)
       .filter((s) => {
+        if (!s.product || s.score < 25) return false;
+        if (s.product.id === best.product.id) return false;
         const prodTitle = s.product.title.toLowerCase();
 
-        // Hard negative exclusions on alternatives
         if (isContaminated(itemText, prodTitle)) {
           return false;
         }
@@ -190,12 +113,36 @@ export class FuzzyMatcher {
           if (item.category !== s.product.category) return false;
         }
         if (targetNouns.length > 0) {
-          return targetNouns.some((n) => prodTitle.includes(n));
+          return targetNouns.some((n) => {
+            const stem = n.endsWith('es') ? n.slice(0, -2) : (n.endsWith('s') ? n.slice(0, -1) : n);
+            return prodTitle.includes(n) || (stem.length >= 3 && prodTitle.includes(stem));
+          });
         }
         return true;
       })
       .slice(0, 16)
       .map((s) => s.product);
+
+    // Weight shortfall check: if requested targetQuantity exists and supplied totalQty < targetQuantity
+    let weightShortfall = undefined;
+    let targetNormalized = item.targetQuantity || 1;
+    if (item.unit === 'kg' || item.unit === 'l') {
+      targetNormalized *= 1000;
+    }
+    if (targetNormalized > 0 && best.totalQty < targetNormalized) {
+      weightShortfall = {
+        requested: item.targetQuantity,
+        supplied: (item.unit === 'kg' || item.unit === 'l') ? best.totalQty / 1000 : best.totalQty,
+        unit: item.unit
+      };
+    }
+
+    const isCatalog = best.product.source === 'catalog';
+    const confidenceScore = best.product.confidenceScore !== undefined
+      ? best.product.confidenceScore
+      : (isCatalog ? 0.4 : 0.8);
+    const confidenceSource = best.product.confidenceSource || (isCatalog ? 'catalog' : 'aggregator');
+    const isEstimated = isCatalog || best.product.isEstimated === true;
 
     return {
       parsedItem: item,
@@ -209,12 +156,10 @@ export class FuzzyMatcher {
         : best.product.unitPrice,
       weightDifferencePercent: best.weightDiffPct,
       isClosestPack: Math.abs(best.weightDiffPct) < 25,
+      weightShortfall,
+      isEstimated,
       matchScore: best.score,
-      ...formatConfidence(
-        best.product.confidenceScore || (best.product.source === 'catalog' ? 1.0 : 0.8),
-        best.product.confidenceSource || (best.product.source === 'catalog' ? 'catalog' : 'aggregator'),
-        best.product.confidence
-      ),
+      ...formatConfidence(confidenceScore, confidenceSource, best.product.confidence),
       dealApplied: best.dealApplied || undefined,
       alternatives
     };
@@ -233,8 +178,26 @@ export class FuzzyMatcher {
       return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
     }
 
-    let score = 0;
     const titleLower = prod.title.toLowerCase();
+    const itemText = `${item.baseItem || ''} ${item.name || ''}`.toLowerCase();
+
+    // Contamination guard check
+    if (isContaminated(itemText, titleLower)) {
+      return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
+    }
+
+    // Noun evidence requirement: at least one non-generic keyword must appear in the product title
+    if (keywords.length > 0) {
+      const hasNounOverlap = keywords.some((kw) => {
+        const stem = kw.endsWith('es') ? kw.slice(0, -2) : (kw.endsWith('s') ? kw.slice(0, -1) : kw);
+        return titleLower.includes(kw) || (stem.length >= 3 && titleLower.includes(stem));
+      });
+      if (!hasNounOverlap) {
+        return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
+      }
+    }
+
+    let score = 0;
     const itemLower = (item.name || '').toLowerCase();
 
     // 1. Semantic Cut & Form Flexibility (Respecting user cutMatchingStrategy setting)
@@ -308,6 +271,14 @@ export class FuzzyMatcher {
     }
     // If beef requested, penalize pork, turkey, lamb, chicken
     if (itemLower.includes('beef') && !titleLower.includes('beef')) {
+      score -= 80;
+    }
+    // If bean/beans requested, penalize lentils/peas/chickpeas
+    if (/\b(?:beans?)\b/i.test(itemLower) && !/\b(?:beans?)\b/i.test(titleLower)) {
+      score -= 80;
+    }
+    // If lentil/lentils requested, penalize beans/peas
+    if (/\b(?:lentils?)\b/i.test(itemLower) && !/\b(?:lentils?)\b/i.test(titleLower)) {
       score -= 80;
     }
 
@@ -550,11 +521,14 @@ export class FuzzyMatcher {
     const clean = raw
       .replace(/[^\w\s]/g, ' ')
       .replace(
-        /\b(approx|fresh|sliced|tinned|frozen|natural|pack|packs|head|bunch|tin|tins|bulbs?|loaves|loaf|whole|halves|piece|pieces|portion|portions|target|item|items|mix)\b/g,
-        ''
+        /\b(approx|fresh|sliced|tinned|frozen|natural|pack|packs|head|heads|bulb|bulbs|bunch|bunches|tube|tubes|tin|tins|can|cans|tub|tubs|loaves|loaf|box|boxes|pot|pots|jar|jars|whole|halves|piece|pieces|portion|portions|target|item|items|mix|raw|organic|pure|lean|extra|good|quality|british|standard|large|medium|small|baby|red|green|white|yellow|brown|dark|light|sweet|water|brine|oil|spring|kg|g|ml|l|lt|litre|litres|oz|lb|pt|pint|pints|x)\b/gi,
+        ' '
       )
+      .replace(/\b\d+\b/g, ' ')
+      .replace(/\s+/g, ' ')
       .trim();
 
-    return clean.split(/\s+/).filter((k) => k.length > 1);
+    return clean.split(/\s+/).filter((k) => k.length > 1 && !/^\d+$/.test(k));
   }
 }
+

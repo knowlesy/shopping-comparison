@@ -89,4 +89,75 @@ describe('FuzzyMatcher', () => {
     );
     assert.equal(scored.score, -500);
   });
+
+  it('should reject garbage matches without noun evidence (Apples != Spinach, Walnuts != Tomato Puree)', () => {
+    const apples = IngredientParser.parseItem('Apples 250 g');
+    const applesMatch = FuzzyMatcher.matchProduct('asda', apples, [], preferences);
+    if (applesMatch.product) {
+      assert.match(applesMatch.product.title, /apple/i);
+    } else {
+      assert.equal(applesMatch.product, null);
+    }
+
+    const walnuts = IngredientParser.parseItem('Walnuts 200 g');
+    const walnutsMatch = FuzzyMatcher.matchProduct('tesco', walnuts, [], preferences);
+    if (walnutsMatch.product) {
+      assert.match(walnutsMatch.product.title, /walnut/i);
+    } else {
+      assert.equal(walnutsMatch.product, null);
+    }
+
+    const butterBeans = IngredientParser.parseItem('Butter beans in water 2 x 400 g');
+    const butterBeansMatch = FuzzyMatcher.matchProduct('sainsburys', butterBeans, [], preferences);
+    if (butterBeansMatch.product) {
+      assert.match(butterBeansMatch.product.title, /bean/i);
+      assert.doesNotMatch(butterBeansMatch.product.title, /milk/i);
+    } else {
+      assert.equal(butterBeansMatch.product, null);
+    }
+
+    const peanutButter = IngredientParser.parseItem('Smooth peanut butter 300 g');
+    const peanutButterMatch = FuzzyMatcher.matchProduct('sainsburys', peanutButter, [], preferences);
+    if (peanutButterMatch.product) {
+      assert.match(peanutButterMatch.product.title, /peanut|butter/i);
+      assert.doesNotMatch(peanutButterMatch.product.title, /egg/i);
+    } else {
+      assert.equal(peanutButterMatch.product, null);
+    }
+
+    const sultanas = IngredientParser.parseItem('Sultanas 500 g');
+    const sultanasMatch = FuzzyMatcher.matchProduct('tesco', sultanas, [], preferences);
+    if (sultanasMatch.product) {
+      assert.match(sultanasMatch.product.title, /sultana|raisin/i);
+      assert.doesNotMatch(sultanasMatch.product.title, /fusilli|pasta/i);
+    } else {
+      assert.equal(sultanasMatch.product, null);
+    }
+  });
+
+  it('should set weightShortfall when supplied quantity under-delivers against target quantity', () => {
+    const item = IngredientParser.parseItem('1.6kg frozen cod loins');
+    const candidate = [{
+      id: 'test-cod-1500',
+      supermarket: 'tesco',
+      title: 'Tesco Frozen Cod Loins 1.5kg',
+      brand: 'Tesco',
+      tier: 'standard',
+      category: 'fish',
+      packageSize: 1500,
+      packageUnit: 'g',
+      price: 12.00,
+      unitPrice: 8.00,
+      unitPriceMeasure: '£/kg',
+      isFrozen: true,
+      inStock: true
+    }];
+
+    const match = FuzzyMatcher.matchProduct('tesco', item, candidate, preferences);
+    assert.ok(match.product);
+    assert.ok(match.weightShortfall);
+    assert.equal(match.weightShortfall.requested, 1.6);
+    assert.equal(match.weightShortfall.supplied, 1.5);
+    assert.equal(match.weightShortfall.unit, 'kg');
+  });
 });
