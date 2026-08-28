@@ -19,7 +19,20 @@ playwright/.cache/
 tests/*-report*.json
 tests/recipes-verification-report.json
 
-# Audit & Context reports
+# Audit, OWASP & Security Scan Reports
+*owasp*report*
+*owasp*.json
+*owasp*.md
+*zap*report*
+*zap*.json
+*zap*.md
+*zap*.html
+*.sarif
+*security-report*
+*security_report*
+.scannerwork/
+.zaproxy/
+zap.out
 context.md
 *context.md
 *-context.md
@@ -33,6 +46,8 @@ report*.md
 !scripts/*audit*.ts
 !scripts/*audit*.js
 !tests/*audit*.js
+!tests/*owasp*.js
+!scripts/*owasp*.js
 !.github/ISSUE_TEMPLATE/bug_report.md
 
 # Environment files

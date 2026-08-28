@@ -19,6 +19,19 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
 
+// OWASP Security: Conceal express engine footprint
+app.disable('x-powered-by');
+
+// OWASP Security: Standard defensive response headers
+app.use((_req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
+  res.setHeader('X-Permitted-Cross-Domain-Policies', 'none');
+  next();
+});
+
 app.use(
   cors({
     origin: CLIENT_ORIGIN,

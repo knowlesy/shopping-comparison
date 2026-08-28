@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import crypto from 'node:crypto';
 import { connect } from 'puppeteer-real-browser';
 
 dotenv.config();
@@ -7,6 +8,19 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3002;
 const SCRAPE_TOKEN = process.env.SCRAPE_TOKEN;
+
+// OWASP Security: Conceal express engine footprint
+app.disable('x-powered-by');
+
+// OWASP Security: Standard defensive response headers
+app.use((_req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
+  res.setHeader('X-Permitted-Cross-Domain-Policies', 'none');
+  next();
+});
 
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true, limit: '5mb' }));
@@ -21,7 +35,7 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Auth middleware: enforce shared secret token on scrape endpoint (fails closed)
+// Auth middleware: enforce shared secret token on scrape endpoint (fails closed, constant-time comparison)
 function authenticateScrapeToken(req, res, next) {
   if (!SCRAPE_TOKEN) {
     return res.status(500).json({
@@ -31,7 +45,19 @@ function authenticateScrapeToken(req, res, next) {
     });
   }
   const token = req.headers['x-scrape-token'];
-  if (!token || token !== SCRAPE_TOKEN) {
+  if (!token || typeof token !== 'string') {
+    return res.status(401).json({
+      success: false,
+      error: 'Unauthorized: invalid or missing x-scrape-token header.'
+    });
+  }
+
+  const tokenBuffer = Buffer.from(token);
+  const expectedBuffer = Buffer.from(SCRAPE_TOKEN);
+  if (
+    tokenBuffer.length !== expectedBuffer.length ||
+    !crypto.timingSafeEqual(tokenBuffer, expectedBuffer)
+  ) {
     return res.status(401).json({
       success: false,
       error: 'Unauthorized: invalid or missing x-scrape-token header.'
