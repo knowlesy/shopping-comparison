@@ -8,6 +8,7 @@ import {
   FavoriteItem,
   IngredientIdea,
   CacheStats,
+  PriceHistoryStats,
 } from '../types';
 import {
   ClientShoppingParser,
@@ -270,6 +271,19 @@ export const api = {
       fetch(`${API_BASE}/history/${id}`, { method: 'DELETE' }).catch(() => {});
     } catch {}
     return true;
+  },
+
+  // Stats & Match Ratios Analytics
+  getStats: async (): Promise<PriceHistoryStats | null> => {
+    try {
+      const res = await fetch(`${API_BASE}/stats`);
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch (err) {
+      console.warn('Could not fetch price history stats:', err);
+    }
+    return null;
   },
 
   // Favorites

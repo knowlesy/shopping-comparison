@@ -13,7 +13,7 @@ import {
   Layers,
   Sparkles,
 } from 'lucide-react';
-import { SavedShop, SupermarketName } from '../types';
+import { SavedShop, SupermarketName, PriceHistoryStats } from '../types';
 import { api } from '../services/api';
 
 const STORE_DISPLAY_NAMES: Record<string, string> = {
@@ -45,16 +45,21 @@ interface ArchiveHistoryProps {
 
 export const ArchiveHistory: React.FC<ArchiveHistoryProps> = ({ onLoadShop }) => {
   const [history, setHistory] = useState<SavedShop[]>([]);
+  const [stats, setStats] = useState<PriceHistoryStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [expandedShopId, setExpandedShopId] = useState<string | null>(null);
 
   const fetchHistory = async () => {
     try {
       setLoading(true);
-      const res = await api.getHistory();
-      setHistory(res);
+      const [resHistory, resStats] = await Promise.all([
+        api.getHistory(),
+        api.getStats()
+      ]);
+      setHistory(resHistory);
+      setStats(resStats);
     } catch (err) {
-      console.error('Error loading history:', err);
+      console.error('Error loading history & stats:', err);
     } finally {
       setLoading(false);
     }
@@ -194,6 +199,44 @@ export const ArchiveHistory: React.FC<ArchiveHistoryProps> = ({ onLoadShop }) =>
                     </div>
                   );
                 })}
+              </div>
+            </div>
+          )}
+
+          {/* Data Freshness & Match Sources Distribution */}
+          {stats && stats.totalComparisons > 0 && (
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                  📊 Match Source Truthfulness & Freshness
+                </span>
+                <span className="text-[11px] text-slate-400">Aggregated across all comparison runs</span>
+              </div>
+              <div className="grid grid-cols-3 gap-3 text-center">
+                <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-500/20">
+                  <div className="text-xl font-black text-emerald-600 dark:text-emerald-400">
+                    {stats.sourceRatios.live}%
+                  </div>
+                  <div className="text-[10px] font-bold uppercase text-emerald-800 dark:text-emerald-300 mt-0.5">
+                    Live Aggregator ({stats.sourceRatios.counts.live})
+                  </div>
+                </div>
+                <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-500/20">
+                  <div className="text-xl font-black text-blue-600 dark:text-blue-400">
+                    {stats.sourceRatios.cache}%
+                  </div>
+                  <div className="text-[10px] font-bold uppercase text-blue-800 dark:text-blue-300 mt-0.5">
+                    72h Cache ({stats.sourceRatios.counts.cache})
+                  </div>
+                </div>
+                <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-500/20">
+                  <div className="text-xl font-black text-amber-600 dark:text-amber-400">
+                    {stats.sourceRatios.catalog}%
+                  </div>
+                  <div className="text-[10px] font-bold uppercase text-amber-800 dark:text-amber-300 mt-0.5">
+                    Benchmark Catalog ({stats.sourceRatios.counts.catalog})
+                  </div>
+                </div>
               </div>
             </div>
           )}

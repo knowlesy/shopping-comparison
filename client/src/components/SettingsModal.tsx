@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Sliders, Heart, Shield, Package, Store, Check, RefreshCw } from 'lucide-react';
+import { X, Sliders, Heart, Shield, Package, Store, Check, RefreshCw, Sparkles } from 'lucide-react';
 import { UserPreferences, SupermarketName, CacheStats } from '../types';
 import { api } from '../services/api';
 

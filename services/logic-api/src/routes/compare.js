@@ -7,6 +7,7 @@ import {
   getOrFetchCandidatesWithSource
 } from '../services/candidatePipeline.js';
 import { getUserSettings } from './settings.js';
+import { PriceHistory } from '../services/priceHistory.js';
 
 export const compareRouter = express.Router();
 
@@ -88,6 +89,8 @@ compareRouter.post('/', async (req, res) => {
     if (firstScrapeError) {
       console.warn(`[Logic-API] Live scraping fallback to catalog: ${firstScrapeError}`);
     }
+
+    PriceHistory.recordSnapshot(comparison);
 
     console.log(
       `[Logic-API] Comparison complete. Cheapest store: ${comparison.cheapestStore.toUpperCase()} (sources: live=${sourcesCount.live}, cache=${sourcesCount.cache}, catalog=${sourcesCount.catalog})`
@@ -244,6 +247,8 @@ compareRouter.post('/stream', async (req, res) => {
       if (firstScrapeError) {
         console.warn(`[Logic-API] Stream live scraping fallback to catalog: ${firstScrapeError}`);
       }
+
+      PriceHistory.recordSnapshot(comparison);
 
       res.write(
         `data: ${JSON.stringify({

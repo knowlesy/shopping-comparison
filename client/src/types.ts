@@ -241,3 +241,23 @@ export interface SavedShop {
   savings: number;
   items?: SavedShopItemPrice[];
 }
+
+export interface PriceHistoryStats {
+  totalComparisons: number;
+  winRates: Record<string, { wins: number; percentage: number }>;
+  sourceRatios: {
+    live: number;
+    cache: number;
+    catalog: number;
+    counts: { live: number; cache: number; catalog: number };
+  };
+  categoryActivity: Record<string, number>;
+  recentSnapshots: Array<{
+    id: string;
+    timestamp: string;
+    itemsCount: number;
+    cheapestStore: SupermarketName;
+    supermarketTotals: Record<string, number>;
+    meta?: { sources?: { live: number; cache: number; catalog: number } };
+  }>;
+}

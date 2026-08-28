@@ -12,6 +12,7 @@ import { ideasRouter } from './routes/ideas.js';
 import { cacheRouter } from './routes/cache.js';
 import { authRouter } from './routes/auth.js';
 import { systemRouter } from './routes/system.js';
+import { statsRouter } from './routes/stats.js';
 
 dotenv.config();
 
@@ -62,6 +63,7 @@ app.use('/api/ingredient-ideas', ideasRouter);
 app.use('/api/cache', cacheRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/system', systemRouter);
+app.use('/api/stats', statsRouter);
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 [Logic-API] Service B listening on http://0.0.0.0:${PORT}`);
