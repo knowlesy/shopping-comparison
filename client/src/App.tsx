@@ -749,17 +749,19 @@ export default function App() {
       />
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500 space-y-1">
-        <p>ShoppingWise UK • Comparing {(() => {
-          const nameMap: Record<string, string> = {
-            asda: 'Asda', sainsburys: "Sainsbury's", tesco: 'Tesco', morrisons: 'Morrisons',
-            iceland: 'Iceland', aldi: 'Aldi', lidl: 'Lidl', waitrose: 'Waitrose',
-            ocado: 'Ocado', coop: 'Co-op',
-          };
-          const names = preferences.enabledSupermarkets.map(s => nameMap[s] || s);
-          if (names.length <= 1) return names[0] || 'supermarkets';
-          return names.slice(0, -1).join(', ') + ' & ' + names[names.length - 1];
-        })()}</p>
+      <footer className="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500 space-y-1.5">
+        <p className="font-semibold text-slate-700 dark:text-slate-300">
+          ShoppingWise UK <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 ml-1">v{appVersion}</span> • Comparing {(() => {
+            const nameMap: Record<string, string> = {
+              asda: 'Asda', sainsburys: "Sainsbury's", tesco: 'Tesco', morrisons: 'Morrisons',
+              iceland: 'Iceland', aldi: 'Aldi', lidl: 'Lidl', waitrose: 'Waitrose',
+              ocado: 'Ocado', coop: 'Co-op',
+            };
+            const names = (preferences.enabledSupermarkets || []).map(s => nameMap[s] || s);
+            if (names.length <= 1) return names[0] || 'supermarkets';
+            return names.slice(0, -1).join(', ') + ' & ' + names[names.length - 1];
+          })()}
+        </p>
         <p className="text-[11px] text-slate-400">
           Real package sizes, closest-weight pack matching, healthier alternatives, and live supermarket pricing.
         </p>
