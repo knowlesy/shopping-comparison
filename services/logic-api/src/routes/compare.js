@@ -49,15 +49,20 @@ compareRouter.post('/', async (req, res) => {
   }
 
   const sourcesCount = { live: 0, cache: 0, catalog: 0 };
+  let firstScrapeError = null;
 
   try {
     for (const item of items) {
       const coreQuery = getCoreSearchQuery(item);
-      const { products: candidateProducts, source } =
+      const { products: candidateProducts, source, error: scrapeErr } =
         await getOrFetchCandidatesWithSource(coreQuery, {
           forceRefresh,
           enabledStores
         });
+
+      if (scrapeErr && !firstScrapeError) {
+        firstScrapeError = scrapeErr;
+      }
 
       if (sourcesCount[source] !== undefined) {
         sourcesCount[source]++;
@@ -75,8 +80,13 @@ compareRouter.post('/', async (req, res) => {
         live: sourcesCount.live,
         cache: sourcesCount.cache,
         catalog: sourcesCount.catalog
-      }
+      },
+      scrapeError: firstScrapeError || undefined
     };
+
+    if (firstScrapeError) {
+      console.warn(`[Logic-API] Live scraping fallback to catalog: ${firstScrapeError}`);
+    }
 
     console.log(
       `[Logic-API] Comparison complete. Cheapest store: ${comparison.cheapestStore.toUpperCase()} (sources: live=${sourcesCount.live}, cache=${sourcesCount.cache}, catalog=${sourcesCount.catalog})`
@@ -160,6 +170,7 @@ compareRouter.post('/stream', async (req, res) => {
   }
 
   const sourcesCount = { live: 0, cache: 0, catalog: 0 };
+  let firstScrapeError = null;
 
   try {
     for (let i = 0; i < items.length; i++) {
@@ -180,11 +191,15 @@ compareRouter.post('/stream', async (req, res) => {
         })}\n\n`
       );
 
-      const { products: candidateProducts, source } =
+      const { products: candidateProducts, source, error: scrapeErr } =
         await getOrFetchCandidatesWithSource(coreQuery, {
           forceRefresh,
           enabledStores
         });
+
+      if (scrapeErr && !firstScrapeError) {
+        firstScrapeError = scrapeErr;
+      }
 
       if (sourcesCount[source] !== undefined) {
         sourcesCount[source]++;
@@ -220,8 +235,13 @@ compareRouter.post('/stream', async (req, res) => {
           live: sourcesCount.live,
           cache: sourcesCount.cache,
           catalog: sourcesCount.catalog
-        }
+        },
+        scrapeError: firstScrapeError || undefined
       };
+
+      if (firstScrapeError) {
+        console.warn(`[Logic-API] Stream live scraping fallback to catalog: ${firstScrapeError}`);
+      }
 
       res.write(
         `data: ${JSON.stringify({

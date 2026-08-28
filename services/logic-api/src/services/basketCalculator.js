@@ -153,11 +153,15 @@ export class BasketCalculator {
       const missingItems = [];
       let subtotal = 0;
       let totalHealthScore = 0;
+      let estimatedMatches = 0;
 
       for (const m of matches) {
         if (m.product) {
           subtotal += m.totalPrice;
           if (m.product.isHealthier) totalHealthScore += 1;
+          if (m.isEstimated || m.confidenceSource === 'catalog') {
+            estimatedMatches += 1;
+          }
         } else {
           missingItems.push(m.parsedItem);
         }
@@ -166,6 +170,9 @@ export class BasketCalculator {
       subtotal = Number(subtotal.toFixed(2));
       const deliveryFee = subtotal >= info.deliveryMinOrder ? 0 : info.deliveryFee;
       const totalPrice = Number((subtotal + deliveryFee).toFixed(2));
+      const itemsFound = items.length - missingItems.length;
+      const estimatedShare = itemsFound > 0 ? Number((estimatedMatches / itemsFound).toFixed(2)) : 0;
+      const hasEstimatedPrices = estimatedMatches > 0;
 
       storeResults[store] = {
         supermarket: store,
@@ -175,10 +182,12 @@ export class BasketCalculator {
         deliveryFee,
         totalPrice,
         savingsVsHighest: 0,
-        itemsFound: items.length - missingItems.length,
+        itemsFound,
         itemsTotal: items.length,
         missingItems,
         isCheapest: false,
+        estimatedShare,
+        hasEstimatedPrices,
         averageHealthScore:
           items.length > 0 ? Math.round((totalHealthScore / items.length) * 100) : 0
       };
@@ -197,6 +206,9 @@ export class BasketCalculator {
     const highestStore = ranked[ranked.length - 1]?.supermarket || 'tesco';
     const highestTotal = ranked[ranked.length - 1]?.totalPrice || 0;
 
+    let totalMatched = 0;
+    let totalEstimated = 0;
+
     for (const storeRes of Object.values(storeResults)) {
       storeRes.isCheapest = storeRes.itemsFound > 0 && storeRes.supermarket === cheapestStore;
       storeRes.savingsVsHighest =
@@ -206,8 +218,11 @@ export class BasketCalculator {
       if (storeRes.isCheapest) {
         storeRes.badge = '🏆 Cheapest Overall';
       }
+      totalMatched += storeRes.itemsFound;
+      totalEstimated += Math.round(storeRes.itemsFound * storeRes.estimatedShare);
     }
 
+    const overallEstimatedShare = totalMatched > 0 ? Number((totalEstimated / totalMatched).toFixed(2)) : 0;
     const splitOptimization = this.calculateSplitBasket(items, storeResults, cheapestStore);
 
     return {
@@ -216,6 +231,8 @@ export class BasketCalculator {
       cheapestStore,
       highestStore,
       splitOptimization,
+      estimatedShare: overallEstimatedShare,
+      hasEstimatedPrices: overallEstimatedShare > 0,
       timestamp: new Date().toISOString()
     };
   }

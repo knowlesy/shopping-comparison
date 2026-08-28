@@ -60,6 +60,7 @@ export async function getOrFetchCandidatesWithSource(coreQuery, options = {}) {
 
   let candidateProducts = [];
   let source = 'catalog';
+  let error = null;
 
   try {
     const targetUrl = `https://www.trolley.co.uk/search/?q=${encodeURIComponent(coreQuery)}`;
@@ -79,8 +80,9 @@ export async function getOrFetchCandidatesWithSource(coreQuery, options = {}) {
     if (candidateProducts && candidateProducts.length > 0) {
       source = 'live';
     }
-  } catch (_err) {
+  } catch (err) {
     // Gracefully proceed with verified catalog products
+    error = err.message || 'Scrape failed';
     source = 'catalog';
   }
 
@@ -91,7 +93,8 @@ export async function getOrFetchCandidatesWithSource(coreQuery, options = {}) {
 
   return {
     products: candidateProducts,
-    source
+    source,
+    error
   };
 }
 

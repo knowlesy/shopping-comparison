@@ -87,10 +87,15 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({
       {/* Top Action & Summary Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
         <div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 flex-wrap gap-y-1">
             <span className="px-2.5 py-1 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 text-xs font-extrabold uppercase">
               Live UK Comparison
             </span>
+            {comparison.hasEstimatedPrices && (
+              <span className="px-2.5 py-1 rounded-lg bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 text-xs font-semibold">
+                Estimated benchmark data
+              </span>
+            )}
             <span className="text-xs text-slate-500">
               {items.length} items parsed & compared
             </span>
@@ -537,6 +542,16 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({
                                         {match.confidence && (
                                           <div className="text-[9px] text-slate-400 dark:text-slate-500 truncate" title={match.confidence}>
                                             {match.confidence}
+                                          </div>
+                                        )}
+                                        {(match.isEstimated || match.confidenceSource === 'catalog') && (
+                                          <div className="px-1.5 py-0.5 mt-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[9px] font-medium truncate" title="Estimated benchmark price">
+                                            📊 Estimated price
+                                          </div>
+                                        )}
+                                        {match.weightShortfall && (
+                                          <div className="px-1.5 py-0.5 mt-0.5 rounded bg-amber-50 dark:bg-amber-950/40 border border-amber-200/50 dark:border-amber-800/40 text-amber-700 dark:text-amber-300 text-[9px] font-medium truncate" title={`Supplied: ${match.weightShortfall.supplied}${match.weightShortfall.unit || ''} vs Requested: ${match.weightShortfall.requested}${match.weightShortfall.unit || ''}`}>
+                                            ⚠️ Shortfall ({match.weightShortfall.supplied}/{match.weightShortfall.requested}{match.weightShortfall.unit || ''})
                                           </div>
                                         )}
                                         {match.packsNeeded > 1 && (

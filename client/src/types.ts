@@ -97,6 +97,12 @@ export interface ItemMatch {
   effectiveUnitPrice: number;
   weightDifferencePercent: number;
   isClosestPack: boolean;
+  isEstimated?: boolean;
+  weightShortfall?: {
+    requested: number;
+    supplied: number;
+    unit?: string;
+  };
   matchScore: number;
   confidence?: string;
   confidenceScore?: number;
@@ -127,6 +133,8 @@ export interface StoreBasketResult {
   itemsTotal: number;
   missingItems: ParsedItem[];
   isCheapest: boolean;
+  estimatedShare?: number;
+  hasEstimatedPrices?: boolean;
   averageHealthScore: number;
   badge?: string;
 }
@@ -152,6 +160,8 @@ export interface ComparisonResponse {
   cheapestStore: SupermarketName;
   highestStore: SupermarketName;
   splitOptimization: SplitBasketOptimization;
+  estimatedShare?: number;
+  hasEstimatedPrices?: boolean;
   timestamp: string;
   meta?: {
     sources?: {
@@ -159,6 +169,7 @@ export interface ComparisonResponse {
       cache: number;
       catalog: number;
     };
+    scrapeError?: string;
   };
 }
 
