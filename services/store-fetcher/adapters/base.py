@@ -6,7 +6,10 @@ the required search, normalize, and capability declaration contract.
 
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Optional
-from ..schema import UnifiedProduct
+try:
+    from ..schema import UnifiedProduct
+except (ImportError, ValueError):
+    from schema import UnifiedProduct
 
 
 class AdapterCapabilities:

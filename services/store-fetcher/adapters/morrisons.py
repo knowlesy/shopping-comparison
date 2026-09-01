@@ -7,8 +7,12 @@ extracting structured productEntities from server-rendered window.__INITIAL_STAT
 import re
 import json
 from typing import List, Dict, Any, Optional
-from .base import BaseAdapter, AdapterCapabilities
-from ..schema import UnifiedProduct
+try:
+    from .base import BaseAdapter, AdapterCapabilities
+    from ..schema import UnifiedProduct
+except (ImportError, ValueError):
+    from adapters.base import BaseAdapter, AdapterCapabilities
+    from schema import UnifiedProduct
 
 try:
     from curl_cffi import requests as cffi_requests
@@ -124,8 +128,24 @@ class MorrisonsAdapter(BaseAdapter):
                 }
 
         in_stock = raw.get("status") != "OUT_OF_STOCK"
-        images = raw.get("images") or {}
-        image_url = images.get("default") or raw.get("image")
+        images = raw.get("images")
+        image_url = None
+        if isinstance(images, dict):
+            image_url = images.get("default") or images.get("url") or images.get("src")
+        elif isinstance(images, list) and images:
+            first_img = images[0]
+            if isinstance(first_img, str):
+                image_url = first_img
+            elif isinstance(first_img, dict):
+                image_url = first_img.get("url") or first_img.get("default") or first_img.get("src")
+        if not image_url:
+            image_url = raw.get("image")
+
+        if isinstance(image_url, dict):
+            image_url = image_url.get("src") or image_url.get("url") or image_url.get("default")
+        if not isinstance(image_url, str):
+            image_url = None
+
         product_url = f"https://groceries.morrisons.com/products/{product_id}" if product_id else None
 
         return UnifiedProduct(

@@ -4,12 +4,20 @@ Declares all seven UK supermarkets and their adapter implementations or unsuppor
 """
 
 from typing import Dict, Any, Type, Optional
-from .adapters.base import BaseAdapter
-from .adapters.tesco import TescoAdapter
-from .adapters.sainsburys import SainsburysAdapter
-from .adapters.morrisons import MorrisonsAdapter
-from .adapters.asda import AsdaAdapter
-from .adapters.iceland import IcelandAdapter
+try:
+    from .adapters.base import BaseAdapter
+    from .adapters.tesco import TescoAdapter
+    from .adapters.sainsburys import SainsburysAdapter
+    from .adapters.morrisons import MorrisonsAdapter
+    from .adapters.asda import AsdaAdapter
+    from .adapters.iceland import IcelandAdapter
+except (ImportError, ValueError):
+    from adapters.base import BaseAdapter
+    from adapters.tesco import TescoAdapter
+    from adapters.sainsburys import SainsburysAdapter
+    from adapters.morrisons import MorrisonsAdapter
+    from adapters.asda import AsdaAdapter
+    from adapters.iceland import IcelandAdapter
 
 
 STORE_REGISTRY: Dict[str, Dict[str, Any]] = {

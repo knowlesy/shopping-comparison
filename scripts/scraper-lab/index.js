@@ -15,6 +15,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { RETAILER_ENDPOINTS } from './endpoints.js';
 import { scrubSessionData } from './sanitizer.js';
+import { runReality } from './reality.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -280,6 +281,9 @@ async function main() {
     case 'replay':
       await runReplay();
       break;
+    case 'reality':
+      await runReality(options);
+      break;
     default:
       console.log(`
 ShoppingWise Scraper Lab CLI v${LAB_VERSION}
@@ -288,6 +292,7 @@ Commands:
   node scripts/scraper-lab record --store <name> --query "<query>"
   node scripts/scraper-lab probe
   node scripts/scraper-lab replay
+  node scripts/scraper-lab reality [--offline]
       `);
       break;
   }

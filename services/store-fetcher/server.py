@@ -53,19 +53,33 @@ class SearchRequest(BaseModel):
     wantVariants: Optional[bool] = Field(False, description="Whether to fetch all size variants")
 
 
+try:
+    from .registry import get_adapter, STORE_REGISTRY
+    from .politeness import rate_limiter, circuit_breaker, daily_request_cap
+except ImportError:
+    from registry import get_adapter, STORE_REGISTRY
+    from politeness import rate_limiter, circuit_breaker, daily_request_cap
+
+
 @app.get("/health")
 def health(x_fetcher_token: Optional[str] = Header(None, alias="x-fetcher-token")):
     """Health check endpoint exposing adapter status and circuit states."""
-    adapters_status = {store: "not_implemented" for store in KNOWN_STORES}
+    adapters_status = {}
+    for store in KNOWN_STORES:
+        reg = STORE_REGISTRY.get(store, {})
+        if reg.get("supported"):
+            adapters_status[store] = "implemented: " + reg.get("notes", "direct adapter active")
+        else:
+            adapters_status[store] = reg.get("reason", "unsupported")
     for store, reason in UNSUPPORTED_STORES.items():
         adapters_status[store] = f"unsupported: {reason}"
 
-    circuits_status = {store: "closed" for store in KNOWN_STORES}
+    circuits_status = {store: circuit_breaker.get_state(store) for store in KNOWN_STORES}
 
     return {
         "status": "ok",
         "service": "store-fetcher",
-        "version": "1.2.0",
+        "version": "1.3.0",
         "uptime": round(time.time() - START_TIME, 2),
         "adapters": adapters_status,
         "circuits": circuits_status,
@@ -82,7 +96,7 @@ def search(
     """
     Search endpoint across direct retailer backends.
     Enforces timing-safe token authentication.
-    Step 3: All adapters return not_implemented status.
+    Dispatches to retailer adapters with politeness delays and circuit breaking.
     """
     token = x_fetcher_token or x_scrape_token
     if not token and authorization and authorization.lower().startswith("bearer "):
@@ -103,11 +117,70 @@ def search(
                 "reason": UNSUPPORTED_STORES[clean_store],
                 "products": [],
             }
-        else:
-            # Step 3 skeleton: Every adapter returns not_implemented
+            continue
+
+        reg_entry = STORE_REGISTRY.get(clean_store, {})
+        if not reg_entry.get("supported", False):
+            results[clean_store] = {
+                "status": "unsupported",
+                "reason": reg_entry.get("reason", f"Direct adapter for {clean_store} is unsupported"),
+                "products": [],
+            }
+            continue
+
+        if not circuit_breaker.is_available(clean_store):
+            results[clean_store] = {
+                "status": "circuit_open",
+                "reason": f"Circuit breaker open for {clean_store}",
+                "products": [],
+            }
+            continue
+
+        if not daily_request_cap.check_and_increment(clean_store):
+            results[clean_store] = {
+                "status": "rate_limited",
+                "reason": f"Daily request cap reached for {clean_store}",
+                "products": [],
+            }
+            continue
+
+        adapter = get_adapter(clean_store)
+        if not adapter:
             results[clean_store] = {
                 "status": "not_implemented",
-                "message": f"Direct adapter for {clean_store} is not yet implemented (Step 3 skeleton)",
+                "message": f"Adapter instance not found for {clean_store}",
+                "products": [],
+            }
+            continue
+
+        try:
+            # Politeness delay before hitting external retailer
+            rate_limiter.wait_polite(clean_store)
+
+            raw_results = adapter.search(
+                req.query,
+                target_quantity=req.targetQuantity,
+                want_variants=bool(req.wantVariants),
+            )
+            circuit_breaker.record_success(clean_store)
+
+            normalized = []
+            for raw in raw_results:
+                try:
+                    p = adapter.normalize(raw)
+                    normalized.append(p.to_dict() if hasattr(p, "to_dict") else dict(p))
+                except Exception:
+                    pass
+
+            results[clean_store] = {
+                "status": "ok",
+                "products": normalized,
+            }
+        except Exception as e:
+            circuit_breaker.record_failure(clean_store)
+            results[clean_store] = {
+                "status": "error",
+                "error": str(e),
                 "products": [],
             }
 

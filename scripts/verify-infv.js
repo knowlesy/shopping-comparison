@@ -631,6 +631,148 @@ check(11, 'No plaintext credentials anywhere in the repo tree', () => {
 });
 
 // ---------------------------------------------------------------------------
+// Step 13 — Reality validation: the real 52-line weekly shop, end to end
+// ---------------------------------------------------------------------------
+const BASELINE = 'tests/fixtures/reality-baseline.json';
+
+check(13, 'lab:reality runs the real list end-to-end, live and offline', () => {
+  const pkg = JSON.parse(read(r('package.json')));
+  if (!pkg.scripts || !pkg.scripts['lab:reality']) fail('no "lab:reality" npm script');
+  const lab = readAll('scripts/scraper-lab', '.js');
+  if (!/reality/i.test(lab)) fail('scraper-lab has no reality command');
+  if (!/--offline|offline/i.test(lab)) fail('reality run has no offline (fixture-replay) mode');
+  const ci = readAll('.github/workflows', '.yml') + readAll('.github/workflows', '.yaml');
+  if (/lab:reality/.test(ci)) fail('lab:reality is wired into CI — the live run must stay manual');
+});
+
+check(13, 'Baseline is a real measurement over the whole 52-line list, internally consistent', () => {
+  const raw = read(r(BASELINE));
+  if (!raw) fail(`${BASELINE} missing — run the reality measurement and commit the result`);
+  let b;
+  try {
+    b = JSON.parse(raw);
+  } catch {
+    fail(`${BASELINE} is not valid JSON`);
+  }
+  if (!b.measuredAt || Number.isNaN(Date.parse(b.measuredAt))) fail('baseline.measuredAt missing/unparseable');
+  const totals = b.totals || b;
+  const parsed = totals.itemsParsed ?? totals.items;
+  if (parsed !== 58) {
+    fail(`baseline covers ${parsed} items — the real 52-line list parses to 58 items, so this is not the whole list`);
+  }
+  const noMatch = totals.noMatchCount ?? totals.noMatch;
+  const matched = totals.matchedCount ?? totals.matched;
+  if (typeof noMatch !== 'number' || typeof matched !== 'number') {
+    fail('baseline totals must carry numeric matchedCount and noMatchCount');
+  }
+  if (matched + noMatch !== parsed) {
+    fail(`baseline is inconsistent: matched(${matched}) + noMatch(${noMatch}) != itemsParsed(${parsed})`);
+  }
+  const bySource = b.bySource || totals.bySource;
+  if (!bySource || typeof bySource !== 'object') fail('baseline has no per-source breakdown (direct/aggregator/catalog)');
+  for (const k of ['direct', 'catalog']) {
+    if (typeof bySource[k] !== 'number') fail(`baseline.bySource.${k} missing`);
+  }
+});
+
+check(13, 'Baseline proves the direct tier actually ran (sidecar was up), not a catalog-only run', () => {
+  const b = JSON.parse(read(r(BASELINE)) || '{}');
+  const bySource = b.bySource || (b.totals || {}).bySource || {};
+  if (!(bySource.direct > 0)) {
+    fail(`bySource.direct=${bySource.direct} — the sidecar was not serving during the measurement, so this proves nothing about direct adapters`);
+  }
+  if (b.sidecarUsed === false) fail('baseline explicitly records sidecarUsed=false');
+  const stores = b.storesLive || b.liveStores;
+  if (Array.isArray(stores) && stores.length === 0) fail('baseline records no live stores');
+});
+
+check(13, 'Baseline states the honest comparison against the catalog-only run', () => {
+  const b = JSON.parse(read(r(BASELINE)) || '{}');
+  const cmp = b.comparisonToCatalogOnly || b.comparison;
+  if (!cmp) fail('baseline has no comparisonToCatalogOnly block — record what direct data actually changed');
+  const before = cmp.catalogOnlyNoMatch ?? cmp.before;
+  const after = cmp.directNoMatch ?? cmp.after;
+  if (typeof before !== 'number' || typeof after !== 'number') {
+    fail('comparison must carry numeric before/after no-match counts');
+  }
+  if (before !== 28) {
+    fail(`comparison.before=${before} but the measured catalog-only baseline is 28 no-matches — do not restate it, measure it`);
+  }
+  // No improvement is an acceptable finding, but it must be explained, not glossed over.
+  if (after >= before && !cmp.explanation) {
+    fail(`direct tier resolved nothing (${before} -> ${after}) and no explanation is recorded — say why`);
+  }
+});
+
+check(13, 'Offline replay test ratchets the baseline inside npm test', () => {
+  const tests =
+    readAll('services/logic-api/src/services', '.test.js') +
+    (fs.existsSync(r('tests')) ? readAll('tests', '.test.js') + readAll('tests', '.js') : '');
+  if (!/reality-baseline/.test(tests)) {
+    fail('no test reads tests/fixtures/reality-baseline.json — nothing prevents the match rate silently regressing');
+  }
+  if (!/noMatch|matched/i.test(tests)) fail('ratchet test does not assert on match counts');
+});
+
+// ---------------------------------------------------------------------------
+// Step 14 — CI: build only what changed, and actually test the sidecar
+// ---------------------------------------------------------------------------
+const ci = () => read(r('.github/workflows/ci.yml'));
+const SERVICES = ['client', 'logic-api', 'scraper-pod', 'store-fetcher'];
+
+check(14, 'Every service has an image build, including the Python sidecar', () => {
+  const src = ci();
+  for (const s of SERVICES) {
+    if (!new RegExp(`Push ${s} Image`, 'i').test(src)) fail(`no build step for ${s}`);
+  }
+});
+
+check(14, 'A change-detection job scopes builds to the services that actually changed', () => {
+  const src = ci();
+  if (!/dorny\/paths-filter|changed-files|outputs:\s*\n\s*(client|logic-api|store-fetcher)/i.test(src)) {
+    fail('no path-filter/change-detection job — every push rebuilds all four images regardless of what changed');
+  }
+  // Each build step must be gated on its own service's change output.
+  for (const s of SERVICES) {
+    const stepIdx = src.search(new RegExp(`Push ${s} Image`, 'i'));
+    if (stepIdx < 0) continue;
+    const step = src.slice(stepIdx, stepIdx + 400);
+    if (!/^\s*if:/m.test(step)) fail(`"${s}" image builds unconditionally — gate it on that service's changed-files output`);
+  }
+});
+
+check(14, 'Tag/release builds still publish the complete set regardless of path filters', () => {
+  const src = ci();
+  const stepIdx = src.search(/Push client Image/i);
+  const step = src.slice(stepIdx, stepIdx + 400);
+  const cond = (step.match(/if:\s*([^\n]*(?:\n\s{10,}[^\n]*)*)/) || [])[1] || '';
+  if (!/refs\/tags|startsWith|is_release|release/i.test(cond)) {
+    fail('path-filtered builds have no tag/release escape hatch — a version tag must publish every image, not just changed ones');
+  }
+});
+
+check(14, 'CI tests the Python sidecar it ships (setup + lint/tests)', () => {
+  const src = ci();
+  if (!/setup-python|actions\/setup-python/.test(src)) fail('CI never sets up Python — store-fetcher code ships untested');
+  if (!/pytest|ruff|flake8|py_compile|mypy/.test(src)) fail('CI runs no Python tests or linting for store-fetcher');
+});
+
+check(14, 'CI runs the verification gates, not just the unit suite', () => {
+  const src = ci();
+  if (!/verify:audit/.test(src)) fail('CI does not run npm run verify:audit');
+  if (!/verify:infv/.test(src)) fail('CI does not run npm run verify:infv');
+  if (/lab:probe|lab:record|lab:reality|lab:search/.test(src)) {
+    fail('CI invokes a live lab command — those must stay manual');
+  }
+});
+
+check(14, 'Security workflow covers the Python sidecar dependencies', () => {
+  const owasp = read(r('.github/workflows/owasp.yml'));
+  if (!/store-fetcher/.test(owasp)) fail('owasp.yml never audits services/store-fetcher');
+  if (!/pip-audit|safety|pip\s+audit/.test(owasp)) fail('no Python dependency vulnerability audit (pip-audit/safety)');
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 await Promise.allSettled(pending);

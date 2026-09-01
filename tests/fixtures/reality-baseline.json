@@ -1,0 +1,47 @@
+{
+  "measuredAt": "2026-09-01T22:38:10.190Z",
+  "sidecarUsed": true,
+  "storesLive": [
+    "tesco",
+    "sainsburys",
+    "morrisons"
+  ],
+  "totals": {
+    "itemsParsed": 58,
+    "matchedCount": 58,
+    "noMatchCount": 0
+  },
+  "bySource": {
+    "direct": 58,
+    "aggregator": 0,
+    "catalog": 0
+  },
+  "perStore": {
+    "tesco": {
+      "itemsFound": 58,
+      "matchRate": 1,
+      "basketTotal": 153.22
+    },
+    "sainsburys": {
+      "itemsFound": 57,
+      "matchRate": 0.98,
+      "basketTotal": 145.67
+    },
+    "morrisons": {
+      "itemsFound": 28,
+      "matchRate": 0.48,
+      "basketTotal": 79.78
+    }
+  },
+  "variantRoutesCount": 24,
+  "confidenceDistribution": {
+    "0.9": 115,
+    "0.4": 28
+  },
+  "unresolvedItems": [],
+  "comparisonToCatalogOnly": {
+    "catalogOnlyNoMatch": 28,
+    "directNoMatch": 0,
+    "explanation": "Direct fetch tier resolved 28 previously unmatchable items across Tesco, Sainsbury's, and Morrisons."
+  }
+}

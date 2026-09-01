@@ -70,6 +70,24 @@ jobs:
       - name: Run unit test suite
         run: npm test
 
+      - name: Setup Python 3.12 for store-fetcher
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Test store-fetcher sidecar
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r services/store-fetcher/requirements.txt
+          python -m py_compile services/store-fetcher/*.py services/store-fetcher/adapters/*.py
+          pytest services/store-fetcher/tests
+
+      - name: Run verification audit
+        run: npm run verify:audit
+
+      - name: Run direct adapters verification
+        run: npm run verify:infv
+
       - name: Build client production bundle
         run: npm run build
 
@@ -101,9 +119,48 @@ jobs:
         id: bump
         run: node scripts/release/auto-version.js
 
+  changes:
+    name: Detect Changed Services
+    runs-on: ubuntu-latest
+    outputs:
+      client: ${{ steps.filter.outputs.client }}
+      logic-api: ${{ steps.filter.outputs.logic-api }}
+      scraper-pod: ${{ steps.filter.outputs.scraper-pod }}
+      store-fetcher: ${{ steps.filter.outputs.store-fetcher }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Path Filter
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            client:
+              - 'client/**'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'client/Dockerfile'
+            logic-api:
+              - 'services/logic-api/**'
+              - 'data/**'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'services/logic-api/Dockerfile'
+            scraper-pod:
+              - 'services/scraper-pod/**'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'services/scraper-pod/Dockerfile'
+            store-fetcher:
+              - 'services/store-fetcher/**'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'services/store-fetcher/Dockerfile'
+
   docker-build:
     name: Build & Publish Container Images
-    needs: [test, version]
+    needs: [test, version, changes]
     if: |
       github.ref == 'refs/heads/master' ||
       github.ref == 'refs/heads/main' ||
@@ -126,6 +183,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and Push client Image
+        if: startsWith(github.ref, 'refs/tags/v') || needs.changes.outputs.client == 'true'
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -144,6 +202,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Build and Push logic-api Image
+        if: startsWith(github.ref, 'refs/tags/v') || needs.changes.outputs.logic-api == 'true'
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -164,6 +223,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Build and Push scraper-pod Image
+        if: startsWith(github.ref, 'refs/tags/v') || needs.changes.outputs.scraper-pod == 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./services/scraper-pod
@@ -182,6 +242,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Build and Push store-fetcher Image
+        if: startsWith(github.ref, 'refs/tags/v') || needs.changes.outputs.store-fetcher == 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./services/store-fetcher

@@ -6,8 +6,12 @@ Direct stateless HTTP extraction is declared unreachable.
 """
 
 from typing import List, Dict, Any, Optional
-from .base import BaseAdapter, AdapterCapabilities
-from ..schema import UnifiedProduct
+try:
+    from .base import BaseAdapter, AdapterCapabilities
+    from ..schema import UnifiedProduct
+except (ImportError, ValueError):
+    from adapters.base import BaseAdapter, AdapterCapabilities
+    from schema import UnifiedProduct
 
 
 class IcelandAdapter(BaseAdapter):

@@ -8,8 +8,12 @@ and server-side Apollo Client state.
 import re
 import json
 from typing import List, Dict, Any, Optional
-from .base import BaseAdapter, AdapterCapabilities
-from ..schema import UnifiedProduct
+try:
+    from .base import BaseAdapter, AdapterCapabilities
+    from ..schema import UnifiedProduct
+except (ImportError, ValueError):
+    from adapters.base import BaseAdapter, AdapterCapabilities
+    from schema import UnifiedProduct
 
 try:
     from curl_cffi import requests as cffi_requests
