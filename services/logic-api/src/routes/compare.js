@@ -49,7 +49,7 @@ compareRouter.post('/', async (req, res) => {
     storeMatchesMap[s] = [];
   }
 
-  const sourcesCount = { live: 0, cache: 0, catalog: 0 };
+  const sourcesCount = { live: 0, cache: 0, catalog: 0, direct: 0 };
   let firstScrapeError = null;
 
   try {
@@ -59,7 +59,8 @@ compareRouter.post('/', async (req, res) => {
         await getOrFetchCandidatesWithSource(coreQuery, {
           forceRefresh,
           enabledStores,
-          includeDeals: preferences.includeDeals !== false
+          includeDeals: preferences.includeDeals !== false,
+          preferences
         });
 
       if (scrapeErr && !firstScrapeError) {
@@ -81,7 +82,8 @@ compareRouter.post('/', async (req, res) => {
       sources: {
         live: sourcesCount.live,
         cache: sourcesCount.cache,
-        catalog: sourcesCount.catalog
+        catalog: sourcesCount.catalog,
+        direct: sourcesCount.direct
       },
       scrapeError: firstScrapeError || undefined
     };
@@ -173,7 +175,7 @@ compareRouter.post('/stream', async (req, res) => {
     storeMatchesMap[s] = [];
   }
 
-  const sourcesCount = { live: 0, cache: 0, catalog: 0 };
+  const sourcesCount = { live: 0, cache: 0, catalog: 0, direct: 0 };
   let firstScrapeError = null;
 
   try {
@@ -199,7 +201,8 @@ compareRouter.post('/stream', async (req, res) => {
         await getOrFetchCandidatesWithSource(coreQuery, {
           forceRefresh,
           enabledStores,
-          includeDeals: preferences.includeDeals !== false
+          includeDeals: preferences.includeDeals !== false,
+          preferences
         });
 
       if (scrapeErr && !firstScrapeError) {
@@ -239,7 +242,8 @@ compareRouter.post('/stream', async (req, res) => {
         sources: {
           live: sourcesCount.live,
           cache: sourcesCount.cache,
-          catalog: sourcesCount.catalog
+          catalog: sourcesCount.catalog,
+          direct: sourcesCount.direct
         },
         scrapeError: firstScrapeError || undefined
       };

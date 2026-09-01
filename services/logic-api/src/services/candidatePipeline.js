@@ -1,3 +1,4 @@
+import { StoreFetcherClient } from './storeFetcherClient.js';
 import { ScraperClient } from './scraperClient.js';
 import { GeminiDomParser } from './geminiParser.js';
 import { PriceCache } from './priceCache.js';
@@ -42,13 +43,23 @@ export function buildScrapeCacheKey(coreQuery, enabledStores = []) {
 }
 
 /**
- * Shared candidate pipeline for fetching candidates with 72h PriceCache check, bounded scraping, and source tracking.
+ * Shared candidate pipeline for fetching candidates with:
+ * 1. 72h PriceCache check
+ * 2. Tier 1: StoreFetcherClient direct store adapters (ahead of aggregator)
+ * 3. Tier 2: ScraperClient aggregator (trolley) fallback
+ * 4. Tier 3: Verified catalog benchmarks fallback
+ *
  * @param {string} coreQuery - Normalized ingredient search query
- * @param {object} options - { forceRefresh, timeoutMs, enabledStores }
- * @returns {Promise<{ products: Array, source: 'live' | 'cache' | 'catalog', error?: string }>}
+ * @param {object} options - { forceRefresh, timeoutMs, enabledStores, preferences }
+ * @returns {Promise<{ products: Array, source: 'direct' | 'live' | 'cache' | 'catalog', error?: string }>}
  */
 export async function getOrFetchCandidatesWithSource(coreQuery, options = {}) {
-  const { forceRefresh = false, timeoutMs = 15000, enabledStores = [] } = options;
+  const {
+    forceRefresh = false,
+    timeoutMs = 15000,
+    enabledStores = [],
+    preferences = {}
+  } = options;
   const cacheKey = buildScrapeCacheKey(coreQuery, enabledStores);
 
   if (!forceRefresh) {
@@ -77,28 +88,61 @@ export async function getOrFetchCandidatesWithSource(coreQuery, options = {}) {
   let source = 'catalog';
   let error = null;
 
-  try {
-    const targetUrl = `https://www.trolley.co.uk/search/?q=${encodeURIComponent(coreQuery)}`;
-
-    const scrapePromise = ScraperClient.fetchHtml(targetUrl, {
-      waitForSelector: '.product-item, body',
-      timeout: timeoutMs,
-      delay: 500
-    });
-
-    const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('Live scrape timeout')), timeoutMs)
-    );
-
-    const { html } = await Promise.race([scrapePromise, timeoutPromise]);
-    candidateProducts = await GeminiDomParser.parseHtml(html, coreQuery);
-    if (candidateProducts && candidateProducts.length > 0) {
-      source = 'live';
+  // Tier 1: Direct store adapters (ahead of aggregator)
+  const isDirectEnabled = preferences.directScrapersEnabled !== false;
+  const directTargetStores = enabledStores.filter((s) => {
+    if (preferences.directStoreAdapters && preferences.directStoreAdapters[s] === false) {
+      return false;
     }
-  } catch (err) {
-    // Gracefully proceed with verified catalog products
-    error = err.message || 'Scrape failed';
-    source = 'catalog';
+    return ['tesco', 'sainsburys', 'asda', 'morrisons', 'iceland'].includes(s);
+  });
+
+  if (isDirectEnabled && directTargetStores.length > 0) {
+    try {
+      const directTimeout = Math.min(timeoutMs, 8000);
+      const directRes = await StoreFetcherClient.search(coreQuery, directTargetStores, {
+        timeoutMs: directTimeout
+      });
+      if (
+        directRes &&
+        directRes.success &&
+        Array.isArray(directRes.products) &&
+        directRes.products.length > 0
+      ) {
+        candidateProducts = directRes.products;
+        source = 'direct';
+      }
+    } catch (directErr) {
+      // Graceful fallback to aggregator
+      console.warn(`[candidatePipeline] Tier 1 direct fetch failed: ${directErr.message}`);
+    }
+  }
+
+  // Tier 2: Aggregator (trolley.co.uk) if direct tier yielded no products
+  if (candidateProducts.length === 0) {
+    try {
+      const targetUrl = `https://www.trolley.co.uk/search/?q=${encodeURIComponent(coreQuery)}`;
+
+      const scrapePromise = ScraperClient.fetchHtml(targetUrl, {
+        waitForSelector: '.product-item, body',
+        timeout: timeoutMs,
+        delay: 500
+      });
+
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Live scrape timeout')), timeoutMs)
+      );
+
+      const { html } = await Promise.race([scrapePromise, timeoutPromise]);
+      candidateProducts = await GeminiDomParser.parseHtml(html, coreQuery);
+      if (candidateProducts && candidateProducts.length > 0) {
+        source = 'live';
+      }
+    } catch (err) {
+      // Gracefully proceed with verified catalog products
+      error = err.message || 'Scrape failed';
+      source = 'catalog';
+    }
   }
 
   // Save / refresh persistent cache
