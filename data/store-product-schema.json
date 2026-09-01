@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "UnifiedStoreProduct",
+  "description": "Unified Product Schema for ShoppingWise Direct Supermarket Adapters",
+  "type": "object",
+  "schemaVersion": "1.0.0",
+  "required": [
+    "id",
+    "supermarket",
+    "title",
+    "price",
+    "source",
+    "schemaVersion"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "description": "Schema version stamp (1.0.0)"
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique retailer product identifier"
+    },
+    "supermarket": {
+      "type": "string",
+      "description": "Supermarket identifier (e.g. tesco, sainsburys, asda, morrisons, iceland)"
+    },
+    "title": {
+      "type": "string",
+      "description": "Clean product title"
+    },
+    "brand": {
+      "type": ["string", "null"],
+      "description": "Product brand name"
+    },
+    "price": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Current standard price in GBP"
+    },
+    "unitPrice": {
+      "type": ["number", "null"],
+      "description": "Price per unit measure in GBP"
+    },
+    "unitPriceMeasure": {
+      "type": ["string", "null"],
+      "description": "Unit of measurement (100g, kg, litre, each)"
+    },
+    "packageSize": {
+      "type": ["number", "null"],
+      "description": "Numeric package weight/volume"
+    },
+    "packageUnit": {
+      "type": ["string", "null"],
+      "description": "Unit (g, kg, ml, l)"
+    },
+    "packageDisplay": {
+      "type": ["string", "null"],
+      "description": "Original raw package string"
+    },
+    "deal": {
+      "type": ["object", "null"],
+      "description": "Applied multibuy or promotional bundle details"
+    },
+    "clubcardPrice": {
+      "type": ["number", "null"],
+      "description": "Tesco Clubcard price in GBP"
+    },
+    "nectarPrice": {
+      "type": ["number", "null"],
+      "description": "Sainsbury's Nectar price in GBP"
+    },
+    "inStock": {
+      "type": "boolean",
+      "default": true
+    },
+    "productUrl": {
+      "type": ["string", "null"]
+    },
+    "imageUrl": {
+      "type": ["string", "null"]
+    },
+    "source": {
+      "type": "string",
+      "enum": ["direct"],
+      "default": "direct"
+    }
+  }
+}

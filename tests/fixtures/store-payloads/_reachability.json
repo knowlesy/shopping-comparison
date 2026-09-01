@@ -1,0 +1,46 @@
+{
+  "generatedAt": "2026-09-01T19:54:00.000Z",
+  "labVersion": "1.0.0",
+  "stores": {
+    "tesco": {
+      "status": "unreachable",
+      "checkedAt": "2026-09-01T19:54:00.000Z",
+      "reason": "Pending live lab:probe execution in Step 5 checkpoint",
+      "evidence": "Initial state before probe execution"
+    },
+    "sainsburys": {
+      "status": "unreachable",
+      "checkedAt": "2026-09-01T19:54:00.000Z",
+      "reason": "Pending live lab:probe execution in Step 5 checkpoint",
+      "evidence": "Initial state before probe execution"
+    },
+    "asda": {
+      "status": "unreachable",
+      "checkedAt": "2026-09-01T19:54:00.000Z",
+      "reason": "Pending live lab:probe execution in Step 5 checkpoint",
+      "evidence": "Initial state before probe execution"
+    },
+    "morrisons": {
+      "status": "unreachable",
+      "checkedAt": "2026-09-01T19:54:00.000Z",
+      "reason": "Pending live lab:probe execution in Step 5 checkpoint",
+      "evidence": "Initial state before probe execution"
+    },
+    "iceland": {
+      "status": "unreachable",
+      "checkedAt": "2026-09-01T19:54:00.000Z",
+      "reason": "Pending live lab:probe execution in Step 5 checkpoint",
+      "evidence": "Initial state before probe execution"
+    },
+    "aldi": {
+      "status": "unsupported",
+      "checkedAt": "2026-09-01T19:54:00.000Z",
+      "reason": "No UK online grocery platform — estimated data only (Click & Collect discontinued)"
+    },
+    "lidl": {
+      "status": "unsupported",
+      "checkedAt": "2026-09-01T19:54:00.000Z",
+      "reason": "No UK online grocery platform — in-store shopping only"
+    }
+  }
+}
