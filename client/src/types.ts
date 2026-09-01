@@ -189,6 +189,7 @@ export interface UserPreferences {
   enablePastSearches?: boolean;
   directScrapersEnabled?: boolean;
   directStoreAdapters?: Record<string, boolean>;
+  allowMixedPackSizes?: boolean;
   aiMatchingEnabled?: boolean;
   aiMatchingExternallyConfigured?: boolean;
   hasGeminiKey?: boolean;

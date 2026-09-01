@@ -311,6 +311,23 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 </button>
               ))}
             </div>
+
+            <label className="flex items-center justify-between p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40 cursor-pointer mt-2">
+              <div>
+                <span className="text-xs font-bold text-slate-800 dark:text-slate-200 block">
+                  Allow Mixed Pack Sizes (Cheapest-Route Optimizer)
+                </span>
+                <span className="text-[11px] text-slate-500">
+                  When enabled, combines multiple different pack sizes (e.g. 500g + 250g + 250g) to find the absolute lowest cost route for your target weight. When disabled, uses single pack sizes multiplied.
+                </span>
+              </div>
+              <input
+                type="checkbox"
+                checked={localPrefs.allowMixedPackSizes ?? false}
+                onChange={e => setLocalPrefs({ ...localPrefs, allowMixedPackSizes: e.target.checked })}
+                className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500"
+              />
+            </label>
           </div>
 
           {/* Section: Promotional Deals & Multibuys */}

@@ -37,6 +37,7 @@ let userSettings = {
     morrisons: true,
     iceland: true
   },
+  allowMixedPackSizes: false,
   aiMatchingEnabled: process.env.ENABLE_GEMINI_MATCHING === 'true' || isAiConfiguredExternally,
   aiMatchingExternallyConfigured: isAiConfiguredExternally,
   geminiApiKey: ''
@@ -76,6 +77,7 @@ settingsRouter.put('/', (req, res) => {
     'enablePastSearches',
     'directScrapersEnabled',
     'directStoreAdapters',
+    'allowMixedPackSizes',
     'aiMatchingEnabled',
     'geminiApiKey'
   ];

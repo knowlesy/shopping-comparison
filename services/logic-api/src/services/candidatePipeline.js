@@ -101,7 +101,9 @@ export async function getOrFetchCandidatesWithSource(coreQuery, options = {}) {
     try {
       const directTimeout = Math.min(timeoutMs, 8000);
       const directRes = await StoreFetcherClient.search(coreQuery, directTargetStores, {
-        timeoutMs: directTimeout
+        timeoutMs: directTimeout,
+        wantVariants: true,
+        targetQuantity: preferences.targetQuantity
       });
       if (
         directRes &&
@@ -109,6 +111,7 @@ export async function getOrFetchCandidatesWithSource(coreQuery, options = {}) {
         Array.isArray(directRes.products) &&
         directRes.products.length > 0
       ) {
+        // Collect size variants returned by direct store adapters
         candidateProducts = directRes.products;
         source = 'direct';
       }
