@@ -187,6 +187,8 @@ export interface UserPreferences {
   defaultPostcode?: string;
   devMode?: boolean;
   enablePastSearches?: boolean;
+  directScrapersEnabled?: boolean;
+  directStoreAdapters?: Record<string, boolean>;
   aiMatchingEnabled?: boolean;
   aiMatchingExternallyConfigured?: boolean;
   hasGeminiKey?: boolean;

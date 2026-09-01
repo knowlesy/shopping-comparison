@@ -15,6 +15,8 @@ const isAiConfiguredExternally = Boolean(
   process.env.ENABLE_GEMINI_MATCHING === 'true'
 );
 
+export const KNOWN_DIRECT_STORES = ['tesco', 'sainsburys', 'asda', 'morrisons', 'iceland'];
+
 let userSettings = {
   healthierDefault: true,
   fatPercentagePreference: 5,
@@ -27,6 +29,14 @@ let userSettings = {
   includeDeals: true,
   enabledSupermarkets: ['asda', 'sainsburys', 'tesco', 'morrisons', 'iceland', 'aldi', 'lidl'],
   enablePastSearches: true,
+  directScrapersEnabled: true,
+  directStoreAdapters: {
+    tesco: true,
+    sainsburys: true,
+    asda: true,
+    morrisons: true,
+    iceland: true
+  },
   aiMatchingEnabled: process.env.ENABLE_GEMINI_MATCHING === 'true' || isAiConfiguredExternally,
   aiMatchingExternallyConfigured: isAiConfiguredExternally,
   geminiApiKey: ''
@@ -64,15 +74,46 @@ settingsRouter.put('/', (req, res) => {
     'enabledSupermarkets',
     'devMode',
     'enablePastSearches',
+    'directScrapersEnabled',
+    'directStoreAdapters',
     'aiMatchingEnabled',
     'geminiApiKey'
   ];
+
+  if (req.body && req.body.directScrapersEnabled !== undefined) {
+    if (typeof req.body.directScrapersEnabled !== 'boolean') {
+      return res.status(400).json({ error: 'directScrapersEnabled must be a boolean' });
+    }
+  }
+
+  if (req.body && req.body.directStoreAdapters !== undefined) {
+    if (
+      typeof req.body.directStoreAdapters !== 'object' ||
+      req.body.directStoreAdapters === null ||
+      Array.isArray(req.body.directStoreAdapters)
+    ) {
+      return res.status(400).json({ error: 'directStoreAdapters must be an object' });
+    }
+    for (const [store, val] of Object.entries(req.body.directStoreAdapters)) {
+      if (!KNOWN_DIRECT_STORES.includes(store)) {
+        return res.status(400).json({ error: `Unknown store in directStoreAdapters: ${store}` });
+      }
+      if (typeof val !== 'boolean') {
+        return res.status(400).json({ error: `directStoreAdapters.${store} must be a boolean` });
+      }
+    }
+  }
 
   const sanitized = {};
   for (const key of allowedKeys) {
     if (req.body && req.body[key] !== undefined) {
       if (key === 'geminiApiKey') {
         sanitized[key] = typeof req.body[key] === 'string' ? req.body[key].trim() : '';
+      } else if (key === 'directStoreAdapters') {
+        sanitized[key] = {
+          ...userSettings.directStoreAdapters,
+          ...req.body[key]
+        };
       } else {
         sanitized[key] = req.body[key];
       }

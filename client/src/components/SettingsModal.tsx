@@ -400,6 +400,123 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             </div>
           </div>
 
+          {/* Section: Direct Store Lookups */}
+          <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+            <div className="flex items-center justify-between">
+              <h4 className="text-xs font-extrabold uppercase text-slate-400 tracking-wider flex items-center space-x-1.5">
+                <Cpu className="w-3.5 h-3.5 text-blue-500" />
+                <span>Direct Store Lookups</span>
+              </h4>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300">
+                Tier 1 Direct (90% trust)
+              </span>
+            </div>
+
+            {/* Master Toggle */}
+            <label className="flex items-start space-x-3 p-3.5 rounded-xl border border-blue-200/60 dark:border-blue-800/40 bg-blue-50/40 dark:bg-blue-950/20 cursor-pointer transition">
+              <input
+                type="checkbox"
+                checked={localPrefs.directScrapersEnabled ?? true}
+                onChange={e => setLocalPrefs({ ...localPrefs, directScrapersEnabled: e.target.checked })}
+                className="w-4 h-4 mt-0.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+              />
+              <div className="flex-1">
+                <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center space-x-1.5">
+                  <span>Enable Direct Store Adapters (Master Switch)</span>
+                </span>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
+                  Query supermarket backends directly for high-confidence pricing (90%). When disabled or if an adapter is offline, requests gracefully fall back to aggregator (60%) or catalog benchmark (40%).
+                </p>
+              </div>
+            </label>
+
+            {/* Per-Store Adapter Rows */}
+            <div className="space-y-1.5 pt-1">
+              <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 block px-1">
+                Per-Store Adapters & Live Status
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {[
+                  { id: 'tesco', name: 'Tesco', supported: true },
+                  { id: 'sainsburys', name: "Sainsbury's", supported: true },
+                  { id: 'asda', name: 'Asda', supported: true },
+                  { id: 'morrisons', name: 'Morrisons', supported: true },
+                  { id: 'iceland', name: 'Iceland', supported: true },
+                  { id: 'aldi', name: 'Aldi', supported: false },
+                  { id: 'lidl', name: 'Lidl', supported: false },
+                ].map(store => {
+                  const masterOn = localPrefs.directScrapersEnabled ?? true;
+                  const adapterOn = localPrefs.directStoreAdapters?.[store.id] ?? true;
+                  const isChecked = masterOn && adapterOn && store.supported;
+
+                  if (!store.supported) {
+                    return (
+                      <div
+                        key={store.id}
+                        className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100/70 dark:bg-slate-900/50 opacity-50 cursor-not-allowed flex items-center justify-between"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            disabled
+                            checked={false}
+                            className="w-3.5 h-3.5 rounded border-slate-300 text-slate-400 cursor-not-allowed"
+                          />
+                          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">{store.name}</span>
+                        </div>
+                        <span className="text-[9px] font-medium text-slate-500 dark:text-slate-400 italic text-right">
+                          No online grocery — estimated data only
+                        </span>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <label
+                      key={store.id}
+                      className={`p-2.5 rounded-xl border text-xs font-semibold transition flex items-center justify-between cursor-pointer ${
+                        isChecked
+                          ? 'bg-emerald-50/50 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-800 text-slate-800 dark:text-slate-200'
+                          : 'bg-slate-50 dark:bg-slate-800/40 border-slate-200 dark:border-slate-700 text-slate-400'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          checked={adapterOn}
+                          disabled={!masterOn}
+                          onChange={e => {
+                            const current = localPrefs.directStoreAdapters || {
+                              tesco: true, sainsburys: true, asda: true, morrisons: true, iceland: true
+                            };
+                            setLocalPrefs({
+                              ...localPrefs,
+                              directStoreAdapters: {
+                                ...current,
+                                [store.id]: e.target.checked
+                              }
+                            });
+                          }}
+                          className="w-3.5 h-3.5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 disabled:opacity-50"
+                        />
+                        <span className="text-xs font-bold">{store.name}</span>
+                      </div>
+                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
+                        !masterOn
+                          ? 'bg-slate-200 dark:bg-slate-800 text-slate-500'
+                          : adapterOn
+                            ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300'
+                            : 'bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300'
+                      }`}>
+                        {!masterOn ? 'Disabled' : adapterOn ? 'Enabled' : 'Disabled'}
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
           {/* Section 5: 72-Hour Price Cache & Data Controls */}
           <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
             <div className="flex items-center justify-between">

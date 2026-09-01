@@ -34,6 +34,14 @@ const DEFAULT_PREFS: UserPreferences = {
   packSizingPolicy: 'closest',
   enabledSupermarkets: ['asda', 'sainsburys', 'tesco', 'morrisons', 'iceland', 'aldi', 'lidl'],
   devMode: true,
+  directScrapersEnabled: true,
+  directStoreAdapters: {
+    tesco: true,
+    sainsburys: true,
+    asda: true,
+    morrisons: true,
+    iceland: true
+  },
 };
 
 export default function App() {
