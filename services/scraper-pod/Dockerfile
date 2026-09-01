@@ -1,4 +1,4 @@
-FROM node:22-bullseye
+FROM node:26-bullseye
 
 # Install Chromium, Xvfb, fonts, and required X11/graphics dependencies for headless execution
 RUN apt-get update && apt-get install -y --no-install-recommends \
