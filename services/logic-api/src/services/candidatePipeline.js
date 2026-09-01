@@ -2,6 +2,7 @@ import { StoreFetcherClient } from './storeFetcherClient.js';
 import { ScraperClient } from './scraperClient.js';
 import { GeminiDomParser } from './geminiParser.js';
 import { PriceCache } from './priceCache.js';
+import { QueryStrategist } from './queryStrategist.js';
 
 export function getCoreSearchQuery(item) {
   if (!item) return '';
@@ -99,11 +100,19 @@ export async function getOrFetchCandidatesWithSource(coreQuery, options = {}) {
 
   if (isDirectEnabled && directTargetStores.length > 0) {
     try {
+      // Formulate store-specific query terms and variant targets via QueryStrategist
+      const queryPlan = await QueryStrategist.plan(
+        typeof coreQuery === 'string' ? { name: coreQuery } : coreQuery,
+        { supermarket: directTargetStores[0] || 'tesco', aiMatchingEnabled: preferences.aiMatchingEnabled }
+      );
+      const searchTerms = queryPlan.queries && queryPlan.queries.length > 0 ? queryPlan.queries[0] : coreQuery;
+
       const directTimeout = Math.min(timeoutMs, 8000);
-      const directRes = await StoreFetcherClient.search(coreQuery, directTargetStores, {
+      const directRes = await StoreFetcherClient.search(searchTerms, directTargetStores, {
         timeoutMs: directTimeout,
         wantVariants: true,
-        targetQuantity: preferences.targetQuantity
+        targetQuantity: preferences.targetQuantity,
+        suggestedVariants: queryPlan.suggestedVariants
       });
       if (
         directRes &&

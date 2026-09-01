@@ -312,6 +312,30 @@ function assertReachabilityDeclared(store) {
   if (status !== 'reachable' && !entry.evidence && !entry.reason) {
     fail(`${store}: declared "${status}" with no evidence/reason — an honest negative still needs proof`);
   }
+  // A store may only be written off as unreachable if it was tested with the client
+  // this project actually ships: TLS-impersonating curl_cffi via the sidecar. A 403
+  // against plain node/undici fetch proves nothing except that plain fetch is blocked —
+  // which research.md states as a given, and is the entire reason the sidecar exists.
+  // "Reachable" must mean "structured product data was extracted", not "the server
+  // returned 200". Retailer HTML search pages return 200 for consent walls, challenge
+  // interstitials and empty shells — none of which are usable.
+  if (status === 'reachable') {
+    if (typeof entry.productsFound !== 'number') {
+      fail(`${store}: declared reachable without a numeric "productsFound" — HTTP 200 alone does not prove usable data (consent/challenge pages also return 200)`);
+    }
+    if (entry.productsFound <= 0) {
+      fail(`${store}: declared reachable but productsFound=${entry.productsFound} — that is not reachable, it is a 200 with no products`);
+    }
+  }
+  if (status === 'unreachable') {
+    const client = String(entry.client || entry.via || '');
+    if (!client) {
+      fail(`${store}: declared unreachable with no "client" field — record which HTTP client was used`);
+    }
+    if (/^(node|undici|fetch|axios|got|plain)/i.test(client) || !/impersonat|curl_cffi|camoufox|sidecar|store-fetcher/i.test(client)) {
+      fail(`${store}: declared unreachable using client "${client}" — a non-impersonating client cannot establish this. Re-probe through the sidecar (curl_cffi impersonation) before writing the store off.`);
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -326,6 +350,14 @@ check(6, 'Tesco adapter implements the contract against the documented GraphQL g
 });
 
 check(6, 'Tesco normalization is proven offline against a recorded payload', () => {
+  const rf = r('tests/fixtures/store-payloads/_reachability.json');
+  if (fs.existsSync(rf)) {
+    const report = JSON.parse(read(rf));
+    const entry = (report.stores || report).tesco || {};
+    if ((entry.status || entry.state) !== 'reachable') {
+      return `tesco declared ${entry.status || 'unknown'} — no normalization test required`;
+    }
+  }
   const files = [
     ...fs.readdirSync(r('services/logic-api/src/services')).filter((f) => f.endsWith('.test.js'))
       .map((f) => read(r('services/logic-api/src/services', f))),
@@ -337,8 +369,16 @@ check(6, 'Tesco normalization is proven offline against a recorded payload', () 
 });
 
 check(6, 'Tesco fixture carries real provenance and Tesco reachability is declared', () => {
-  assertRealFixture('tesco');
   assertReachabilityDeclared('tesco');
+  const report = JSON.parse(read(r('tests/fixtures/store-payloads/_reachability.json')));
+  const entry = (report.stores || report).tesco;
+  const status = entry.status || entry.state;
+  // Only a store proven reachable owes a fixture. A store honestly declared
+  // unreachable (with an impersonating client, per assertReachabilityDeclared)
+  // must NOT have one invented for it.
+  if (status !== 'reachable') return `tesco declared ${status} — no fixture required`;
+  assertRealFixture('tesco');
+  return '';
 });
 
 // ---------------------------------------------------------------------------
@@ -477,6 +517,40 @@ check(9, 'Mixed pack sizes are opt-in, and the chosen route is explained to the 
   if (!(mixed.totalPrice <= single.totalPrice)) fail('mixed mode is not at least as cheap as single-variant');
 });
 
+check(9, 'variantOptimizer is actually WIRED INTO the runtime matching path, not dead code', async () => {
+  // A module that only its own tests import is not a feature. Require a real
+  // runtime importer, then prove the matcher's output carries the optimizer's route.
+  const runtimeDir = r('services/logic-api/src');
+  const importers = [];
+  const walk = (dir) => {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      const p = path.join(dir, e.name);
+      if (e.isDirectory()) walk(p);
+      else if (e.name.endsWith('.js') && !e.name.endsWith('.test.js') && e.name !== 'variantOptimizer.js') {
+        if (/variantOptimizer/.test(read(p))) importers.push(path.relative(runtimeDir, p));
+      }
+    }
+  };
+  walk(runtimeDir);
+  if (importers.length === 0) {
+    fail('nothing in services/logic-api/src imports variantOptimizer.js — the 900g optimizer never runs in the app');
+  }
+
+  const { FuzzyMatcher } = await svc('fuzzyMatcher.js');
+  const variants = [
+    { id: 'v500', supermarket: 'tesco', title: 'Tesco Beef Mince 500g', category: 'meat', packageSize: 500, packageUnit: 'g', packageDisplay: '500g', price: 2.6, unitPrice: 5.2 },
+    { id: 'v1k', supermarket: 'tesco', title: 'Tesco Beef Mince 1kg', category: 'meat', packageSize: 1, packageUnit: 'kg', packageDisplay: '1kg', price: 6.0, unitPrice: 6.0 }
+  ];
+  const item = { name: 'beef mince', baseItem: 'beef mince', category: 'meat', targetQuantity: 900, unit: 'g' };
+  const m = FuzzyMatcher.matchProduct('tesco', item, variants, { packSizingPolicy: 'cover', includeDeals: false });
+  if (!m || !m.product) fail('matcher returned no match for a multi-variant candidate set');
+  const hasRoute = Array.isArray(m.lines) || Array.isArray(m.variantRoute) || typeof m.routeExplanation === 'string' || typeof m.explanation === 'string';
+  if (!hasRoute) {
+    fail(`match result carries no optimizer route (lines/explanation) — matcher is not using variantOptimizer (importers found: ${importers.join(', ')})`);
+  }
+  return `wired via: ${importers.join(', ')}`;
+});
+
 check(9, 'Fan-out asks the adapter for size variants, and the setting is user-facing', async () => {
   const pipe = read(r('services/logic-api/src/services/candidatePipeline.js'));
   if (!/variant/i.test(pipe)) fail('pipeline does not request/collect size variants');
@@ -500,6 +574,25 @@ check(10, 'A query strategist proposes store-specific search terms and is AI-opt
   if (!plan) fail('strategist returned nothing with AI disabled');
   const terms = plan.queries || plan.terms || plan;
   if (!Array.isArray(terms) || terms.length === 0) fail('strategist produced no query terms offline');
+});
+
+check(10, 'queryStrategist is WIRED INTO the runtime lookup path, not only the eval script', () => {
+  const runtimeDir = r('services/logic-api/src');
+  const importers = [];
+  const walk = (dir) => {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      const p = path.join(dir, e.name);
+      if (e.isDirectory()) walk(p);
+      else if (e.name.endsWith('.js') && !e.name.endsWith('.test.js') && e.name !== 'queryStrategist.js') {
+        if (/queryStrategist/.test(read(p))) importers.push(path.relative(runtimeDir, p));
+      }
+    }
+  };
+  walk(runtimeDir);
+  if (importers.length === 0) {
+    fail('nothing in services/logic-api/src imports queryStrategist.js — it runs only in the eval harness, never for a real lookup');
+  }
+  return `wired via: ${importers.join(', ')}`;
 });
 
 check(10, 'AI lookup selection is evaluated by the existing harness with direct-tier fixtures', () => {

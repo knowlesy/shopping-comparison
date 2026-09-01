@@ -10,7 +10,7 @@ export const RETAILER_ENDPOINTS = {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
-      'x-apikey': '8c5c3639-684f-4d9f-a3c3-6e693175bb97', // Common public app key
+      // UNUSED / DEPRECATED: Shipped adapter extracts dehydrated Apollo Client state from search HTML SSR; static x-apikey is not used
       'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
       'accept': 'application/json'
     },

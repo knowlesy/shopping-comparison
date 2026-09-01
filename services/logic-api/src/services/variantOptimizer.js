@@ -226,6 +226,7 @@ export class VariantOptimizer {
     return {
       lines: best.lines,
       totalQuantity: best.totalQuantity,
+      unit: targetUnit,
       totalPrice: best.totalPrice,
       effectiveUnitPrice,
       weightDifferencePercent: weightDiff,

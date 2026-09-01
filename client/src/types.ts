@@ -109,6 +109,10 @@ export interface ItemMatch {
   confidenceSource?: 'direct' | 'aggregator' | 'ai' | 'ai-cached' | 'catalog';
   dealApplied?: DealApplied;
   reason?: string;
+  lines?: Array<{ product: SupermarketProduct; packs: number; subtotal: number }>;
+  variantRoute?: Array<{ product: SupermarketProduct; packs: number; subtotal: number }>;
+  routeExplanation?: string;
+  explanation?: string;
   alternatives?: SupermarketProduct[];
 }
 

@@ -4,6 +4,7 @@ import { formatConfidence, CONFIDENCE_BY_SOURCE } from './confidence.js';
 import { KeywordExtractor } from './keywordExtractor.js';
 import { PackSelector } from './packSelector.js';
 import { PenaltyRules } from './penaltyRules.js';
+import { VariantOptimizer } from './variantOptimizer.js';
 
 // Pre-index catalog products by supermarket once at startup to avoid repeated O(N) filtering in loops
 const CATALOG_BY_STORE = {};
@@ -67,8 +68,16 @@ export class FuzzyMatcher {
       };
     });
 
-    // Sort strictly by highest match score, then lowest total price
-    scored.sort((a, b) => b.score - a.score || a.totalPrice - b.totalPrice);
+    // Sort: live/direct products take precedence over catalog fallback when score >= 25,
+    // then highest match score, then lowest total price
+    scored.sort((a, b) => {
+      const aIsCat = a.product.source === 'catalog';
+      const bIsCat = b.product.source === 'catalog';
+      if (aIsCat !== bIsCat && a.score >= 25 && b.score >= 25) {
+        return aIsCat ? 1 : -1;
+      }
+      return b.score - a.score || a.totalPrice - b.totalPrice;
+    });
 
     const best = scored[0];
 
@@ -90,6 +99,68 @@ export class FuzzyMatcher {
       };
     }
 
+function getTitleCore(title = '') {
+  return String(title)
+    .toLowerCase()
+    .replace(/\b\d+(?:\.\d+)?\s*(?:kg|g|litre|ltr|l|ml|pints?|pt|pk|pack)\b/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+    // Filter candidate size variants sharing the same product line and source tier as best match
+    const bestTitleCore = getTitleCore(best.product.title);
+    const isBestCatalog = best.product.source === 'catalog';
+    const productVariants = scored
+      .filter((s) => s.product && s.score >= 25 && s.product.price > 0)
+      .filter((s) => {
+        const isCat = s.product.source === 'catalog';
+        if (isBestCatalog !== isCat) return false;
+        if (s.product.id === best.product.id) return true;
+        const sTitleCore = getTitleCore(s.product.title);
+        const titleMatches = sTitleCore === bestTitleCore || (sTitleCore.length > 5 && (bestTitleCore.includes(sTitleCore) || sTitleCore.includes(bestTitleCore)));
+        return titleMatches;
+      })
+      .map((s) => s.product);
+
+    let chosenProduct = best.product;
+    let chosenPacks = best.packs;
+    let chosenTotalQty = best.totalQty;
+    let chosenTotalPrice = best.totalPrice;
+    let chosenWeightDiff = best.weightDiffPct;
+    let chosenDealApplied = best.dealApplied;
+    let lines = [{ product: best.product, packs: best.packs, subtotal: best.totalPrice }];
+    let explanation = `${best.packs}x ${best.product.title}`;
+
+    if (productVariants.length > 1) {
+      const optRoute = VariantOptimizer.optimize(productVariants, item, preferences);
+      if (optRoute && optRoute.lines && optRoute.lines.length > 0) {
+        lines = optRoute.lines;
+        explanation = optRoute.explanation;
+        chosenProduct = optRoute.lines[0].product;
+        chosenPacks = optRoute.lines.reduce((sum, l) => sum + l.packs, 0);
+
+        const targetUnit = String(item.unit || '').toLowerCase();
+        let totalQtyInBase = optRoute.totalQuantity;
+        if (targetUnit === 'kg' || targetUnit === 'l') {
+          totalQtyInBase = Math.round(optRoute.totalQuantity * 1000);
+        }
+
+        chosenTotalQty = totalQtyInBase;
+        chosenTotalPrice = optRoute.totalPrice;
+        chosenWeightDiff = optRoute.weightDifferencePercent;
+        if (optRoute.dealApplied) {
+          chosenDealApplied = {
+            dealText: optRoute.dealApplied,
+            originalPrice: Number((chosenProduct.price * chosenPacks).toFixed(2)),
+            discountedPrice: chosenTotalPrice,
+            savings: Number((chosenProduct.price * chosenPacks - chosenTotalPrice).toFixed(2)),
+            effectiveUnitPrice: optRoute.effectiveUnitPrice,
+            summary: optRoute.dealApplied
+          };
+        }
+      }
+    }
+
     const itemText = `${item.baseItem || ''} ${item.name || ''}`.toLowerCase();
     const targetNouns = keywords;
 
@@ -97,7 +168,7 @@ export class FuzzyMatcher {
     const alternatives = scored
       .filter((s) => {
         if (!s.product || s.score < 25) return false;
-        if (s.product.id === best.product.id) return false;
+        if (s.product.id === chosenProduct.id) return false;
         const prodTitle = s.product.title.toLowerCase();
 
         if (isContaminated(itemText, prodTitle)) {
@@ -124,34 +195,38 @@ export class FuzzyMatcher {
       .map((s) => s.product);
 
     // Weight shortfall check via PackSelector
-    const weightShortfall = PackSelector.detectShortfall(item, best.totalQty);
+    const weightShortfall = PackSelector.detectShortfall(item, chosenTotalQty);
 
-    const isCatalog = best.product.source === 'catalog';
-    const isDirect = best.product.source === 'direct';
-    const confidenceSource = best.product.confidenceSource || (isCatalog ? 'catalog' : (isDirect ? 'direct' : 'aggregator'));
+    const isCatalog = chosenProduct.source === 'catalog';
+    const isDirect = chosenProduct.source === 'direct';
+    const confidenceSource = chosenProduct.confidenceSource || (isCatalog ? 'catalog' : (isDirect ? 'direct' : 'aggregator'));
     const defaultScore = CONFIDENCE_BY_SOURCE[confidenceSource] ?? (isCatalog ? 0.4 : 0.6);
-    const confidenceScore = best.product.confidenceScore !== undefined
-      ? best.product.confidenceScore
+    const confidenceScore = chosenProduct.confidenceScore !== undefined
+      ? chosenProduct.confidenceScore
       : defaultScore;
-    const isEstimated = isCatalog || best.product.isEstimated === true;
+    const isEstimated = isCatalog || chosenProduct.isEstimated === true;
 
     return {
       parsedItem: item,
       supermarket,
-      product: best.product,
-      packsNeeded: best.packs,
-      totalQuantity: best.totalQty,
-      totalPrice: best.totalPrice,
-      effectiveUnitPrice: best.dealApplied
-        ? best.dealApplied.effectiveUnitPrice
-        : best.product.unitPrice,
-      weightDifferencePercent: best.weightDiffPct,
-      isClosestPack: Math.abs(best.weightDiffPct) < 25,
+      product: chosenProduct,
+      packsNeeded: chosenPacks,
+      totalQuantity: chosenTotalQty,
+      totalPrice: chosenTotalPrice,
+      effectiveUnitPrice: chosenDealApplied
+        ? chosenDealApplied.effectiveUnitPrice
+        : chosenProduct.unitPrice,
+      weightDifferencePercent: chosenWeightDiff,
+      isClosestPack: Math.abs(chosenWeightDiff) < 25,
       weightShortfall,
       isEstimated,
       matchScore: best.score,
-      ...formatConfidence(confidenceScore, confidenceSource, best.product.confidence, supermarket),
-      dealApplied: best.dealApplied || undefined,
+      lines,
+      variantRoute: lines,
+      explanation,
+      routeExplanation: explanation,
+      ...formatConfidence(confidenceScore, confidenceSource, chosenProduct.confidence, supermarket),
+      dealApplied: chosenDealApplied || undefined,
       alternatives
     };
   }

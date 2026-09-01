@@ -502,21 +502,26 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({
                                       </div>
 
                                       {/* Packaging & Calculation */}
-                                      <div className="text-[11px] text-slate-500 dark:text-slate-400 space-y-0.5 pt-0.5">
-                                        <div className="flex items-center space-x-1">
-                                          <Package className="w-3 h-3 text-slate-400 shrink-0" />
-                                          <span className="truncate">
-                                            {match.packsNeeded > 1
-                                              ? `${match.packsNeeded} × ${product.packageDisplay} = ${match.totalQuantity}${product.packageUnit}`
-                                              : product.packageDisplay}
-                                          </span>
+                                        <div className="text-[11px] text-slate-500 dark:text-slate-400 space-y-0.5 pt-0.5">
+                                          <div className="flex items-center space-x-1">
+                                            <Package className="w-3 h-3 text-slate-400 shrink-0" />
+                                            <span className="truncate">
+                                              {match.packsNeeded > 1
+                                                ? `${match.packsNeeded} × ${product.packageDisplay} = ${match.totalQuantity}${product.packageUnit}`
+                                                : product.packageDisplay}
+                                            </span>
+                                          </div>
+                                          {match.explanation && (
+                                            <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium truncate" title={match.explanation}>
+                                              ⚡ {match.explanation}
+                                            </div>
+                                          )}
+                                          <div className="text-slate-400 text-[10px]">
+                                            {product.unitPrice > 0 && `(£${product.unitPrice.toFixed(2)} ${product.unitPriceMeasure})`}
+                                          </div>
                                         </div>
-                                        <div className="text-slate-400 text-[10px]">
-                                          {product.unitPrice > 0 && `(£${product.unitPrice.toFixed(2)} ${product.unitPriceMeasure})`}
-                                        </div>
-                                      </div>
 
-                                      {/* Deal / Multibuy Banner */}
+                                        {/* Deal / Multibuy Banner */}
                                       {match.dealApplied ? (
                                         <div className="px-1.5 py-0.5 mt-1 rounded bg-amber-100 dark:bg-amber-950/80 border border-amber-300/60 dark:border-amber-800/60 text-amber-900 dark:text-amber-200 text-[10px] font-extrabold truncate" title={match.dealApplied.summary || match.dealApplied.dealText}>
                                           🏷️ {match.dealApplied.dealText}
