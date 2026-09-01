@@ -79,3 +79,9 @@ yarn-error.log*
 blog.md
 docs/blog_assets/
 docs/research/
+
+# Python Virtualenv and Cache
+.venv/
+*/.venv/
+__pycache__/
+*.pyc

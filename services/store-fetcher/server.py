@@ -116,3 +116,113 @@ def search(
         "stores": results,
         "source": "direct",
     }
+
+
+@app.get("/probe")
+def probe_stores(
+    x_fetcher_token: Optional[str] = Header(None, alias="x-fetcher-token")
+):
+    """
+    Live canary reachability probe across supermarket backends
+    using curl_cffi browser impersonation (chrome124).
+    """
+    from datetime import datetime, timezone
+    try:
+        from curl_cffi import requests as cffi_requests
+    except ImportError:
+        cffi_requests = None
+
+    now = datetime.now(timezone.utc).isoformat()
+    client_name = "curl_cffi/chrome124 (store-fetcher sidecar)"
+
+    probes = {
+        "tesco": {
+            "url": "https://www.tesco.com/groceries/en-GB/search?query=semi%20skimmed%20milk",
+            "method": "GET",
+            "headers": {"accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"}
+        },
+        "sainsburys": {
+            "url": "https://www.sainsburys.co.uk/groceries-api/gol-services/product/v1/product?filter[keyword]=semi%20skimmed%20milk&page_number=1&page_size=24",
+            "method": "GET",
+            "headers": {"accept": "application/json"}
+        },
+        "asda": {
+            "url": "https://groceries.asda.com/search/semi%20skimmed%20milk",
+            "method": "GET",
+            "headers": {"accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"}
+        },
+        "morrisons": {
+            "url": "https://groceries.morrisons.com/search?entry=semi%20skimmed%20milk",
+            "method": "GET",
+            "headers": {"accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"}
+        },
+        "iceland": {
+            "url": "https://www.iceland.co.uk/search?q=semi%20skimmed%20milk",
+            "method": "GET",
+            "headers": {"accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"}
+        }
+    }
+
+    report = {
+        "generatedAt": now,
+        "labVersion": "1.2.0",
+        "client": client_name,
+        "stores": {}
+    }
+
+    session = cffi_requests.Session(impersonate="chrome124") if cffi_requests else None
+
+    for store_name, cfg in probes.items():
+        if not session:
+            report["stores"][store_name] = {
+                "status": "unreachable",
+                "client": client_name,
+                "checkedAt": now,
+                "evidence": "curl_cffi not available in runtime"
+            }
+            continue
+
+        start = time.time()
+        try:
+            res = session.request(cfg["method"], cfg["url"], headers=cfg.get("headers", {}), timeout=12)
+            elapsed_ms = round((time.time() - start) * 1000)
+            if res.status_code == 200:
+                report["stores"][store_name] = {
+                    "status": "reachable",
+                    "client": client_name,
+                    "checkedAt": now,
+                    "httpStatus": res.status_code,
+                    "responseTimeMs": elapsed_ms,
+                    "requestUrl": cfg["url"]
+                }
+            else:
+                report["stores"][store_name] = {
+                    "status": "unreachable",
+                    "client": client_name,
+                    "checkedAt": now,
+                    "httpStatus": res.status_code,
+                    "evidence": f"HTTP {res.status_code} returned from {cfg['url']}",
+                    "reason": "Retailer edge challenge or block" if res.status_code == 403 else f"HTTP {res.status_code}"
+                }
+        except Exception as e:
+            elapsed_ms = round((time.time() - start) * 1000)
+            report["stores"][store_name] = {
+                "status": "unreachable",
+                "client": client_name,
+                "checkedAt": now,
+                "httpStatus": 0,
+                "evidence": str(e),
+                "reason": f"Connection error: {e}"
+            }
+
+    # Explicitly declared unsupported stores
+    for store_name, reason in UNSUPPORTED_STORES.items():
+        report["stores"][store_name] = {
+            "status": "unsupported",
+            "client": client_name,
+            "checkedAt": now,
+            "reason": reason
+        }
+
+    return report
+

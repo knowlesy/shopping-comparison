@@ -1,51 +1,59 @@
 {
-  "generatedAt": "2026-09-01T18:54:40.557Z",
-  "labVersion": "1.0.0",
+  "generatedAt": "2026-09-01T19:18:08.823896+00:00",
+  "labVersion": "1.2.0",
+  "client": "curl_cffi/chrome124 (store-fetcher sidecar)",
   "stores": {
     "tesco": {
-      "status": "unreachable",
-      "checkedAt": "2026-09-01T18:54:40.714Z",
-      "httpStatus": 403,
-      "evidence": "HTTP 403 returned from https://xapi.tesco.com/graphql",
-      "reason": "Blocked by retailer edge security (WAF / Bot Manager)"
+      "status": "reachable",
+      "client": "curl_cffi/chrome124 (store-fetcher sidecar)",
+      "checkedAt": "2026-09-01T19:18:08.823896+00:00",
+      "httpStatus": 200,
+      "responseTimeMs": 1361,
+      "requestUrl": "https://www.tesco.com/groceries/en-GB/search?query=semi%20skimmed%20milk"
     },
     "sainsburys": {
       "status": "reachable",
-      "checkedAt": "2026-09-01T18:54:41.145Z",
+      "client": "curl_cffi/chrome124 (store-fetcher sidecar)",
+      "checkedAt": "2026-09-01T19:18:08.823896+00:00",
       "httpStatus": 200,
-      "responseTimeMs": 428,
+      "responseTimeMs": 857,
       "requestUrl": "https://www.sainsburys.co.uk/groceries-api/gol-services/product/v1/product?filter[keyword]=semi%20skimmed%20milk&page_number=1&page_size=24"
     },
     "asda": {
-      "status": "unreachable",
-      "checkedAt": "2026-09-01T18:54:41.229Z",
-      "httpStatus": 403,
-      "evidence": "HTTP 403 returned from https://groceries.asda.com/api/v2/search?requestorigin=gi&keyword=semi%20skimmed%20milk",
-      "reason": "Blocked by retailer edge security (WAF / Bot Manager)"
+      "status": "reachable",
+      "client": "curl_cffi/chrome124 (store-fetcher sidecar)",
+      "checkedAt": "2026-09-01T19:18:08.823896+00:00",
+      "httpStatus": 200,
+      "responseTimeMs": 625,
+      "requestUrl": "https://groceries.asda.com/search/semi%20skimmed%20milk"
     },
     "morrisons": {
-      "status": "unreachable",
-      "checkedAt": "2026-09-01T18:54:41.487Z",
-      "httpStatus": 404,
-      "evidence": "HTTP 404 returned from https://groceries.morrisons.com/web/v4/products?searchTerm=semi%20skimmed%20milk",
-      "reason": "HTTP 404"
+      "status": "reachable",
+      "client": "curl_cffi/chrome124 (store-fetcher sidecar)",
+      "checkedAt": "2026-09-01T19:18:08.823896+00:00",
+      "httpStatus": 200,
+      "responseTimeMs": 1018,
+      "requestUrl": "https://groceries.morrisons.com/search?entry=semi%20skimmed%20milk"
     },
     "iceland": {
       "status": "reachable",
-      "checkedAt": "2026-09-01T18:54:42.849Z",
+      "client": "curl_cffi/chrome124 (store-fetcher sidecar)",
+      "checkedAt": "2026-09-01T19:18:08.823896+00:00",
       "httpStatus": 200,
-      "responseTimeMs": 1056,
-      "requestUrl": "https://www.iceland.co.uk/search?q=semi%20skimmed%20milk&format=json-extended"
+      "responseTimeMs": 1122,
+      "requestUrl": "https://www.iceland.co.uk/search?q=semi%20skimmed%20milk"
     },
     "aldi": {
       "status": "unsupported",
-      "checkedAt": "2026-09-01T18:54:42.849Z",
-      "reason": "No UK online grocery platform — estimated data only (Click & Collect discontinued)"
+      "client": "curl_cffi/chrome124 (store-fetcher sidecar)",
+      "checkedAt": "2026-09-01T19:18:08.823896+00:00",
+      "reason": "No UK online grocery platform — estimated data only"
     },
     "lidl": {
       "status": "unsupported",
-      "checkedAt": "2026-09-01T18:54:42.849Z",
-      "reason": "No UK online grocery platform — in-store shopping only"
+      "client": "curl_cffi/chrome124 (store-fetcher sidecar)",
+      "checkedAt": "2026-09-01T19:18:08.823896+00:00",
+      "reason": "No UK online grocery platform — estimated data only"
     }
   }
 }

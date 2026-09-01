@@ -29,6 +29,8 @@ export default [
       'client/dist/',
       'client/node_modules/',
       'services/*/node_modules/',
+      'services/*/.venv/',
+      '**/.venv/',
       'data/',
       'scripts/dev/'
     ]

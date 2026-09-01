@@ -1,0 +1,1919 @@
+{
+  "_provenance": {
+    "recordedAt": "2026-09-01T19:18:49.537326+00:00",
+    "requestUrl": "https://www.tesco.com/groceries/en-GB/search?query=bananas",
+    "httpStatus": 200,
+    "adapter": "tesco",
+    "labVersion": "1.2.0"
+  },
+  "store": "tesco",
+  "query": "bananas",
+  "payload": {
+    "products": [
+      {
+        "__typename": "ProductType",
+        "id": "318086083",
+        "tpnb": "93943270",
+        "adId": "display_11cMDkXc8VZbH7isq43ynq9G1H0KCgoIOTM5NDMyNzASABoMCJj59tQGEJqUpf4CIgIIAQ==",
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/2fc3f919-efe1-42b1-9271-64f6464320e7/edffe83d-a085-48cc-980b-d4874737d66e_1667055920.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "318086083",
+        "gtin": "05070002247708",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [
+          {
+            "__typename": "PromotionType",
+            "id": "101475753",
+            "attributes": [
+              "CLUBCARD_PRICING"
+            ],
+            "promotionType": null,
+            "__ref": "PromotionType:{\"id\":\"101475753\",\"description\":\"\u00a32.00 Clubcard Price\"}"
+          }
+        ],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "POTINA Banana Oat drink 1 Litre",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/2fc3f919-efe1-42b1-9271-64f6464320e7/edffe83d-a085-48cc-980b-d4874737d66e_1667055920.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Dairy Free Drinks",
+        "departmentName": "Milk & Milkshakes",
+        "superDepartmentName": "Drinks",
+        "shelfName": "Oat Drinks",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 2.8,
+          "unitPrice": 2.8,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 22,
+            "overallRating": 4.3,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "285157326",
+        "tpnb": "77427870",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/e295a807-2d7f-432d-92a0-dfb64e5a6c7b/2e151c6d-2a5f-41de-af0e-513a2c6b87a0_1846504696.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "285157326",
+        "gtin": "00000003251416",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [
+          {
+            "__typename": "PromotionType",
+            "id": "101715258",
+            "attributes": [
+              "CLUBCARD_PRICING"
+            ],
+            "promotionType": null,
+            "__ref": "PromotionType:{\"id\":\"101715258\",\"description\":\"65p Clubcard Price\"}"
+          }
+        ],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Small Bananas 6 Pack",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/e295a807-2d7f-432d-92a0-dfb64e5a6c7b/2e151c6d-2a5f-41de-af0e-513a2c6b87a0_1846504696.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Bananas",
+        "departmentName": "Fresh Fruit",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Bananas",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 0.75,
+          "unitPrice": 0.12,
+          "unitOfMeasure": "each"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 573,
+            "overallRating": 2.3,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "275280804",
+        "tpnb": "50502269",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/1feec673-c2f3-4e8c-9198-ca4ac8a23c2c/4c931bfb-d2c2-4979-877f-af5e3a8b0685_1475640744.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "275280804",
+        "gtin": "00261480000000",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Bananas Loose",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/1feec673-c2f3-4e8c-9198-ca4ac8a23c2c/4c931bfb-d2c2-4979-877f-af5e3a8b0685_1475640744.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Bananas",
+        "departmentName": "Fresh Fruit",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Loose Bananas",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            },
+            {
+              "__typename": "CompetitorsInfo",
+              "competitors": [
+                {
+                  "__typename": "Competitor",
+                  "id": "ALDI",
+                  "priceMatch": {
+                    "__typename": "PriceMatch",
+                    "isMatching": true
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0.18,
+        "productType": "LooseProduce",
+        "catchWeightList": null,
+        "restrictions": [
+          {
+            "__typename": "ProductRestrictionType",
+            "isViolated": false,
+            "type": "RdgDayTime",
+            "message": "The price per item is a guide only. The final charge will be based on product weight, so can vary"
+          }
+        ],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 0.16,
+          "unitPrice": 0.9,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 950,
+            "overallRating": 2.7,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "266419328",
+        "tpnb": "65728590",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/3cb88fa3-ef12-400b-ad2f-be9b0c7b0b5f/8e4e43e0-f369-4bdd-9bfa-5240376f5ed0_2129484329.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "266419328",
+        "gtin": "00000010001875",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Ripe Bananas 5 Pack",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/3cb88fa3-ef12-400b-ad2f-be9b0c7b0b5f/8e4e43e0-f369-4bdd-9bfa-5240376f5ed0_2129484329.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Bananas",
+        "departmentName": "Fresh Fruit",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Bananas",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            },
+            {
+              "__typename": "CompetitorsInfo",
+              "competitors": [
+                {
+                  "__typename": "Competitor",
+                  "id": "ALDI",
+                  "priceMatch": {
+                    "__typename": "PriceMatch",
+                    "isMatching": true
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 0.78,
+          "unitPrice": 0.16,
+          "unitOfMeasure": "each"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 421,
+            "overallRating": 2.5,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "266420677",
+        "tpnb": "65729767",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/ff558f31-fabf-442d-86ed-6079cd1aef31/fa8f2e16-7a7a-43d8-8403-a3c36add54fe_754417135.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "266420677",
+        "gtin": "00000010001882",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Ripen At Home Bananas 5 Pack",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/ff558f31-fabf-442d-86ed-6079cd1aef31/fa8f2e16-7a7a-43d8-8403-a3c36add54fe_754417135.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Bananas",
+        "departmentName": "Fresh Fruit",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Bananas",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 0.78,
+          "unitPrice": 0.16,
+          "unitOfMeasure": "each"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 184,
+            "overallRating": 2.7,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "303869954",
+        "tpnb": "86775489",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/0b3f4e78-c720-4129-9816-24e2396b55f1/4a28fbb9-135d-4bd3-8f81-ea98e9217641_504976936.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "303869954",
+        "gtin": "00000003341148",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Fairtrade Organic Bananas 5 Pack",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/0b3f4e78-c720-4129-9816-24e2396b55f1/4a28fbb9-135d-4bd3-8f81-ea98e9217641_504976936.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Bananas",
+        "departmentName": "Fresh Fruit",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Organic Bananas",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 1.6,
+          "unitPrice": 0.32,
+          "unitOfMeasure": "each"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 233,
+            "overallRating": 2.9,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "273420937",
+        "tpnb": "71666704",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/d7d4220a-45a7-4c9b-a6c8-a4d19ae905d9/6d89c02e-8e2a-41fa-864f-b037ac2fc7b1_486643539.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "273420937",
+        "gtin": "05018735224931",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Soreen Banana Lunchbox Loaves 5 Pack",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/d7d4220a-45a7-4c9b-a6c8-a4d19ae905d9/6d89c02e-8e2a-41fa-864f-b037ac2fc7b1_486643539.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Mini Rolls, Cake Slices & Small Cakes",
+        "departmentName": "Cake",
+        "superDepartmentName": "Bakery",
+        "shelfName": "Cake Slices & Bites",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 1.8,
+          "unitPrice": 12,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 71,
+            "overallRating": 4.2,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "254903706",
+        "tpnb": "50032738",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/8c41a49c-7e25-43ea-9476-0a100383948e/a328c2cf-509e-4e7e-a50a-5495dd1b57a4_1568414400.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "254903706",
+        "gtin": "05000354770036",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Angel Delight Banana 59G",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/8c41a49c-7e25-43ea-9476-0a100383948e/a328c2cf-509e-4e7e-a50a-5495dd1b57a4_1568414400.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Dessert Mixes & Kits",
+        "departmentName": "Desserts",
+        "superDepartmentName": "Food Cupboard",
+        "shelfName": "Whipped Desserts",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 0.95,
+          "unitPrice": 16.1,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 38,
+            "overallRating": 4.6,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "315074430",
+        "tpnb": "91778980",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/c678e71a-d4df-448a-8225-c869a19d7a11/0fbcba07-61aa-462c-9847-0ef57eb9e014_1834739902.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "315074430",
+        "gtin": "05000234054478",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [
+          {
+            "__typename": "PromotionType",
+            "id": "102989102",
+            "attributes": [
+              "CLUBCARD_PRICING"
+            ],
+            "promotionType": null,
+            "__ref": "PromotionType:{\"id\":\"102989102\",\"description\":\"Any 2 for \u00a33.40 Clubcard Price - Selected Whitworths Dry Fruits & Nuts\"}"
+          }
+        ],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Whitworths Banana Chips 150G",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/c678e71a-d4df-448a-8225-c869a19d7a11/0fbcba07-61aa-462c-9847-0ef57eb9e014_1834739902.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Dried Fruit",
+        "departmentName": "Dried Fruit, Nuts, Nutrient Powders & Seeds",
+        "superDepartmentName": "Treats & Snacks",
+        "shelfName": "Dried Fruit",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 99,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 2.2,
+          "unitPrice": 14.67,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 2,
+            "overallRating": 3,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "312352287",
+        "tpnb": "91058070",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/11acf9a4-35cb-4c9b-b3b9-4da26c50390e/e605455c-165c-43b7-954a-fa8278cae766_904563763.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "312352287",
+        "gtin": "05059697256820",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Chewy Dried Banana 200G",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/11acf9a4-35cb-4c9b-b3b9-4da26c50390e/e605455c-165c-43b7-954a-fa8278cae766_904563763.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Dried Fruit, Nut & Seed Mixes",
+        "departmentName": "Dried Fruit, Nuts, Nutrient Powders & Seeds",
+        "superDepartmentName": "Treats & Snacks",
+        "shelfName": "Mixed Dried Fruit",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 4.2,
+          "unitPrice": 21,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 13,
+            "overallRating": 4.4,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "280823888",
+        "tpnb": "75235794",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/94404034-bcb1-4ad1-a256-dd8de39dd595/8138bed2-7bc7-4d67-9efe-4a20657f0e11_1410817240.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "280823888",
+        "gtin": "05901067400848",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Kubus Apple Banana Mousse 100g",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/94404034-bcb1-4ad1-a256-dd8de39dd595/8138bed2-7bc7-4d67-9efe-4a20657f0e11_1410817240.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Eastern European",
+        "departmentName": "World Foods",
+        "superDepartmentName": "Food Cupboard",
+        "shelfName": "Polish Kids Juice & Snacks",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 0.85,
+          "unitPrice": 8.5,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": null,
+            "overallRating": null,
+            "overallRatingRange": null
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "301576635",
+        "tpnb": "85593901",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/043492ee-2fb7-41a1-aa1c-25d28faf1830/c6db6730-a503-46b9-aae2-a3b6c328d029_1218403396.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "301576635",
+        "gtin": "05057753521813",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Strawberry & Banana Bars 5 x 30g",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/043492ee-2fb7-41a1-aa1c-25d28faf1830/c6db6730-a503-46b9-aae2-a3b6c328d029_1218403396.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Fruit & Nut Bars",
+        "departmentName": "Dried Fruit, Nuts, Nutrient Powders & Seeds",
+        "superDepartmentName": "Treats & Snacks",
+        "shelfName": "Fruit & Nut Bars",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 2.15,
+          "unitPrice": 14.33,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 23,
+            "overallRating": 3.3,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "302038799",
+        "tpnb": "85822879",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/7d393bd8-1776-4d16-861a-953e8b86af7e/9a9fb93c-be31-49c2-a2a7-43427af4bdf1_1585831135.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "302038799",
+        "gtin": "05013919003104",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [
+          {
+            "__typename": "PromotionType",
+            "id": "100819853",
+            "attributes": [
+              "CLUBCARD_PRICING"
+            ],
+            "promotionType": null,
+            "__ref": "PromotionType:{\"id\":\"100819853\",\"description\":\"Any 3 for \u00a33 Clubcard Price - Selected Wagg Dog Treats\"}"
+          }
+        ],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Wagg [REDACTED]s Peanut Butter & Banana 125g",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/7d393bd8-1776-4d16-861a-953e8b86af7e/9a9fb93c-be31-49c2-a2a7-43427af4bdf1_1585831135.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Dog Treats",
+        "departmentName": "Dog Food & Accessories",
+        "superDepartmentName": "Pets",
+        "shelfName": "Dog Reward Treats",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 1.4,
+          "unitPrice": 11.2,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 1,
+            "overallRating": 5,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "300534756",
+        "tpnb": "85089237",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/10bdd3de-f3fe-4b02-b912-8287512a4195/77856160-249e-4688-b98b-3c09b421d7a7_29269975.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "300534756",
+        "gtin": "05057753125509",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Mango & Banana Bars 5 X 30G",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/10bdd3de-f3fe-4b02-b912-8287512a4195/77856160-249e-4688-b98b-3c09b421d7a7_29269975.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Fruit & Nut Bars",
+        "departmentName": "Dried Fruit, Nuts, Nutrient Powders & Seeds",
+        "superDepartmentName": "Treats & Snacks",
+        "shelfName": "Fruit & Nut Bars",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 2.15,
+          "unitPrice": 14.33,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 25,
+            "overallRating": 3.5,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "305435877",
+        "tpnb": "87541413",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/7aceb3b0-96e4-4ebc-aa62-ec60478d7a87/ac084421-cafb-4b7f-b2ce-c2bc8a0e4932_1675770142.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "305435877",
+        "gtin": "05060113085955",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [
+          {
+            "__typename": "PromotionType",
+            "id": "102830611",
+            "attributes": [
+              "CLUBCARD_PRICING"
+            ],
+            "promotionType": null,
+            "__ref": "PromotionType:{\"id\":\"102830611\",\"description\":\"\u00a32.50 Clubcard Price\"}"
+          }
+        ],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Creative Nature Banana Bread Mix 250g",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/7aceb3b0-96e4-4ebc-aa62-ec60478d7a87/ac084421-cafb-4b7f-b2ce-c2bc8a0e4932_1675770142.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Cake Mixes",
+        "departmentName": "Home Baking & Sugar",
+        "superDepartmentName": "Food Cupboard",
+        "shelfName": "Dessert Mix",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 3.5,
+          "unitPrice": 14,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 11,
+            "overallRating": 4.6,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "321945969",
+        "tpnb": "96815163",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/00883120-be71-491f-bbd2-5be3060ef944/ea5a540f-8939-4ce5-bc60-e7886267df6a_1035170241.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "321945969",
+        "gtin": "08410175092113",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [
+          {
+            "__typename": "PromotionType",
+            "id": "101683143",
+            "attributes": [
+              "CLUBCARD_PRICING"
+            ],
+            "promotionType": null,
+            "__ref": "PromotionType:{\"id\":\"101683143\",\"description\":\"\u00a33.50 Clubcard Price\"}"
+          }
+        ],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Goodies Bluey Apple & Banana Pouch 4x100g",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/00883120-be71-491f-bbd2-5be3060ef944/ea5a540f-8939-4ce5-bc60-e7886267df6a_1035170241.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Kids Snacks From 3 Years",
+        "departmentName": "Baby & Toddler Food",
+        "superDepartmentName": "Baby & Toddler",
+        "shelfName": "Kids Fruit Snacks",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 4,
+          "unitPrice": 10,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 10,
+            "overallRating": 4.8,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "309488940",
+        "tpnb": "89431644",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/f6c2ef63-7c20-49ba-8b1b-760bb8ae2679/28f9692f-de38-46fe-9d6c-d326cd012b7a_412778708.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "309488940",
+        "gtin": "05059512736636",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco 5 Banana Bites With A Yogurt Coating 125G",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/f6c2ef63-7c20-49ba-8b1b-760bb8ae2679/28f9692f-de38-46fe-9d6c-d326cd012b7a_412778708.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Fruit Snacks",
+        "departmentName": "Dried Fruit, Nuts, Nutrient Powders & Seeds",
+        "superDepartmentName": "Treats & Snacks",
+        "shelfName": "Fruit Pieces & Flakes",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 99,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 2.15,
+          "unitPrice": 17.2,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 30,
+            "overallRating": 4.1,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "311953151",
+        "tpnb": "90868731",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/46ca7795-7807-4ef4-8b0a-68e7fea08865/60db609b-d256-45f4-9ee5-79b4dbde4a1e_658820139.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "311953151",
+        "gtin": "08445290293312",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [
+          {
+            "__typename": "PromotionType",
+            "id": "101897866",
+            "attributes": [
+              "CLUBCARD_PRICING"
+            ],
+            "promotionType": null,
+            "__ref": "PromotionType:{\"id\":\"101897866\",\"description\":\"\u00a33.65 Save 25% Clubcard Price\"}"
+          }
+        ],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Nesquik Banana Flavoured Milkshake Powder 500g Tub",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/46ca7795-7807-4ef4-8b0a-68e7fea08865/60db609b-d256-45f4-9ee5-79b4dbde4a1e_658820139.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milkshakes & Flavoured Milk",
+        "departmentName": "Kids Drinks",
+        "superDepartmentName": "Drinks",
+        "shelfName": "Milkshake Powder",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 4.95,
+          "unitPrice": 9.9,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 18,
+            "overallRating": 4.3,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "279842342",
+        "tpnb": "74746462",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/45f04128-28a8-4237-8f09-ddc28da4e433/bfbcfd77-09fd-42f6-9972-c29cf8cc2617_1254791979.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "279842342",
+        "gtin": "05901067400824",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Kubus Strawberry, Apple, Banana, Carrot Mousse 100g",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/45f04128-28a8-4237-8f09-ddc28da4e433/bfbcfd77-09fd-42f6-9972-c29cf8cc2617_1254791979.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Eastern European",
+        "departmentName": "World Foods",
+        "superDepartmentName": "Food Cupboard",
+        "shelfName": "Polish Kids Juice & Snacks",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 0.85,
+          "unitPrice": 8.5,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 5,
+            "overallRating": 5,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "313602846",
+        "tpnb": "91710277",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/639a9605-a1a1-442c-abd1-2b96b4e39411/3787a921-a69b-4496-9b5f-7192f7323b4e_1808969515.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "313602846",
+        "gtin": "05060406462487",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [
+          {
+            "__typename": "PromotionType",
+            "id": "98480408",
+            "attributes": [
+              "CLUBCARD_PRICING"
+            ],
+            "promotionType": null,
+            "__ref": "PromotionType:{\"id\":\"98480408\",\"description\":\"Any 3 for \u00a33 Clubcard Price - Selected Porridge Pots Bars Or Drinks\"}"
+          }
+        ],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Up & Go Breakfast Shake - Banana & Honey 300ml",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/639a9605-a1a1-442c-abd1-2b96b4e39411/3787a921-a69b-4496-9b5f-7192f7323b4e_1808969515.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "On The Go Breakfast",
+        "departmentName": "Cereals",
+        "superDepartmentName": "Food Cupboard",
+        "shelfName": "Breakfast Drinks",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 99,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 1.4,
+          "unitPrice": 4.67,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 30,
+            "overallRating": 4.7,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "321965542",
+        "tpnb": "96542911",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/e6cc4bda-1d73-48aa-a233-b778bc8136b3/22889a0c-0c92-4158-b550-f573b44d41ff_1611164779.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "321965542",
+        "gtin": "08410175092083",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [
+          {
+            "__typename": "PromotionType",
+            "id": "101683140",
+            "attributes": [
+              "CLUBCARD_PRICING"
+            ],
+            "promotionType": null,
+            "__ref": "PromotionType:{\"id\":\"101683140\",\"description\":\"\u00a33.50 Clubcard Price\"}"
+          }
+        ],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Goodies Bluey Banana Strawberry & Apple Pouch 4x100g",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/e6cc4bda-1d73-48aa-a233-b778bc8136b3/22889a0c-0c92-4158-b550-f573b44d41ff_1611164779.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Kids Snacks From 3 Years",
+        "departmentName": "Baby & Toddler Food",
+        "superDepartmentName": "Baby & Toddler",
+        "shelfName": "Kids Fruit Snacks",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 4,
+          "unitPrice": 10,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 10,
+            "overallRating": 5,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "308859895",
+        "tpnb": "89245104",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/33c6a93b-77ef-4c49-8794-af0db3a1dab3/e0dc0620-adef-49d4-a654-c880efe6de42_352729784.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "308859895",
+        "gtin": "05901067406741",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Kubus 100% Juice Apple, Carrot & Banana 850Ml",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/33c6a93b-77ef-4c49-8794-af0db3a1dab3/e0dc0620-adef-49d4-a654-c880efe6de42_352729784.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Eastern European",
+        "departmentName": "World Foods",
+        "superDepartmentName": "Food Cupboard",
+        "shelfName": "Polish Kids Juice & Snacks",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 1.95,
+          "unitPrice": 2.29,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 4,
+            "overallRating": 4.8,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "318260435",
+        "tpnb": "94037165",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/2820ec1b-46a4-4007-848c-6542c1423948/178ab4a5-d6aa-44b4-88a3-7ab20570d8c4_597536217.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "318260435",
+        "gtin": "05070002247715",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [
+          {
+            "__typename": "PromotionType",
+            "id": "101475756",
+            "attributes": [
+              "CLUBCARD_PRICING"
+            ],
+            "promotionType": null,
+            "__ref": "PromotionType:{\"id\":\"101475756\",\"description\":\"\u00a32.00 Clubcard Price\"}"
+          }
+        ],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "POTINA Banana Cocoa Oat drink 1 Litre",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/2820ec1b-46a4-4007-848c-6542c1423948/178ab4a5-d6aa-44b4-88a3-7ab20570d8c4_597536217.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Dairy Free Drinks",
+        "departmentName": "Milk & Milkshakes",
+        "superDepartmentName": "Drinks",
+        "shelfName": "Oat Drinks",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 2.8,
+          "unitPrice": 2.8,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 22,
+            "overallRating": 3.9,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "321679760",
+        "tpnb": "96534276",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/33869dce-68e7-4375-9ad9-f1d984d56484/beeba8c7-c464-4808-8efe-fdb3f56c9f3b_1618419140.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "321679760",
+        "gtin": "08410175092106",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [
+          {
+            "__typename": "PromotionType",
+            "id": "101683142",
+            "attributes": [
+              "CLUBCARD_PRICING"
+            ],
+            "promotionType": null,
+            "__ref": "PromotionType:{\"id\":\"101683142\",\"description\":\"\u00a33.50 Clubcard Price\"}"
+          }
+        ],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Goodies Bluey Yogurt Banana & Strawberry Pouch 4x100g",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/33869dce-68e7-4375-9ad9-f1d984d56484/beeba8c7-c464-4808-8efe-fdb3f56c9f3b_1618419140.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Kids Snacks From 3 Years",
+        "departmentName": "Baby & Toddler Food",
+        "superDepartmentName": "Baby & Toddler",
+        "shelfName": "Kids Fruit Snacks",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 4,
+          "unitPrice": 10,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 19,
+            "overallRating": 5,
+            "overallRatingRange": 5
+          }
+        }
+      }
+    ],
+    "promotions": {
+      "PromotionType:{\"id\":\"101475753\",\"description\":\"\u00a32.00 Clubcard Price\"}": {
+        "__typename": "PromotionType",
+        "id": "101475753",
+        "promotionType": null,
+        "startDate": "2026-07-07T23:00:00Z",
+        "endDate": "2026-09-02T23:00:00Z",
+        "description": "\u00a32.00 Clubcard Price",
+        "unitSellingInfo": "\u00a32.00/litre",
+        "price": {
+          "__typename": "PromotionPriceType",
+          "beforeDiscount": null,
+          "afterDiscount": 2.8
+        },
+        "attributes": [
+          "CLUBCARD_PRICING"
+        ],
+        "missed": null,
+        "warnings": null
+      },
+      "PromotionType:{\"id\":\"101715258\",\"description\":\"65p Clubcard Price\"}": {
+        "__typename": "PromotionType",
+        "id": "101715258",
+        "promotionType": null,
+        "startDate": "2026-08-24T23:00:00Z",
+        "endDate": "2026-09-07T23:00:00Z",
+        "description": "65p Clubcard Price",
+        "unitSellingInfo": "\u00a30.11/each",
+        "price": {
+          "__typename": "PromotionPriceType",
+          "beforeDiscount": null,
+          "afterDiscount": 0.75
+        },
+        "attributes": [
+          "CLUBCARD_PRICING"
+        ],
+        "missed": null,
+        "warnings": null
+      },
+      "PromotionType:{\"id\":\"102989102\",\"description\":\"Any 2 for \u00a33.40 Clubcard Price - Selected Whitworths Dry Fruits & Nuts\"}": {
+        "__typename": "PromotionType",
+        "id": "102989102",
+        "promotionType": null,
+        "startDate": "2026-09-01T23:00:00Z",
+        "endDate": "2027-09-02T23:00:00Z",
+        "description": "Any 2 for \u00a33.40 Clubcard Price - Selected Whitworths Dry Fruits & Nuts",
+        "unitSellingInfo": null,
+        "price": null,
+        "attributes": [
+          "CLUBCARD_PRICING"
+        ],
+        "missed": null,
+        "warnings": null
+      },
+      "PromotionType:{\"id\":\"100819853\",\"description\":\"Any 3 for \u00a33 Clubcard Price - Selected Wagg Dog Treats\"}": {
+        "__typename": "PromotionType",
+        "id": "100819853",
+        "promotionType": null,
+        "startDate": "2026-07-21T23:00:00Z",
+        "endDate": "2026-09-15T23:00:00Z",
+        "description": "Any 3 for \u00a33 Clubcard Price - Selected Wagg Dog Treats",
+        "unitSellingInfo": null,
+        "price": null,
+        "attributes": [
+          "CLUBCARD_PRICING"
+        ],
+        "missed": null,
+        "warnings": null
+      },
+      "PromotionType:{\"id\":\"102830611\",\"description\":\"\u00a32.50 Clubcard Price\"}": {
+        "__typename": "PromotionType",
+        "id": "102830611",
+        "promotionType": null,
+        "startDate": "2026-08-31T23:00:00Z",
+        "endDate": "2026-09-28T23:00:00Z",
+        "description": "\u00a32.50 Clubcard Price",
+        "unitSellingInfo": "\u00a310.00/kg",
+        "price": {
+          "__typename": "PromotionPriceType",
+          "beforeDiscount": null,
+          "afterDiscount": 3.5
+        },
+        "attributes": [
+          "CLUBCARD_PRICING"
+        ],
+        "missed": null,
+        "warnings": null
+      },
+      "PromotionType:{\"id\":\"101683143\",\"description\":\"\u00a33.50 Clubcard Price\"}": {
+        "__typename": "PromotionType",
+        "id": "101683143",
+        "promotionType": null,
+        "startDate": "2026-08-18T23:00:00Z",
+        "endDate": "2026-09-29T23:00:00Z",
+        "description": "\u00a33.50 Clubcard Price",
+        "unitSellingInfo": "\u00a38.75/kg",
+        "price": {
+          "__typename": "PromotionPriceType",
+          "beforeDiscount": null,
+          "afterDiscount": 4
+        },
+        "attributes": [
+          "CLUBCARD_PRICING"
+        ],
+        "missed": null,
+        "warnings": null
+      },
+      "PromotionType:{\"id\":\"101897866\",\"description\":\"\u00a33.65 Save 25% Clubcard Price\"}": {
+        "__typename": "PromotionType",
+        "id": "101897866",
+        "promotionType": null,
+        "startDate": "2026-08-11T23:00:00Z",
+        "endDate": "2026-10-06T23:00:00Z",
+        "description": "\u00a33.65 Save 25% Clubcard Price",
+        "unitSellingInfo": "\u00a37.30/kg",
+        "price": {
+          "__typename": "PromotionPriceType",
+          "beforeDiscount": null,
+          "afterDiscount": 4.95
+        },
+        "attributes": [
+          "CLUBCARD_PRICING"
+        ],
+        "missed": null,
+        "warnings": null
+      },
+      "PromotionType:{\"id\":\"98480408\",\"description\":\"Any 3 for \u00a33 Clubcard Price - Selected Porridge Pots Bars Or Drinks\"}": {
+        "__typename": "PromotionType",
+        "id": "98480408",
+        "promotionType": null,
+        "startDate": "2026-03-01T00:00:00Z",
+        "endDate": "2027-03-01T00:00:00Z",
+        "description": "Any 3 for \u00a33 Clubcard Price - Selected Porridge Pots Bars Or Drinks",
+        "unitSellingInfo": null,
+        "price": null,
+        "attributes": [
+          "CLUBCARD_PRICING"
+        ],
+        "missed": null,
+        "warnings": null
+      },
+      "PromotionType:{\"id\":\"101683140\",\"description\":\"\u00a33.50 Clubcard Price\"}": {
+        "__typename": "PromotionType",
+        "id": "101683140",
+        "promotionType": null,
+        "startDate": "2026-08-18T23:00:00Z",
+        "endDate": "2026-09-29T23:00:00Z",
+        "description": "\u00a33.50 Clubcard Price",
+        "unitSellingInfo": "\u00a38.75/kg",
+        "price": {
+          "__typename": "PromotionPriceType",
+          "beforeDiscount": null,
+          "afterDiscount": 4
+        },
+        "attributes": [
+          "CLUBCARD_PRICING"
+        ],
+        "missed": null,
+        "warnings": null
+      },
+      "PromotionType:{\"id\":\"101475756\",\"description\":\"\u00a32.00 Clubcard Price\"}": {
+        "__typename": "PromotionType",
+        "id": "101475756",
+        "promotionType": null,
+        "startDate": "2026-07-07T23:00:00Z",
+        "endDate": "2026-09-02T23:00:00Z",
+        "description": "\u00a32.00 Clubcard Price",
+        "unitSellingInfo": "\u00a32.00/litre",
+        "price": {
+          "__typename": "PromotionPriceType",
+          "beforeDiscount": null,
+          "afterDiscount": 2.8
+        },
+        "attributes": [
+          "CLUBCARD_PRICING"
+        ],
+        "missed": null,
+        "warnings": null
+      },
+      "PromotionType:{\"id\":\"101683142\",\"description\":\"\u00a33.50 Clubcard Price\"}": {
+        "__typename": "PromotionType",
+        "id": "101683142",
+        "promotionType": null,
+        "startDate": "2026-08-18T23:00:00Z",
+        "endDate": "2026-09-29T23:00:00Z",
+        "description": "\u00a33.50 Clubcard Price",
+        "unitSellingInfo": "\u00a38.75/kg",
+        "price": {
+          "__typename": "PromotionPriceType",
+          "beforeDiscount": null,
+          "afterDiscount": 4
+        },
+        "attributes": [
+          "CLUBCARD_PRICING"
+        ],
+        "missed": null,
+        "warnings": null
+      }
+    },
+    "rawQuery": "bananas",
+    "totalCount": 24
+  }
+}

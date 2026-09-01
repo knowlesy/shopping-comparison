@@ -1,0 +1,1176 @@
+{
+  "_provenance": {
+    "recordedAt": "2026-09-01T19:18:48.264095+00:00",
+    "requestUrl": "https://www.tesco.com/groceries/en-GB/search?query=beef+mince",
+    "httpStatus": 200,
+    "adapter": "tesco",
+    "labVersion": "1.2.0"
+  },
+  "store": "tesco",
+  "query": "beef mince",
+  "payload": {
+    "products": [
+      {
+        "__typename": "ProductType",
+        "id": "250871426",
+        "tpnb": "52251648",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/c17ef428-8877-4f47-91a0-e7b276055912/3a077acc-e9d3-4f09-8522-7fd38a5ea200.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "250871426",
+        "gtin": "05018374928993",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Lean Beef Steak Mince 5% Fat 500g",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/c17ef428-8877-4f47-91a0-e7b276055912/3a077acc-e9d3-4f09-8522-7fd38a5ea200.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Mince & Meatballs",
+        "departmentName": "Fresh Meat & Poultry",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Beef Mince & Meatballs",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            },
+            {
+              "__typename": "CompetitorsInfo",
+              "competitors": [
+                {
+                  "__typename": "Competitor",
+                  "id": "ALDI",
+                  "priceMatch": {
+                    "__typename": "PriceMatch",
+                    "isMatching": true
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 5.05,
+          "unitPrice": 10.1,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 177,
+            "overallRating": 3.1,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "279704092",
+        "tpnb": "74668272",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/d03eb091-41dc-4965-8b79-6f9a44a7eec3/e8c726b8-698a-4d9d-8840-62ef88d506be.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "279704092",
+        "gtin": "05053947729720",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Lean Beef Steak Mince 5% Fat 250G",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/d03eb091-41dc-4965-8b79-6f9a44a7eec3/e8c726b8-698a-4d9d-8840-62ef88d506be.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Mince & Meatballs",
+        "departmentName": "Fresh Meat & Poultry",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Beef Mince & Meatballs",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            },
+            {
+              "__typename": "CompetitorsInfo",
+              "competitors": [
+                {
+                  "__typename": "Competitor",
+                  "id": "ALDI",
+                  "priceMatch": {
+                    "__typename": "PriceMatch",
+                    "isMatching": true
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 2.55,
+          "unitPrice": 10.2,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 84,
+            "overallRating": 4.4,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "308083458",
+        "tpnb": "88915990",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/8b555942-e3e7-4b38-9944-dc1b31ff6d6d/d28a93da-d49f-40eb-b727-7b3550e83bcd.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "308083458",
+        "gtin": "05057753911577",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Beef Mince 20% Fat 500g",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/8b555942-e3e7-4b38-9944-dc1b31ff6d6d/d28a93da-d49f-40eb-b727-7b3550e83bcd.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Mince & Meatballs",
+        "departmentName": "Fresh Meat & Poultry",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Beef Mince & Meatballs",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            },
+            {
+              "__typename": "CompetitorsInfo",
+              "competitors": [
+                {
+                  "__typename": "Competitor",
+                  "id": "ALDI",
+                  "priceMatch": {
+                    "__typename": "PriceMatch",
+                    "isMatching": true
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 3.25,
+          "unitPrice": 6.5,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 106,
+            "overallRating": 4.1,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "282470731",
+        "tpnb": "76074216",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/49567402-40fe-4161-9995-d411439ac77c/ad7834e9-d77f-4916-8ac1-4cc4c12ea869.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "282470731",
+        "gtin": "05053526954062",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Lean Beef Steak Mince 5% Fat 750g",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/49567402-40fe-4161-9995-d411439ac77c/ad7834e9-d77f-4916-8ac1-4cc4c12ea869.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Mince & Meatballs",
+        "departmentName": "Fresh Meat & Poultry",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Beef Mince & Meatballs",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            },
+            {
+              "__typename": "CompetitorsInfo",
+              "competitors": [
+                {
+                  "__typename": "Competitor",
+                  "id": "ALDI",
+                  "priceMatch": {
+                    "__typename": "PriceMatch",
+                    "isMatching": true
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 7.09,
+          "unitPrice": 9.45,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 132,
+            "overallRating": 3.3,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "261958659",
+        "tpnb": "58299488",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/3d5cdd23-353b-45a5-8fd9-22ad78d3c79b/f156b0e0-cb9e-4f49-8f42-b854da142cfa.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "261958659",
+        "gtin": "05051277007211",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Finest Aberdeen Angus Steak Mince 500G",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/3d5cdd23-353b-45a5-8fd9-22ad78d3c79b/f156b0e0-cb9e-4f49-8f42-b854da142cfa.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Mince & Meatballs",
+        "departmentName": "Fresh Meat & Poultry",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Beef Mince & Meatballs",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 6,
+          "unitPrice": 12,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 88,
+            "overallRating": 3.7,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "296422890",
+        "tpnb": "52251464",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/13a2a81e-4075-42ca-8668-aa858c2a6cd3/e2de0367-e709-4416-afa3-c5f7b8ad8c20.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "296422890",
+        "gtin": "05057373517081",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Beef Steak Mince 15% Fat 750g",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/13a2a81e-4075-42ca-8668-aa858c2a6cd3/e2de0367-e709-4416-afa3-c5f7b8ad8c20.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Mince & Meatballs",
+        "departmentName": "Fresh Meat & Poultry",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Beef Mince & Meatballs",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 7.1,
+          "unitPrice": 9.47,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 53,
+            "overallRating": 4.1,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "296422877",
+        "tpnb": "52251429",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/ab2e3665-0320-4f75-a38d-91553f74d080/1e234002-e5fc-4876-9e0a-3f24cd108229.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "296422877",
+        "gtin": "05057373517067",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Beef Steak Mince 15% Fat 500G",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/ab2e3665-0320-4f75-a38d-91553f74d080/1e234002-e5fc-4876-9e0a-3f24cd108229.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Mince & Meatballs",
+        "departmentName": "Fresh Meat & Poultry",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Beef Mince & Meatballs",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 4.95,
+          "unitPrice": 9.9,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 60,
+            "overallRating": 3.7,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "322755173",
+        "tpnb": "97266188",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/d170e7c5-10c5-4fac-a874-5c4014921c49/5d81f414-0ee2-420d-909b-e4a849e6e2ff.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "322755173",
+        "gtin": "05063446483436",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Beef & Pork Mince 23% Fat 500g",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/d170e7c5-10c5-4fac-a874-5c4014921c49/5d81f414-0ee2-420d-909b-e4a849e6e2ff.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Mince & Meatballs",
+        "departmentName": "Fresh Meat & Poultry",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Beef Mince & Meatballs",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 99,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 4,
+          "unitPrice": 8,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 2,
+            "overallRating": 3,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "309452019",
+        "tpnb": "89427431",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/d0d2c5b3-9eae-405c-9b91-7dda3150ee10/063011f5-1331-43ab-916b-29b3cf3ef6a7.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "309452019",
+        "gtin": "05057753915896",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Finest 5% Aberdeen Angus Steak Mince 500G",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/d0d2c5b3-9eae-405c-9b91-7dda3150ee10/063011f5-1331-43ab-916b-29b3cf3ef6a7.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Mince & Meatballs",
+        "departmentName": "Fresh Meat & Poultry",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Beef Mince & Meatballs",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 99,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 6.5,
+          "unitPrice": 13,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 67,
+            "overallRating": 4.6,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "274571347",
+        "tpnb": "53854452",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/bdea8ba7-d8d0-4136-8dcb-965eba9e79e7/56af07b4-86d1-4a7e-b80b-515ac8dff1c5_584146354.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "274571347",
+        "gtin": "05052909937012",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Minced Beef & Onion 392g",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/bdea8ba7-d8d0-4136-8dcb-965eba9e79e7/56af07b4-86d1-4a7e-b80b-515ac8dff1c5_584146354.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Tinned Ready To Eat Meals",
+        "departmentName": "Tins, Cans & Packets",
+        "superDepartmentName": "Food Cupboard",
+        "shelfName": "Tinned Pies",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 2,
+          "unitPrice": 5.1,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 65,
+            "overallRating": 3.9,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "261965092",
+        "tpnb": "52687378",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/16e22b89-01b9-4621-9a43-6dcaf9342015/980e2c4b-45e2-4557-8ebd-d171d8a93408.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "261965092",
+        "gtin": "05051277013038",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Organic Beef Steak Mince 15% Fat 500G",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/16e22b89-01b9-4621-9a43-6dcaf9342015/980e2c4b-45e2-4557-8ebd-d171d8a93408.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Mince & Meatballs",
+        "departmentName": "Fresh Meat & Poultry",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Beef Mince & Meatballs",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 8.5,
+          "unitPrice": 17,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 25,
+            "overallRating": 4.1,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "317051333",
+        "tpnb": "92433119",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/963c0978-d87c-4302-8999-b9127d0b54b1/9763638a-619d-44ef-bb81-2aaab70ccfec_1576355551.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "317051333",
+        "gtin": "05010034016187",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [
+          {
+            "__typename": "PromotionType",
+            "id": "100901967",
+            "attributes": [
+              "CLUBCARD_PRICING"
+            ],
+            "promotionType": null,
+            "__ref": "PromotionType:{\"id\":\"100901967\",\"description\":\"Any 4 for 3 Clubcard Price - Cheapest Product Free - Selected Ambient Ready Meals\"}"
+          }
+        ],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Bens Original Favourites Chilli con Carne Minced Beef and Vegetable Microwave Instant Meal 250g",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/963c0978-d87c-4302-8999-b9127d0b54b1/9763638a-619d-44ef-bb81-2aaab70ccfec_1576355551.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Flavoured Microwave Rice",
+        "departmentName": "Dried Pasta, Rice, Noodles & Cous Cous",
+        "superDepartmentName": "Food Cupboard",
+        "shelfName": "Mexican Style Microwave Rice",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 99,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 2.5,
+          "unitPrice": 10,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 83,
+            "overallRating": 3.9,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "281974465",
+        "tpnb": "52399427",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/ff8d1da3-60d9-4c09-9dca-adfaa11b1316/d6829045-f338-4b39-973a-c68e452d2b6a.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "281974465",
+        "gtin": "05053526772994",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Beef Meatballs 12 Pack 336g",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/ff8d1da3-60d9-4c09-9dca-adfaa11b1316/d6829045-f338-4b39-973a-c68e452d2b6a.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Mince & Meatballs",
+        "departmentName": "Fresh Meat & Poultry",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Beef Mince & Meatballs",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 3.95,
+          "unitPrice": 11.76,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 59,
+            "overallRating": 4.1,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "282011659",
+        "tpnb": "65619650",
+        "adId": null,
+        "isForSale": false,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/dc6ffdb5-9eee-4198-a5b3-b49ed6dea3e6/3650b1e7-d426-4f24-bfc0-f6b2b60221af.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "282011659",
+        "gtin": "05053526774318",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Beef Meatballs 24 Pack 672g",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/dc6ffdb5-9eee-4198-a5b3-b49ed6dea3e6/3650b1e7-d426-4f24-bfc0-f6b2b60221af.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Mince & Meatballs",
+        "departmentName": "Fresh Meat & Poultry",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Beef Mince & Meatballs",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [
+          {
+            "__typename": "ProductRestrictionType",
+            "isViolated": true,
+            "type": "ExcludedProduct",
+            "message": "This product is unavailable"
+          }
+        ],
+        "variations": null,
+        "status": "ExcludedProduct",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 6.5,
+          "unitPrice": 9.67,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [
+          {
+            "__ref": "ProductType:281974465"
+          }
+        ],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 55,
+            "overallRating": 4,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "282025194",
+        "tpnb": "63086677",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/003c8b03-a5ff-4938-b627-f40ca40853ea/2689a762-75a1-4d11-944b-d360bdfbfbe4_2015094638.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "282025194",
+        "gtin": "05053526774738",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Finest 12 Beef & Herb Meatballs 336G",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/003c8b03-a5ff-4938-b627-f40ca40853ea/2689a762-75a1-4d11-944b-d360bdfbfbe4_2015094638.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Mince & Meatballs",
+        "departmentName": "Fresh Meat & Poultry",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Beef Mince & Meatballs",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 4.95,
+          "unitPrice": 14.73,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 70,
+            "overallRating": 3.9,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "286694229",
+        "tpnb": "76016914",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/743c80b4-ca2c-41ba-a01c-a229f4ff1a59/d3d513ef-376d-49ef-bcf0-68cd9c4b4f26_1902726681.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "286694229",
+        "gtin": "05054402524966",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [
+          {
+            "__typename": "PromotionType",
+            "id": "102551647",
+            "attributes": [
+              "CLUBCARD_PRICING"
+            ],
+            "promotionType": null,
+            "__ref": "PromotionType:{\"id\":\"102551647\",\"description\":\"\u00a34.25 Clubcard Price\"}"
+          }
+        ],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Finest 20 Mini Meatballs 336G",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/743c80b4-ca2c-41ba-a01c-a229f4ff1a59/d3d513ef-376d-49ef-bcf0-68cd9c4b4f26_1902726681.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Mince & Meatballs",
+        "departmentName": "Fresh Meat & Poultry",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Beef Mince & Meatballs",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 4.95,
+          "unitPrice": 14.73,
+          "unitOfMeasure": "kg"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 55,
+            "overallRating": 4.2,
+            "overallRatingRange": 5
+          }
+        }
+      }
+    ],
+    "promotions": {
+      "PromotionType:{\"id\":\"100901967\",\"description\":\"Any 4 for 3 Clubcard Price - Cheapest Product Free - Selected Ambient Ready Meals\"}": {
+        "__typename": "PromotionType",
+        "id": "100901967",
+        "promotionType": null,
+        "startDate": "2026-08-11T23:00:00Z",
+        "endDate": "2026-09-02T23:00:00Z",
+        "description": "Any 4 for 3 Clubcard Price - Cheapest Product Free - Selected Ambient Ready Meals",
+        "unitSellingInfo": null,
+        "price": null,
+        "attributes": [
+          "CLUBCARD_PRICING"
+        ],
+        "missed": null,
+        "warnings": null
+      },
+      "PromotionType:{\"id\":\"102551647\",\"description\":\"\u00a34.25 Clubcard Price\"}": {
+        "__typename": "PromotionType",
+        "id": "102551647",
+        "promotionType": null,
+        "startDate": "2026-08-25T23:00:00Z",
+        "endDate": "2026-10-06T23:00:00Z",
+        "description": "\u00a34.25 Clubcard Price",
+        "unitSellingInfo": "\u00a312.65/kg",
+        "price": {
+          "__typename": "PromotionPriceType",
+          "beforeDiscount": null,
+          "afterDiscount": 4.95
+        },
+        "attributes": [
+          "CLUBCARD_PRICING"
+        ],
+        "missed": null,
+        "warnings": null
+      }
+    },
+    "rawQuery": "beef mince",
+    "totalCount": 16
+  }
+}

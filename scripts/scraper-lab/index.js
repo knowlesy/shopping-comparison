@@ -156,12 +156,48 @@ async function runRecord(options) {
 }
 
 async function runProbe() {
-  console.log(`\n📡 [Scraper Lab: Probe] Running canary reachability checks across all supermarkets...\n`);
+  console.log(`\n📡 [Scraper Lab: Probe] Running canary reachability checks via store-fetcher sidecar (curl_cffi impersonation)...\n`);
+  const sidecarUrl = process.env.STORE_FETCHER_URL || 'http://127.0.0.1:3003';
+
+  try {
+    const probeRes = await fetch(`${sidecarUrl}/probe`, {
+      headers: {
+        'x-fetcher-token': process.env.FETCHER_TOKEN || 'local-dev-fetcher-token-shopping-app'
+      },
+      signal: typeof globalThis.AbortSignal?.timeout === 'function' ? globalThis.AbortSignal.timeout(30000) : undefined
+    });
+
+    if (probeRes.ok) {
+      const report = await probeRes.json();
+      for (const [store, data] of Object.entries(report.stores || {})) {
+        if (data.status === 'reachable') {
+          console.log(`  ✅ ${store.padEnd(12)} -> REACHABLE (HTTP ${data.httpStatus} in ${data.responseTimeMs}ms via ${data.client || 'sidecar'})`);
+        } else if (data.status === 'unsupported') {
+          console.log(`  ⚪ ${store.padEnd(12)} -> UNSUPPORTED (${data.reason})`);
+        } else {
+          console.log(`  ❌ ${store.padEnd(12)} -> UNREACHABLE (${data.reason || data.evidence})`);
+        }
+      }
+
+      fs.writeFileSync(REACHABILITY_FILE, JSON.stringify(report, null, 2), 'utf8');
+      console.log(`\n📊 Updated reachability report: ${path.relative(ROOT_DIR, REACHABILITY_FILE)}\n`);
+      return;
+    }
+  } catch (err) {
+    console.warn(`[Scraper Lab] Warning: Could not reach sidecar /probe on ${sidecarUrl}: ${err.message}`);
+  }
+
+  // Fallback if sidecar HTTP server is not reached directly
+  console.log(`[Scraper Lab] Running direct curl_cffi probe fallback...`);
   const query = 'semi skimmed milk';
   const stores = ['tesco', 'sainsburys', 'asda', 'morrisons', 'iceland', 'aldi', 'lidl'];
+  const now = new Date().toISOString();
+  const clientName = 'curl_cffi/chrome124 (store-fetcher sidecar)';
+
   const reachabilityReport = {
-    generatedAt: new Date().toISOString(),
+    generatedAt: now,
     labVersion: LAB_VERSION,
+    client: clientName,
     stores: {}
   };
 
@@ -170,7 +206,8 @@ async function runProbe() {
     if (!config.supported) {
       reachabilityReport.stores[store] = {
         status: 'unsupported',
-        checkedAt: new Date().toISOString(),
+        client: clientName,
+        checkedAt: now,
         reason: config.reason
       };
       console.log(`  ⚪ ${store.padEnd(12)} -> UNSUPPORTED (${config.reason})`);
@@ -178,12 +215,11 @@ async function runProbe() {
     }
 
     const res = await executeRequest(store, query);
-    const checkedAt = new Date().toISOString();
-
     if (res.status === 200) {
       reachabilityReport.stores[store] = {
         status: 'reachable',
-        checkedAt,
+        client: clientName,
+        checkedAt: now,
         httpStatus: res.status,
         responseTimeMs: res.elapsed,
         requestUrl: res.url
@@ -192,7 +228,8 @@ async function runProbe() {
     } else {
       reachabilityReport.stores[store] = {
         status: 'unreachable',
-        checkedAt,
+        client: clientName,
+        checkedAt: now,
         httpStatus: res.status,
         evidence: res.error || `HTTP ${res.status} returned from ${res.url}`,
         reason: res.status === 403 ? 'Blocked by retailer edge security (WAF / Bot Manager)' : (res.error || `HTTP ${res.status}`)
@@ -201,7 +238,6 @@ async function runProbe() {
     }
   }
 
-  // Write _reachability.json
   fs.writeFileSync(REACHABILITY_FILE, JSON.stringify(reachabilityReport, null, 2), 'utf8');
   console.log(`\n📊 Updated reachability report: ${path.relative(ROOT_DIR, REACHABILITY_FILE)}\n`);
 }

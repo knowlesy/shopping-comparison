@@ -1,0 +1,1526 @@
+{
+  "_provenance": {
+    "recordedAt": "2026-09-01T19:18:47.424860+00:00",
+    "requestUrl": "https://www.tesco.com/groceries/en-GB/search?query=semi+skimmed+milk",
+    "httpStatus": 200,
+    "adapter": "tesco",
+    "labVersion": "1.2.0"
+  },
+  "store": "tesco",
+  "query": "semi skimmed milk",
+  "payload": {
+    "products": [
+      {
+        "__typename": "ProductType",
+        "id": "309178944",
+        "tpnb": "89620806",
+        "adId": "display_4_dRmz975yrucDvph0sDActTAQoKCgoIODk2MjA4MDYSABoMCJb59tQGEN3h4sIDIgIIAQ==",
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/2ca86492-b866-487a-92eb-ac06d0dbb3a5/2e4d82ec-3bac-4caa-9401-1c638ddfae70_1271242422.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "309178944",
+        "gtin": "05711953112577",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Arla Lactofree Organic Semi Skimmed Milk 1L",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/2ca86492-b866-487a-92eb-ac06d0dbb3a5/2e4d82ec-3bac-4caa-9401-1c638ddfae70_1271242422.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk, Butter & Eggs",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Semi-Skimmed Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 99,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 2.1,
+          "unitPrice": 2.1,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": null,
+            "overallRating": null,
+            "overallRatingRange": null
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "254656543",
+        "tpnb": "54550994",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/07531d6d-8bf2-41b5-a5ad-e2ae0a71f2b3/17233543-2c5b-4a06-a0ab-cfdbddcd488e_2028878860.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "254656543",
+        "gtin": "05000436589457",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco British Semi Skimmed Milk 2.272L, 4 Pints",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/07531d6d-8bf2-41b5-a5ad-e2ae0a71f2b3/17233543-2c5b-4a06-a0ab-cfdbddcd488e_2028878860.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk, Butter & Eggs",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Semi-Skimmed Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 1.75,
+          "unitPrice": 0.77,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 662,
+            "overallRating": 4.1,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "252207537",
+        "tpnb": "54169392",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/8bb67050-c132-4326-97f2-04be9fdce6c9/93e23843-fc27-4cb7-9448-9820e01e8281_798947363.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "252207537",
+        "gtin": "05000436338826",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco British Semi Skimmed Milk 1.13L, 2 Pints",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/8bb67050-c132-4326-97f2-04be9fdce6c9/93e23843-fc27-4cb7-9448-9820e01e8281_798947363.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk & Milkshakes",
+        "superDepartmentName": "Drinks",
+        "shelfName": "Semi-Skimmed Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            },
+            {
+              "__typename": "CompetitorsInfo",
+              "competitors": [
+                {
+                  "__typename": "Competitor",
+                  "id": "ALDI",
+                  "priceMatch": {
+                    "__typename": "PriceMatch",
+                    "isMatching": true
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 1.2,
+          "unitPrice": 1.06,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 284,
+            "overallRating": 4.3,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "251314158",
+        "tpnb": "52466204",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/43cc7922-a4b0-46bc-9ee4-e4b8ff6fe1c9/20ce2a7e-d170-4f52-ac34-6ff7e5cfb302_1058176312.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "251314158",
+        "gtin": "05031021057952",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco British Semi Skimmed Milk 568 Ml, 1 Pint",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/43cc7922-a4b0-46bc-9ee4-e4b8ff6fe1c9/20ce2a7e-d170-4f52-ac34-6ff7e5cfb302_1058176312.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk, Butter & Eggs",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Semi-Skimmed Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            },
+            {
+              "__typename": "CompetitorsInfo",
+              "competitors": [
+                {
+                  "__typename": "Competitor",
+                  "id": "ALDI",
+                  "priceMatch": {
+                    "__typename": "PriceMatch",
+                    "isMatching": true
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 0.85,
+          "unitPrice": 1.5,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 133,
+            "overallRating": 4.3,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "257264875",
+        "tpnb": "53676386",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/3b477fdc-325c-407f-bc79-80bf69d03797/1b1e8973-ff5b-4f0c-aef7-aaca5d7e38d3.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "257264875",
+        "gtin": "05000181024043",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [
+          {
+            "__typename": "PromotionType",
+            "id": "100144020",
+            "attributes": [
+              "CLUBCARD_PRICING"
+            ],
+            "promotionType": null,
+            "__ref": "PromotionType:{\"id\":\"100144020\",\"description\":\"Any 2 for \u00a34 Clubcard Price - Selected Dairy Products 2 Litre\"}"
+          }
+        ],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Cravendale Filtered Fresh Semi Skimmed Milk 2L Fresher for Longer",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/3b477fdc-325c-407f-bc79-80bf69d03797/1b1e8973-ff5b-4f0c-aef7-aaca5d7e38d3.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk, Butter & Eggs",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Filtered Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 2.65,
+          "unitPrice": 1.32,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 221,
+            "overallRating": 4.7,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "253737115",
+        "tpnb": "51039848",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/f407c090-7891-451c-be0d-63ff72e27800/23586558-a757-4466-b2b0-316b480ad5ac_2007489569.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "253737115",
+        "gtin": "05000358397956",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [
+          {
+            "__typename": "PromotionType",
+            "id": "102748458",
+            "attributes": [
+              "CLUBCARD_PRICING"
+            ],
+            "promotionType": null,
+            "__ref": "PromotionType:{\"id\":\"102748458\",\"description\":\"\u00a31.90 Clubcard Price\"}"
+          }
+        ],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Filtered Semi Skimmed Milk 2 Litre",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/f407c090-7891-451c-be0d-63ff72e27800/23586558-a757-4466-b2b0-316b480ad5ac_2007489569.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk, Butter & Eggs",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Semi-Skimmed Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 2.2,
+          "unitPrice": 1.1,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 130,
+            "overallRating": 4.5,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "260086626",
+        "tpnb": "58795507",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/37f6e610-fa45-4cd9-a975-0288c57a5508/48207e5a-147e-4585-ab7a-fbcafab6696f.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "260086626",
+        "gtin": "05000181024029",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Cravendale Filtered Fresh Semi Skimmed Milk 1L Fresher for Longer",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/37f6e610-fa45-4cd9-a975-0288c57a5508/48207e5a-147e-4585-ab7a-fbcafab6696f.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk, Butter & Eggs",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Filtered Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 1.75,
+          "unitPrice": 1.75,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 176,
+            "overallRating": 4.7,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "251499998",
+        "tpnb": "55595680",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/c26413ef-a899-4988-b74a-18eb4a895058/d00d59c6-d415-4e75-b341-0e4c09e647d3_1729558291.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "251499998",
+        "gtin": "05050179762099",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Organic British Semi Skimmed Milk 2.272L/4 Pints",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/c26413ef-a899-4988-b74a-18eb4a895058/d00d59c6-d415-4e75-b341-0e4c09e647d3_1729558291.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk, Butter & Eggs",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Organic Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 2.45,
+          "unitPrice": 1.08,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 68,
+            "overallRating": 4,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "254278040",
+        "tpnb": "50435475",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/e0f951d6-6339-4261-b8a4-da45d66abde6/b734f1c8-e0da-4dfe-ada0-b93ac9999692_774127112.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "254278040",
+        "gtin": "05000119115904",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco British Semi Skimmed Longlife Uht Milk 1 Litre",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/e0f951d6-6339-4261-b8a4-da45d66abde6/b734f1c8-e0da-4dfe-ada0-b93ac9999692_774127112.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk, Butter & Eggs",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Long Life Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 1.35,
+          "unitPrice": 1.35,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 76,
+            "overallRating": 4.7,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "299914279",
+        "tpnb": "84793122",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/d57c1d72-104c-410c-bdc8-80ef1dbaedea/9b08dbb9-6e06-4d4a-a770-141181213d7e_627877666.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "299914279",
+        "gtin": "05057545828601",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Creamfields Semi Skimmed UHT Milk 1L",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/d57c1d72-104c-410c-bdc8-80ef1dbaedea/9b08dbb9-6e06-4d4a-a770-141181213d7e_627877666.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk, Butter & Eggs",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Long Life Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            },
+            {
+              "__typename": "CompetitorsInfo",
+              "competitors": [
+                {
+                  "__typename": "Competitor",
+                  "id": "ALDI",
+                  "priceMatch": {
+                    "__typename": "PriceMatch",
+                    "isMatching": true
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 0.65,
+          "unitPrice": 0.65,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 92,
+            "overallRating": 4.3,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "291631643",
+        "tpnb": "80691424",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/8f1dacf8-b0f4-4915-b3f2-11db0d285a75/385e1bd7-9b96-48ca-84b3-105f9c2b53e7.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "291631643",
+        "gtin": "05000181036312",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [
+          {
+            "__typename": "PromotionType",
+            "id": "100144020",
+            "attributes": [
+              "CLUBCARD_PRICING"
+            ],
+            "promotionType": null,
+            "__ref": "PromotionType:{\"id\":\"100144020\",\"description\":\"Any 2 for \u00a34 Clubcard Price - Selected Dairy Products 2 Litre\"}"
+          }
+        ],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Arla BOB Skimmed Milk 2L Tastes like Semi Skimmed",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/8f1dacf8-b0f4-4915-b3f2-11db0d285a75/385e1bd7-9b96-48ca-84b3-105f9c2b53e7.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk, Butter & Eggs",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Filtered Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 2.5,
+          "unitPrice": 1.25,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 223,
+            "overallRating": 4.5,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "255026297",
+        "tpnb": "51000268",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/c7e0b487-bc09-433e-acc7-32a48737c2de/45ea46f7-2104-4557-951a-95d2ff7eaa33_456034817.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "255026297",
+        "gtin": "05018374012333",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco British Semi Skimmed Uht Milk 6 X 1 Litre",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/c7e0b487-bc09-433e-acc7-32a48737c2de/45ea46f7-2104-4557-951a-95d2ff7eaa33_456034817.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk, Butter & Eggs",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Long Life Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 6.15,
+          "unitPrice": 1.02,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 78,
+            "overallRating": 4.5,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "251499710",
+        "tpnb": "55595524",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/80b956ca-92e4-456c-99d8-f9d7153afe34/adcae7c1-3c1f-4497-a9ea-0fead11f5c0a_1085756452.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "251499710",
+        "gtin": "05050179761979",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Tesco Organic British Semi Skimmed Milk 1.136L, 2 Pint",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/80b956ca-92e4-456c-99d8-f9d7153afe34/adcae7c1-3c1f-4497-a9ea-0fead11f5c0a_1085756452.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk, Butter & Eggs",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Organic Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 2,
+          "unitPrice": 1.76,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 65,
+            "overallRating": 4.2,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "313855022",
+        "tpnb": "92007452",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/457cbbbd-e9bb-478f-b24e-249572736c6e/aea416cc-7de1-4e0e-ad75-2530678e4c44.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "313855022",
+        "gtin": "05000246728183",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [
+          {
+            "__typename": "PromotionType",
+            "id": "100144020",
+            "attributes": [
+              "CLUBCARD_PRICING"
+            ],
+            "promotionType": null,
+            "__ref": "PromotionType:{\"id\":\"100144020\",\"description\":\"Any 2 for \u00a34 Clubcard Price - Selected Dairy Products 2 Litre\"}"
+          }
+        ],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Arla BOB Semi-Skimmed Milk 2L That Tastes Like Whole",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/457cbbbd-e9bb-478f-b24e-249572736c6e/aea416cc-7de1-4e0e-ad75-2530678e4c44.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk, Butter & Eggs",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Filtered Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 99,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 2.5,
+          "unitPrice": 1.25,
+          "unitOfMeasure": "litre DR.WT"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 227,
+            "overallRating": 4.7,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "258882358",
+        "tpnb": "57051748",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/41bf2c0e-01dc-4201-ae38-f1c91241c6ad/81c641ba-1aa6-4dc1-8a7b-a7749c0add8e_2078405317.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "258882358",
+        "gtin": "05036589201618",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Yeo Valley Organic Semi-Skimmed Fresh Milk 2L",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/41bf2c0e-01dc-4201-ae38-f1c91241c6ad/81c641ba-1aa6-4dc1-8a7b-a7749c0add8e_2078405317.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk, Butter & Eggs",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Organic Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 3.15,
+          "unitPrice": 1.58,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 143,
+            "overallRating": 4.6,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "318183774",
+        "tpnb": "93817200",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/3c006431-1e68-4f5d-9097-860289a8546a/f239e28e-1b62-4139-a215-66d1ab47e905_1824646076.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "318183774",
+        "gtin": "05015326000066",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [
+          {
+            "__typename": "PromotionType",
+            "id": "102354462",
+            "attributes": [
+              "CLUBCARD_PRICING"
+            ],
+            "promotionType": null,
+            "__ref": "PromotionType:{\"id\":\"102354462\",\"description\":\"\u00a32.00 Clubcard Price\"}"
+          }
+        ],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "SuperNutrio High Protein Fresh Semi Skimmed Milk 1l",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/3c006431-1e68-4f5d-9097-860289a8546a/f239e28e-1b62-4139-a215-66d1ab47e905_1824646076.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk, Butter & Eggs",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Semi-Skimmed Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 99,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 2.5,
+          "unitPrice": 2.5,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 5,
+            "overallRating": 4.2,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "323848955",
+        "tpnb": "97690975",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/c0b7fe2b-c0f3-4481-8b1a-e1e1efcc6faa/e0eb1c37-939d-43b4-bc90-5e6f4da82415_1062687815.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "323848955",
+        "gtin": "05000181030341",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Arla Long Life UHT Semi Skimmed Milk 1L",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/c0b7fe2b-c0f3-4481-8b1a-e1e1efcc6faa/e0eb1c37-939d-43b4-bc90-5e6f4da82415_1062687815.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk & Milkshakes",
+        "superDepartmentName": "Drinks",
+        "shelfName": "Semi-Skimmed Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 99,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 1.5,
+          "unitPrice": 1.5,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 2,
+            "overallRating": 5,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "258104839",
+        "tpnb": "50444815",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/2413dfc8-9e15-4fa2-9e5b-77f3795a1b20/97c3c494-c17e-46ed-b5b7-c5248bd52585_1724032906.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "258104839",
+        "gtin": "05010825001774",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Delamere Dairy Sterilised Semi-Skimmed Milk 1 Litre",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/2413dfc8-9e15-4fa2-9e5b-77f3795a1b20/97c3c494-c17e-46ed-b5b7-c5248bd52585_1724032906.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk, Butter & Eggs",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Long Life Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 16,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 1.45,
+          "unitPrice": 1.45,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 5,
+            "overallRating": 5,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "312849967",
+        "tpnb": "91319073",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/f05d823a-850c-48fd-b613-d106a56a9214/437b08af-1dda-43d0-b1b6-388674734070_1328522338.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "312849967",
+        "gtin": "05000246728589",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Yeo Valley Organic Semi-Skimmed Fresh Milk 1L",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/f05d823a-850c-48fd-b613-d106a56a9214/437b08af-1dda-43d0-b1b6-388674734070_1328522338.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk, Butter & Eggs",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Organic Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 2,
+          "unitPrice": 2,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 27,
+            "overallRating": 4.7,
+            "overallRatingRange": 5
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "321117165",
+        "tpnb": "96779654",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/8ed43207-c1bc-43a8-9334-9f8d8b9cbac9/4902f487-9f12-4d29-8bf5-6cee6b7439bc_829943372.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "321117165",
+        "gtin": "05000181042030",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Yeo Valley Free Range Semi-Skimmed Long Life Organic Milk 1L",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/8ed43207-c1bc-43a8-9334-9f8d8b9cbac9/4902f487-9f12-4d29-8bf5-6cee6b7439bc_829943372.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk, Butter & Eggs",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Long Life Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 99,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 2.35,
+          "unitPrice": 2.35,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": null,
+            "overallRating": null,
+            "overallRatingRange": null
+          }
+        }
+      },
+      {
+        "__typename": "ProductType",
+        "id": "306501037",
+        "tpnb": "87888383",
+        "adId": null,
+        "isForSale": true,
+        "defaultImageUrl": "https://digitalcontent.api.tesco.com/v2/media/ghs/59000869-7a66-4504-9548-2b9c67e64bee/cbb292a1-00e9-4a7f-be77-e3875df70760_356879909.jpeg?h=225&w=225",
+        "bulkBuyLimitGroupId": null,
+        "tpnc": "306501037",
+        "gtin": "05025840000039",
+        "modelMetadata": null,
+        "seller": null,
+        "isNew": false,
+        "fulfilment": null,
+        "promotions": [],
+        "isInFavourites": null,
+        "isInAnyList": null,
+        "title": "Graham's Organic Whole Milk 1L",
+        "media": {
+          "__typename": "ProductMediaType",
+          "defaultImage": {
+            "__typename": "ProductMediaDefaultImageType",
+            "url": "https://digitalcontent.api.tesco.com/v2/media/ghs/59000869-7a66-4504-9548-2b9c67e64bee/cbb292a1-00e9-4a7f-be77-e3875df70760_356879909.jpeg",
+            "aspectRatio": 1
+          }
+        },
+        "aisleName": "Milk",
+        "departmentName": "Milk, Butter & Eggs",
+        "superDepartmentName": "Fresh Food",
+        "shelfName": "Organic Milk",
+        "details": {
+          "__typename": "ProductDetailsType",
+          "components": [
+            {
+              "__typename": "AdditionalInfo",
+              "isLowEverydayPricing": false
+            }
+          ]
+        },
+        "bulkBuyLimit": 25,
+        "groupBulkBuyLimit": 0,
+        "averageWeight": 0,
+        "productType": "SingleProduct",
+        "catchWeightList": null,
+        "restrictions": [],
+        "variations": null,
+        "status": "AvailableForSale",
+        "price": {
+          "__typename": "PriceType",
+          "actual": 2.1,
+          "unitPrice": 2.1,
+          "unitOfMeasure": "litre"
+        },
+        "unavailabilityReasons": null,
+        "substitutions": [],
+        "reviews": {
+          "__typename": "ReviewsType",
+          "stats": {
+            "__typename": "ReviewStatsType",
+            "noOfReviews": 14,
+            "overallRating": 4.4,
+            "overallRatingRange": 5
+          }
+        }
+      }
+    ],
+    "promotions": {
+      "PromotionType:{\"id\":\"100144020\",\"description\":\"Any 2 for \u00a34 Clubcard Price - Selected Dairy Products 2 Litre\"}": {
+        "__typename": "PromotionType",
+        "id": "100144020",
+        "promotionType": null,
+        "startDate": "2026-05-06T23:00:00Z",
+        "endDate": "2027-03-03T00:00:00Z",
+        "description": "Any 2 for \u00a34 Clubcard Price - Selected Dairy Products 2 Litre",
+        "unitSellingInfo": null,
+        "price": null,
+        "attributes": [
+          "CLUBCARD_PRICING"
+        ],
+        "missed": null,
+        "warnings": null
+      },
+      "PromotionType:{\"id\":\"102748458\",\"description\":\"\u00a31.90 Clubcard Price\"}": {
+        "__typename": "PromotionType",
+        "id": "102748458",
+        "promotionType": null,
+        "startDate": "2026-08-25T23:00:00Z",
+        "endDate": "2026-09-15T23:00:00Z",
+        "description": "\u00a31.90 Clubcard Price",
+        "unitSellingInfo": "\u00a30.95/litre",
+        "price": {
+          "__typename": "PromotionPriceType",
+          "beforeDiscount": null,
+          "afterDiscount": 2.2
+        },
+        "attributes": [
+          "CLUBCARD_PRICING"
+        ],
+        "missed": null,
+        "warnings": null
+      },
+      "PromotionType:{\"id\":\"102354462\",\"description\":\"\u00a32.00 Clubcard Price\"}": {
+        "__typename": "PromotionType",
+        "id": "102354462",
+        "promotionType": null,
+        "startDate": "2026-08-07T23:00:00Z",
+        "endDate": "2026-09-15T23:00:00Z",
+        "description": "\u00a32.00 Clubcard Price",
+        "unitSellingInfo": "\u00a32.00/litre",
+        "price": {
+          "__typename": "PromotionPriceType",
+          "beforeDiscount": null,
+          "afterDiscount": 2.5
+        },
+        "attributes": [
+          "CLUBCARD_PRICING"
+        ],
+        "missed": null,
+        "warnings": null
+      }
+    },
+    "rawQuery": "semi skimmed milk",
+    "totalCount": 21
+  }
+}
