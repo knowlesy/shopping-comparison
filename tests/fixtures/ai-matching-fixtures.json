@@ -251,5 +251,101 @@
     "expectedPick": "iceland-conference-pears-600g",
     "expected": "iceland-conference-pears-600g",
     "reasoning": "Should select Conference Pears via alternateTerms and avoid oats or plum tomatoes."
+  },
+  {
+    "id": "fix-7",
+    "query": "British semi skimmed milk 4 pints",
+    "type": "direct_lookup",
+    "lookupStrategy": "direct",
+    "item": {
+      "name": "Semi skimmed milk",
+      "baseItem": "Semi skimmed milk",
+      "targetQuantity": 4,
+      "unit": "pints",
+      "category": "dairy"
+    },
+    "candidates": [
+      {
+        "id": "sainsburys-milk-4pt-direct",
+        "supermarket": "sainsburys",
+        "title": "Sainsbury's British Semi Skimmed Milk 4 Pints 2.27L",
+        "price": 1.45,
+        "packageSize": 4,
+        "packageUnit": "pt",
+        "category": "dairy",
+        "source": "direct"
+      },
+      {
+        "id": "sainsburys-whole-milk-4pt-direct",
+        "supermarket": "sainsburys",
+        "title": "Sainsbury's Whole Milk 4 Pints 2.27L",
+        "price": 1.45,
+        "packageSize": 4,
+        "packageUnit": "pt",
+        "category": "dairy",
+        "source": "direct"
+      },
+      {
+        "id": "sainsburys-skimmed-milk-4pt-direct",
+        "supermarket": "sainsburys",
+        "title": "Sainsbury's Skimmed Milk 4 Pints 2.27L",
+        "price": 1.45,
+        "packageSize": 4,
+        "packageUnit": "pt",
+        "category": "dairy",
+        "source": "direct"
+      }
+    ],
+    "expectedPick": "sainsburys-milk-4pt-direct",
+    "expected": "sainsburys-milk-4pt-direct",
+    "reasoning": "Should select semi skimmed milk directly from direct tier candidates."
+  },
+  {
+    "id": "fix-8",
+    "query": "Beef mince 900 g",
+    "type": "variant_lookup",
+    "lookupStrategy": "variant_optimizer",
+    "item": {
+      "name": "Beef mince",
+      "baseItem": "Beef mince",
+      "targetQuantity": 900,
+      "unit": "g",
+      "category": "meat"
+    },
+    "candidates": [
+      {
+        "id": "tesco-mince-500g-direct",
+        "supermarket": "tesco",
+        "title": "Tesco Lean Beef Steak Mince 500g",
+        "price": 2.60,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "category": "meat",
+        "source": "direct"
+      },
+      {
+        "id": "tesco-mince-1kg-direct",
+        "supermarket": "tesco",
+        "title": "Tesco Lean Beef Steak Mince 1kg",
+        "price": 6.00,
+        "packageSize": 1,
+        "packageUnit": "kg",
+        "category": "meat",
+        "source": "direct"
+      },
+      {
+        "id": "tesco-mince-250g-direct",
+        "supermarket": "tesco",
+        "title": "Tesco Lean Beef Steak Mince 250g",
+        "price": 1.60,
+        "packageSize": 250,
+        "packageUnit": "g",
+        "category": "meat",
+        "source": "direct"
+      }
+    ],
+    "expectedPick": "tesco-mince-500g-direct",
+    "expected": "tesco-mince-500g-direct",
+    "reasoning": "Variant optimizer selects 2x500g (£5.20) as the cheapest cover route for 900g target."
   }
 ]

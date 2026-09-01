@@ -8,6 +8,8 @@ import { AiDecisionReviewer } from '../services/logic-api/src/services/aiDecisio
 import { FuzzyMatcher } from '../services/logic-api/src/services/fuzzyMatcher.js';
 import { KeywordExtractor } from '../services/logic-api/src/services/keywordExtractor.js';
 import { PenaltyRules } from '../services/logic-api/src/services/penaltyRules.js';
+import { QueryStrategist } from '../services/logic-api/src/services/queryStrategist.js';
+import { VariantOptimizer } from '../services/logic-api/src/services/variantOptimizer.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,12 +33,22 @@ async function runAiEval() {
   const results = [];
 
   for (const fixture of fixtures) {
-    const { id, query, item, candidates, expectedPick, expected } = fixture;
+    const { id, query, item, candidates, expectedPick, expected, lookupStrategy } = fixture;
     const targetExpected = expectedPick || expected;
     let chosenId = null;
     let reasoning = '';
 
-    if (isRulesMode) {
+    // Evaluate QueryStrategist lookup terms for the item
+    const lookupPlan = await QueryStrategist.plan(item, {
+      supermarket: candidates[0]?.supermarket || 'tesco',
+      aiMatchingEnabled: !isRulesMode
+    });
+
+    if (lookupStrategy === 'variant_optimizer') {
+      const optResult = VariantOptimizer.optimize(candidates, item, { packSizingPolicy: 'cover' });
+      chosenId = optResult?.lines[0]?.product?.id || null;
+      reasoning = `Selected via VariantOptimizer (${optResult?.explanation || ''}) [lookup queries: ${lookupPlan.queries.join(', ')}]`;
+    } else if (isRulesMode) {
       // Score fixture candidate set directly using deterministic PenaltyRules
       const keywords = KeywordExtractor.extractKeywords(item);
       let best = null;
