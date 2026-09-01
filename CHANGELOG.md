@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.0] - 2026-09-01
+
+### Added
+- **Direct Supermarket Fetch Adapters**: Implemented native, high-confidence (90%) direct adapters for Sainsbury's (GOL API), Tesco (SSR Apollo extraction), and Morrisons (initial state payload).
+- **Python Store-Fetcher Sidecar**: Lightweight FastAPI service with TLS-fingerprint impersonation (`curl_cffi`), internal token auth, Gaussian rate limiting, exponential backoff, circuit breakers, and a hard 1,000 requests/day cap.
+- **Cheapest-Route Variant Optimizer**: Solves the 900g problem across pack sizes, factoring multibuy and loyalty deals into pack selection with opt-in mixed pack sizes.
+- **Offline Query Strategist**: Proposes ranked, store-specific search queries and variant size targets ahead of adapter calls.
+- **Camoufox Tier 2 Escalation & Reachability Reporting**: Verified Asda and Iceland client-side SPA shells and established reachability criteria.
+- **Scraping Architecture & Basket Creation Specification**: Comprehensive architectural design document covering split-plane session management, credential encryption at rest, and safe basket synchronization bounds.
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),

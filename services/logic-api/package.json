@@ -1,6 +1,6 @@
 {
   "name": "logic-api",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Logic API Service for UK Grocery Data - AI parsing, fuzzy matching, and basket comparison",
   "main": "src/index.js",
   "type": "module",
