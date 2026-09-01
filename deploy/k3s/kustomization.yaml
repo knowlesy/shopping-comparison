@@ -6,6 +6,7 @@ resources:
   - 01-namespace.yaml
   - 02-config.yaml
   - 03-scraper-pod.yaml
+  - 03a-store-fetcher.yaml
   - 04-logic-api.yaml
   - 05-client.yaml
   - 06-ingress.yaml

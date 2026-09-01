@@ -18,6 +18,25 @@ services:
       retries: 3
       start_period: 10s
 
+  store-fetcher:
+    build:
+      context: ./services/store-fetcher
+      dockerfile: Dockerfile
+    container_name: uk-grocery-store-fetcher
+    environment:
+      - PORT=3003
+      - PYTHONUNBUFFERED=1
+      - FETCHER_TOKEN=${FETCHER_TOKEN:-local-dev-fetcher-token-shopping-app}
+      - PROXY_URL=${PROXY_URL:-}
+      - PROXY_TYPE=${PROXY_TYPE:-}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:3003/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
   logic-api:
     build:
       context: .
@@ -30,6 +49,8 @@ services:
       - NODE_ENV=production
       - SCRAPER_SERVICE_URL=http://scraper-pod:3002/scrape
       - SCRAPE_TOKEN=${SCRAPE_TOKEN:-local-dev-scrape-token-shopping-app}
+      - STORE_FETCHER_URL=http://store-fetcher:3003
+      - FETCHER_TOKEN=${FETCHER_TOKEN:-local-dev-fetcher-token-shopping-app}
       - CLIENT_ORIGIN=${CLIENT_ORIGIN:-http://localhost:8080}
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
       - DATA_DIR=/usr/src/app/data/runtime
@@ -37,6 +58,7 @@ services:
       - logic-data:/usr/src/app/data/runtime
     depends_on:
       - scraper-pod
+      - store-fetcher
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:3001/health"]

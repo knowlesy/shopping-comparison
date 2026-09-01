@@ -225,6 +225,95 @@ check(5, 'Recorded payload fixtures replay offline inside npm test', () => {
   if (!/store-payloads/.test(tests)) fail('no unit test replays recorded store payloads');
 });
 
+check(5, 'lab:record stamps machine-checkable provenance onto every fixture', () => {
+  const lab = readAll('scripts/scraper-lab', '.js');
+  if (!/_provenance|provenance/i.test(lab)) fail('lab does not write a provenance block');
+  for (const field of ['recordedAt', 'requestUrl', 'httpStatus']) {
+    if (!new RegExp(field, 'i').test(lab)) fail(`lab provenance lacks "${field}"`);
+  }
+  if (!/scrub|redact|sanitiz/i.test(lab)) fail('lab does not scrub cookies/tokens before saving');
+});
+
+check(5, 'Lab maintains an honest per-store reachability report', () => {
+  const lab = readAll('scripts/scraper-lab', '.js');
+  if (!/_reachability|reachability/i.test(lab)) {
+    fail('lab does not write tests/fixtures/store-payloads/_reachability.json');
+  }
+});
+
+// Shared provenance validator for adapter fixtures (Steps 6 & 7).
+// A fixture that never came from a real request cannot satisfy this without
+// deliberate fabrication — which is an explicit task failure, not a shortcut.
+function assertRealFixture(store) {
+  const dir = r('tests/fixtures/store-payloads');
+  if (!fs.existsSync(dir)) fail('tests/fixtures/store-payloads/ missing');
+  const files = fs.readdirSync(dir).filter((f) => new RegExp(store, 'i').test(f) && f.endsWith('.json'));
+  if (files.length === 0) fail(`no recorded payload fixture for ${store}`);
+
+  let anyValid = false;
+  const problems = [];
+  for (const f of files) {
+    let parsed;
+    try {
+      parsed = JSON.parse(read(path.join(dir, f)));
+    } catch {
+      problems.push(`${f}: not valid JSON`);
+      continue;
+    }
+    const prov = parsed._provenance || parsed.provenance;
+    if (!prov) {
+      problems.push(`${f}: no _provenance block`);
+      continue;
+    }
+    if (!prov.recordedAt || Number.isNaN(Date.parse(prov.recordedAt))) {
+      problems.push(`${f}: _provenance.recordedAt missing/unparseable`);
+      continue;
+    }
+    if (!prov.requestUrl || !/^https?:\/\//.test(prov.requestUrl)) {
+      problems.push(`${f}: _provenance.requestUrl is not a real URL`);
+      continue;
+    }
+    if (prov.httpStatus !== 200) {
+      problems.push(`${f}: _provenance.httpStatus=${prov.httpStatus} (a recorded success must be 200)`);
+      continue;
+    }
+    const payload = JSON.stringify(parsed.payload ?? parsed.body ?? parsed);
+    if (payload.length < 2000) {
+      problems.push(`${f}: payload is ${payload.length} bytes — too small to be a real search response`);
+      continue;
+    }
+    if (/cookie|set-cookie|authorization|bearer /i.test(payload)) {
+      problems.push(`${f}: payload still contains session/auth material — scrub before committing`);
+      continue;
+    }
+    anyValid = true;
+  }
+  if (!anyValid) fail(`no fixture for ${store} carries valid provenance:\n          ${problems.join('\n          ')}`);
+}
+
+function assertReachabilityDeclared(store) {
+  const file = r('tests/fixtures/store-payloads/_reachability.json');
+  if (!fs.existsSync(file)) fail('tests/fixtures/store-payloads/_reachability.json missing');
+  let report;
+  try {
+    report = JSON.parse(read(file));
+  } catch {
+    fail('_reachability.json is not valid JSON');
+  }
+  const entry = (report.stores || report)[store];
+  if (!entry) fail(`_reachability.json has no entry for ${store}`);
+  const status = entry.status || entry.state;
+  if (!['reachable', 'unreachable', 'unsupported'].includes(status)) {
+    fail(`${store}: status "${status}" is not one of reachable/unreachable/unsupported`);
+  }
+  if (!entry.checkedAt || Number.isNaN(Date.parse(entry.checkedAt))) {
+    fail(`${store}: checkedAt missing/unparseable`);
+  }
+  if (status !== 'reachable' && !entry.evidence && !entry.reason) {
+    fail(`${store}: declared "${status}" with no evidence/reason — an honest negative still needs proof`);
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Step 6 — Tesco reference adapter
 // ---------------------------------------------------------------------------
@@ -237,11 +326,19 @@ check(6, 'Tesco adapter implements the contract against the documented GraphQL g
 });
 
 check(6, 'Tesco normalization is proven offline against a recorded payload', () => {
-  const dir = r('tests/fixtures/store-payloads');
-  if (!fs.existsSync(dir)) fail('tests/fixtures/store-payloads/ missing');
-  if (!fs.readdirSync(dir).some((f) => /tesco/i.test(f))) fail('no recorded tesco payload fixture');
-  const tests = readAll('services/logic-api/src/services', '.test.js') + readAll('tests', '.js');
-  if (!/tesco/i.test(tests)) fail('no offline test asserts tesco normalization');
+  const files = [
+    ...fs.readdirSync(r('services/logic-api/src/services')).filter((f) => f.endsWith('.test.js'))
+      .map((f) => read(r('services/logic-api/src/services', f))),
+    ...(fs.existsSync(r('tests')) ? fs.readdirSync(r('tests')).filter((f) => f.endsWith('.js'))
+      .map((f) => read(r('tests', f))) : [])
+  ];
+  const hit = files.find((src) => /store-payloads/.test(src) && /tesco/i.test(src) && /normaliz/i.test(src));
+  if (!hit) fail('no offline test loads a tesco store-payload fixture and asserts normalization');
+});
+
+check(6, 'Tesco fixture carries real provenance and Tesco reachability is declared', () => {
+  assertRealFixture('tesco');
+  assertReachabilityDeclared('tesco');
 });
 
 // ---------------------------------------------------------------------------
@@ -253,12 +350,18 @@ check(7, 'Adapters exist for Sainsbury’s, Asda, Morrisons, Iceland with record
     if (!fs.existsSync(r('services/store-fetcher/adapters', `${store}.py`))) missing.push(`${store}.py`);
   }
   if (missing.length) fail(`missing adapters: ${missing.join(', ')}`);
-  const dir = r('tests/fixtures/store-payloads');
-  const files = fs.existsSync(dir) ? fs.readdirSync(dir).join(',') : '';
-  const noFixture = ['sainsburys', 'asda', 'morrisons', 'iceland'].filter(
-    (s) => !new RegExp(s, 'i').test(files)
-  );
-  if (noFixture.length) fail(`no recorded payload fixture for: ${noFixture.join(', ')}`);
+  const notes = [];
+  for (const store of ['sainsburys', 'asda', 'morrisons', 'iceland']) {
+    assertReachabilityDeclared(store);
+    const report = JSON.parse(read(r('tests/fixtures/store-payloads/_reachability.json')));
+    const entry = (report.stores || report)[store];
+    const status = entry.status || entry.state;
+    // A store honestly declared unreachable needs no fixture — but it must be
+    // declared with evidence, which assertReachabilityDeclared already enforced.
+    if (status === 'reachable') assertRealFixture(store);
+    else notes.push(`${store}=${status}`);
+  }
+  return notes.length ? `declared non-reachable: ${notes.join(', ')}` : '';
 });
 
 check(7, 'Aldi/Lidl are explicitly declared unavailable for direct fetch, not silently missing', () => {

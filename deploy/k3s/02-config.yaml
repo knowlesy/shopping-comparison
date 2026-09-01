@@ -7,6 +7,8 @@ data:
   NODE_ENV: "production"
   PORT_LOGIC: "3001"
   PORT_SCRAPER: "3002"
+  PORT_FETCHER: "3003"
   PORT_CLIENT: "8080"
   SCRAPER_SERVICE_URL: "http://shoppingwise-scraper-pod:3002/scrape"
+  STORE_FETCHER_URL: "http://shoppingwise-store-fetcher:3003"
   CLIENT_ORIGIN: "http://localhost:8080"
