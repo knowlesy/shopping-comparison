@@ -1,45 +1,50 @@
 {
-  "generatedAt": "2026-09-01T19:54:00.000Z",
+  "generatedAt": "2026-09-01T18:54:40.557Z",
   "labVersion": "1.0.0",
   "stores": {
     "tesco": {
       "status": "unreachable",
-      "checkedAt": "2026-09-01T19:54:00.000Z",
-      "reason": "Pending live lab:probe execution in Step 5 checkpoint",
-      "evidence": "Initial state before probe execution"
+      "checkedAt": "2026-09-01T18:54:40.714Z",
+      "httpStatus": 403,
+      "evidence": "HTTP 403 returned from https://xapi.tesco.com/graphql",
+      "reason": "Blocked by retailer edge security (WAF / Bot Manager)"
     },
     "sainsburys": {
-      "status": "unreachable",
-      "checkedAt": "2026-09-01T19:54:00.000Z",
-      "reason": "Pending live lab:probe execution in Step 5 checkpoint",
-      "evidence": "Initial state before probe execution"
+      "status": "reachable",
+      "checkedAt": "2026-09-01T18:54:41.145Z",
+      "httpStatus": 200,
+      "responseTimeMs": 428,
+      "requestUrl": "https://www.sainsburys.co.uk/groceries-api/gol-services/product/v1/product?filter[keyword]=semi%20skimmed%20milk&page_number=1&page_size=24"
     },
     "asda": {
       "status": "unreachable",
-      "checkedAt": "2026-09-01T19:54:00.000Z",
-      "reason": "Pending live lab:probe execution in Step 5 checkpoint",
-      "evidence": "Initial state before probe execution"
+      "checkedAt": "2026-09-01T18:54:41.229Z",
+      "httpStatus": 403,
+      "evidence": "HTTP 403 returned from https://groceries.asda.com/api/v2/search?requestorigin=gi&keyword=semi%20skimmed%20milk",
+      "reason": "Blocked by retailer edge security (WAF / Bot Manager)"
     },
     "morrisons": {
       "status": "unreachable",
-      "checkedAt": "2026-09-01T19:54:00.000Z",
-      "reason": "Pending live lab:probe execution in Step 5 checkpoint",
-      "evidence": "Initial state before probe execution"
+      "checkedAt": "2026-09-01T18:54:41.487Z",
+      "httpStatus": 404,
+      "evidence": "HTTP 404 returned from https://groceries.morrisons.com/web/v4/products?searchTerm=semi%20skimmed%20milk",
+      "reason": "HTTP 404"
     },
     "iceland": {
-      "status": "unreachable",
-      "checkedAt": "2026-09-01T19:54:00.000Z",
-      "reason": "Pending live lab:probe execution in Step 5 checkpoint",
-      "evidence": "Initial state before probe execution"
+      "status": "reachable",
+      "checkedAt": "2026-09-01T18:54:42.849Z",
+      "httpStatus": 200,
+      "responseTimeMs": 1056,
+      "requestUrl": "https://www.iceland.co.uk/search?q=semi%20skimmed%20milk&format=json-extended"
     },
     "aldi": {
       "status": "unsupported",
-      "checkedAt": "2026-09-01T19:54:00.000Z",
+      "checkedAt": "2026-09-01T18:54:42.849Z",
       "reason": "No UK online grocery platform — estimated data only (Click & Collect discontinued)"
     },
     "lidl": {
       "status": "unsupported",
-      "checkedAt": "2026-09-01T19:54:00.000Z",
+      "checkedAt": "2026-09-01T18:54:42.849Z",
       "reason": "No UK online grocery platform — in-store shopping only"
     }
   }

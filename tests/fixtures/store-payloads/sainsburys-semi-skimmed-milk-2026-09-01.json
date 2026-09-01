@@ -1,0 +1,2764 @@
+{
+  "_provenance": {
+    "recordedAt": "2026-09-01T18:55:01.191Z",
+    "requestUrl": "https://www.sainsburys.co.uk/groceries-api/gol-services/product/v1/product?filter[keyword]=semi%20skimmed%20milk&page_number=1&page_size=24",
+    "httpStatus": 200,
+    "adapter": "sainsburys",
+    "labVersion": "1.0.0"
+  },
+  "query": "semi skimmed milk",
+  "store": "sainsburys",
+  "payload": {
+    "products": [
+      {
+        "sainId": "3evwa6mk",
+        "product_uid": "1208450",
+        "favourite_uid": null,
+        "eans": [
+          "0000001208450"
+        ],
+        "product_type": "BASIC",
+        "name": "Sainsbury's British Semi Skimmed Milk, SO Organic 2.27L (4 pint)",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/1208450/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/sainsburys-british-semi-skimmed-milk-so-organic-2-27l-4-pint",
+        "unit_price": {
+          "price": 1.17,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 2.65,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 1.17,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": true,
+        "spotlight_label": "Featured",
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [
+          {
+            "label_uid": "ORGANIC",
+            "text": "ORGANIC",
+            "alt_text": "ORGANIC",
+            "color": "#218234",
+            "link": "https://www.sainsburys.co.uk/gol-ui/groceries/dietary-and-world-foods/organic/c:1019232",
+            "link_opens_in_new_window": false
+          },
+          {
+            "label_uid": "BRITISH",
+            "text": "BRITISH",
+            "alt_text": "BRITISH",
+            "color": "#4c4c4c",
+            "link": "https://www.sainsburys.co.uk/gol-ui/features/best-of-british",
+            "link_opens_in_new_window": false
+          }
+        ],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "1208450",
+          "total": 259,
+          "average_rating": 4.5135
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/1208450/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "461873",
+            "name": "Dairy"
+          },
+          {
+            "id": "474592",
+            "name": "Dairy & chilled essentials"
+          }
+        ],
+        "header": {
+          "text": "Featured",
+          "type": "FEATURED"
+        },
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "jszdjdwd",
+        "product_uid": "7657802",
+        "favourite_uid": null,
+        "eans": [
+          "0000000133845"
+        ],
+        "product_type": "BASIC",
+        "name": "Sainsbury's 2L Fresher for Longer Filtered Semi-Skimmed Milk",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/7657802/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/sainsburys-2l-fresher-for-longer-filtered-semi-skimmed-milk",
+        "unit_price": {
+          "price": 1.1,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 2.2,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 1.1,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": true,
+        "spotlight_label": "Featured",
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [
+          {
+            "label_uid": "BRITISH",
+            "text": "BRITISH",
+            "alt_text": "BRITISH",
+            "color": "#4c4c4c",
+            "link": "https://www.sainsburys.co.uk/gol-ui/features/best-of-british",
+            "link_opens_in_new_window": false
+          }
+        ],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "7657802",
+          "total": 349,
+          "average_rating": 4.7679
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/7657802/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "474592",
+            "name": "Dairy & chilled essentials"
+          }
+        ],
+        "header": {
+          "text": "Featured",
+          "type": "FEATURED"
+        },
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "yp025e2m",
+        "product_uid": "357937",
+        "favourite_uid": null,
+        "eans": [
+          "0000000357937",
+          "0000050181117"
+        ],
+        "product_type": "BASIC",
+        "name": "Sainsbury's British Semi Skimmed Milk 2.27L (4 pint)",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/357937/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/sainsburys-british-semi-skimmed-milk-2-27l-4-pint",
+        "unit_price": {
+          "price": 0.77,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 1.75,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 0.77,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [
+          {
+            "label_uid": "BRITISH",
+            "text": "BRITISH",
+            "alt_text": "BRITISH",
+            "color": "#4c4c4c",
+            "link": "https://www.sainsburys.co.uk/gol-ui/features/best-of-british",
+            "link_opens_in_new_window": false
+          }
+        ],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "357937",
+          "total": 2027,
+          "average_rating": 4.5999
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/357937/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "474592",
+            "name": "Dairy & chilled essentials"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "1hdmbscw",
+        "product_uid": "1137637",
+        "favourite_uid": null,
+        "eans": [
+          "5000181013566",
+          "0000001137637"
+        ],
+        "product_type": "BASIC",
+        "name": "Sainsbury's British Semi Skimmed Milk 1.13L (2 pint)",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/1137637/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/sainsburys-british-semi-skimmed-milk-1-13l-2-pint",
+        "unit_price": {
+          "price": 1.06,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 1.2,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 1.06,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [
+          {
+            "label_uid": "BRITISH",
+            "text": "BRITISH",
+            "alt_text": "BRITISH",
+            "color": "#4c4c4c",
+            "link": "https://www.sainsburys.co.uk/gol-ui/features/best-of-british",
+            "link_opens_in_new_window": false
+          },
+          {
+            "label_uid": "ALDI PRICE MATCH*",
+            "text": "ALDI PRICE MATCH*",
+            "alt_text": "ALDI PRICE MATCH*",
+            "color": "#D70000",
+            "link": "https://www.sainsburys.co.uk/gol-ui/events/aldi-price-match",
+            "link_opens_in_new_window": false
+          }
+        ],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "1137637",
+          "total": 2027,
+          "average_rating": 4.5999
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/1137637/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "474592",
+            "name": "Dairy & chilled essentials"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "v3pjd624",
+        "product_uid": "3216620",
+        "favourite_uid": null,
+        "eans": [
+          "5000181024043"
+        ],
+        "product_type": "BASIC",
+        "name": "Cravendale Filtered Fresh Semi Skimmed Milk 2L Fresher for Longer",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/3216620/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/cravendale-filtered-fresh-semi-skimmed-milk-2l-fresher-for-longer",
+        "unit_price": {
+          "price": 1,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 2,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 1.33,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [
+          {
+            "promotion_uid": "10758893",
+            "icon": "",
+            "link": "/gol-ui/promo-lister/10758893",
+            "strap_line": "Buy 1 for 2",
+            "start_date": "2026-08-25T23:00:00Z",
+            "end_date": "2026-09-14T23:00:00Z",
+            "original_price": 2.65,
+            "promo_mechanic_id": "99",
+            "is_nectar": true,
+            "promo_type": "SIMPLE_FIXED_PRICE",
+            "promo_group": "simple"
+          }
+        ],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [
+          {
+            "label_uid": "Chilled",
+            "text": "Chilled",
+            "alt_text": "Chilled",
+            "color": "#005096",
+            "link_opens_in_new_window": false
+          }
+        ],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "3216620",
+          "total": 312,
+          "average_rating": 4.6699
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/3216620/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "461873",
+            "name": "Dairy"
+          },
+          {
+            "id": "474592",
+            "name": "Dairy & chilled essentials"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "agmxvs5v",
+        "product_uid": "464390",
+        "favourite_uid": null,
+        "eans": [
+          "5000181016574",
+          "0000000464390"
+        ],
+        "product_type": "BASIC",
+        "name": "Sainsbury's British Semi Skimmed Milk 3.4L (6 pint)",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/464390/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/sainsburys-british-semi-skimmed-milk-3-4l-6-pint",
+        "unit_price": {
+          "price": 0.7,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 2.4,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 0.7,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [
+          {
+            "label_uid": "BRITISH",
+            "text": "BRITISH",
+            "alt_text": "BRITISH",
+            "color": "#4c4c4c",
+            "link": "https://www.sainsburys.co.uk/gol-ui/features/best-of-british",
+            "link_opens_in_new_window": false
+          },
+          {
+            "label_uid": "ALDI PRICE MATCH*",
+            "text": "ALDI PRICE MATCH*",
+            "alt_text": "ALDI PRICE MATCH*",
+            "color": "#D70000",
+            "link": "https://www.sainsburys.co.uk/gol-ui/events/aldi-price-match",
+            "link_opens_in_new_window": false
+          }
+        ],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "464390",
+          "total": 2027,
+          "average_rating": 4.5999
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/464390/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "474592",
+            "name": "Dairy & chilled essentials"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "zm4ww6gt",
+        "product_uid": "173759",
+        "favourite_uid": null,
+        "eans": [
+          "5000181015614",
+          "5000181013306",
+          "0000001128451",
+          "0000000173759",
+          "5000181016512"
+        ],
+        "product_type": "BASIC",
+        "name": "Sainsbury's British Semi Skimmed Milk 1 Pint",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/173759/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/sainsburys-british-semi-skimmed-milk-1-pint",
+        "unit_price": {
+          "price": 1.5,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 0.85,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 1.5,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [
+          {
+            "label_uid": "BRITISH",
+            "text": "BRITISH",
+            "alt_text": "BRITISH",
+            "color": "#4c4c4c",
+            "link": "https://www.sainsburys.co.uk/gol-ui/features/best-of-british",
+            "link_opens_in_new_window": false
+          },
+          {
+            "label_uid": "ALDI PRICE MATCH*",
+            "text": "ALDI PRICE MATCH*",
+            "alt_text": "ALDI PRICE MATCH*",
+            "color": "#D70000",
+            "link": "https://www.sainsburys.co.uk/gol-ui/events/aldi-price-match",
+            "link_opens_in_new_window": false
+          }
+        ],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "173759",
+          "total": 2027,
+          "average_rating": 4.5999
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/173759/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "rcy8pm65",
+        "product_uid": "7943123",
+        "favourite_uid": null,
+        "eans": [
+          "0000000346085"
+        ],
+        "product_type": "BASIC",
+        "name": "Sainsbury's Everyday Lactose Free Semi Skimmed Dairy Drink 1L",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/7943123/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/sainsburys-everyday-lactose-free-semi-skimmed-dairy-drink-1l",
+        "unit_price": {
+          "price": 1.35,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 1.35,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 1.35,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [
+          {
+            "label_uid": "BRITISH",
+            "text": "BRITISH",
+            "alt_text": "BRITISH",
+            "color": "#4c4c4c",
+            "link": "https://www.sainsburys.co.uk/gol-ui/features/best-of-british",
+            "link_opens_in_new_window": false
+          }
+        ],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "7943123",
+          "total": 258,
+          "average_rating": 4.7791
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/7943123/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "428946",
+            "name": "Lactose free"
+          },
+          {
+            "id": "474592",
+            "name": "Dairy & chilled essentials"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "pqg7mccf",
+        "product_uid": "3216590",
+        "favourite_uid": null,
+        "eans": [
+          "5000181024029"
+        ],
+        "product_type": "BASIC",
+        "name": "Cravendale Filtered Fresh Semi Skimmed Milk Fresher for Longer 1L",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/3216590/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/cravendale-filtered-fresh-semi-skimmed-milk-fresher-for-longer-1l",
+        "unit_price": {
+          "price": 1.75,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 1.75,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 1.75,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [
+          {
+            "label_uid": "Chilled",
+            "text": "Chilled",
+            "alt_text": "Chilled",
+            "color": "#005096",
+            "link_opens_in_new_window": false
+          }
+        ],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "3216590",
+          "total": 312,
+          "average_rating": 4.6699
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/3216590/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "461873",
+            "name": "Dairy"
+          },
+          {
+            "id": "474592",
+            "name": "Dairy & chilled essentials"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "2t8z5nar",
+        "product_uid": "8019434",
+        "favourite_uid": null,
+        "eans": [
+          "0000000394482"
+        ],
+        "product_type": "BASIC",
+        "name": "Sainsbury's 1L Semi Skimmed British Long Life Milk",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/8019434/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/sainsburys-1l-semi-skimmed-british-long-life-milk",
+        "unit_price": {
+          "price": 0.95,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 0.95,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 0.95,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [
+          {
+            "label_uid": "ALDI PRICE MATCH*",
+            "text": "ALDI PRICE MATCH*",
+            "alt_text": "ALDI PRICE MATCH*",
+            "color": "#D70000",
+            "link": "https://www.sainsburys.co.uk/gol-ui/events/aldi-price-match",
+            "link_opens_in_new_window": false
+          }
+        ],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "8019434",
+          "total": 127,
+          "average_rating": 4.7874
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/8019434/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12437",
+            "name": "Longer life milk"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "sv4mkykf",
+        "product_uid": "7787579",
+        "favourite_uid": null,
+        "eans": [
+          "5000181036312"
+        ],
+        "product_type": "BASIC",
+        "name": "Arla Bob Skimmed Milk Tastes like Semi Skimmed 2L",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/7787579/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/arla-bob-skimmed-milk-tastes-like-semi-skimmed-2l",
+        "unit_price": {
+          "price": 1.43,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 2.85,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 1.43,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [
+          {
+            "label_uid": "Chilled",
+            "text": "Chilled",
+            "alt_text": "Chilled",
+            "color": "#005096",
+            "link_opens_in_new_window": false
+          }
+        ],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "7787579",
+          "total": 142,
+          "average_rating": 4.7113
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/7787579/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "461873",
+            "name": "Dairy"
+          },
+          {
+            "id": "474592",
+            "name": "Dairy & chilled essentials"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "ym7hjnyg",
+        "product_uid": "6336297",
+        "favourite_uid": null,
+        "eans": [
+          "0000001219494"
+        ],
+        "product_type": "BASIC",
+        "name": "Sainsbury's British Semi Skimmed Milk, SO Organic 1.13L (2 pint)",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/6336297/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/sainsburys-british-semi-skimmed-milk-so-organic-1-13l-2-pint",
+        "unit_price": {
+          "price": 1.76,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 2,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 1.76,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [
+          {
+            "label_uid": "ORGANIC",
+            "text": "ORGANIC",
+            "alt_text": "ORGANIC",
+            "color": "#218234",
+            "link": "https://www.sainsburys.co.uk/gol-ui/groceries/dietary-and-world-foods/organic/c:1019232",
+            "link_opens_in_new_window": false
+          },
+          {
+            "label_uid": "BRITISH",
+            "text": "BRITISH",
+            "alt_text": "BRITISH",
+            "color": "#4c4c4c",
+            "link": "https://www.sainsburys.co.uk/gol-ui/features/best-of-british",
+            "link_opens_in_new_window": false
+          }
+        ],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "6336297",
+          "total": 259,
+          "average_rating": 4.5135
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/6336297/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "461873",
+            "name": "Dairy"
+          },
+          {
+            "id": "474592",
+            "name": "Dairy & chilled essentials"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "ywfcexfg",
+        "product_uid": "6646953",
+        "favourite_uid": null,
+        "eans": [
+          "0000001530735",
+          "0000000522403"
+        ],
+        "product_type": "BASIC",
+        "name": "Sainsbury's Semi Skimmed Long Life Milk 6x1L",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/6646953/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/sainsburys-semi-skimmed-long-life-milk-6x1l",
+        "unit_price": {
+          "price": 0.95,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 5.7,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 0.95,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [
+          {
+            "label_uid": "ALDI PRICE MATCH*",
+            "text": "ALDI PRICE MATCH*",
+            "alt_text": "ALDI PRICE MATCH*",
+            "color": "#D70000",
+            "link": "https://www.sainsburys.co.uk/gol-ui/events/aldi-price-match",
+            "link_opens_in_new_window": false
+          }
+        ],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "6646953",
+          "total": 68,
+          "average_rating": 4.7647
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/6646953/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12437",
+            "name": "Longer life milk"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "19r0937a",
+        "product_uid": "6372891",
+        "favourite_uid": null,
+        "eans": [
+          "5000181028133"
+        ],
+        "product_type": "BASIC",
+        "name": "Arla Lactofree Semi Skimmed Milk Drink 1L",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/6372891/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/arla-lactofree-semi-skimmed-milk-drink-1l",
+        "unit_price": {
+          "price": 1.95,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 1.95,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 1.95,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [
+          {
+            "label_uid": "Chilled",
+            "text": "Chilled",
+            "alt_text": "Chilled",
+            "color": "#005096",
+            "link_opens_in_new_window": false
+          }
+        ],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "6372891",
+          "total": 229,
+          "average_rating": 4.5633
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/6372891/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "428946",
+            "name": "Lactose free"
+          },
+          {
+            "id": "461873",
+            "name": "Dairy"
+          },
+          {
+            "id": "474592",
+            "name": "Dairy & chilled essentials"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "sx30248r",
+        "product_uid": "7797484",
+        "favourite_uid": null,
+        "eans": [
+          "5000181034844"
+        ],
+        "product_type": "BASIC",
+        "name": "Cravendale Filtered Fresh Semi Skimmed Milk Fresher for Longer 3L",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/7797484/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/cravendale-filtered-fresh-semi-skimmed-milk-fresher-for-longer-3l",
+        "unit_price": {
+          "price": 1.3,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 3.9,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 1.3,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [
+          {
+            "label_uid": "Chilled",
+            "text": "Chilled",
+            "alt_text": "Chilled",
+            "color": "#005096",
+            "link_opens_in_new_window": false
+          }
+        ],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "7797484",
+          "total": 312,
+          "average_rating": 4.6699
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/7797484/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "461873",
+            "name": "Dairy"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "jextf8zj",
+        "product_uid": "4150862",
+        "favourite_uid": null,
+        "eans": [
+          "5015326100049"
+        ],
+        "product_type": "BASIC",
+        "name": "St Helen's Farm Semi Skimmed Goats Milk 1L",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/4150862/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/st-helen-s-farm-semi-skimmed-goats-milk-1l",
+        "unit_price": {
+          "price": 2.5,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 2.5,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 2.5,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [
+          {
+            "label_uid": "Chilled",
+            "text": "Chilled",
+            "alt_text": "Chilled",
+            "color": "#005096",
+            "link_opens_in_new_window": false
+          },
+          {
+            "label_uid": "LOW EVERYDAY PRICE",
+            "text": "LOW EVERYDAY PRICE",
+            "alt_text": "LOW EVERYDAY PRICE",
+            "color": "#D70000",
+            "link": "https://www.sainsburys.co.uk/gol-ui/events/low-everyday-prices",
+            "link_opens_in_new_window": false
+          }
+        ],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "4150862",
+          "total": 33,
+          "average_rating": 4.7273
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/4150862/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "474592",
+            "name": "Dairy & chilled essentials"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "t0mjyvre",
+        "product_uid": "8085808",
+        "favourite_uid": null,
+        "eans": [
+          "5000181042139"
+        ],
+        "product_type": "BASIC",
+        "name": "Arla Lactofree Semi Skimmed Milk Drink 2L",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/8085808/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/arla-lactofree-semi-skimmed-milk-drink-2l",
+        "unit_price": {
+          "price": 1.21,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 2.5,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 1.53,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [
+          {
+            "promotion_uid": "10757157",
+            "icon": "",
+            "link": "/gol-ui/promo-lister/10757157",
+            "strap_line": "Buy 1 for 2.5",
+            "start_date": "2026-08-25T23:00:00Z",
+            "end_date": "2026-09-14T23:00:00Z",
+            "original_price": 3.15,
+            "promo_mechanic_id": "99",
+            "is_nectar": true,
+            "promo_type": "SIMPLE_FIXED_PRICE",
+            "promo_group": "simple"
+          }
+        ],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "8085808",
+          "total": 229,
+          "average_rating": 4.5633
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/8085808/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "428946",
+            "name": "Lactose free"
+          },
+          {
+            "id": "461873",
+            "name": "Dairy"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "fc8qmvca",
+        "product_uid": "6483776",
+        "favourite_uid": null,
+        "eans": [
+          "5000181041118",
+          "5036589201618",
+          "5036589202806"
+        ],
+        "product_type": "BASIC",
+        "name": "Yeo Valley Organic Fresh Semi Skimmed Milk 2L",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/6483776/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/yeo-valley-organic-fresh-semi-skimmed-milk-2l",
+        "unit_price": {
+          "price": 1.58,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 3.15,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 1.58,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [
+          {
+            "label_uid": "ORGANIC",
+            "text": "ORGANIC",
+            "alt_text": "ORGANIC",
+            "color": "#218234",
+            "link": "https://www.sainsburys.co.uk/gol-ui/groceries/dietary-and-world-foods/organic/c:1019232",
+            "link_opens_in_new_window": false
+          },
+          {
+            "label_uid": "Chilled",
+            "text": "Chilled",
+            "alt_text": "Chilled",
+            "color": "#005096",
+            "link_opens_in_new_window": false
+          }
+        ],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "6483776",
+          "total": 246,
+          "average_rating": 4.5935
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/6483776/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "461873",
+            "name": "Dairy"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "px5t9awy",
+        "product_uid": "6770710",
+        "favourite_uid": null,
+        "eans": [
+          "5036589201137",
+          "5036589202790",
+          "5000246728589"
+        ],
+        "product_type": "BASIC",
+        "name": "Yeo Valley Organic Free Range Semi Skimmed Milk 1L",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/6770710/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/yeo-valley-organic-free-range-semi-skimmed-milk-1l",
+        "unit_price": {
+          "price": 2.15,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 2.15,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 2.15,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [
+          {
+            "label_uid": "ORGANIC",
+            "text": "ORGANIC",
+            "alt_text": "ORGANIC",
+            "color": "#218234",
+            "link": "https://www.sainsburys.co.uk/gol-ui/groceries/dietary-and-world-foods/organic/c:1019232",
+            "link_opens_in_new_window": false
+          },
+          {
+            "label_uid": "Chilled",
+            "text": "Chilled",
+            "alt_text": "Chilled",
+            "color": "#005096",
+            "link_opens_in_new_window": false
+          }
+        ],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "6770710",
+          "total": 246,
+          "average_rating": 4.5935
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/6770710/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "461873",
+            "name": "Dairy"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "bwvq2rvh",
+        "product_uid": "603379",
+        "favourite_uid": null,
+        "eans": [
+          "0000001544138",
+          "0000000603379",
+          "0000001262124",
+          "0000000154994"
+        ],
+        "product_type": "BASIC",
+        "name": "Sainsbury's British Semi Skimmed Milk, SO Organic 568ml (1 pint)",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/603379/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/sainsburys-british-semi-skimmed-milk-so-organic-568ml-1-pint",
+        "unit_price": {
+          "price": 2.11,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 1.2,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 2.11,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [
+          {
+            "label_uid": "ORGANIC",
+            "text": "ORGANIC",
+            "alt_text": "ORGANIC",
+            "color": "#218234",
+            "link": "https://www.sainsburys.co.uk/gol-ui/groceries/dietary-and-world-foods/organic/c:1019232",
+            "link_opens_in_new_window": false
+          },
+          {
+            "label_uid": "BRITISH",
+            "text": "BRITISH",
+            "alt_text": "BRITISH",
+            "color": "#4c4c4c",
+            "link": "https://www.sainsburys.co.uk/gol-ui/features/best-of-british",
+            "link_opens_in_new_window": false
+          }
+        ],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "603379",
+          "total": 259,
+          "average_rating": 4.5135
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/603379/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "461873",
+            "name": "Dairy"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "wk26knx3",
+        "product_uid": "6455875",
+        "favourite_uid": null,
+        "eans": [
+          "5000181029161",
+          "5711953027871"
+        ],
+        "product_type": "BASIC",
+        "name": "Arla 1L LactoFREE Semi Skimmed Long Life Milk Drink",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/6455875/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/arla-1l-lactofree-semi-skimmed-long-life-milk-drink",
+        "unit_price": {
+          "price": 2.1,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 2.1,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 2.1,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "6455875",
+          "total": 61,
+          "average_rating": 4.4426
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/6455875/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12437",
+            "name": "Longer life milk"
+          },
+          {
+            "id": "428946",
+            "name": "Lactose free"
+          },
+          {
+            "id": "461853",
+            "name": "Milk free cheese & dairy alternatives"
+          },
+          {
+            "id": "461873",
+            "name": "Dairy"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "ve4hsx47",
+        "product_uid": "8203083",
+        "favourite_uid": null,
+        "eans": [
+          "5000246729623"
+        ],
+        "product_type": "BASIC",
+        "name": "Arla BOB Skimmed Milk Tastes like Semi Skimmed 1L",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/8203083/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/arla-bob-skimmed-milk-tastes-like-semi-skimmed-1l",
+        "unit_price": {
+          "price": 1.4,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 1.4,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 1.55,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [
+          {
+            "promotion_uid": "10762068",
+            "icon": "",
+            "link": "/gol-ui/promo-lister/10762068",
+            "strap_line": "Buy 1 for 1.4",
+            "start_date": "2026-08-25T23:00:00Z",
+            "end_date": "2026-09-14T23:00:00Z",
+            "original_price": 1.55,
+            "promo_mechanic_id": "99",
+            "is_nectar": true,
+            "promo_type": "SIMPLE_FIXED_PRICE",
+            "promo_group": "simple"
+          }
+        ],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "8203083",
+          "total": 94,
+          "average_rating": 4.8085
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/8203083/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "461873",
+            "name": "Dairy"
+          },
+          {
+            "id": "461871",
+            "name": "Vegetarian & plant based"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "sst64t2d",
+        "product_uid": "8036445",
+        "favourite_uid": null,
+        "eans": [
+          "5000181036886"
+        ],
+        "product_type": "BASIC",
+        "name": "Cravendale Filtered Fresh Semi Skimmed Milk Fresher for Longer 250ml",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/8036445/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/cravendale-filtered-fresh-semi-skimmed-milk-fresher-for-longer-250ml",
+        "unit_price": {
+          "price": 3.4,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 0.85,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 3.4,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "8036445",
+          "total": 312,
+          "average_rating": 4.6699
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/8036445/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "461873",
+            "name": "Dairy"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      },
+      {
+        "sainId": "xb3zf7dj",
+        "product_uid": "7991824",
+        "favourite_uid": null,
+        "eans": [
+          "5711953112577"
+        ],
+        "product_type": "BASIC",
+        "name": "Arla Lactofree Organic Semi Skimmed Milk Drink 1 Litre",
+        "image": "https://assets.sainsburys-groceries.co.uk/gol/7991824/image.jpg",
+        "image_zoom": "",
+        "image_thumbnail": "",
+        "image_thumbnail_small": "",
+        "full_url": "://www.sainsburys.co.uk/gol-ui/product/arla-lactofree-organic-semi-skimmed-milk-drink-1-litre",
+        "unit_price": {
+          "price": 2.1,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "retail_price": {
+          "price": 2.1,
+          "measure": ""
+        },
+        "original_unit_price": {
+          "price": 2.1,
+          "measure": "ltr",
+          "measure_amount": 1
+        },
+        "is_available": true,
+        "promotions": [],
+        "associations": [],
+        "is_alcoholic": false,
+        "relevancyRank": 1,
+        "is_spotlight": false,
+        "is_intolerant": false,
+        "is_mhra": false,
+        "badges": [],
+        "labels": [
+          {
+            "label_uid": "ORGANIC",
+            "text": "ORGANIC",
+            "alt_text": "ORGANIC",
+            "color": "#218234",
+            "link": "https://www.sainsburys.co.uk/gol-ui/groceries/dietary-and-world-foods/organic/c:1019232",
+            "link_opens_in_new_window": false
+          },
+          {
+            "label_uid": "Chilled",
+            "text": "Chilled",
+            "alt_text": "Chilled",
+            "color": "#005096",
+            "link_opens_in_new_window": false
+          }
+        ],
+        "zone": null,
+        "department": null,
+        "reviews": {
+          "is_enabled": true,
+          "product_uid": "7991824",
+          "total": 75,
+          "average_rating": 4.7333
+        },
+        "breadcrumbs": [],
+        "details_html": "",
+        "assets": {
+          "plp_image": "https://assets.sainsburys-groceries.co.uk/gol/7991824/image.jpg",
+          "images": [],
+          "video": []
+        },
+        "description": [],
+        "important_information": [],
+        "attachments": [],
+        "categories": [
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "12431",
+            "name": "Fresh milk"
+          },
+          {
+            "id": "428946",
+            "name": "Lactose free"
+          },
+          {
+            "id": "461873",
+            "name": "Dairy"
+          }
+        ],
+        "is_supply_chain_orderable": false,
+        "display_icons": [],
+        "pdp_deep_link": "",
+        "promise": {
+          "type": "",
+          "earliest_promise_date": null,
+          "last_amendment_date": null,
+          "status": {
+            "label": "",
+            "type": "NONE"
+          }
+        }
+      }
+    ],
+    "controls": {
+      "sort": {
+        "active": "-relevance",
+        "options": [
+          {
+            "display": "Relevance",
+            "value": "-relevance"
+          },
+          {
+            "display": "Price - Low to High",
+            "value": "price"
+          },
+          {
+            "display": "Price - High to Low",
+            "value": "-price"
+          },
+          {
+            "display": "Ratings - High to Low",
+            "value": "-customer rating"
+          }
+        ]
+      },
+      "total_record_count": 28,
+      "returned_record_count": 24,
+      "page": {
+        "active": 1,
+        "first": 1,
+        "last": 2,
+        "size": 24,
+        "size_options": [
+          30,
+          60,
+          90
+        ]
+      },
+      "filters": [
+        {
+          "key": "nav_Filter-Your-Results",
+          "label": "Most Popular",
+          "type": "MULTI_SELECT",
+          "values": [
+            {
+              "id": "Offers",
+              "label": "Offers & Nectar Prices",
+              "value": "Offers",
+              "selected": false,
+              "enabled": true
+            }
+          ]
+        },
+        {
+          "key": "nav_Brand",
+          "label": "Brand",
+          "type": "MULTI_SELECT",
+          "values": [
+            {
+              "id": "sainsbury's",
+              "label": "Sainsbury's",
+              "value": "sainsbury's",
+              "selected": false,
+              "enabled": true,
+              "count": 11
+            },
+            {
+              "id": "arla",
+              "label": "Arla",
+              "value": "arla",
+              "selected": false,
+              "enabled": true,
+              "count": 7
+            },
+            {
+              "id": "cravendale",
+              "label": "Cravendale",
+              "value": "cravendale",
+              "selected": false,
+              "enabled": true,
+              "count": 4
+            },
+            {
+              "id": "so organic",
+              "label": "SO Organic",
+              "value": "so organic",
+              "selected": false,
+              "enabled": true,
+              "count": 3
+            },
+            {
+              "id": "yeo valley",
+              "label": "Yeo Valley",
+              "value": "yeo valley",
+              "selected": false,
+              "enabled": true,
+              "count": 2
+            },
+            {
+              "id": "st helen's farm",
+              "label": "St Helen's Farm",
+              "value": "st helen's farm",
+              "selected": false,
+              "enabled": true,
+              "count": 1
+            },
+            {
+              "id": "supernutrio",
+              "label": "SuperNutrio",
+              "value": "supernutrio",
+              "selected": false,
+              "enabled": true,
+              "count": 1
+            },
+            {
+              "id": "the estate dairy",
+              "label": "The Estate Dairy",
+              "value": "the estate dairy",
+              "selected": false,
+              "enabled": true,
+              "count": 1
+            },
+            {
+              "id": "yeo valley organic",
+              "label": "Yeo Valley Organic",
+              "value": "yeo valley organic",
+              "selected": false,
+              "enabled": true,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "key": "allergyandintolerance",
+          "label": "Allergy & Intolerance",
+          "type": "MULTI_SELECT",
+          "values": [
+            {
+              "id": "gluten free",
+              "label": "Gluten Free",
+              "value": "gluten free",
+              "selected": false,
+              "enabled": true,
+              "count": 17
+            },
+            {
+              "id": "no celery",
+              "label": "No Celery",
+              "value": "no celery",
+              "selected": false,
+              "enabled": true,
+              "count": 17
+            },
+            {
+              "id": "no crustaceans",
+              "label": "No Crustaceans",
+              "value": "no crustaceans",
+              "selected": false,
+              "enabled": true,
+              "count": 17
+            },
+            {
+              "id": "no egg",
+              "label": "No Egg",
+              "value": "no egg",
+              "selected": false,
+              "enabled": true,
+              "count": 17
+            },
+            {
+              "id": "no fish",
+              "label": "No Fish",
+              "value": "no fish",
+              "selected": false,
+              "enabled": true,
+              "count": 17
+            },
+            {
+              "id": "no lupin",
+              "label": "No Lupin",
+              "value": "no lupin",
+              "selected": false,
+              "enabled": true,
+              "count": 17
+            },
+            {
+              "id": "no molluscs",
+              "label": "No Molluscs",
+              "value": "no molluscs",
+              "selected": false,
+              "enabled": true,
+              "count": 17
+            },
+            {
+              "id": "no mustard",
+              "label": "No Mustard",
+              "value": "no mustard",
+              "selected": false,
+              "enabled": true,
+              "count": 17
+            },
+            {
+              "id": "no nuts",
+              "label": "No Nuts",
+              "value": "no nuts",
+              "selected": false,
+              "enabled": true,
+              "count": 17
+            },
+            {
+              "id": "no peanuts",
+              "label": "No Peanuts",
+              "value": "no peanuts",
+              "selected": false,
+              "enabled": true,
+              "count": 17
+            },
+            {
+              "id": "no sesame",
+              "label": "No Sesame",
+              "value": "no sesame",
+              "selected": false,
+              "enabled": true,
+              "count": 17
+            },
+            {
+              "id": "no soya",
+              "label": "No Soya",
+              "value": "no soya",
+              "selected": false,
+              "enabled": true,
+              "count": 17
+            },
+            {
+              "id": "no sulphites",
+              "label": "No Sulphites",
+              "value": "no sulphites",
+              "selected": false,
+              "enabled": true,
+              "count": 17
+            },
+            {
+              "id": "no lactose",
+              "label": "No Lactose",
+              "value": "no lactose",
+              "selected": false,
+              "enabled": true,
+              "count": 5
+            }
+          ]
+        },
+        {
+          "key": "diet_Dietary_and_Lifestyle_Options",
+          "label": "Dietary & Lifestyle",
+          "type": "MULTI_SELECT",
+          "values": [
+            {
+              "id": "low salt",
+              "label": "Low Salt",
+              "value": "low salt",
+              "selected": false,
+              "enabled": true,
+              "count": 17
+            },
+            {
+              "id": "vegetarian",
+              "label": "Vegetarian",
+              "value": "vegetarian",
+              "selected": false,
+              "enabled": true,
+              "count": 17
+            },
+            {
+              "id": "high protein",
+              "label": "High Protein",
+              "value": "high protein",
+              "selected": false,
+              "enabled": true,
+              "count": 16
+            },
+            {
+              "id": "healthy choice",
+              "label": "Healthy Choice",
+              "value": "healthy choice",
+              "selected": false,
+              "enabled": true,
+              "count": 10
+            },
+            {
+              "id": "halal",
+              "label": "Halal",
+              "value": "halal",
+              "selected": false,
+              "enabled": true,
+              "count": 6
+            },
+            {
+              "id": "organic",
+              "label": "Organic",
+              "value": "organic",
+              "selected": false,
+              "enabled": true,
+              "count": 5
+            },
+            {
+              "id": "low fat",
+              "label": "Low Fat",
+              "value": "low fat",
+              "selected": false,
+              "enabled": true,
+              "count": 4
+            },
+            {
+              "id": "low sugar",
+              "label": "Low Sugar",
+              "value": "low sugar",
+              "selected": false,
+              "enabled": true,
+              "count": 1
+            }
+          ]
+        },
+        {
+          "key": "other",
+          "label": "Other",
+          "type": "MULTI_SELECT",
+          "values": [
+            {
+              "id": "keep refrigerated",
+              "label": "Keep Refrigerated",
+              "value": "keep refrigerated",
+              "selected": false,
+              "enabled": true,
+              "count": 15
+            },
+            {
+              "id": "suitable for home freezing",
+              "label": "Suitable for Home Freezing",
+              "value": "suitable for home freezing",
+              "selected": false,
+              "enabled": true,
+              "count": 2
+            }
+          ]
+        },
+        {
+          "key": "cat_Category",
+          "label": "Category",
+          "type": "SINGLE_SELECT",
+          "values": [
+            {
+              "label": "All Categories",
+              "value": "allCat",
+              "selected": true,
+              "enabled": true
+            },
+            {
+              "id": "812511",
+              "label": "Dairy & eggs",
+              "value": "812511",
+              "selected": false,
+              "enabled": true
+            },
+            {
+              "id": "812503",
+              "label": "Drinks",
+              "value": "812503",
+              "selected": false,
+              "enabled": true
+            },
+            {
+              "id": "814813",
+              "label": "Free from foods",
+              "value": "814813",
+              "selected": false,
+              "enabled": true
+            }
+          ]
+        },
+        {
+          "key": "subcat_SubCategory",
+          "label": "SubCategory",
+          "type": "SINGLE_SELECT",
+          "values": [
+            {
+              "label": "All Subcategories",
+              "value": "allCat",
+              "selected": true,
+              "enabled": false
+            }
+          ]
+        }
+      ],
+      "cat_filters": [
+        {
+          "id": "812511",
+          "name": "Dairy & eggs",
+          "value": 28
+        },
+        {
+          "id": "812503",
+          "name": "Drinks",
+          "value": 25
+        },
+        {
+          "id": "814813",
+          "name": "Free from foods",
+          "value": 5
+        }
+      ],
+      "searchterm_hfss_restricted": false,
+      "category_match": false
+    }
+  }
+}
