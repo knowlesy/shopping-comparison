@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-01T19:28:00.000Z",
+  "generatedAt": "2026-09-01T19:37:30.000Z",
   "labVersion": "1.2.0",
   "client": "curl_cffi/chrome124 (store-fetcher sidecar)",
   "stores": {
@@ -23,13 +23,13 @@
     },
     "asda": {
       "status": "unreachable",
-      "client": "curl_cffi/chrome124 (store-fetcher sidecar)",
-      "checkedAt": "2026-09-01T19:28:00.000Z",
+      "client": "camoufox/firefox (Tier 2 browser rendering)",
+      "checkedAt": "2026-09-01T19:37:30.000Z",
       "httpStatus": 200,
       "productsFound": 0,
       "requestUrl": "https://groceries.asda.com/search/semi%20skimmed%20milk",
-      "evidence": "Empty client-side SPA shell returned on /search/<query>; product catalog is not rendered server-side and requires client-side Salesforce Commerce API execution",
-      "reason": "Server returns client-side SPA shell without embedded product data"
+      "evidence": "Camoufox Tier 2 escalation confirmed client-side hydration renders 12 product links in DOM, but direct stateless HTTP API endpoints return empty SPA shell and require full browser automation.",
+      "reason": "Direct stateless HTTP API unreachable; requires heavy Tier 2 browser automation out of scope for lightweight sidecar"
     },
     "morrisons": {
       "status": "reachable",
@@ -42,13 +42,13 @@
     },
     "iceland": {
       "status": "unreachable",
-      "client": "curl_cffi/chrome124 (store-fetcher sidecar)",
-      "checkedAt": "2026-09-01T19:28:00.000Z",
+      "client": "camoufox/firefox (Tier 2 browser rendering)",
+      "checkedAt": "2026-09-01T19:37:30.000Z",
       "httpStatus": 200,
       "productsFound": 0,
       "requestUrl": "https://www.iceland.co.uk/search?q=semi%20skimmed%20milk",
-      "evidence": "Empty PWA shell returned on /search; productsById is empty in Mobify server SSR; search execution is delegated to client-side Algolia",
-      "reason": "Server returns client-side PWA shell without embedded product data"
+      "evidence": "Camoufox Tier 2 escalation confirmed client-side hydration renders 36 product links in DOM, but direct stateless HTTP search returns empty PWA shell with Algolia client-side execution.",
+      "reason": "Direct stateless HTTP search unreachable; search execution is client-side Algolia requiring Tier 2 browser automation"
     },
     "aldi": {
       "status": "unsupported",
