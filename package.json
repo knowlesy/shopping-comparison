@@ -26,7 +26,8 @@
     "test:uncached-20": "node tests/uncached-20-lists-30-items-audit.js",
     "test:recipes-20": "node tests/verify-20-recipes.js",
     "eval:ai": "node scripts/eval-ai-matching.js",
-    "verify:audit": "node scripts/verify-audit6.js"
+    "verify:audit": "node scripts/verify-audit6.js",
+    "verify:infv": "node scripts/verify-infv.js"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

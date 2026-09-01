@@ -72,7 +72,7 @@ export interface SupermarketProduct {
   promoText?: string;
   confidence?: string;
   confidenceScore?: number;
-  confidenceSource?: 'aggregator' | 'ai' | 'ai-cached' | 'catalog';
+  confidenceSource?: 'direct' | 'aggregator' | 'ai' | 'ai-cached' | 'catalog';
   isHealthier: boolean;
   isFrozen?: boolean;
   fatPercentage?: number;
@@ -106,7 +106,7 @@ export interface ItemMatch {
   matchScore: number;
   confidence?: string;
   confidenceScore?: number;
-  confidenceSource?: 'aggregator' | 'ai' | 'ai-cached' | 'catalog';
+  confidenceSource?: 'direct' | 'aggregator' | 'ai' | 'ai-cached' | 'catalog';
   dealApplied?: DealApplied;
   reason?: string;
   alternatives?: SupermarketProduct[];

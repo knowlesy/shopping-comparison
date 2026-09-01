@@ -277,7 +277,7 @@ export class DomParser {
         deal: deal || undefined,
         promoText: card.promoText || undefined,
         clubcardPrice,
-        ...formatConfidence(0.8, 'aggregator'),
+        ...formatConfidence(0.6, 'aggregator'),
         isHealthier,
         fatPercentage,
         isOrganic,

@@ -544,6 +544,15 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({
                                             {match.confidence}
                                           </div>
                                         )}
+                                        {match.confidenceSource === 'direct' && (
+                                          <div
+                                            className="px-1.5 py-0.5 mt-0.5 rounded bg-emerald-100 dark:bg-emerald-950/70 border border-emerald-300 dark:border-emerald-700/60 text-emerald-800 dark:text-emerald-300 text-[9px] font-bold flex items-center justify-center space-x-1 shadow-xs truncate"
+                                            title={`Direct live price from ${supermarkets[storeKey]?.info.name || 'Store'}`}
+                                          >
+                                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse inline-block shrink-0" />
+                                            <span className="truncate">Live from {supermarkets[storeKey]?.info.name || 'Store'}</span>
+                                          </div>
+                                        )}
                                         {(match.isEstimated || match.confidenceSource === 'catalog') && (
                                           <div className="px-1.5 py-0.5 mt-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[9px] font-medium truncate" title="Estimated benchmark price">
                                             📊 Estimated price

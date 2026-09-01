@@ -1,6 +1,6 @@
 import { CATALOG_PRODUCTS } from './catalogData.js';
 import { isContaminated } from './contaminationRules.js';
-import { formatConfidence } from './confidence.js';
+import { formatConfidence, CONFIDENCE_BY_SOURCE } from './confidence.js';
 import { KeywordExtractor } from './keywordExtractor.js';
 import { PackSelector } from './packSelector.js';
 import { PenaltyRules } from './penaltyRules.js';
@@ -127,10 +127,12 @@ export class FuzzyMatcher {
     const weightShortfall = PackSelector.detectShortfall(item, best.totalQty);
 
     const isCatalog = best.product.source === 'catalog';
+    const isDirect = best.product.source === 'direct';
+    const confidenceSource = best.product.confidenceSource || (isCatalog ? 'catalog' : (isDirect ? 'direct' : 'aggregator'));
+    const defaultScore = CONFIDENCE_BY_SOURCE[confidenceSource] ?? (isCatalog ? 0.4 : 0.6);
     const confidenceScore = best.product.confidenceScore !== undefined
       ? best.product.confidenceScore
-      : (isCatalog ? 0.4 : 0.8);
-    const confidenceSource = best.product.confidenceSource || (isCatalog ? 'catalog' : 'aggregator');
+      : defaultScore;
     const isEstimated = isCatalog || best.product.isEstimated === true;
 
     return {
@@ -148,7 +150,7 @@ export class FuzzyMatcher {
       weightShortfall,
       isEstimated,
       matchScore: best.score,
-      ...formatConfidence(confidenceScore, confidenceSource, best.product.confidence),
+      ...formatConfidence(confidenceScore, confidenceSource, best.product.confidence, supermarket),
       dealApplied: best.dealApplied || undefined,
       alternatives
     };
