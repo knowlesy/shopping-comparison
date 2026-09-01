@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SupermarketAdapterRegistry",
+  "description": "Declared UK supermarket adapter registry with supported capabilities and unsupported reasons",
+  "version": "1.2.0",
+  "stores": {
+    "tesco": {
+      "name": "Tesco",
+      "supported": true,
+      "status": "reachable",
+      "adapter": "TescoAdapter",
+      "capabilities": ["variants", "loyalty_price", "deal_strings", "unit_price", "stock"]
+    },
+    "sainsburys": {
+      "name": "Sainsbury's",
+      "supported": true,
+      "status": "reachable",
+      "adapter": "SainsburysAdapter",
+      "capabilities": ["variants", "loyalty_price", "deal_strings", "unit_price", "stock"]
+    },
+    "morrisons": {
+      "name": "Morrisons",
+      "supported": true,
+      "status": "reachable",
+      "adapter": "MorrisonsAdapter",
+      "capabilities": ["variants", "loyalty_price", "deal_strings", "unit_price", "stock"]
+    },
+    "asda": {
+      "name": "Asda",
+      "supported": false,
+      "status": "unreachable",
+      "reason": "unsupported: Server returns client-side SPA shell without embedded product data — requires browser execution"
+    },
+    "iceland": {
+      "name": "Iceland",
+      "supported": false,
+      "status": "unreachable",
+      "reason": "unsupported: Server returns client-side PWA shell with unpopulated productsById — search delegated to client-side Algolia"
+    },
+    "aldi": {
+      "name": "Aldi",
+      "supported": false,
+      "status": "unsupported",
+      "reason": "unsupported: No UK online grocery platform — estimated data only (Click & Collect discontinued)"
+    },
+    "lidl": {
+      "name": "Lidl",
+      "supported": false,
+      "status": "unsupported",
+      "reason": "unsupported: No UK online grocery platform — in-store shopping only (estimated data only)"
+    }
+  }
+}

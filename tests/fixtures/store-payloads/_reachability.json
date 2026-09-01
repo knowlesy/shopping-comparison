@@ -1,59 +1,66 @@
 {
-  "generatedAt": "2026-09-01T19:18:08.823896+00:00",
+  "generatedAt": "2026-09-01T19:28:00.000Z",
   "labVersion": "1.2.0",
   "client": "curl_cffi/chrome124 (store-fetcher sidecar)",
   "stores": {
     "tesco": {
       "status": "reachable",
       "client": "curl_cffi/chrome124 (store-fetcher sidecar)",
-      "checkedAt": "2026-09-01T19:18:08.823896+00:00",
+      "checkedAt": "2026-09-01T19:28:00.000Z",
       "httpStatus": 200,
       "responseTimeMs": 1361,
+      "productsFound": 21,
       "requestUrl": "https://www.tesco.com/groceries/en-GB/search?query=semi%20skimmed%20milk"
     },
     "sainsburys": {
       "status": "reachable",
       "client": "curl_cffi/chrome124 (store-fetcher sidecar)",
-      "checkedAt": "2026-09-01T19:18:08.823896+00:00",
+      "checkedAt": "2026-09-01T19:28:00.000Z",
       "httpStatus": 200,
       "responseTimeMs": 857,
+      "productsFound": 24,
       "requestUrl": "https://www.sainsburys.co.uk/groceries-api/gol-services/product/v1/product?filter[keyword]=semi%20skimmed%20milk&page_number=1&page_size=24"
     },
     "asda": {
-      "status": "reachable",
+      "status": "unreachable",
       "client": "curl_cffi/chrome124 (store-fetcher sidecar)",
-      "checkedAt": "2026-09-01T19:18:08.823896+00:00",
+      "checkedAt": "2026-09-01T19:28:00.000Z",
       "httpStatus": 200,
-      "responseTimeMs": 625,
-      "requestUrl": "https://groceries.asda.com/search/semi%20skimmed%20milk"
+      "productsFound": 0,
+      "requestUrl": "https://groceries.asda.com/search/semi%20skimmed%20milk",
+      "evidence": "Empty client-side SPA shell returned on /search/<query>; product catalog is not rendered server-side and requires client-side Salesforce Commerce API execution",
+      "reason": "Server returns client-side SPA shell without embedded product data"
     },
     "morrisons": {
       "status": "reachable",
       "client": "curl_cffi/chrome124 (store-fetcher sidecar)",
-      "checkedAt": "2026-09-01T19:18:08.823896+00:00",
+      "checkedAt": "2026-09-01T19:28:00.000Z",
       "httpStatus": 200,
       "responseTimeMs": 1018,
+      "productsFound": 50,
       "requestUrl": "https://groceries.morrisons.com/search?entry=semi%20skimmed%20milk"
     },
     "iceland": {
-      "status": "reachable",
+      "status": "unreachable",
       "client": "curl_cffi/chrome124 (store-fetcher sidecar)",
-      "checkedAt": "2026-09-01T19:18:08.823896+00:00",
+      "checkedAt": "2026-09-01T19:28:00.000Z",
       "httpStatus": 200,
-      "responseTimeMs": 1122,
-      "requestUrl": "https://www.iceland.co.uk/search?q=semi%20skimmed%20milk"
+      "productsFound": 0,
+      "requestUrl": "https://www.iceland.co.uk/search?q=semi%20skimmed%20milk",
+      "evidence": "Empty PWA shell returned on /search; productsById is empty in Mobify server SSR; search execution is delegated to client-side Algolia",
+      "reason": "Server returns client-side PWA shell without embedded product data"
     },
     "aldi": {
       "status": "unsupported",
       "client": "curl_cffi/chrome124 (store-fetcher sidecar)",
-      "checkedAt": "2026-09-01T19:18:08.823896+00:00",
-      "reason": "No UK online grocery platform — estimated data only"
+      "checkedAt": "2026-09-01T19:28:00.000Z",
+      "reason": "No UK online grocery platform — estimated data only (Click & Collect discontinued)"
     },
     "lidl": {
       "status": "unsupported",
       "client": "curl_cffi/chrome124 (store-fetcher sidecar)",
-      "checkedAt": "2026-09-01T19:18:08.823896+00:00",
-      "reason": "No UK online grocery platform — estimated data only"
+      "checkedAt": "2026-09-01T19:28:00.000Z",
+      "reason": "No UK online grocery platform — in-store shopping only"
     }
   }
 }

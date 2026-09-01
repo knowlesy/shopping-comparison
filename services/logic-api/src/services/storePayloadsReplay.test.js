@@ -128,4 +128,41 @@ describe('Store Payloads Offline Replay Suite', () => {
     assert.ok(sample.price > 0);
     assert.equal(sample.source, 'direct');
   });
+
+  it('should load a recorded morrisons store-payload fixture and assert normalization offline', () => {
+    if (!fs.existsSync(FIXTURES_DIR)) return;
+
+    const morrisonsFiles = fs.readdirSync(FIXTURES_DIR).filter(f => f.startsWith('morrisons-') && f.endsWith('.json'));
+    if (morrisonsFiles.length === 0) return;
+
+    const fixturePath = path.join(FIXTURES_DIR, morrisonsFiles[0]);
+    const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
+    assert.equal(fixture.store, 'morrisons');
+
+    const rawProducts = fixture.payload.products || [];
+    assert.ok(rawProducts.length > 0);
+
+    function normalizeMorrisonsProduct(raw) {
+      return {
+        id: String(raw.productId || raw.retailerProductId || raw.sku || raw.id || ''),
+        supermarket: 'morrisons',
+        title: raw.name || '',
+        brand: raw.brand || 'Morrisons',
+        price: Number(raw.price?.current?.amount || 0),
+        unitPrice: raw.price?.unit?.current?.amount ? Number(raw.price.unit.current.amount) / 100 : null,
+        unitPriceMeasure: raw.price?.unit?.label || null,
+        inStock: raw.status !== 'OUT_OF_STOCK',
+        source: 'direct',
+        schemaVersion: '1.0.0'
+      };
+    }
+
+    const normalized = rawProducts.map(normalizeMorrisonsProduct);
+    assert.ok(normalized.length > 0);
+    const sample = normalized[0];
+    assert.ok(sample.id);
+    assert.equal(sample.supermarket, 'morrisons');
+    assert.ok(sample.price > 0);
+    assert.equal(sample.source, 'direct');
+  });
 });
