@@ -1,64 +1,17 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { IngredientParser } from './ingredientParser.js';
 import { FuzzyMatcher } from './fuzzyMatcher.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const REAL_LIST_PATH = path.resolve(__dirname, '../../../../tests/fixtures/real-list.json');
+
 describe('Real 52-Line List Reality Fixtures & Match Fidelity', () => {
-  const REAL_52_LIST = [
-    'Chicken breast fillets 1.4 kg',
-    'Beef mince 5% 1.9 kg',
-    'Pork sausages 12-pack',
-    'Salmon fillets 4 portions',
-    'Cod loin 500 g',
-    'Tinned tuna in spring water 4 x 160 g',
-    'Tofu firm 400 g',
-    'Eggs large free range 18',
-    'Greek yogurt 0% fat 1 kg',
-    'Whole milk 4 pints',
-    'Cheddar cheese mature 400 g',
-    'Butter salted 250 g',
-    'Mozzarella 2 x 125 g',
-    'Oat milk barista 2 L',
-    'Broccoli 2 heads',
-    'Carrots 1 kg',
-    'Brown onions 1 kg',
-    'Garlic 3 bulbs',
-    'Baby spinach 250 g',
-    'Red bell peppers 3',
-    'Cucumber 1',
-    'Avocados ripe 4-pack',
-    'Mushrooms chestnut 400 g',
-    'Maris Piper potatoes 1.8 kg',
-    'Sweet potatoes 1 kg',
-    'Bananas 6',
-    'Apples Pink Lady 6-pack',
-    'Lemons 4',
-    'Fresh blueberries 200 g',
-    'Satsumas or easy peelers 600 g',
-    'Basmati rice 1 kg',
-    'Rolled porridge oats 1 kg',
-    'Penne pasta 1 kg',
-    'Tinned chopped tomatoes 4 x 400 g',
-    'Tinned chickpeas in water 2 x 400 g',
-    'Tinned black beans 2 x 400 g',
-    'Red split lentils 500 g',
-    'Olive oil extra virgin 750 ml',
-    'Rapeseed oil 1 L',
-    'Soy sauce reduced salt 150 ml',
-    'Peanut butter crunchy 1 kg',
-    'Wholewheat sliced bread 800 g',
-    'Sourdough loaf 1',
-    'Tortilla wraps 8-pack',
-    'Ground cumin 40 g',
-    'Smoked paprika 45 g',
-    'Dried oregano 25 g',
-    'Reduced-salt stock cubes 8-pack',
-    'Dark chocolate 70% 100 g',
-    'Honey clear 340 g',
-    'Walnuts 200 g',
-    'Frozen garden peas 1 kg',
-    'Tinned sardines in olive oil 2 x 120 g'
-  ];
+  const REAL_52_LIST = JSON.parse(fs.readFileSync(REAL_LIST_PATH, 'utf8'));
 
   it('should correctly parse all sentinel items from the real list', () => {
     // Sentinel 1: Maris Piper potatoes 1.8
@@ -76,14 +29,15 @@ describe('Real 52-Line List Reality Fixtures & Match Fidelity', () => {
     assert.equal(sardines.unit, 'g');
 
     // Sentinel 3: Reduced-salt stock cubes
-    const stockCubes = IngredientParser.parseItem('Reduced-salt stock cubes 8-pack');
+    const stockCubes = IngredientParser.parseItem('Reduced-salt stock cubes 3 (adults only, never for infant)');
     assert.ok(stockCubes.name.toLowerCase().includes('stock cubes'));
-    assert.equal(stockCubes.targetQuantity, 8);
+    assert.equal(stockCubes.targetQuantity, 3);
   });
 
   it('should parse all real-world lines with valid names and positive quantities', () => {
     const parsed = IngredientParser.parseList(REAL_52_LIST.join('\n'));
-    assert.equal(parsed.length, REAL_52_LIST.length);
+    // Since herb line expands to 7 items, 51 lines + 7 = 58 items
+    assert.equal(parsed.length, 58);
 
     for (const item of parsed) {
       assert.ok(item.name && item.name.length > 0, `Empty name for ${item.rawText}`);

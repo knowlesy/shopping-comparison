@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-01T22:38:10.190Z",
+  "measuredAt": "2026-09-02T20:04:44.749Z",
   "sidecarUsed": true,
   "storesLive": [
     "tesco",
@@ -8,40 +8,45 @@
   ],
   "totals": {
     "itemsParsed": 58,
-    "matchedCount": 58,
-    "noMatchCount": 0
+    "matchedCount": 57,
+    "noMatchCount": 1,
+    "suspectMatches": 0
   },
+  "suspectMatches": 0,
+  "suspectItems": [],
   "bySource": {
-    "direct": 58,
+    "direct": 56,
     "aggregator": 0,
-    "catalog": 0
+    "catalog": 1
   },
   "perStore": {
     "tesco": {
-      "itemsFound": 58,
-      "matchRate": 1,
-      "basketTotal": 153.22
-    },
-    "sainsburys": {
       "itemsFound": 57,
       "matchRate": 0.98,
-      "basketTotal": 145.67
+      "basketTotal": 159.8
+    },
+    "sainsburys": {
+      "itemsFound": 30,
+      "matchRate": 0.52,
+      "basketTotal": 78.44
     },
     "morrisons": {
       "itemsFound": 28,
       "matchRate": 0.48,
-      "basketTotal": 79.78
+      "basketTotal": 75.53
     }
   },
-  "variantRoutesCount": 24,
+  "variantRoutesCount": 21,
   "confidenceDistribution": {
-    "0.9": 115,
-    "0.4": 28
+    "0.9": 63,
+    "0.4": 52
   },
-  "unresolvedItems": [],
+  "unresolvedItems": [
+    "Hummus"
+  ],
   "comparisonToCatalogOnly": {
     "catalogOnlyNoMatch": 28,
-    "directNoMatch": 0,
-    "explanation": "Direct fetch tier resolved 28 previously unmatchable items across Tesco, Sainsbury's, and Morrisons."
+    "directNoMatch": 1,
+    "explanation": "Direct fetch tier resolved 27 previously unmatchable items across Tesco, Sainsbury's, and Morrisons."
   }
 }

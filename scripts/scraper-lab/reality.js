@@ -6,69 +6,57 @@ import { FuzzyMatcher } from '../../services/logic-api/src/services/fuzzyMatcher
 import { BasketCalculator } from '../../services/logic-api/src/services/basketCalculator.js';
 import { QueryStrategist } from '../../services/logic-api/src/services/queryStrategist.js';
 import { StoreFetcherClient } from '../../services/logic-api/src/services/storeFetcherClient.js';
+import { isContaminated } from '../../services/logic-api/src/services/contaminationRules.js';
 import { getUserSettings } from '../../services/logic-api/src/routes/settings.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, '../..');
 
+export const REAL_LIST_FILE = path.join(ROOT_DIR, 'tests/fixtures/real-list.json');
 export const REALITY_FIXTURES_FILE = path.join(ROOT_DIR, 'tests/fixtures/reality-fixtures.json');
+export const REALITY_SAMPLE_FILE = path.join(ROOT_DIR, 'tests/fixtures/reality-sample.json');
 export const REALITY_BASELINE_FILE = path.join(ROOT_DIR, 'tests/fixtures/reality-baseline.json');
 
-export const REAL_52_LINES = [
-  'Beef mince 5% 1.9 kg',
-  'Walnuts 200 g',
-  'Large eggs 17',
-  'Semi-skimmed milk 4 pints',
-  'Tinned sardines in olive oil 2 x 120 g',
-  'Little gem lettuce 2-pack',
-  'Celery 1 head',
-  'Garlic 1 bulb',
-  'Tomato paste 1 tube',
-  'Potatoes 1.8kg',
-  'Bananas 10',
-  'Apples 250 g',
-  'Hummus 200 g',
-  'Sultanas 500 g',
-  'Lasagne sheets 500 g',
-  'Red peppers 4',
-  'Red wine vinegar',
-  'Frozen peas 1 kg',
-  'Butter beans in water 2 x 400 g',
-  'Smooth peanut butter 300 g',
-  'Plums or pears 600 g',
-  'Oregano, thyme, rosemary, basil, parsley, sage, mint',
-  'Olive oil',
-  'Carrots 1 kg',
-  'Onions 1 kg',
-  'Broccoli 500 g',
-  'Cucumber 1',
-  'Oranges 6',
-  'Chicken breast fillets 1 kg',
-  'Salmon fillets 4',
-  'Frozen cod fillets 1.5 kg',
-  'Greek yogurt 0% 1 kg',
-  'Cheddar cheese 400 g',
-  'Wholewheat fusilli 1 kg',
-  'Basmati rice 1 kg',
-  'Porridge oats 1 kg',
-  'Red lentils 500 g',
-  'Chia seeds 200 g',
-  'Wholemeal bread 1 loaf',
-  'Plain flour 1.5 kg',
-  'Dark chocolate (adults only, 85%) 200 g',
-  'Baby food pouches (infant) 4',
-  'Chopped tomatoes 4 x 400 g',
-  'Kidney beans 400 g',
-  'Chickpeas 400 g',
-  'Spinach 250 g',
-  'Mushrooms 300 g',
-  'Courgettes 500 g',
-  'Lemons 4',
-  'Vegetable stock cubes 8',
-  'Fairy washing up liquid 433 ml',
-  'Kitchen roll 2 pack'
-];
+export const REAL_52_LINES = JSON.parse(fs.readFileSync(REAL_LIST_FILE, 'utf8'));
+
+export function trimProduct(p) {
+  return {
+    id: String(p.id || ''),
+    supermarket: p.supermarket,
+    title: p.title,
+    brand: p.brand || undefined,
+    price: p.price,
+    unitPrice: p.unitPrice,
+    unitPriceMeasure: p.unitPriceMeasure,
+    packageSize: p.packageSize,
+    packageUnit: p.packageUnit,
+    packageDisplay: p.packageDisplay,
+    deal: p.deal ? { description: p.deal.description, type: p.deal.type } : null,
+    clubcardPrice: p.clubcardPrice,
+    nectarPrice: p.nectarPrice,
+    inStock: p.inStock !== false,
+    source: p.source || 'direct',
+    confidenceSource: p.confidenceSource || 'direct'
+  };
+}
+
+export function isSuspectMatch(item, product) {
+  if (!product || !item) return false;
+  const itemText = (item.name || item.baseItem || '').toLowerCase();
+  const prodTitle = (product.title || '').toLowerCase();
+
+  if (isContaminated(itemText, prodTitle)) return true;
+  if (/hummus/i.test(itemText) && /chips|crisps/i.test(prodTitle)) return true;
+  if (/apple/i.test(itemText) && /spinach/i.test(prodTitle)) return true;
+  if (/walnut/i.test(itemText) && /puree|paste/i.test(prodTitle)) return true;
+  if (/peanut butter/i.test(itemText) && /egg/i.test(prodTitle)) return true;
+  if (/butter bean/i.test(itemText) && /milk|butter\b(?! bean)/i.test(prodTitle)) return true;
+  if (/dark chocolate/i.test(itemText) && !/chocolate|cocoa/i.test(prodTitle)) return true;
+  if (/stock cubes/i.test(itemText) && !/stock|cube|pot|broth|bouillon/i.test(prodTitle)) return true;
+
+  return false;
+}
 
 export async function runReality(options = {}) {
   const isOffline = Boolean(options.offline || options['--offline'] || process.argv.includes('--offline'));
@@ -85,11 +73,12 @@ export async function runReality(options = {}) {
   let fixturesData = { _provenance: {}, items: [] };
 
   if (isOffline) {
-    if (!fs.existsSync(REALITY_FIXTURES_FILE)) {
-      throw new Error(`Offline mode requires ${REALITY_FIXTURES_FILE} to exist. Run live mode first.`);
+    const fixturePath = fs.existsSync(REALITY_FIXTURES_FILE) ? REALITY_FIXTURES_FILE : REALITY_SAMPLE_FILE;
+    if (!fs.existsSync(fixturePath)) {
+      throw new Error(`Offline mode requires ${fixturePath} to exist. Run live mode first.`);
     }
-    fixturesData = JSON.parse(fs.readFileSync(REALITY_FIXTURES_FILE, 'utf8'));
-    console.log(`Loaded offline fixtures from ${path.relative(ROOT_DIR, REALITY_FIXTURES_FILE)}`);
+    fixturesData = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
+    console.log(`Loaded offline fixtures from ${path.relative(ROOT_DIR, fixturePath)}`);
   } else {
     // Live mode: check sidecar health
     const health = await StoreFetcherClient.health();
@@ -115,14 +104,15 @@ export async function runReality(options = {}) {
         timeoutMs: 12000
       });
 
-      console.log(`${res.products?.length || 0} products found.`);
+      const trimmed = (res.products || []).slice(0, 10).map(trimProduct);
+      console.log(`${trimmed.length} products kept.`);
       recordedItems.push({
         index: i,
         rawText: item.rawText,
         name: item.name,
         baseItem: item.baseItem,
         query,
-        products: res.products || []
+        products: trimmed
       });
     }
 
@@ -138,7 +128,9 @@ export async function runReality(options = {}) {
     };
 
     fs.writeFileSync(REALITY_FIXTURES_FILE, JSON.stringify(fixturesData, null, 2), 'utf8');
-    console.log(`\n💾 Saved live reality fixtures to: ${path.relative(ROOT_DIR, REALITY_FIXTURES_FILE)}\n`);
+    fs.writeFileSync(REALITY_SAMPLE_FILE, JSON.stringify(fixturesData, null, 2), 'utf8');
+    console.log(`\n💾 Saved trimmed reality fixtures to: ${path.relative(ROOT_DIR, REALITY_FIXTURES_FILE)}`);
+    console.log(`💾 Saved reality sample to: ${path.relative(ROOT_DIR, REALITY_SAMPLE_FILE)}\n`);
   }
 
   // Build match results through identical runtime matching pipeline
@@ -197,6 +189,24 @@ export async function runReality(options = {}) {
     }
   }
 
+  // Measure suspect match correctness
+  let suspectMatches = 0;
+  const suspectItems = [];
+  for (let i = 0; i < parsedItems.length; i++) {
+    const item = parsedItems[i];
+    let isItemSuspect = false;
+    for (const store of storesLive) {
+      const match = storeMatchesMap[store][i];
+      if (match && match.product && isSuspectMatch(item, match.product)) {
+        suspectMatches++;
+        isItemSuspect = true;
+      }
+    }
+    if (isItemSuspect) {
+      suspectItems.push(item.name || item.baseItem);
+    }
+  }
+
   const perStore = {};
   for (const store of storesLive) {
     const sRes = comparison.supermarkets[store] || {};
@@ -232,8 +242,11 @@ export async function runReality(options = {}) {
     totals: {
       itemsParsed: parsedItems.length,
       matchedCount,
-      noMatchCount
+      noMatchCount,
+      suspectMatches
     },
+    suspectMatches,
+    suspectItems,
     bySource: {
       direct: itemTierCounts.direct,
       aggregator: itemTierCounts.aggregator || 0,
@@ -260,6 +273,7 @@ export async function runReality(options = {}) {
   console.log(`Items Parsed:             ${baselineData.totals.itemsParsed}`);
   console.log(`Matched Items:            ${baselineData.totals.matchedCount}`);
   console.log(`Unmatched Items:          ${baselineData.totals.noMatchCount}`);
+  console.log(`Suspect / Contaminated:   ${baselineData.totals.suspectMatches} items: [${baselineData.suspectItems.join(', ')}]`);
   console.log(`Direct-tier resolutions:  ${baselineData.bySource.direct}`);
   console.log(`Catalog-only before:      ${baselineData.comparisonToCatalogOnly.catalogOnlyNoMatch}`);
   console.log(`Direct tier after:        ${baselineData.comparisonToCatalogOnly.directNoMatch}`);

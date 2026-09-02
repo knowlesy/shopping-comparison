@@ -45,5 +45,11 @@
     "matchPattern": "\\b(?:plum|plums)\\b",
     "matchNegatePattern": "\\b(?:tomato|tomatoes)\\b",
     "prohibitedPattern": "\\b(?:plum tomatoes?|tomato|tomatoes)\\b"
+  },
+  {
+    "category": "hummus",
+    "matchPattern": "\\b(?:hummus|houmous)\\b",
+    "matchNegatePattern": "\\b(?:crisps?|chips?|crackers?|dip)\\b",
+    "prohibitedPattern": "\\b(?:chips?|crisps?|crackers?|snack|flavoured)\\b"
   }
 ]

@@ -773,6 +773,112 @@ check(14, 'Security workflow covers the Python sidecar dependencies', () => {
 });
 
 // ---------------------------------------------------------------------------
+// Step 15 — Reality result must be honest: the owner's real list, correct matches
+// ---------------------------------------------------------------------------
+const REAL_SENTINELS = [
+  'Maris Piper potatoes 1.8 kg',
+  'Tomato puree 1 tube',
+  'Reduced-salt stock cubes 3 (adults only, never for infant)',
+  'Cherry/salad tomatoes 900 g'
+];
+
+check(15, "Reality run uses the owner's real list verbatim, single-sourced", () => {
+  const realityTest = read(r('services/logic-api/src/services/realityBaseline.test.js'));
+  if (!realityTest) fail('realityBaseline.test.js missing');
+  const missing = REAL_SENTINELS.filter((s) => !realityTest.includes(s));
+  if (missing.length) {
+    fail(`the reality list is paraphrased, not the owner's real list. Missing verbatim lines:\n          - ${missing.join('\n          - ')}`);
+  }
+  // The list now exists in two test files; it must be single-sourced.
+  const realListTest = read(r('services/logic-api/src/services/realList.test.js'));
+  const bothInline =
+    /Maris Piper potatoes 1\.8 kg/.test(realListTest) && /Maris Piper potatoes 1\.8 kg/.test(realityTest);
+  const shared =
+    fs.existsSync(r('tests/fixtures/real-list.json')) || fs.existsSync(r('tests/fixtures/real-list.js'));
+  if (bothInline && !shared) {
+    fail('the real list is duplicated inline in realList.test.js and realityBaseline.test.js — single-source it (e.g. tests/fixtures/real-list.json) so the two can never drift');
+  }
+});
+
+check(15, 'Reality fixtures cover the real list, not a softened rewrite', () => {
+  const p = r('tests/fixtures/reality-fixtures.json');
+  if (!fs.existsSync(p)) fail('tests/fixtures/reality-fixtures.json missing');
+  const j = JSON.parse(read(p));
+  const raws = (j.items || []).map((i) => i.rawText || '');
+  const missing = REAL_SENTINELS.filter((s) => !raws.includes(s));
+  if (missing.length) {
+    fail(`recorded reality fixtures were captured against a paraphrased list. Missing:\n          - ${missing.join('\n          - ')}`);
+  }
+});
+
+check(15, 'Baseline measures match CORRECTNESS, not just match rate', () => {
+  const b = JSON.parse(read(r(BASELINE)) || '{}');
+  const t = b.totals || b;
+  const suspect = t.suspectMatches ?? b.suspectMatches ?? t.contaminatedCount;
+  if (typeof suspect !== 'number') {
+    fail('baseline records no suspect/contaminated match count — a 100% match rate means nothing if wrong products count as matches');
+  }
+  if (!Array.isArray(b.suspectItems)) {
+    fail('baseline has no suspectItems[] naming the questionable matches for review');
+  }
+});
+
+check(15, 'Raw scraped corpora are not published in the public repo', () => {
+  const gi = read(r('.gitignore'));
+  const covered = (p) => new RegExp(p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\\*/g, '.*')).test(gi);
+  if (!/reality-fixtures|store-payloads/.test(gi)) {
+    fail('.gitignore does not exclude the raw scraped corpora (tests/fixtures/reality-fixtures.json, tests/fixtures/store-payloads/) — this repo is public and those are ~2.7MB of retailer product data');
+  }
+  // Whatever stays tracked for CI must be a trimmed sample, not the full corpus.
+  const dir = r('tests/fixtures');
+  if (!fs.existsSync(dir)) fail('tests/fixtures missing');
+  const CAP = 256 * 1024;
+  const oversized = [];
+  const walk = (d) => {
+    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+      const p = path.join(d, e.name);
+      if (e.isDirectory()) walk(p);
+      else if (e.name.endsWith('.json') && fs.statSync(p).size > CAP) {
+        oversized.push(`${path.relative(ROOT, p)} (${Math.round(fs.statSync(p).size / 1024)}KB)`);
+      }
+    }
+  };
+  walk(dir);
+  if (oversized.length) {
+    fail(`tracked fixtures exceed the 256KB sample cap — trim to a representative subset:\n          - ${oversized.join('\n          - ')}`);
+  }
+});
+
+check(15, 'A trimmed sample still exists so the CI ratchet can run on a fresh checkout', () => {
+  const sample =
+    fs.existsSync(r('tests/fixtures/reality-sample.json')) ||
+    fs.existsSync(r('tests/fixtures/reality-fixtures.sample.json'));
+  if (!sample) {
+    fail('no trimmed reality sample is tracked — if the full corpus is ignored, CI has nothing to replay and the ratchet silently does nothing');
+  }
+  if (!fs.existsSync(r(BASELINE))) fail('reality-baseline.json (metrics only) must stay tracked');
+});
+
+check(15, 'Known contamination: hummus must not match hummus-flavoured crisps', async () => {
+  const p = r('tests/fixtures/reality-fixtures.json');
+  if (!fs.existsSync(p)) fail('reality fixtures missing');
+  const j = JSON.parse(read(p));
+  const entry = (j.items || []).find((i) => /hummus/i.test(i.rawText || ''));
+  if (!entry) return 'no hummus item in fixtures';
+  const { FuzzyMatcher } = await svc('fuzzyMatcher.js');
+  const item = {
+    name: entry.name, baseItem: entry.baseItem, category: entry.category,
+    targetQuantity: entry.targetQuantity, unit: entry.unit
+  };
+  for (const store of ['tesco', 'sainsburys', 'morrisons']) {
+    const m = FuzzyMatcher.matchProduct(store, item, entry.products || [], {});
+    if (m && m.product && /chips|crisps/i.test(m.product.title)) {
+      fail(`${store}: "Hummus" matched "${m.product.title}" — real store data carries contamination the catalog never exposed; add a rule`);
+    }
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 await Promise.allSettled(pending);
