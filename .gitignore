@@ -87,6 +87,6 @@ __pycache__/
 *.pyc
 
 # Scraped Retailer Data & Corpora (keep public repo clean)
-tests/fixtures/reality-fixtures.json
+tests/fixtures/reality-fixtures.raw.json
 tests/fixtures/store-payloads/*
 !tests/fixtures/store-payloads/_reachability.json
