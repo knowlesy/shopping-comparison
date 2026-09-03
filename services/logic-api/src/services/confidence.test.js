@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { formatConfidence, CONFIDENCE_BY_SOURCE, DEFAULT_CONFIDENCE } from "./confidence.js";
+import { formatConfidence, composeConfidence, CONFIDENCE_BY_SOURCE, DEFAULT_CONFIDENCE } from "./confidence.js";
 
 describe("Confidence Metadata Helper", () => {
   it("should export CONFIDENCE_BY_SOURCE with ordering invariant direct > aggregator > catalog", () => {
@@ -71,5 +71,28 @@ describe("Confidence Metadata Helper", () => {
 
     const catRes = formatConfidence(null, "catalog");
     assert.equal(catRes.confidenceScore, 0.4);
+  });
+
+  it("should compose two-axis confidence preserving data tier caps", () => {
+    const direct1 = composeConfidence({ dataSource: "direct", matchConfidence: 1 });
+    assert.equal(direct1.dataConfidence, 0.90);
+    assert.equal(direct1.matchConfidence, 1);
+    assert.equal(direct1.confidenceScore, 0.90);
+
+    const directHalf = composeConfidence({ dataSource: "direct", matchConfidence: 0.5 });
+    assert.equal(directHalf.confidenceScore, 0.45);
+    assert.ok(directHalf.confidenceScore < direct1.confidenceScore);
+
+    const catalog1 = composeConfidence({ dataSource: "catalog", matchConfidence: 1 });
+    assert.equal(catalog1.dataConfidence, 0.40);
+    assert.equal(catalog1.confidenceScore, 0.40);
+
+    // Critical Step 16 invariant: AI matching on catalog data NEVER exceeds 0.40
+    const aiOnCatalog = composeConfidence({ dataSource: "catalog", matchConfidence: 0.95, matchSource: "ai", store: "tesco" });
+    assert.equal(aiOnCatalog.dataConfidence, 0.40);
+    assert.equal(aiOnCatalog.confidenceScore, 0.38);
+    assert.ok(aiOnCatalog.confidenceScore <= 0.40);
+    assert.match(aiOnCatalog.confidence, /Tesco catalog/i);
+    assert.match(aiOnCatalog.confidence, /Gemini AI Match/i);
   });
 });

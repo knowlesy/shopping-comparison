@@ -49,6 +49,10 @@ compareRouter.post('/', async (req, res) => {
     storeMatchesMap[s] = [];
   }
 
+  const aiMaxCallsPerBasket = preferences.aiMaxCallsPerBasket ?? 25;
+  const aiCallsContext = { callsUsed: 0, maxCalls: aiMaxCallsPerBasket, aiBudget: aiMaxCallsPerBasket };
+  const enrichedPreferences = { ...preferences, aiCallsContext, aiMaxCallsPerBasket, aiBudget: aiMaxCallsPerBasket };
+
   const sourcesCount = { live: 0, cache: 0, catalog: 0, direct: 0 };
   let firstScrapeError = null;
 
@@ -60,7 +64,7 @@ compareRouter.post('/', async (req, res) => {
           forceRefresh,
           enabledStores,
           includeDeals: preferences.includeDeals !== false,
-          preferences
+          preferences: enrichedPreferences
         });
 
       if (scrapeErr && !firstScrapeError) {
@@ -72,12 +76,15 @@ compareRouter.post('/', async (req, res) => {
       }
 
       for (const store of enabledStores) {
-        const match = FuzzyMatcher.matchProduct(store, item, candidateProducts, preferences);
+        const match = FuzzyMatcher.matchProduct(store, item, candidateProducts, enrichedPreferences);
         storeMatchesMap[store].push(match);
       }
     }
 
     const comparison = BasketCalculator.computeComparison(items, storeMatchesMap, enabledStores);
+    const aiCallsUsed = aiCallsContext.callsUsed;
+    comparison.aiCallsUsed = aiCallsUsed;
+    comparison.aiBudget = aiMaxCallsPerBasket;
     comparison.meta = {
       sources: {
         live: sourcesCount.live,
@@ -85,6 +92,8 @@ compareRouter.post('/', async (req, res) => {
         catalog: sourcesCount.catalog,
         direct: sourcesCount.direct
       },
+      aiCallsUsed,
+      aiBudget: aiMaxCallsPerBasket,
       scrapeError: firstScrapeError || undefined
     };
 
@@ -175,6 +184,10 @@ compareRouter.post('/stream', async (req, res) => {
     storeMatchesMap[s] = [];
   }
 
+  const aiMaxCallsPerBasket = preferences.aiMaxCallsPerBasket ?? 25;
+  const aiCallsContext = { callsUsed: 0, maxCalls: aiMaxCallsPerBasket, aiBudget: aiMaxCallsPerBasket };
+  const enrichedPreferences = { ...preferences, aiCallsContext, aiMaxCallsPerBasket, aiBudget: aiMaxCallsPerBasket };
+
   const sourcesCount = { live: 0, cache: 0, catalog: 0, direct: 0 };
   let firstScrapeError = null;
 
@@ -202,7 +215,7 @@ compareRouter.post('/stream', async (req, res) => {
           forceRefresh,
           enabledStores,
           includeDeals: preferences.includeDeals !== false,
-          preferences
+          preferences: enrichedPreferences
         });
 
       if (scrapeErr && !firstScrapeError) {
@@ -216,7 +229,7 @@ compareRouter.post('/stream', async (req, res) => {
       if (isClosed) break;
 
       for (const store of enabledStores) {
-        const match = FuzzyMatcher.matchProduct(store, item, candidateProducts, preferences);
+        const match = FuzzyMatcher.matchProduct(store, item, candidateProducts, enrichedPreferences);
         storeMatchesMap[store].push(match);
       }
 
@@ -238,6 +251,9 @@ compareRouter.post('/stream', async (req, res) => {
 
     if (!isClosed) {
       const comparison = BasketCalculator.computeComparison(items, storeMatchesMap, enabledStores);
+      const aiCallsUsed = aiCallsContext.callsUsed;
+      comparison.aiCallsUsed = aiCallsUsed;
+      comparison.aiBudget = aiMaxCallsPerBasket;
       comparison.meta = {
         sources: {
           live: sourcesCount.live,
@@ -245,6 +261,8 @@ compareRouter.post('/stream', async (req, res) => {
           catalog: sourcesCount.catalog,
           direct: sourcesCount.direct
         },
+        aiCallsUsed,
+        aiBudget: aiMaxCallsPerBasket,
         scrapeError: firstScrapeError || undefined
       };
 

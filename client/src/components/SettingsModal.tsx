@@ -656,6 +656,97 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     Model: <strong>gemini-2.5-flash</strong> • Write-only (never exposed to browser) • Cached for 72h to minimize API tokens.
                   </span>
 
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                    <div className="space-y-1">
+                      <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block">
+                        AI Assist Level:
+                      </label>
+                      <select
+                        value={localPrefs.aiAssistLevel || 'balanced'}
+                        onChange={e => setLocalPrefs({ ...localPrefs, aiAssistLevel: e.target.value as any })}
+                        className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                      >
+                        <option value="economy">Economy (only when no match found)</option>
+                        <option value="balanced">Balanced (fires on near-ties & low confidence)</option>
+                        <option value="thorough">Thorough (also verifies high-value items)</option>
+                        <option value="off">Off (deterministic fuzzy only)</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block">
+                          Per-Basket AI Budget:
+                        </label>
+                        <span className="text-[10px] text-slate-400">Calls cap</span>
+                      </div>
+                      <input
+                        type="number"
+                        min={0}
+                        max={100}
+                        value={localPrefs.aiMaxCallsPerBasket ?? 25}
+                        onChange={e => setLocalPrefs({ ...localPrefs, aiMaxCallsPerBasket: Math.max(0, parseInt(e.target.value) || 0) })}
+                        className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5 pt-1">
+                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block">
+                      Active AI Stages:
+                    </label>
+                    <div className="grid grid-cols-3 gap-2">
+                      <label className="flex items-center space-x-1.5 text-[11px] text-slate-700 dark:text-slate-300 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={localPrefs.aiStages?.interpret ?? true}
+                          onChange={e => setLocalPrefs({
+                            ...localPrefs,
+                            aiStages: {
+                              interpret: e.target.checked,
+                              query: localPrefs.aiStages?.query ?? false,
+                              select: localPrefs.aiStages?.select ?? true
+                            }
+                          })}
+                          className="w-3.5 h-3.5 text-purple-600 rounded focus:ring-purple-500"
+                        />
+                        <span>Interpret</span>
+                      </label>
+                      <label className="flex items-center space-x-1.5 text-[11px] text-slate-700 dark:text-slate-300 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={localPrefs.aiStages?.query ?? false}
+                          onChange={e => setLocalPrefs({
+                            ...localPrefs,
+                            aiStages: {
+                              interpret: localPrefs.aiStages?.interpret ?? true,
+                              query: e.target.checked,
+                              select: localPrefs.aiStages?.select ?? true
+                            }
+                          })}
+                          className="w-3.5 h-3.5 text-purple-600 rounded focus:ring-purple-500"
+                        />
+                        <span>Query</span>
+                      </label>
+                      <label className="flex items-center space-x-1.5 text-[11px] text-slate-700 dark:text-slate-300 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={localPrefs.aiStages?.select ?? true}
+                          onChange={e => setLocalPrefs({
+                            ...localPrefs,
+                            aiStages: {
+                              interpret: localPrefs.aiStages?.interpret ?? true,
+                              query: localPrefs.aiStages?.query ?? false,
+                              select: e.target.checked
+                            }
+                          })}
+                          className="w-3.5 h-3.5 text-purple-600 rounded focus:ring-purple-500"
+                        />
+                        <span>Select</span>
+                      </label>
+                    </div>
+                  </div>
+
                   <div className="pt-2 flex flex-wrap items-center justify-between gap-2 border-t border-purple-200/50 dark:border-purple-800/40">
                     <button
                       type="button"

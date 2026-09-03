@@ -1,15 +1,16 @@
 import { GoogleGenAI } from '@google/genai';
 import { PriceCache } from './priceCache.js';
 import { getUserSettings } from '../routes/settings.js';
-import { formatConfidence } from './confidence.js';
+import { composeConfidence } from './confidence.js';
+import { AiPolicy } from './aiPolicy.js';
 
 /**
  * AI Decision Reviewer (Hybrid Matching Engine)
  *
  * Architecture Role:
  * Pass 1: Local deterministic FuzzyMatcher scores candidate products.
- * Pass 2 (Fallback): If fuzzy match score is low (< 65) or candidates are thin/borderline,
- * and AI matching is enabled, Google Gemini evaluates candidate products to select
+ * Pass 2 (Fallback): Governed by AiPolicy (ladder, assist level, per-basket budget).
+ * When fired, Google Gemini evaluates candidate products to select
  * the cheapest true match by weight and evaluate active deal structures.
  *
  * Token Minimisation: All Gemini decisions are cached in the 72h PriceCache.
@@ -24,6 +25,7 @@ export class AiDecisionReviewer {
   static isEnabled(preferences = {}) {
     const settings = getUserSettings();
     if (preferences.aiMatchingEnabled === false) return false;
+    if (preferences.aiAssistLevel === 'off') return false;
     const key =
       settings.geminiApiKey ||
       process.env.GEMINI_API_KEY ||
@@ -50,8 +52,29 @@ export class AiDecisionReviewer {
       return null;
     }
 
-    // If AI matching is not enabled or top fuzzy candidate is already high confidence (score >= 65), use fuzzy top match
-    if (!this.isEnabled(preferences) || scoredCandidates[0]?.score >= 65) {
+    const settings = getUserSettings();
+    const mergedPrefs = { ...settings, ...preferences };
+    const topScore = scoredCandidates[0]?.score ?? 0;
+    const secondScore = scoredCandidates[1]?.score ?? 0;
+    const callsUsed = preferences.aiCallsContext?.callsUsed ?? preferences.aiCallsUsed ?? 0;
+    const maxCalls = mergedPrefs.aiMaxCallsPerBasket ?? 25;
+    const aiAssistLevel = mergedPrefs.aiAssistLevel ?? (this.isEnabled(mergedPrefs) ? 'balanced' : 'off');
+    const aiStages = mergedPrefs.aiStages ?? { interpret: true, query: false, select: true };
+
+    const policyDecision = AiPolicy.shouldFire({
+      stage: 'select',
+      aiAssistLevel,
+      aiStages,
+      callsUsed,
+      maxCalls,
+      aiMaxCallsPerBasket: maxCalls,
+      topScore,
+      secondScore,
+      hasNoResult: scoredCandidates.length === 0 || topScore === 0
+    });
+
+    // If AI matching is not enabled or AiPolicy decides not to fire, use top fuzzy candidate
+    if (!this.isEnabled(preferences) || !policyDecision.fire) {
       return scoredCandidates[0];
     }
 
@@ -63,15 +86,21 @@ export class AiDecisionReviewer {
     if (cachedDecision && cachedDecision.productId) {
       const match = scoredCandidates.find((c) => c.product?.id === cachedDecision.productId);
       if (match) {
+        const dataSource = match.product?.source || 'catalog';
+        const conf = composeConfidence({
+          dataSource,
+          matchConfidence: 0.95,
+          matchSource: 'ai-cached',
+          store: supermarket
+        });
         return {
           ...match,
-          ...formatConfidence(0.95, 'ai-cached'),
+          ...conf,
           aiReasoning: cachedDecision.reasoning
         };
       }
     }
 
-    const settings = getUserSettings();
     const apiKey =
       settings.geminiApiKey ||
       process.env.GEMINI_API_KEY ||
@@ -118,6 +147,11 @@ Respond with JSON only in this exact format:
         }
       });
 
+      // Increment basket AI call counter
+      if (preferences.aiCallsContext && typeof preferences.aiCallsContext.callsUsed === 'number') {
+        preferences.aiCallsContext.callsUsed++;
+      }
+
       const text = response.text?.trim() || '{}';
       const parsed = JSON.parse(text);
       const chosenIdx = typeof parsed.selectedIndex === 'number' ? parsed.selectedIndex : 0;
@@ -130,9 +164,17 @@ Respond with JSON only in this exact format:
         reasoning: parsed.reasoning || 'Selected optimal match by weight and deal structure'
       });
 
+      const dataSource = chosen.product?.source || 'catalog';
+      const conf = composeConfidence({
+        dataSource,
+        matchConfidence: 0.95,
+        matchSource: 'ai',
+        store: supermarket
+      });
+
       return {
         ...chosen,
-        ...formatConfidence(0.95, 'ai'),
+        ...conf,
         aiReasoning: parsed.reasoning
       };
     } catch (err) {
@@ -141,3 +183,4 @@ Respond with JSON only in this exact format:
     }
   }
 }
+

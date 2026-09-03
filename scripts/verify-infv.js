@@ -879,6 +879,102 @@ check(15, 'Known contamination: hummus must not match hummus-flavoured crisps', 
 });
 
 // ---------------------------------------------------------------------------
+// Step 16 — AI policy: two-axis confidence, one escalation ladder, a budget
+// ---------------------------------------------------------------------------
+check(16, 'Confidence is two-axis: data (where the price came from) x match (is it the right product)', async () => {
+  const mod = await svc('confidence.js');
+  const compose = mod.composeConfidence || mod.combineConfidence;
+  if (!compose) fail('confidence.js exports no composeConfidence(dataSource, matchConfidence)');
+  const direct = compose({ dataSource: 'direct', matchConfidence: 1 });
+  const catalog = compose({ dataSource: 'catalog', matchConfidence: 1 });
+  for (const [name, out] of [['direct', direct], ['catalog', catalog]]) {
+    if (typeof out.dataConfidence !== 'number') fail(`${name}: no dataConfidence`);
+    if (typeof out.matchConfidence !== 'number') fail(`${name}: no matchConfidence`);
+    if (typeof out.confidenceScore !== 'number') fail(`${name}: no overall confidenceScore`);
+  }
+  if (Math.abs(direct.confidenceScore - 0.9) > 0.001) fail(`direct@match1 => ${direct.confidenceScore}, expected 0.90`);
+  if (Math.abs(catalog.confidenceScore - 0.4) > 0.001) fail(`catalog@match1 => ${catalog.confidenceScore}, expected 0.40`);
+  const half = compose({ dataSource: 'direct', matchConfidence: 0.5 });
+  if (!(half.confidenceScore < direct.confidenceScore)) fail('match confidence does not lower the overall score');
+});
+
+check(16, 'AI raises match confidence but NEVER upgrades the data tier', async () => {
+  const mod = await svc('confidence.js');
+  const compose = mod.composeConfidence || mod.combineConfidence;
+  if (!compose) fail('composeConfidence missing');
+  // The current defect: an AI-picked catalog item reports 95% "verified".
+  const aiOnCatalog = compose({ dataSource: 'catalog', matchConfidence: 0.95, matchSource: 'ai' });
+  if (aiOnCatalog.confidenceScore > 0.4001) {
+    fail(`AI-selected CATALOG item reports ${aiOnCatalog.confidenceScore} — AI cannot make fabricated data trustworthy; cap overall at the data tier (0.40)`);
+  }
+  if (aiOnCatalog.dataConfidence > 0.4001) fail('AI changed dataConfidence for catalog data');
+  const src = read(r('services/logic-api/src/services/aiDecisionReviewer.js'));
+  if (/formatConfidence\(\s*0\.95\s*,\s*['"]ai/.test(src)) {
+    fail('aiDecisionReviewer still overwrites confidence with a flat 0.95 — it must set matchConfidence and preserve the data tier');
+  }
+});
+
+check(16, 'A single aiPolicy module owns when AI fires (no scattered thresholds)', async () => {
+  const mod = await svc('aiPolicy.js').catch(() => null);
+  if (!mod) fail('services/logic-api/src/services/aiPolicy.js missing');
+  const P = mod.AiPolicy || mod.default;
+  if (!P || !(P.shouldFire || P.decide)) fail('aiPolicy exports no shouldFire()/decide()');
+  const fn = (P.shouldFire || P.decide).bind(P);
+  const off = fn({ stage: 'select', aiAssistLevel: 'off', topScore: 10, secondScore: 0, callsUsed: 0 });
+  if (off === true || off?.fire === true) fail('aiAssistLevel "off" still fires AI');
+  const overBudget = fn({ stage: 'select', aiAssistLevel: 'balanced', topScore: 10, secondScore: 0, callsUsed: 999, maxCalls: 25 });
+  if (overBudget === true || overBudget?.fire === true) fail('budget exhausted but AI still fires');
+  const confident = fn({ stage: 'select', aiAssistLevel: 'balanced', topScore: 95, secondScore: 20, callsUsed: 0, maxCalls: 25 });
+  if (confident === true || confident?.fire === true) fail('AI fires on an unambiguous high-confidence match — wasteful');
+  const ambiguous = fn({ stage: 'select', aiAssistLevel: 'balanced', topScore: 70, secondScore: 68, callsUsed: 0, maxCalls: 25 });
+  if (ambiguous === false || ambiguous?.fire === false) fail('AI does not fire when the top two candidates are near-tied (the case it exists for)');
+});
+
+check(16, 'Selection runs ONCE over merged tier candidates, not once per tier', () => {
+  const pipe = read(r('services/logic-api/src/services/candidatePipeline.js'));
+  const matcher = read(r('services/logic-api/src/services/fuzzyMatcher.js'));
+  const both = pipe + matcher;
+  if (!/merge|combined|allCandidates|mergedCandidates/i.test(both)) {
+    fail('no evidence candidates from direct/aggregator/catalog are merged before selection — AI must not be called once per tier');
+  }
+  if (!/sourceTier|dataSource|tier/i.test(both)) {
+    fail('merged candidates carry no tier annotation, so selection cannot prefer direct data');
+  }
+});
+
+check(16, 'AI settings are user-facing: assist level, per-basket budget, per-stage toggles', async () => {
+  const mod = await import(r('services/logic-api/src/routes/settings.js'));
+  const s = mod.getSafeUserSettings();
+  if (!['off', 'economy', 'balanced', 'thorough'].includes(s.aiAssistLevel)) {
+    fail(`aiAssistLevel missing or invalid (got ${JSON.stringify(s.aiAssistLevel)})`);
+  }
+  if (typeof s.aiMaxCallsPerBasket !== 'number') fail('aiMaxCallsPerBasket missing');
+  if (!s.aiStages || typeof s.aiStages !== 'object') fail('aiStages {interpret, query, select} missing');
+  for (const stage of ['interpret', 'query', 'select']) {
+    if (typeof s.aiStages[stage] !== 'boolean') fail(`aiStages.${stage} missing`);
+  }
+  const src = read(r('services/logic-api/src/routes/settings.js'));
+  for (const k of ['aiAssistLevel', 'aiMaxCallsPerBasket', 'aiStages']) {
+    if (!new RegExp(`'${k}'`).test(src)) fail(`${k} not in the PUT allowlist`);
+  }
+  const modal = read(r('client/src/components/SettingsModal.tsx'));
+  if (!/aiAssistLevel/.test(modal)) fail('SettingsModal has no AI assist level control');
+  if (!/aiMaxCallsPerBasket/.test(modal)) fail('SettingsModal has no AI budget control');
+});
+
+check(16, 'Per-basket AI budget is actually enforced and reported', () => {
+  const files =
+    read(r('services/logic-api/src/routes/compare.js')) +
+    read(r('services/logic-api/src/services/aiPolicy.js')) +
+    read(r('services/logic-api/src/services/aiDecisionReviewer.js'));
+  if (!/aiMaxCallsPerBasket|maxCalls|budget/i.test(files)) fail('nothing enforces the per-basket AI call budget');
+  const compare = read(r('services/logic-api/src/routes/compare.js'));
+  if (!/aiCalls|aiCallsUsed|aiBudget/i.test(compare)) {
+    fail('compare response does not report AI calls used — cost must be visible, not silent');
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 await Promise.allSettled(pending);

@@ -74,3 +74,60 @@ export function formatConfidence(score = null, source = "aggregator", customLabe
     confidence: label
   };
 }
+
+/**
+ * Two-Axis Confidence Composition (Step 16)
+ * Axis 1 (dataConfidence): Where the price came from (tier alone: direct 0.90, aggregator 0.60, catalog 0.40).
+ * Axis 2 (matchConfidence): Is it the right product? (normalized fuzzy score or AI verdict, 0..1).
+ * Overall: confidenceScore = dataConfidence * matchConfidence, capped at dataConfidence.
+ * AI sets matchConfidence ONLY and can never upgrade the data tier.
+ *
+ * @param {object} params
+ * @param {"direct" | "aggregator" | "catalog"} params.dataSource - Source tier of product data
+ * @param {number} [params.matchConfidence=1.0] - Match fidelity (0 to 1)
+ * @param {"fuzzy" | "ai" | "ai-cached" | "catalog"} [params.matchSource="fuzzy"] - Mechanism that scored match
+ * @param {string} [params.customLabel] - Custom display label override
+ * @param {string} [params.store] - Store identifier (e.g. 'tesco')
+ * @returns {{ dataConfidence: number, matchConfidence: number, confidenceScore: number, confidenceSource: string, matchSource: string, confidence: string }}
+ */
+export function composeConfidence(params = {}) {
+  const {
+    dataSource = 'catalog',
+    matchConfidence = 1.0,
+    matchSource = 'fuzzy',
+    customLabel = null,
+    store = null
+  } = params;
+
+  const dataConfidence = CONFIDENCE_BY_SOURCE[dataSource] ?? (dataSource === 'direct' ? 0.90 : (dataSource === 'aggregator' ? 0.60 : 0.40));
+  const rawMatch = typeof matchConfidence === 'number' ? matchConfidence : 1.0;
+  const mConf = Math.max(0, Math.min(1, rawMatch));
+
+  // Confidence formula: dataConfidence * matchConfidence, capped at dataConfidence
+  const rawScore = dataConfidence * mConf;
+  const confidenceScore = Number(Math.min(dataConfidence, rawScore).toFixed(4));
+
+  let label = customLabel;
+  if (!label) {
+    const prettyStore = formatStoreName(store);
+    const storeSuffix = prettyStore ? `${prettyStore} ${dataSource}` : dataSource;
+    if (matchSource === 'ai' || matchSource === 'ai-cached') {
+      const aiTag = matchSource === 'ai-cached' ? 'Gemini AI Match - Cached' : 'Gemini AI Match';
+      label = `${Math.round(confidenceScore * 100)}% verified (${storeSuffix} · ${aiTag})`;
+    } else {
+      label = formatConfidence(confidenceScore, dataSource, null, store).confidence;
+    }
+  }
+
+  return {
+    dataConfidence,
+    matchConfidence: mConf,
+    confidenceScore,
+    confidenceSource: dataSource,
+    matchSource,
+    confidence: label
+  };
+}
+
+export const combineConfidence = composeConfidence;
+

@@ -40,7 +40,14 @@ let userSettings = {
   allowMixedPackSizes: false,
   aiMatchingEnabled: process.env.ENABLE_GEMINI_MATCHING === 'true' || isAiConfiguredExternally,
   aiMatchingExternallyConfigured: isAiConfiguredExternally,
-  geminiApiKey: ''
+  geminiApiKey: '',
+  aiAssistLevel: 'balanced',
+  aiMaxCallsPerBasket: 25,
+  aiStages: {
+    interpret: true,
+    query: false,
+    select: true
+  }
 };
 
 export function getUserSettings() {
@@ -79,7 +86,10 @@ settingsRouter.put('/', (req, res) => {
     'directStoreAdapters',
     'allowMixedPackSizes',
     'aiMatchingEnabled',
-    'geminiApiKey'
+    'geminiApiKey',
+    'aiAssistLevel',
+    'aiMaxCallsPerBasket',
+    'aiStages'
   ];
 
   if (req.body && req.body.directScrapersEnabled !== undefined) {
@@ -106,6 +116,36 @@ settingsRouter.put('/', (req, res) => {
     }
   }
 
+  if (req.body && req.body.aiAssistLevel !== undefined) {
+    if (!['off', 'economy', 'balanced', 'thorough'].includes(req.body.aiAssistLevel)) {
+      return res.status(400).json({ error: 'aiAssistLevel must be one of: off, economy, balanced, thorough' });
+    }
+  }
+
+  if (req.body && req.body.aiMaxCallsPerBasket !== undefined) {
+    if (typeof req.body.aiMaxCallsPerBasket !== 'number' || req.body.aiMaxCallsPerBasket < 0) {
+      return res.status(400).json({ error: 'aiMaxCallsPerBasket must be a non-negative number' });
+    }
+  }
+
+  if (req.body && req.body.aiStages !== undefined) {
+    if (
+      typeof req.body.aiStages !== 'object' ||
+      req.body.aiStages === null ||
+      Array.isArray(req.body.aiStages)
+    ) {
+      return res.status(400).json({ error: 'aiStages must be an object' });
+    }
+    for (const [stage, val] of Object.entries(req.body.aiStages)) {
+      if (!['interpret', 'query', 'select'].includes(stage)) {
+        return res.status(400).json({ error: `Unknown stage in aiStages: ${stage}` });
+      }
+      if (typeof val !== 'boolean') {
+        return res.status(400).json({ error: `aiStages.${stage} must be a boolean` });
+      }
+    }
+  }
+
   const sanitized = {};
   for (const key of allowedKeys) {
     if (req.body && req.body[key] !== undefined) {
@@ -114,6 +154,11 @@ settingsRouter.put('/', (req, res) => {
       } else if (key === 'directStoreAdapters') {
         sanitized[key] = {
           ...userSettings.directStoreAdapters,
+          ...req.body[key]
+        };
+      } else if (key === 'aiStages') {
+        sanitized[key] = {
+          ...userSettings.aiStages,
           ...req.body[key]
         };
       } else {

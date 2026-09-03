@@ -198,6 +198,13 @@ export interface UserPreferences {
   aiMatchingExternallyConfigured?: boolean;
   hasGeminiKey?: boolean;
   geminiApiKey?: string;
+  aiAssistLevel?: 'off' | 'economy' | 'balanced' | 'thorough';
+  aiMaxCallsPerBasket?: number;
+  aiStages?: {
+    interpret: boolean;
+    query: boolean;
+    select: boolean;
+  };
 }
 
 export interface FavoriteItem {
