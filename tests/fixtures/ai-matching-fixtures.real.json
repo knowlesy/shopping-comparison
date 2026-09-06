@@ -2651,12 +2651,18 @@
     "expectedTitle": "Rosedene Farms Small Apple 6 Pack",
     "acceptablePicks": [
       "284475550",
-      "284477542"
+      "284477542",
+      "305831903",
+      "284475832",
+      "284477628",
+      "284475671",
+      "253807413"
     ],
     "mustNotPick": [
       "322552361",
       "322549014",
-      "316300058"
+      "316300058",
+      "286681924"
     ],
     "groundTruthNote": "Real apples. Distractors: apple crisps, apple-flavoured water."
   },
@@ -5649,19 +5655,39 @@
         "source": "direct"
       }
     ],
-    "expectNoMatch": true,
-    "expectedPick": null,
-    "expectedTitle": null,
-    "acceptablePicks": [],
+    "expectNoMatch": false,
+    "expectedPick": "303631204",
+    "expectedTitle": "Tesco 0% Fat Greek Style Yogurt 1Kg",
+    "acceptablePicks": [
+      "320543444",
+      "274510599",
+      "307133459"
+    ],
     "mustNotPick": [
       "315161816",
       "315073742",
       "293836686",
       "258170229",
       "256381115",
-      "323871309"
+      "323871309",
+      "296360788",
+      "320799037",
+      "323926747",
+      "283587528",
+      "307348303",
+      "272429624",
+      "305942328",
+      "255639038",
+      "266864059",
+      "311211387",
+      "303631291",
+      "311220949",
+      "273968064",
+      "302308503",
+      "273627768",
+      "292612941"
     ],
-    "groundTruthNote": "0% is an explicit fat requirement and not one candidate states 0% fat. Greek Style and Finest Greek are both full fat, the rest are flavoured or dairy free. Corrected from an earlier label that accepted a full-fat substitute: by this project rule an honest no match beats a substitution the shopper did not ask for."
+    "groundTruthNote": "Relabelled at full shelf depth. Tesco stocks 0% fat Greek style yogurt in 1kg at GBP 1.70, cheaper than two 500g tubs. The earlier no-match label — and the AI decline that appeared to vindicate it — were both artifacts of a trimmed candidate list. Full-fat and flavoured must still lose."
   },
   {
     "id": "real-39",
@@ -5963,15 +5989,17 @@
       }
     ],
     "expectNoMatch": false,
-    "expectedPick": "254878614",
-    "expectedTitle": "Tesco Whole Wheat Fusilli Pasta 500G",
-    "acceptablePicks": [],
+    "expectedPick": "297484657",
+    "expectedTitle": "Tesco Wholewheat Fusilli Pasta 1kg",
+    "acceptablePicks": [
+      "254878614"
+    ],
     "mustNotPick": [
       "254878499",
       "254878522",
       "251966083"
     ],
-    "groundTruthNote": "Wholewheat is stated. The wholewheat option exists at GBP 0.75; rules pick plain white fusilli."
+    "groundTruthNote": "Relabelled at full shelf depth. A single Tesco Wholewheat Fusilli 1kg at GBP 1.45 beats two 500g packs at GBP 1.50. White fusilli must still lose."
   },
   {
     "id": "real-44",
@@ -6324,19 +6352,32 @@
         "source": "direct"
       }
     ],
-    "expectNoMatch": true,
-    "expectedPick": null,
-    "expectedTitle": null,
-    "acceptablePicks": [],
+    "expectNoMatch": false,
+    "expectedPick": "299425783",
+    "expectedTitle": "Tesco Wholemeal Medium Sliced Bread 800g",
+    "acceptablePicks": [
+      "254944260",
+      "255000362"
+    ],
     "mustNotPick": [
       "305953436",
       "330743207",
       "299425748",
       "256174499",
       "299389116",
-      "254942325"
+      "254942325",
+      "254942348",
+      "250168194",
+      "254550817",
+      "254942354",
+      "313837545",
+      "255727936",
+      "300134354",
+      "299597320",
+      "312840916",
+      "302088635"
     ],
-    "groundTruthNote": "Six loaves returned, not one wholemeal. Rules substitute white bread. The honest answer is no match."
+    "groundTruthNote": "Relabelled at full shelf depth. The earlier no-match label was an artifact of a 6-candidate trim that happened to contain only white loaves; the real Tesco search stocks four wholemeal loaves, cheapest Tesco Wholemeal Medium Sliced 800g at GBP 0.75. White bread must still lose."
   },
   {
     "id": "real-46",
@@ -6669,7 +6710,9 @@
     "expectNoMatch": false,
     "expectedPick": "315377302",
     "expectedTitle": "Tesco Finest Peru Dark Chocolate 85% 100g",
-    "acceptablePicks": [],
+    "acceptablePicks": [
+      "250986325"
+    ],
     "mustNotPick": [
       "315386717",
       "259301725",
