@@ -96,7 +96,7 @@ export class AiDecisionReviewer {
     });
 
     // If AI matching is not enabled or AiPolicy decides not to fire, use top fuzzy candidate
-    if (!this.isEnabled(preferences) || !policyDecision.fire) {
+    if (!this.isEnabled(preferences) || (!preferences.forceReview && !policyDecision.fire)) {
       return scoredCandidates[0];
     }
 

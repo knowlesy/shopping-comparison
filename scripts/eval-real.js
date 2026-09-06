@@ -83,7 +83,8 @@ async function aiResolve(f) {
     aiAssistLevel: 'balanced',
     supermarket: 'tesco',
     aiCallsContext: { callsUsed: 0 },
-    bypassCache: true
+    bypassCache: true,
+    forceReview: true
   });
   const prod = reviewed?.product || null;
   // A rules fallback is NOT an AI answer. reviewCandidates swallows upstream
@@ -156,10 +157,14 @@ for (let run = 1; run <= runs; run++) {
   process.stdout.write(`\nAI run ${run}/${runs} `);
   for (const f of fixtures) {
     let res;
-    try {
-      res = await aiResolve(f);
-    } catch (err) {
-      res = { id: null, title: `ERROR: ${err.message}`, reasoning: '', answered: false };
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        res = await aiResolve(f);
+      } catch (err) {
+        res = { id: null, title: `ERROR: ${err.message}`, reasoning: '', answered: false };
+      }
+      if (res.answered) break;
+      if (attempt < 2) await sleep(22000);
     }
     if (!res.answered) unanswered++;
     const v = judge(f, res.id, res.packs, res.qty);
