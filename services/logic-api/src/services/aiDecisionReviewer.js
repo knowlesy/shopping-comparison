@@ -3,6 +3,7 @@ import { PriceCache } from './priceCache.js';
 import { getUserSettings } from '../routes/settings.js';
 import { composeConfidence } from './confidence.js';
 import { AiPolicy } from './aiPolicy.js';
+import { isContaminated } from './contaminationRules.js';
 
 /**
  * AI Decision Reviewer (Hybrid Matching Engine)
@@ -17,6 +18,23 @@ import { AiPolicy } from './aiPolicy.js';
  */
 
 export class AiDecisionReviewer {
+  static _clientFactory = null;
+
+  /**
+   * Seam for injecting test Gemini clients in offline unit/robustness tests
+   * @param {Function} fn - Function receiving { apiKey, model } and returning client with models.generateContent
+   */
+  static setClientFactory(fn) {
+    this._clientFactory = fn;
+  }
+
+  /**
+   * Reset client factory back to default GoogleGenAI
+   */
+  static resetClientFactory() {
+    this._clientFactory = null;
+  }
+
   /**
    * Check if AI candidate reviewing is configured and active
    * @param {object} preferences - User preferences containing aiMatchingEnabled
@@ -87,9 +105,10 @@ export class AiDecisionReviewer {
       const match = scoredCandidates.find((c) => c.product?.id === cachedDecision.productId);
       if (match) {
         const dataSource = match.product?.source || 'catalog';
+        const cachedConf = typeof cachedDecision.confidence === 'number' ? cachedDecision.confidence : 0.9;
         const conf = composeConfidence({
           dataSource,
-          matchConfidence: 0.95,
+          matchConfidence: Math.min(Math.max(cachedConf, 0.5), 0.99),
           matchSource: 'ai-cached',
           store: supermarket
         });
@@ -106,8 +125,18 @@ export class AiDecisionReviewer {
       process.env.GEMINI_API_KEY ||
       process.env.GOOGLE_GENAI_API_KEY;
 
+    // Increment basket AI call counter for every attempt (failed calls consume quota)
+    if (preferences.aiCallsContext && typeof preferences.aiCallsContext.callsUsed === 'number') {
+      preferences.aiCallsContext.callsUsed++;
+    }
+
     try {
-      const ai = new GoogleGenAI({ apiKey });
+      const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+      const ai = this._clientFactory
+        ? this._clientFactory({ apiKey, model })
+        : new GoogleGenAI({ apiKey });
+
+      // Model sees only the top 5 candidates; indexing must be bounded to this payload
       const candidatesPayload = scoredCandidates.slice(0, 5).map((c, idx) => ({
         index: idx,
         id: c.product?.id,
@@ -128,6 +157,7 @@ User requested ingredient: "${item.rawText || query}"
 Target: ${item.targetQuantity || 1} ${item.unit || 'items'}, Health/Dietary: ${item.isHealthierPreferred ? 'Healthier/Lean' : 'Standard'} (fat preference: ${item.fatPercentage || 'any'}%).
 
 Evaluate these candidate products from ${supermarket.toUpperCase()} and select the single best, cheapest genuine match by weight and dietary equivalence. Account for any active multibuy deals.
+If none of the candidates are genuine matches (e.g. dietary or category mismatch with no acceptable alternative), return selectedIndex as null.
 
 Candidates:
 ${JSON.stringify(candidatesPayload, null, 2)}
@@ -135,39 +165,94 @@ ${JSON.stringify(candidatesPayload, null, 2)}
 Respond with JSON only in this exact format:
 {
   "selectedIndex": 0,
-  "confidence": 0.95,
+  "confidence": 0.9,
   "reasoning": "Reason for selection"
 }`;
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-        config: {
-          responseMimeType: 'application/json'
-        }
-      });
+      const timeoutMs = 3500;
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error(`AI candidate review timed out (exceeded ${timeoutMs}ms)`)), timeoutMs)
+      );
 
-      // Increment basket AI call counter
-      if (preferences.aiCallsContext && typeof preferences.aiCallsContext.callsUsed === 'number') {
-        preferences.aiCallsContext.callsUsed++;
-      }
+      const response = await Promise.race([
+        ai.models.generateContent({
+          model,
+          contents: prompt,
+          config: {
+            responseMimeType: 'application/json',
+            temperature: 0
+          }
+        }),
+        timeoutPromise
+      ]);
 
       const text = response.text?.trim() || '{}';
-      const parsed = JSON.parse(text);
-      const chosenIdx = typeof parsed.selectedIndex === 'number' ? parsed.selectedIndex : 0;
-      const chosen = scoredCandidates[chosenIdx] || scoredCandidates[0];
+      let parsed;
+      try {
+        parsed = JSON.parse(text);
+      } catch {
+        // Malformed JSON fails closed to rules without an AI confidence stamp
+        return scoredCandidates[0];
+      }
+
+      if (!parsed || typeof parsed !== 'object') {
+        return scoredCandidates[0];
+      }
+
+      // Model decline: selectedIndex null indicates none of the candidates match
+      if (parsed.selectedIndex === null) {
+        return {
+          ...scoredCandidates[0],
+          product: null,
+          matchScore: 0,
+          totalPrice: 0,
+          matchConfidence: Math.min(Math.max(Number(parsed.confidence) || 0.8, 0.5), 0.99),
+          matchSource: 'ai',
+          aiReasoning: parsed.reasoning || 'Model declined: no candidate matches the query'
+        };
+      }
+
+      // Bounds validation: reject negative, non-integer, or out-of-range indices
+      if (
+        typeof parsed.selectedIndex !== 'number' ||
+        !Number.isInteger(parsed.selectedIndex) ||
+        parsed.selectedIndex < 0 ||
+        parsed.selectedIndex >= candidatesPayload.length
+      ) {
+        // Reject invalid index and fall back to rules without AI confidence stamp
+        return scoredCandidates[0];
+      }
+
+      const chosenIdx = parsed.selectedIndex;
+      const chosen = scoredCandidates[chosenIdx];
+      if (!chosen || !chosen.product) {
+        return scoredCandidates[0];
+      }
+
+      // Contamination check: re-applied to AI pick to prevent AI from repealing food form guarantees
+      const itemText = `${item.baseItem || ''} ${item.name || ''} ${item.rawText || ''}`.toLowerCase();
+      const prodTitle = chosen.product.title || '';
+      if (isContaminated(itemText, prodTitle)) {
+        console.warn(`[AI-Reviewer] AI pick "${prodTitle}" is contaminated for "${itemText}". Rejecting AI pick and falling back to rules.`);
+        return scoredCandidates[0];
+      }
+
+      // Model's reported confidence, clamped to sane range [0.5, 0.99]
+      const rawConfidence = typeof parsed.confidence === 'number' ? parsed.confidence : 0.8;
+      const matchConfidence = Math.min(Math.max(rawConfidence, 0.5), 0.99);
 
       // Cache decision for 72h to minimise API calls
       PriceCache.set(cacheKey, {
-        productId: chosen.product?.id,
+        productId: chosen.product.id,
         selectedIndex: chosenIdx,
+        confidence: matchConfidence,
         reasoning: parsed.reasoning || 'Selected optimal match by weight and deal structure'
       });
 
-      const dataSource = chosen.product?.source || 'catalog';
+      const dataSource = chosen.product.source || 'catalog';
       const conf = composeConfidence({
         dataSource,
-        matchConfidence: 0.95,
+        matchConfidence,
         matchSource: 'ai',
         store: supermarket
       });

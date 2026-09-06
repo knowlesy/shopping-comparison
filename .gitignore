@@ -69,6 +69,7 @@ Thumbs.db
 # Runtime Cache & History
 data/*_cache.json
 data/shop_history.json
+data/settings.json
 services/logic-api/data/*
 *.log
 npm-debug.log*
