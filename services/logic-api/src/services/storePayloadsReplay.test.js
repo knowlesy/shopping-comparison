@@ -44,7 +44,7 @@ describe('Store Payloads Offline Replay Suite', () => {
   });
 
   it('should load a recorded tesco store-payload fixture and assert normalization offline', () => {
-    let rawProducts = [];
+    let rawProducts;
     const tescoFiles = fs.existsSync(FIXTURES_DIR)
       ? fs.readdirSync(FIXTURES_DIR).filter(f => f.startsWith('tesco-') && f.endsWith('.json'))
       : [];
