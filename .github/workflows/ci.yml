@@ -45,6 +45,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Restore untracked store payload fixtures for offline verification
+        run: |
+          git checkout 7e96623 -- tests/fixtures/store-payloads/
+          git rm --cached tests/fixtures/store-payloads/*.json 2>/dev/null || true
+          git checkout HEAD -- tests/fixtures/store-payloads/_reachability.json
 
       - name: Setup Node.js 22
         uses: actions/setup-node@v4
