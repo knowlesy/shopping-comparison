@@ -111,12 +111,26 @@ def test_morrisons_normalization_offline():
             data = json.load(f)
         items = data.get("payload", {}).get("products", [])
     else:
-        assert os.path.exists(SAMPLE_PATH), f"Neither {fixture_path} nor {SAMPLE_PATH} exists"
-        with open(SAMPLE_PATH, "r", encoding="utf-8") as f:
-            sample = json.load(f)
         items = []
-        for it in sample.get("items", []):
-            for p in it.get("products", []):
+        if os.path.exists(SAMPLE_PATH):
+            with open(SAMPLE_PATH, "r", encoding="utf-8") as f:
+                sample = json.load(f)
+            for it in sample.get("items", []):
+                for p in it.get("products", []):
+                    if p.get("supermarket") == "morrisons":
+                        items.append({
+                            "productId": p.get("id"),
+                            "name": p.get("title"),
+                            "brand": p.get("brand", "Morrisons"),
+                            "price": {"current": {"amount": p.get("price")}},
+                            "status": "AVAILABLE",
+                        })
+        if not items:
+            catalog_path = os.path.join(REPO_ROOT, "data", "catalog.json")
+            assert os.path.exists(catalog_path), f"catalog.json not found at {catalog_path}"
+            with open(catalog_path, "r", encoding="utf-8") as f:
+                cat = json.load(f)
+            for p in cat.get("products", []):
                 if p.get("supermarket") == "morrisons":
                     items.append({
                         "productId": p.get("id"),

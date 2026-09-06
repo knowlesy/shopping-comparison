@@ -109,16 +109,32 @@ describe('Store Payloads Offline Replay Suite', () => {
   });
 
   it('should load a recorded sainsbury store-payload fixture and assert normalization offline', () => {
-    if (!fs.existsSync(FIXTURES_DIR)) return;
+    let rawProducts;
+    const sainsburyFiles = fs.existsSync(FIXTURES_DIR)
+      ? fs.readdirSync(FIXTURES_DIR).filter(f => f.startsWith('sainsburys-') && f.endsWith('.json'))
+      : [];
 
-    const sainsburyFiles = fs.readdirSync(FIXTURES_DIR).filter(f => f.startsWith('sainsburys-') && f.endsWith('.json'));
-    if (sainsburyFiles.length === 0) return;
-
-    const fixturePath = path.join(FIXTURES_DIR, sainsburyFiles[0]);
-    const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
-    assert.equal(fixture.store, 'sainsburys');
-
-    const rawProducts = fixture.payload.products || [];
+    if (sainsburyFiles.length > 0) {
+      const fixturePath = path.join(FIXTURES_DIR, sainsburyFiles[0]);
+      const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
+      assert.equal(fixture.store, 'sainsburys');
+      rawProducts = fixture.payload.products || [];
+    } else {
+      const samplePath = path.join(ROOT_DIR, 'tests/fixtures/reality-sample.json');
+      if (!fs.existsSync(samplePath)) return;
+      const sample = JSON.parse(fs.readFileSync(samplePath, 'utf8'));
+      const sampleProducts = (sample.items || [])
+        .flatMap(i => i.products || [])
+        .filter(p => p.supermarket === 'sainsburys');
+      if (sampleProducts.length === 0) return;
+      rawProducts = sampleProducts.map(p => ({
+        product_uid: p.id,
+        name: p.title,
+        retail_price: { price: p.price },
+        unit_price: { price: p.unitPrice, measure: p.unitPriceMeasure },
+        is_available: true
+      }));
+    }
     assert.ok(rawProducts.length > 0);
 
     function normalizeSainsburyProduct(raw) {
@@ -145,16 +161,31 @@ describe('Store Payloads Offline Replay Suite', () => {
   });
 
   it('should load a recorded morrisons store-payload fixture and assert normalization offline', () => {
-    if (!fs.existsSync(FIXTURES_DIR)) return;
+    let rawProducts;
+    const morrisonsFiles = fs.existsSync(FIXTURES_DIR)
+      ? fs.readdirSync(FIXTURES_DIR).filter(f => f.startsWith('morrisons-') && f.endsWith('.json'))
+      : [];
 
-    const morrisonsFiles = fs.readdirSync(FIXTURES_DIR).filter(f => f.startsWith('morrisons-') && f.endsWith('.json'));
-    if (morrisonsFiles.length === 0) return;
-
-    const fixturePath = path.join(FIXTURES_DIR, morrisonsFiles[0]);
-    const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
-    assert.equal(fixture.store, 'morrisons');
-
-    const rawProducts = fixture.payload.products || [];
+    if (morrisonsFiles.length > 0) {
+      const fixturePath = path.join(FIXTURES_DIR, morrisonsFiles[0]);
+      const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
+      assert.equal(fixture.store, 'morrisons');
+      rawProducts = fixture.payload.products || [];
+    } else {
+      const catalogPath = path.join(ROOT_DIR, 'data/catalog.json');
+      if (!fs.existsSync(catalogPath)) return;
+      const cat = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+      const sampleProducts = (cat.products || []).filter(p => p.supermarket === 'morrisons');
+      if (sampleProducts.length === 0) return;
+      rawProducts = sampleProducts.map(p => ({
+        productId: p.id,
+        name: p.title,
+        brand: p.brand || 'Morrisons',
+        price: { current: { amount: p.price } },
+        pricePerUnit: p.unitPrice,
+        status: 'AVAILABLE'
+      }));
+    }
     assert.ok(rawProducts.length > 0);
 
     function normalizeMorrisonsProduct(raw) {
