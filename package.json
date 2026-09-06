@@ -32,7 +32,8 @@
     "lab:record": "node scripts/scraper-lab/index.js record",
     "lab:probe": "node scripts/scraper-lab/index.js probe",
     "lab:replay": "node scripts/scraper-lab/index.js replay",
-    "lab:reality": "node scripts/scraper-lab/index.js reality"
+    "lab:reality": "node scripts/scraper-lab/index.js reality",
+    "eval:real": "node scripts/eval-real.js"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

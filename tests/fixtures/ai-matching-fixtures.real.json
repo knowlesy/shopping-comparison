@@ -1,0 +1,1838 @@
+[
+  {
+    "id": "real-0",
+    "split": "train",
+    "query": "Beef mince 5% 1.9 kg",
+    "item": {
+      "name": "Beef mince",
+      "baseItem": "Beef mince",
+      "category": "meat",
+      "targetQuantity": 1.9,
+      "unit": "kg",
+      "fatPercentage": 5
+    },
+    "candidates": [
+      {
+        "id": "250871426",
+        "supermarket": "tesco",
+        "title": "Tesco Lean Beef Steak Mince 5% Fat 500g",
+        "brand": "Tesco",
+        "price": 5.05,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "unitPrice": 10.1,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "279704092",
+        "supermarket": "tesco",
+        "title": "Tesco Lean Beef Steak Mince 5% Fat 250G",
+        "brand": "Tesco",
+        "price": 2.55,
+        "packageSize": 250,
+        "packageUnit": "g",
+        "unitPrice": 10.2,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "308083458",
+        "supermarket": "tesco",
+        "title": "Tesco Beef Mince 20% Fat 500g",
+        "brand": "Tesco",
+        "price": 3.25,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "unitPrice": 6.5,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "282470731",
+        "supermarket": "tesco",
+        "title": "Tesco Lean Beef Steak Mince 5% Fat 750g",
+        "brand": "Tesco",
+        "price": 7.09,
+        "packageSize": 750,
+        "packageUnit": "g",
+        "unitPrice": 9.45,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "261958659",
+        "supermarket": "tesco",
+        "title": "Tesco Finest Aberdeen Angus Steak Mince 500G",
+        "brand": "Tesco",
+        "price": 6,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "unitPrice": 12,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "296422890",
+        "supermarket": "tesco",
+        "title": "Tesco Beef Steak Mince 15% Fat 750g",
+        "brand": "Tesco",
+        "price": 7.1,
+        "packageSize": 750,
+        "packageUnit": "g",
+        "unitPrice": 9.47,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "282470731",
+    "expectedTitle": "Tesco Lean Beef Steak Mince 5% Fat 750g",
+    "acceptablePicks": [
+      "250871426",
+      "279704092",
+      "282470731",
+      "296422890"
+    ],
+    "mustNotPick": [
+      "308083458",
+      "296422890"
+    ],
+    "groundTruthNote": "A stated fat percentage is a dietary requirement. Rules pick the 20% because it is cheaper."
+  },
+  {
+    "id": "real-2",
+    "split": "train",
+    "query": "Large eggs 17",
+    "item": {
+      "name": "Large eggs",
+      "baseItem": "Large eggs",
+      "category": "dairy-eggs",
+      "targetQuantity": 17,
+      "unit": "item"
+    },
+    "candidates": [
+      {
+        "id": "264328992",
+        "supermarket": "tesco",
+        "title": "Happy Egg Free Range Eggs Large 6 Pack",
+        "brand": "Happy",
+        "price": 2.9,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.48,
+        "unitPriceMeasure": "each",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "274457564",
+        "supermarket": "tesco",
+        "title": "Happy Egg Free Range Eggs Large 10 Pack",
+        "brand": "Happy",
+        "price": 4,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.4,
+        "unitPriceMeasure": "each",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "306934262",
+        "supermarket": "tesco",
+        "title": "Big & Free Large White Free Range Eggs 10 Pack",
+        "brand": "Big",
+        "price": 3.35,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.34,
+        "unitPriceMeasure": "each",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "305838838",
+        "supermarket": "tesco",
+        "title": "Big & Fresh Barn Eggs 6 Large",
+        "brand": "Big",
+        "price": 2.1,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.35,
+        "unitPriceMeasure": "each",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "315445078",
+        "supermarket": "tesco",
+        "title": "St. Ewe Rich Yolk Large Free-Range Eggs 6 Pack",
+        "brand": "St.",
+        "price": 3.5,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.58,
+        "unitPriceMeasure": "each",
+        "deal": "£2.95 Clubcard Price",
+        "source": "direct"
+      },
+      {
+        "id": "316810278",
+        "supermarket": "tesco",
+        "title": "St Ewe Original Large Free Range Eggs 10 Pack",
+        "brand": "St",
+        "price": 4.1,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.41,
+        "unitPriceMeasure": "each",
+        "deal": null,
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "305838838",
+    "expectedTitle": "Big & Fresh Barn Eggs 6 Large",
+    "acceptablePicks": [
+      "274457564",
+      "306934262",
+      "316810278"
+    ],
+    "mustNotPick": [],
+    "minTotalQuantity": 17,
+    "groundTruthNote": "Needs >=17 eggs. Rules buy 12 packs (72 eggs, GBP 25.20) by counting packs not eggs."
+  },
+  {
+    "id": "real-3",
+    "split": "train",
+    "query": "Semi-skimmed milk 4 pints",
+    "item": {
+      "name": "Semi-skimmed milk",
+      "baseItem": "Semi-skimmed milk",
+      "category": "dairy-eggs",
+      "targetQuantity": 4,
+      "unit": "pints"
+    },
+    "candidates": [
+      {
+        "id": "309178944",
+        "supermarket": "tesco",
+        "title": "Arla Lactofree Organic Semi Skimmed Milk 1L",
+        "brand": "Arla",
+        "price": 2.1,
+        "packageSize": 1,
+        "packageUnit": "l",
+        "unitPrice": 2.1,
+        "unitPriceMeasure": "litre",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "254656543",
+        "supermarket": "tesco",
+        "title": "Tesco British Semi Skimmed Milk 2.272L, 4 Pints",
+        "brand": "Tesco",
+        "price": 1.75,
+        "packageSize": 2.272,
+        "packageUnit": "l",
+        "unitPrice": 0.77,
+        "unitPriceMeasure": "litre",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "252207537",
+        "supermarket": "tesco",
+        "title": "Tesco British Semi Skimmed Milk 1.13L, 2 Pints",
+        "brand": "Tesco",
+        "price": 1.2,
+        "packageSize": 1.13,
+        "packageUnit": "l",
+        "unitPrice": 1.06,
+        "unitPriceMeasure": "litre",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "251314158",
+        "supermarket": "tesco",
+        "title": "Tesco British Semi Skimmed Milk 568 Ml, 1 Pint",
+        "brand": "Tesco",
+        "price": 0.85,
+        "packageSize": 568,
+        "packageUnit": "ml",
+        "unitPrice": 1.5,
+        "unitPriceMeasure": "litre",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "257264875",
+        "supermarket": "tesco",
+        "title": "Cravendale Filtered Fresh Semi Skimmed Milk 2L Fresher for Longer",
+        "brand": "Cravendale",
+        "price": 2.65,
+        "packageSize": 2,
+        "packageUnit": "l",
+        "unitPrice": 1.32,
+        "unitPriceMeasure": "litre",
+        "deal": "Any 2 for £4 Clubcard Price - Selected Dairy Products 2 Litre",
+        "source": "direct"
+      },
+      {
+        "id": "253737115",
+        "supermarket": "tesco",
+        "title": "Tesco Filtered Semi Skimmed Milk 2 Litre",
+        "brand": "Tesco",
+        "price": 2.2,
+        "packageSize": 2,
+        "packageUnit": "litre",
+        "unitPrice": 1.1,
+        "unitPriceMeasure": "litre",
+        "deal": "£1.90 Clubcard Price",
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "254656543",
+    "expectedTitle": "Tesco British Semi Skimmed Milk 2.272L, 4 Pints",
+    "acceptablePicks": [],
+    "mustNotPick": [
+      "251314158",
+      "309178944"
+    ],
+    "groundTruthNote": "Exact 4-pint bottle at GBP 1.75. Rules buy 4x2-pint = GBP 4.80 for 8 pints, comparing pints against litres."
+  },
+  {
+    "id": "real-4",
+    "split": "holdout",
+    "query": "Tinned sardines in olive oil 2 x 120 g",
+    "item": {
+      "name": "Tinned sardines in olive oil",
+      "baseItem": "Tinned sardines in olive oil",
+      "category": "fish",
+      "targetQuantity": 240,
+      "unit": "g"
+    },
+    "candidates": [
+      {
+        "id": "267668808",
+        "supermarket": "tesco",
+        "title": "John West Boneless Sardines Olive Oil 95G",
+        "brand": "John",
+        "price": 2,
+        "packageSize": 95,
+        "packageUnit": "g",
+        "unitPrice": 29.85,
+        "unitPriceMeasure": "kg DR.WT",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "322328869",
+        "supermarket": "tesco",
+        "title": "Parmentier Sardines in Extra Virgin Olive Oil 135g",
+        "brand": "Parmentier",
+        "price": 2.1,
+        "packageSize": 135,
+        "packageUnit": "g",
+        "unitPrice": 15.56,
+        "unitPriceMeasure": "kg DR.WT",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "252737883",
+        "supermarket": "tesco",
+        "title": "John West Sardines Olive Oil 120Gm",
+        "brand": "John",
+        "price": 1.4,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 15.56,
+        "unitPriceMeasure": "kg DR.WT",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "310103367",
+        "supermarket": "tesco",
+        "title": "John West Anchovy Fillets In Olive Oil 95G",
+        "brand": "John",
+        "price": 3.2,
+        "packageSize": 95,
+        "packageUnit": "g",
+        "unitPrice": 64,
+        "unitPriceMeasure": "kg DR.WT",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "303544169",
+        "supermarket": "tesco",
+        "title": "Sea Castle Sardines Boneless In Olive Oil 125G",
+        "brand": "Sea",
+        "price": 3,
+        "packageSize": 125,
+        "packageUnit": "g",
+        "unitPrice": 24,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "322650227",
+        "supermarket": "tesco",
+        "title": "Terra Delyssa  Extra Virgin Olive Oil 500ml",
+        "brand": "Terra",
+        "price": 7,
+        "packageSize": 500,
+        "packageUnit": "ml",
+        "unitPrice": 14,
+        "unitPriceMeasure": "litre",
+        "deal": "£5.00 Clubcard Price",
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "252737883",
+    "expectedTitle": "John West Sardines Olive Oil 120Gm",
+    "acceptablePicks": [
+      "267668808",
+      "322328869",
+      "252737883",
+      "303544169"
+    ],
+    "mustNotPick": [
+      "310103367",
+      "322650227"
+    ],
+    "groundTruthNote": "Exact 120g sardines in olive oil. Distractors: anchovies, a bottle of olive oil."
+  },
+  {
+    "id": "real-7",
+    "split": "holdout",
+    "query": "Garlic 1 bulb",
+    "item": {
+      "name": "Garlic",
+      "baseItem": "Garlic",
+      "category": "produce",
+      "targetQuantity": 1,
+      "unit": "bulb"
+    },
+    "candidates": [
+      {
+        "id": "330746960",
+        "supermarket": "tesco",
+        "title": "Heinz Tomato & Garlic Marinara Sauce 490g",
+        "brand": "Heinz",
+        "price": 3.55,
+        "packageSize": 490,
+        "packageUnit": "g",
+        "unitPrice": 7.24,
+        "unitPriceMeasure": "kg",
+        "deal": "Any 4 for 3 Clubcard Price - Cheapest Product Free - Selected Cooking Sauces & Meal Kits",
+        "source": "direct"
+      },
+      {
+        "id": "313168547",
+        "supermarket": "tesco",
+        "title": "Tesco Large Garlic",
+        "brand": "Tesco",
+        "price": 0.5,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.5,
+        "unitPriceMeasure": "each",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "315384380",
+        "supermarket": "tesco",
+        "title": "Tesco Garlic 4 Pack",
+        "brand": "Tesco",
+        "price": 0.87,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.22,
+        "unitPriceMeasure": "each",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "278392921",
+        "supermarket": "tesco",
+        "title": "Tesco Garlic Paste 90G",
+        "brand": "Tesco",
+        "price": 1.8,
+        "packageSize": 90,
+        "packageUnit": "g",
+        "unitPrice": 20,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "257949060",
+        "supermarket": "tesco",
+        "title": "Very Lazy Garlic 200G",
+        "brand": "Very",
+        "price": 1.95,
+        "packageSize": 200,
+        "packageUnit": "g",
+        "unitPrice": 9.75,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "253126769",
+        "supermarket": "tesco",
+        "title": "Gia Garlic Puree 90G",
+        "brand": "Gia",
+        "price": 1.1,
+        "packageSize": 90,
+        "packageUnit": "g",
+        "unitPrice": 12.22,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "313168547",
+    "expectedTitle": "Tesco Large Garlic",
+    "acceptablePicks": [
+      "315384380"
+    ],
+    "mustNotPick": [
+      "278392921",
+      "253126769",
+      "330746960"
+    ],
+    "groundTruthNote": "A bulb of fresh garlic, not paste or puree or a sauce."
+  },
+  {
+    "id": "real-11",
+    "split": "holdout",
+    "query": "Apples 250 g",
+    "item": {
+      "name": "Apples",
+      "baseItem": "Apples",
+      "category": "produce",
+      "targetQuantity": 250,
+      "unit": "g"
+    },
+    "candidates": [
+      {
+        "id": "322552361",
+        "supermarket": "tesco",
+        "title": "Scrapples Crunchy Plain Apple Crisps Multipack (5x12g)",
+        "brand": "Scrapples",
+        "price": 2.95,
+        "packageSize": 12,
+        "packageUnit": "g",
+        "unitPrice": 49.17,
+        "unitPriceMeasure": "kg",
+        "deal": "£2.50 Clubcard Price",
+        "source": "direct"
+      },
+      {
+        "id": "322549014",
+        "supermarket": "tesco",
+        "title": "Scrapples Crunchy Apple Crisps with a squeeze of Strawberry Multipack (5x12g)",
+        "brand": "Scrapples",
+        "price": 2.95,
+        "packageSize": 12,
+        "packageUnit": "g",
+        "unitPrice": 49.17,
+        "unitPriceMeasure": "kg",
+        "deal": "£2.50 Clubcard Price",
+        "source": "direct"
+      },
+      {
+        "id": "316300058",
+        "supermarket": "tesco",
+        "title": "Highland Spring Sugar Free Apple & Blackcurrant Still Spring Flavoured Water 1.25 Litre",
+        "brand": "Highland",
+        "price": 1.25,
+        "packageSize": 1.25,
+        "packageUnit": "litre",
+        "unitPrice": 1,
+        "unitPriceMeasure": "litre",
+        "deal": "Any 3 for £3 Clubcard Price - Selected Drinks",
+        "source": "direct"
+      },
+      {
+        "id": "284475550",
+        "supermarket": "tesco",
+        "title": "Tesco Gala Apples",
+        "brand": "Tesco",
+        "price": 1.8,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.36,
+        "unitPriceMeasure": "each",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "284477542",
+        "supermarket": "tesco",
+        "title": "Tesco Pink Lady Apples 5 Pack",
+        "brand": "Tesco",
+        "price": 2.9,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.58,
+        "unitPriceMeasure": "each",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "292249576",
+        "supermarket": "tesco",
+        "title": "Rosedene Farms Small Apple 6 Pack",
+        "brand": "Rosedene",
+        "price": 0.99,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.16,
+        "unitPriceMeasure": "each",
+        "deal": "69p Clubcard Price",
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "292249576",
+    "expectedTitle": "Rosedene Farms Small Apple 6 Pack",
+    "acceptablePicks": [
+      "284475550",
+      "284477542"
+    ],
+    "mustNotPick": [
+      "322552361",
+      "322549014",
+      "316300058"
+    ],
+    "groundTruthNote": "Real apples. Distractors: apple crisps, apple-flavoured water."
+  },
+  {
+    "id": "real-12",
+    "split": "train",
+    "query": "Hummus 200 g",
+    "item": {
+      "name": "Hummus",
+      "baseItem": "Hummus",
+      "category": "pantry",
+      "targetQuantity": 200,
+      "unit": "g"
+    },
+    "candidates": [
+      {
+        "id": "320555643",
+        "supermarket": "tesco",
+        "title": "Do Goodly Sun Dried Tomato Houmous 150g",
+        "brand": "Do",
+        "price": 2.25,
+        "packageSize": 150,
+        "packageUnit": "g",
+        "unitPrice": 15,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "320968345",
+        "supermarket": "tesco",
+        "title": "Tesco Houmous 200g",
+        "brand": "Tesco",
+        "price": 1.3,
+        "packageSize": 200,
+        "packageUnit": "g",
+        "unitPrice": 6.5,
+        "unitPriceMeasure": "kg",
+        "deal": "Any 2 for £2.20 Clubcard Price - Selected Tesco Dips 163g - 211g",
+        "source": "direct"
+      },
+      {
+        "id": "320673572",
+        "supermarket": "tesco",
+        "title": "Tesco Red Pepper Houmous 182g",
+        "brand": "Tesco",
+        "price": 1.3,
+        "packageSize": 182,
+        "packageUnit": "g",
+        "unitPrice": 7.14,
+        "unitPriceMeasure": "kg",
+        "deal": "Any 2 for £2.20 Clubcard Price - Selected Tesco Dips 163g - 211g",
+        "source": "direct"
+      },
+      {
+        "id": "320967265",
+        "supermarket": "tesco",
+        "title": "Tesco Houmous 300g",
+        "brand": "Tesco",
+        "price": 1.5,
+        "packageSize": 300,
+        "packageUnit": "g",
+        "unitPrice": 5,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "311254788",
+        "supermarket": "tesco",
+        "title": "Ramona's Original Heavenly Houmous 500g",
+        "brand": "Ramona's",
+        "price": 3.7,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "unitPrice": 7.4,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "320547526",
+        "supermarket": "tesco",
+        "title": "Tesco Reduced Fat Houmous 200g",
+        "brand": "Tesco",
+        "price": 1.3,
+        "packageSize": 200,
+        "packageUnit": "g",
+        "unitPrice": 6.5,
+        "unitPriceMeasure": "kg",
+        "deal": "Any 2 for £2.20 Clubcard Price - Selected Tesco Dips 163g - 211g",
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "320968345",
+    "expectedTitle": "Tesco Houmous 200g",
+    "acceptablePicks": [],
+    "mustNotPick": [
+      "320673572",
+      "320555643",
+      "320547526"
+    ],
+    "groundTruthNote": "Plain 200g tub. Flavoured variants and hummus crisps must lose."
+  },
+  {
+    "id": "real-13",
+    "split": "train",
+    "query": "Sultanas 500 g",
+    "item": {
+      "name": "Sultanas",
+      "baseItem": "Sultanas",
+      "category": "pantry",
+      "targetQuantity": 500,
+      "unit": "g"
+    },
+    "candidates": [
+      {
+        "id": "279841965",
+        "supermarket": "tesco",
+        "title": "Tesco Sultana Scones 6 Pack",
+        "brand": "Tesco",
+        "price": 1.85,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.31,
+        "unitPriceMeasure": "each",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "253846591",
+        "supermarket": "tesco",
+        "title": "Tesco Finest All Butter Sultana Scones 4 Pack",
+        "brand": "Tesco",
+        "price": 2.1,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.52,
+        "unitPriceMeasure": "each",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "290350049",
+        "supermarket": "tesco",
+        "title": "Tesco Sultana & Oat Cookies 200G",
+        "brand": "Tesco",
+        "price": 1.4,
+        "packageSize": 200,
+        "packageUnit": "g",
+        "unitPrice": 7,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "259650305",
+        "supermarket": "tesco",
+        "title": "Tesco Sultana Bran Cereal 750G",
+        "brand": "Tesco",
+        "price": 3,
+        "packageSize": 750,
+        "packageUnit": "g",
+        "unitPrice": 4,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "254852604",
+        "supermarket": "tesco",
+        "title": "Kellogg's Sultana Bran Breakfast Cereal 500g",
+        "brand": "Kellogg's",
+        "price": 2.5,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "unitPrice": 5,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "271245404",
+        "supermarket": "tesco",
+        "title": "Ambrosia Creamed Rice Sultanas & Nutmeg 400G Tin",
+        "brand": "Ambrosia",
+        "price": 1.95,
+        "packageSize": 400,
+        "packageUnit": "g",
+        "unitPrice": 4.88,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": true,
+    "expectedPick": null,
+    "expectedTitle": null,
+    "acceptablePicks": [],
+    "mustNotPick": [
+      "279841965",
+      "253846591",
+      "290350049",
+      "259650305",
+      "254852604",
+      "271245404"
+    ],
+    "groundTruthNote": "Tesco returned scones, cookies, bran cereal and creamed rice. No plain sultanas exist. The honest answer is no match."
+  },
+  {
+    "id": "real-14",
+    "split": "holdout",
+    "query": "Lasagne sheets 500 g",
+    "item": {
+      "name": "Lasagne sheets",
+      "baseItem": "Lasagne sheets",
+      "category": "pantry",
+      "targetQuantity": 500,
+      "unit": "g"
+    },
+    "candidates": [
+      {
+        "id": "250211327",
+        "supermarket": "tesco",
+        "title": "Tesco Lasagne Pasta 500G",
+        "brand": "Tesco",
+        "price": 0.75,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "unitPrice": 1.5,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "303732718",
+        "supermarket": "tesco",
+        "title": "Tesco Fresh Lasagne Sheets 250G",
+        "brand": "Tesco",
+        "price": 2,
+        "packageSize": 250,
+        "packageUnit": "g",
+        "unitPrice": 8,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "284210294",
+        "supermarket": "tesco",
+        "title": "Barilla Lasagne Pasta Sheets 500g",
+        "brand": "Barilla",
+        "price": 1.75,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "unitPrice": 3.5,
+        "unitPriceMeasure": "kg",
+        "deal": "£1.25 Clubcard Price",
+        "source": "direct"
+      },
+      {
+        "id": "314943129",
+        "supermarket": "tesco",
+        "title": "Napolina Lasagne Pasta Sheets 375g",
+        "brand": "Napolina",
+        "price": 1.65,
+        "packageSize": 375,
+        "packageUnit": "g",
+        "unitPrice": 4.4,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "264890284",
+        "supermarket": "tesco",
+        "title": "Tesco Free From Lasagne Sheets 250G",
+        "brand": "Tesco",
+        "price": 0.75,
+        "packageSize": 250,
+        "packageUnit": "g",
+        "unitPrice": 3,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "287546940",
+        "supermarket": "tesco",
+        "title": "Tesco Free From White Lasagne Sauce 480G",
+        "brand": "Tesco",
+        "price": 1.45,
+        "packageSize": 480,
+        "packageUnit": "g",
+        "unitPrice": 3.02,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "250211327",
+    "expectedTitle": "Tesco Lasagne Pasta 500G",
+    "acceptablePicks": [
+      "284210294"
+    ],
+    "mustNotPick": [
+      "287546940"
+    ],
+    "groundTruthNote": "Exact 500g at GBP 0.75. Rules pick Barilla at GBP 1.75 for the same size."
+  },
+  {
+    "id": "real-15",
+    "split": "train",
+    "query": "Red peppers 4",
+    "item": {
+      "name": "Red peppers",
+      "baseItem": "Red peppers",
+      "category": "produce",
+      "targetQuantity": 4,
+      "unit": "item"
+    },
+    "candidates": [
+      {
+        "id": "258421636",
+        "supermarket": "tesco",
+        "title": "Tesco Red Peppers Each",
+        "brand": "Tesco",
+        "price": 0.7,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.7,
+        "unitPriceMeasure": "each",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "278774752",
+        "supermarket": "tesco",
+        "title": "Aleyna Roasted Red Peppers 480G",
+        "brand": "Aleyna",
+        "price": 2.15,
+        "packageSize": 480,
+        "packageUnit": "g",
+        "unitPrice": 6.72,
+        "unitPriceMeasure": "kg DR.WT",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "316068027",
+        "supermarket": "tesco",
+        "title": "Peppadew Roasted Red Peppers 465g",
+        "brand": "Peppadew",
+        "price": 4.1,
+        "packageSize": 465,
+        "packageUnit": "g",
+        "unitPrice": 8.82,
+        "unitPriceMeasure": "kg DR.WT",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "293425320",
+        "supermarket": "tesco",
+        "title": "Tesco Pitted Green Olives With Red Peppers",
+        "brand": "Tesco",
+        "price": 1.15,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 16.43,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "311956597",
+        "supermarket": "tesco",
+        "title": "Tesco Red Pepper & 3 Bean Chilli 392G",
+        "brand": "Tesco",
+        "price": 2,
+        "packageSize": 392,
+        "packageUnit": "g",
+        "unitPrice": 5.1,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "309766369",
+        "supermarket": "tesco",
+        "title": "Epicure Original Whole Pickles with Dill & Red Pepper 970g",
+        "brand": "Epicure",
+        "price": 4,
+        "packageSize": 970,
+        "packageUnit": "g",
+        "unitPrice": 7.55,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "258421636",
+    "expectedTitle": "Tesco Red Peppers Each",
+    "acceptablePicks": [],
+    "mustNotPick": [
+      "311956597",
+      "293425320",
+      "309766369",
+      "278774752",
+      "316068027",
+      "316068027"
+    ],
+    "groundTruthNote": "Four fresh red peppers. Rules pick a tin of bean chilli."
+  },
+  {
+    "id": "real-16",
+    "split": "holdout",
+    "query": "Red wine vinegar",
+    "item": {
+      "name": "Red wine vinegar",
+      "baseItem": "Red wine vinegar",
+      "category": "pantry",
+      "targetQuantity": 1,
+      "unit": "item"
+    },
+    "candidates": [
+      {
+        "id": "260511660",
+        "supermarket": "tesco",
+        "title": "Tesco Red Wine Vinegar 350Ml",
+        "brand": "Tesco",
+        "price": 1.55,
+        "packageSize": 350,
+        "packageUnit": "ml",
+        "unitPrice": 4.43,
+        "unitPriceMeasure": "litre",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "260511700",
+        "supermarket": "tesco",
+        "title": "Tesco White Wine Vinegar 350Ml",
+        "brand": "Tesco",
+        "price": 1.55,
+        "packageSize": 350,
+        "packageUnit": "ml",
+        "unitPrice": 4.43,
+        "unitPriceMeasure": "litre",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "255247726",
+        "supermarket": "tesco",
+        "title": "Stone's Original Ginger Wine 70cl",
+        "brand": "Stone's",
+        "price": 8.25,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 11.79,
+        "unitPriceMeasure": "litre",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "285477477",
+        "supermarket": "tesco",
+        "title": "The Straw Hat Red 75Cl",
+        "brand": "The",
+        "price": 5,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 6.67,
+        "unitPriceMeasure": "litre",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "314949371",
+        "supermarket": "tesco",
+        "title": "La Vieille Ferme Rose Wine 1.5L",
+        "brand": "La",
+        "price": 15.75,
+        "packageSize": 1.5,
+        "packageUnit": "l",
+        "unitPrice": 10.5,
+        "unitPriceMeasure": "litre",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "308084739",
+        "supermarket": "tesco",
+        "title": "Campo Viejo Winemakers Blend Red Wine 75cl",
+        "brand": "Campo",
+        "price": 9,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 12,
+        "unitPriceMeasure": "litre",
+        "deal": null,
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "260511660",
+    "expectedTitle": "Tesco Red Wine Vinegar 350Ml",
+    "acceptablePicks": [],
+    "mustNotPick": [
+      "260511700",
+      "255247726",
+      "285477477",
+      "314949371",
+      "308084739"
+    ],
+    "groundTruthNote": "Red wine VINEGAR. Distractors: white wine vinegar and four actual wines."
+  },
+  {
+    "id": "real-17",
+    "split": "holdout",
+    "query": "Frozen peas 1 kg",
+    "item": {
+      "name": "Frozen peas",
+      "baseItem": "Frozen peas",
+      "category": "produce",
+      "targetQuantity": 1,
+      "unit": "kg"
+    },
+    "candidates": [
+      {
+        "id": "320969689",
+        "supermarket": "tesco",
+        "title": "Do Goodly Smashed Pea Guacamole 150g",
+        "brand": "Do",
+        "price": 2.25,
+        "packageSize": 150,
+        "packageUnit": "g",
+        "unitPrice": 15,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "299539406",
+        "supermarket": "tesco",
+        "title": "Grower's Harvest Garden Peas 900G",
+        "brand": "Grower's",
+        "price": 1.15,
+        "packageSize": 900,
+        "packageUnit": "g",
+        "unitPrice": 1.28,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "250172580",
+        "supermarket": "tesco",
+        "title": "Tesco Garden Peas 1Kg",
+        "brand": "Tesco",
+        "price": 1.7,
+        "packageSize": 1,
+        "packageUnit": "kg",
+        "unitPrice": 1.7,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "250172608",
+        "supermarket": "tesco",
+        "title": "Tesco Petits Pois 1Kg",
+        "brand": "Tesco",
+        "price": 2,
+        "packageSize": 1,
+        "packageUnit": "kg",
+        "unitPrice": 2,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "256789198",
+        "supermarket": "tesco",
+        "title": "Tesco British Garden Peas In Water 290G",
+        "brand": "Tesco",
+        "price": 0.41,
+        "packageSize": 290,
+        "packageUnit": "g",
+        "unitPrice": 2.34,
+        "unitPriceMeasure": "kg DR.WT",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "296118224",
+        "supermarket": "tesco",
+        "title": "Birds Eye Garden Peas 800G",
+        "brand": "Birds",
+        "price": 2.25,
+        "packageSize": 800,
+        "packageUnit": "g",
+        "unitPrice": 2.81,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "250172580",
+    "expectedTitle": "Tesco Garden Peas 1Kg",
+    "acceptablePicks": [
+      "299539406",
+      "296118224"
+    ],
+    "mustNotPick": [
+      "320969689",
+      "256789198"
+    ],
+    "groundTruthNote": "Frozen peas. Distractors: pea guacamole and tinned peas in water."
+  },
+  {
+    "id": "real-37",
+    "split": "train",
+    "query": "Greek yogurt 0% 1 kg",
+    "item": {
+      "name": "Greek yogurt",
+      "baseItem": "Greek yogurt",
+      "category": "dairy-eggs",
+      "targetQuantity": 1,
+      "unit": "kg"
+    },
+    "candidates": [
+      {
+        "id": "315161816",
+        "supermarket": "tesco",
+        "title": "The Collective Gourmet Mango Greek Style Yogurt 425G",
+        "brand": "The",
+        "price": 2.95,
+        "packageSize": 425,
+        "packageUnit": "g",
+        "unitPrice": 6.94,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "315073742",
+        "supermarket": "tesco",
+        "title": "The Collective Gourmet Raspberry Greek Style Yogurt 425G",
+        "brand": "The",
+        "price": 2.95,
+        "packageSize": 425,
+        "packageUnit": "g",
+        "unitPrice": 6.94,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "293836686",
+        "supermarket": "tesco",
+        "title": "Alpro Greek Style Plain Dairy Free Yoghurt Alternative 400g",
+        "brand": "Alpro",
+        "price": 2.5,
+        "packageSize": 400,
+        "packageUnit": "g",
+        "unitPrice": 6.25,
+        "unitPriceMeasure": "kg",
+        "deal": "£2.15 Clubcard Price",
+        "source": "direct"
+      },
+      {
+        "id": "258170229",
+        "supermarket": "tesco",
+        "title": "Tesco Greek Style Yogurt 500G",
+        "brand": "Tesco",
+        "price": 1.15,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "unitPrice": 2.3,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "256381115",
+        "supermarket": "tesco",
+        "title": "Tesco Finest Greek Yogurt 500G",
+        "brand": "Tesco",
+        "price": 2.5,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "unitPrice": 5,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "323871309",
+        "supermarket": "tesco",
+        "title": "Muller Light Greek Boost Bowl Mango & Passionfruit Yogurt with Granola 170g",
+        "brand": "Muller",
+        "price": 1.65,
+        "packageSize": 170,
+        "packageUnit": "g",
+        "unitPrice": 9.71,
+        "unitPriceMeasure": "kg",
+        "deal": "Any 3 for £4 Clubcard Price - Selected Breakfast Toppers",
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "256381115",
+    "expectedTitle": "Tesco Finest Greek Yogurt 500G",
+    "acceptablePicks": [
+      "258170229"
+    ],
+    "mustNotPick": [
+      "315161816",
+      "323871309",
+      "315073742",
+      "293836686",
+      "323871309"
+    ],
+    "groundTruthNote": "Plain Greek yogurt. Nothing is 0% so the fat spec cannot be met; flavoured and dairy-free must still lose."
+  },
+  {
+    "id": "real-39",
+    "split": "train",
+    "query": "Wholewheat fusilli 1 kg",
+    "item": {
+      "name": "Wholewheat fusilli",
+      "baseItem": "Wholewheat fusilli",
+      "category": "pantry",
+      "targetQuantity": 1,
+      "unit": "kg"
+    },
+    "candidates": [
+      {
+        "id": "254878499",
+        "supermarket": "tesco",
+        "title": "Tesco Fusilli Pasta Twists 1Kg",
+        "brand": "Tesco",
+        "price": 1.19,
+        "packageSize": 1,
+        "packageUnit": "kg",
+        "unitPrice": 1.19,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "254878545",
+        "supermarket": "tesco",
+        "title": "Tesco Fusilli Pasta 500G",
+        "brand": "Tesco",
+        "price": 0.75,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "unitPrice": 1.5,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "251966083",
+        "supermarket": "tesco",
+        "title": "De Cecco Fusilli 500G",
+        "brand": "De",
+        "price": 2,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "unitPrice": 4,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "255343007",
+        "supermarket": "tesco",
+        "title": "Tesco Fusilli Pasta Twists 3Kg",
+        "brand": "Tesco",
+        "price": 3.55,
+        "packageSize": 3,
+        "packageUnit": "kg",
+        "unitPrice": 1.18,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "254878614",
+        "supermarket": "tesco",
+        "title": "Tesco Whole Wheat Fusilli Pasta 500G",
+        "brand": "Tesco",
+        "price": 0.75,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "unitPrice": 1.5,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "254878522",
+        "supermarket": "tesco",
+        "title": "Tesco Tricolore Fusilli Pasta Twists 500G",
+        "brand": "Tesco",
+        "price": 0.75,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "unitPrice": 1.5,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "254878614",
+    "expectedTitle": "Tesco Whole Wheat Fusilli Pasta 500G",
+    "acceptablePicks": [],
+    "mustNotPick": [
+      "254878499",
+      "254878522",
+      "251966083"
+    ],
+    "groundTruthNote": "Wholewheat is stated. The wholewheat option exists at GBP 0.75; rules pick plain white fusilli."
+  },
+  {
+    "id": "real-44",
+    "split": "train",
+    "query": "Wholemeal bread 1 loaf",
+    "item": {
+      "name": "Wholemeal bread",
+      "baseItem": "Wholemeal bread",
+      "category": "bakery",
+      "targetQuantity": 1,
+      "unit": "loaf"
+    },
+    "candidates": [
+      {
+        "id": "305953436",
+        "supermarket": "tesco",
+        "title": "Soreen Sliced Fruited Malt Loaf 290g",
+        "brand": "Soreen",
+        "price": 1.75,
+        "packageSize": 290,
+        "packageUnit": "g",
+        "unitPrice": 6.03,
+        "unitPriceMeasure": "kg",
+        "deal": "£1.25 Clubcard Price",
+        "source": "direct"
+      },
+      {
+        "id": "330743207",
+        "supermarket": "tesco",
+        "title": "Wildfarmed Simply Sourdough 640g",
+        "brand": "Wildfarmed",
+        "price": 2.5,
+        "packageSize": 640,
+        "packageUnit": "g",
+        "unitPrice": 3.91,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "299425748",
+        "supermarket": "tesco",
+        "title": "Tesco White Toastie Bread Thick Sliced 800g",
+        "brand": "Tesco",
+        "price": 0.75,
+        "packageSize": 800,
+        "packageUnit": "g",
+        "unitPrice": 0.94,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "256174499",
+        "supermarket": "tesco",
+        "title": "Hovis Soft White Medium Sliced Bread 800g",
+        "brand": "Hovis",
+        "price": 1.25,
+        "packageSize": 800,
+        "packageUnit": "g",
+        "unitPrice": 1.56,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "299389116",
+        "supermarket": "tesco",
+        "title": "Tesco Medium Sliced White Bread 800g",
+        "brand": "Tesco",
+        "price": 0.74,
+        "packageSize": 800,
+        "packageUnit": "g",
+        "unitPrice": 0.92,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "254942325",
+        "supermarket": "tesco",
+        "title": "Warburtons Medium Sliced Soft White Bread 800g",
+        "brand": "Warburtons",
+        "price": 1.4,
+        "packageSize": 800,
+        "packageUnit": "g",
+        "unitPrice": 1.75,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": true,
+    "expectedPick": null,
+    "expectedTitle": null,
+    "acceptablePicks": [],
+    "mustNotPick": [
+      "305953436",
+      "330743207",
+      "299425748",
+      "256174499",
+      "299389116",
+      "254942325"
+    ],
+    "groundTruthNote": "Six loaves returned, not one wholemeal. Rules substitute white bread. The honest answer is no match."
+  },
+  {
+    "id": "real-46",
+    "split": "train",
+    "query": "Dark chocolate (adults only, 85%) 200 g",
+    "item": {
+      "name": "Dark chocolate",
+      "baseItem": "Dark chocolate",
+      "category": "pantry",
+      "targetQuantity": 200,
+      "unit": "g",
+      "notes": [
+        "adults only, 85%"
+      ]
+    },
+    "candidates": [
+      {
+        "id": "315386717",
+        "supermarket": "tesco",
+        "title": "Tesco Finest Ecuador Dark Chocolate 75% 100g",
+        "brand": "Tesco",
+        "price": 2.4,
+        "packageSize": 100,
+        "packageUnit": "g",
+        "unitPrice": 24,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "300795095",
+        "supermarket": "tesco",
+        "title": "Ms Molly's Dark Chocolate Bar 100G",
+        "brand": "Ms",
+        "price": 0.59,
+        "packageSize": 100,
+        "packageUnit": "g",
+        "unitPrice": 5.9,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "315377302",
+        "supermarket": "tesco",
+        "title": "Tesco Finest Peru Dark Chocolate 85% 100g",
+        "brand": "Tesco",
+        "price": 2.4,
+        "packageSize": 100,
+        "packageUnit": "g",
+        "unitPrice": 24,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "300794948",
+        "supermarket": "tesco",
+        "title": "Tesco Dark Chocolate Bar 200G",
+        "brand": "Tesco",
+        "price": 2.3,
+        "packageSize": 200,
+        "packageUnit": "g",
+        "unitPrice": 11.5,
+        "unitPriceMeasure": "kg",
+        "deal": "£2.00 Clubcard Price",
+        "source": "direct"
+      },
+      {
+        "id": "286265409",
+        "supermarket": "tesco",
+        "title": "Cadbury Bournville Classic Dark Chocolate 180g",
+        "brand": "Cadbury",
+        "price": 2.75,
+        "packageSize": 180,
+        "packageUnit": "g",
+        "unitPrice": 15.28,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "259301725",
+        "supermarket": "tesco",
+        "title": "Lindt Excellence Dark Chocolate Bar - 70% Cocoa 100g",
+        "brand": "Lindt",
+        "price": 3.5,
+        "packageSize": 100,
+        "packageUnit": "g",
+        "unitPrice": 35,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "315377302",
+    "expectedTitle": "Tesco Finest Peru Dark Chocolate 85% 100g",
+    "acceptablePicks": [],
+    "mustNotPick": [
+      "315386717",
+      "259301725",
+      "286265409",
+      "300795095",
+      "300794948"
+    ],
+    "groundTruthNote": "85% is stated and an exact 85% bar exists. Rules pick a plain bar of unstated cocoa content."
+  },
+  {
+    "id": "real-53",
+    "split": "holdout",
+    "query": "Courgettes 500 g",
+    "item": {
+      "name": "Courgettes",
+      "baseItem": "Courgettes",
+      "category": "produce",
+      "targetQuantity": 500,
+      "unit": "g"
+    },
+    "candidates": [
+      {
+        "id": "302292312",
+        "supermarket": "tesco",
+        "title": "Tesco Courgettes",
+        "brand": "Tesco",
+        "price": 1.39,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.46,
+        "unitPriceMeasure": "each",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "253554596",
+        "supermarket": "tesco",
+        "title": "Tesco Courgettes Loose",
+        "brand": "Tesco",
+        "price": 0.56,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 2.78,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "262018816",
+        "supermarket": "tesco",
+        "title": "Tesco Organic Courgettes 3 Pack",
+        "brand": "Tesco",
+        "price": 2.5,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.83,
+        "unitPriceMeasure": "each",
+        "deal": null,
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "302292312",
+    "expectedTitle": "Tesco Courgettes",
+    "acceptablePicks": [
+      "253554596",
+      "262018816"
+    ],
+    "mustNotPick": [],
+    "maxPacksNeeded": 4,
+    "groundTruthNote": "500g of courgettes. Rules buy 12 loose by counting items against a gram target."
+  },
+  {
+    "id": "real-56",
+    "split": "holdout",
+    "query": "Fairy washing up liquid 433 ml",
+    "item": {
+      "name": "Fairy washing up liquid",
+      "baseItem": "Fairy washing up liquid",
+      "category": "household",
+      "targetQuantity": 433,
+      "unit": "ml"
+    },
+    "candidates": [
+      {
+        "id": "313187081",
+        "supermarket": "tesco",
+        "title": "Fairy Original Washing Up Liquid 654Ml",
+        "brand": "Fairy",
+        "price": 1.8,
+        "packageSize": 654,
+        "packageUnit": "ml",
+        "unitPrice": 2.75,
+        "unitPriceMeasure": "litre",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "313518537",
+        "supermarket": "tesco",
+        "title": "Fairy Original Washing Up Liquid 320Ml",
+        "brand": "Fairy",
+        "price": 0.89,
+        "packageSize": 320,
+        "packageUnit": "ml",
+        "unitPrice": 2.78,
+        "unitPriceMeasure": "litre",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "315753393",
+        "supermarket": "tesco",
+        "title": "Fairy Original Washing Up Liquid Green with LiftAction 1450ML",
+        "brand": "Fairy",
+        "price": 3.95,
+        "packageSize": 1450,
+        "packageUnit": "ml",
+        "unitPrice": 2.72,
+        "unitPriceMeasure": "litre",
+        "deal": "£3.55 Clubcard Price",
+        "source": "direct"
+      },
+      {
+        "id": "318251817",
+        "supermarket": "tesco",
+        "title": "Fairy Max Power Eucalyptus Anti-Bacterial Washing Up Liquid 545ml",
+        "brand": "Fairy",
+        "price": 3,
+        "packageSize": 545,
+        "packageUnit": "ml",
+        "unitPrice": 5.5,
+        "unitPriceMeasure": "litre",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "315145462",
+        "supermarket": "tesco",
+        "title": "Fairy Clean & Fresh Washing Up Liquid - Pomegranate & Grapefruit 320ml",
+        "brand": "Fairy",
+        "price": 0.89,
+        "packageSize": 320,
+        "packageUnit": "ml",
+        "unitPrice": 2.78,
+        "unitPriceMeasure": "litre",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "313610427",
+        "supermarket": "tesco",
+        "title": "Fairy Lemon Washing Up Liquid 654Ml",
+        "brand": "Fairy",
+        "price": 1.8,
+        "packageSize": 654,
+        "packageUnit": "ml",
+        "unitPrice": 2.75,
+        "unitPriceMeasure": "litre",
+        "deal": null,
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "313187081",
+    "expectedTitle": "Fairy Original Washing Up Liquid 654Ml",
+    "acceptablePicks": [
+      "313518537",
+      "315753393"
+    ],
+    "mustNotPick": [
+      "318251817",
+      "313610427",
+      "315145462"
+    ],
+    "groundTruthNote": "Plain Fairy Original. Rules pick Max Power Eucalyptus at over 3x the price."
+  }
+]
