@@ -1524,6 +1524,74 @@ check(20, 'No API key can reach the public repo via settings or eval artifacts',
 });
 
 // ---------------------------------------------------------------------------
+// Step 22 — Widen the model's view, escalate hard cases, keep trolley honest
+// ---------------------------------------------------------------------------
+check(22, 'The model sees more than the top 5 of a 40-product search', async () => {
+  const src = read(r(AIR));
+  if (/scoredCandidates\.slice\(0,\s*5\)/.test(src)) {
+    fail(`${AIR}:111 sends only \`scoredCandidates.slice(0, 5)\`. The Tesco adapter applies no limit and a real search returns roughly 24-48 products, so the model reviews about 12% of the shelf — and only the 12% the rules already ranked highest. If the rules rank the right product 12th it is never seen. Candidates are cached whole before truncation, so widening costs no extra fetching. Read the cap from config with a materially higher default.`);
+  }
+  const cap = src.match(/slice\(0,\s*(\d+)\)/);
+  if (cap && Number(cap[1]) < 15) {
+    fail(`candidate cap is still only ${cap[1]} — too narrow to matter on a real search page`);
+  }
+});
+
+check(22, 'A poor match does not silently fall through to the aggregator', () => {
+  const src = read(r('services/logic-api/src/services/candidatePipeline.js'));
+  if (!/candidateProducts\.length === 0/.test(src)) {
+    fail('candidatePipeline no longer gates the aggregator on an empty direct result — trolley must stay reserved for "the shop returned nothing", never for "the shop returned nothing good"');
+  }
+  if (/matchScore|confidence|poorMatch|badMatch/.test(src.split('Tier 2')[1] || '')) {
+    fail('the aggregator tier now inspects match quality. An unmatched item must resolve to an honest no match and go to escalation, not to a trolley scrape.');
+  }
+});
+
+check(22, 'Unresolved items escalate to a stronger model in one batched pass', async () => {
+  const p = r('services/logic-api/src/services/aiEscalation.js');
+  if (!fs.existsSync(p)) {
+    fail('no aiEscalation.js — items that finish unresolved or low-confidence should be collected and sent ONCE, as a batch, to a stronger model with their full candidate lists, rather than being abandoned or retried one at a time on the cheap model');
+  }
+  const src = read(p);
+  if (!/GEMINI_ESCALATION_MODEL|escalationModel/.test(src)) {
+    fail('the escalation tier does not read its own model id — it must be configurable separately from the per-item model, since the whole point is that it is a different, stronger one');
+  }
+  if (!/batch|items\s*\)|Array\.isArray/.test(src)) {
+    fail('escalation does not take a batch — one call for all problem items is the design, not one call each');
+  }
+});
+
+check(22, 'Escalation still cannot promote where the price came from', async () => {
+  const p = r('services/logic-api/src/services/aiEscalation.js');
+  if (!fs.existsSync(p)) fail('no aiEscalation.js yet');
+  const src = read(p);
+  if (/dataSource:\s*['"]direct['"]|dataConfidence:\s*0?\.9/.test(src)) {
+    fail('escalation sets the data tier itself. A stronger model may raise MATCH confidence, never the tier describing where the price came from — that is the Step 16 rule and it applies to every AI tier.');
+  }
+});
+
+check(22, 'Escalation is bounded and reports what it cost', async () => {
+  const p = r('services/logic-api/src/services/aiEscalation.js');
+  if (!fs.existsSync(p)) fail('no aiEscalation.js yet');
+  const src = read(p);
+  if (!/budget|maxItems|cap|limit/i.test(src)) {
+    fail('escalation has no bound — a basket where everything fails must not turn into an unbounded call to the expensive model');
+  }
+});
+
+check(22, 'The eval fixtures carry a realistic number of candidates', () => {
+  const p = r('tests/fixtures/ai-matching-fixtures.real.json');
+  if (!fs.existsSync(p)) return 'no real fixtures';
+  const F = JSON.parse(read(p) || '[]');
+  if (!F.length) return 'empty';
+  const counts = F.map((f) => (f.candidates || []).length).sort((a, b) => a - b);
+  const median = counts[Math.floor(counts.length / 2)];
+  if (median < 10) {
+    fail(`fixtures carry a median of ${median} candidates, but the retained raw payload for beef mince holds 16 and a real Tesco search returns roughly 24-48. Tuning a candidate cap and a decline threshold against a 6-item slate proves nothing about a 40-item one. Re-cut deeper from the raw payloads, or re-scrape.`);
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 await Promise.allSettled(pending);
