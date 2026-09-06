@@ -38,4 +38,15 @@ describe('KeywordExtractor', () => {
     assert.deepEqual(kws, ['plums', 'pears']);
     assert.equal(KeywordExtractor.hasNounEvidence(kws, 'Tesco Conference Pears 600g'), true);
   });
+
+  it('should resolve UK nameVariants bidirectionally in noun evidence', () => {
+    // Hummus -> Houmous (shopping list to UK retailer spelling)
+    assert.equal(KeywordExtractor.hasNounEvidence(['hummus'], 'Tesco Houmous 200g'), true);
+    assert.equal(KeywordExtractor.hasNounEvidence(['houmous'], 'Sainsburys Hummus 200g'), true);
+    assert.equal(KeywordExtractor.hasNounEvidence(['hummus'], 'Tesco Beef Steak Mince 500g'), false);
+
+    // Yogurt -> Yoghurt
+    assert.equal(KeywordExtractor.hasNounEvidence(['yogurt'], 'Alpro Greek Style Plain Dairy Free Yoghurt Alternative 400g'), true);
+    assert.equal(KeywordExtractor.hasNounEvidence(['yoghurt'], 'Tesco Greek Style Yogurt 500G'), true);
+  });
 });

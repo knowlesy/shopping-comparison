@@ -4,7 +4,46 @@
  * Fully offline-capable by default with optional AI expansion.
  */
 
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { getCoreSearchQuery } from './candidatePipeline.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const candidatePaths = [
+  process.env.MATCHING_RULES_PATH,
+  path.resolve(__dirname, '../../../../data/matching-rules.json'),
+  path.resolve(__dirname, '../../data/matching-rules.json'),
+  path.resolve(process.cwd(), 'data/matching-rules.json'),
+  path.resolve(__dirname, 'matching-rules.json')
+].filter(Boolean);
+
+let rawRules = null;
+for (const p of candidatePaths) {
+  if (fs.existsSync(p)) {
+    try {
+      rawRules = JSON.parse(fs.readFileSync(p, 'utf8'));
+      break;
+    } catch {
+      // continue
+    }
+  }
+}
+
+const matchingRules = rawRules || {};
+const storePhrasing = matchingRules.storePhrasing || {};
+const rawNameVariants = matchingRules.nameVariants || {};
+const nameVariantGroups = [];
+const rawGroups = Array.isArray(rawNameVariants)
+  ? rawNameVariants
+  : Object.entries(rawNameVariants).map(([k, v]) => [k, ...(Array.isArray(v) ? v : [v])]);
+for (const group of rawGroups) {
+  if (Array.isArray(group)) {
+    nameVariantGroups.push(group.map((w) => String(w).toLowerCase().trim()).filter(Boolean));
+  }
+}
 
 export class QueryStrategist {
   /**
@@ -22,6 +61,22 @@ export class QueryStrategist {
 
     if (core) {
       terms.push(core);
+
+      // UK naming and spelling variants from data/matching-rules.json
+      for (const group of nameVariantGroups) {
+        for (let i = 0; i < group.length; i++) {
+          const variant = group[i];
+          const regex = new RegExp(`\\b${variant}\\b`, 'i');
+          if (regex.test(core)) {
+            for (let j = 0; j < group.length; j++) {
+              if (i !== j) {
+                const alternate = core.replace(regex, group[j]);
+                terms.push(alternate);
+              }
+            }
+          }
+        }
+      }
     }
 
     // Attribute expansions (e.g. fat percentage, free range, organic)
@@ -43,11 +98,16 @@ export class QueryStrategist {
       terms.push(`wholemeal ${core}`);
     }
 
-    // Store-specific search phrasing
-    if (supermarket === 'sainsburys' && core.includes('lettuce')) {
-      terms.push('little gem');
-    } else if (supermarket === 'morrisons' && core.includes('milk')) {
-      terms.push('british semi skimmed milk');
+    // Store-specific search phrasing from data/matching-rules.json
+    if (core && storePhrasing && storePhrasing[supermarket]) {
+      const storeRules = storePhrasing[supermarket] || [];
+      for (const rule of storeRules) {
+        if (rule && rule.trigger && rule.phrase) {
+          if (new RegExp(`\\b${rule.trigger}\\b`, 'i').test(core) || core.includes(rule.trigger)) {
+            terms.push(rule.phrase);
+          }
+        }
+      }
     }
 
     // Deduplicate terms while preserving order

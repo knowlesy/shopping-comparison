@@ -72,5 +72,17 @@
     "bunch": 5,
     "head": 1,
     "bulb": 1
+  },
+  "nameVariants": {
+    "houmous": ["hummus"],
+    "yoghurt": ["yogurt"]
+  },
+  "storePhrasing": {
+    "sainsburys": [
+      { "trigger": "lettuce", "phrase": "little gem" }
+    ],
+    "morrisons": [
+      { "trigger": "milk", "phrase": "british semi skimmed milk" }
+    ]
   }
 }
