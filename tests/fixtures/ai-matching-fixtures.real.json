@@ -2656,7 +2656,9 @@
       "284475832",
       "284477628",
       "284475671",
-      "253807413"
+      "253807413",
+      "253559147",
+      "251627289"
     ],
     "mustNotPick": [
       "322552361",
@@ -2664,7 +2666,7 @@
       "316300058",
       "286681924"
     ],
-    "groundTruthNote": "Real apples. Distractors: apple crisps, apple-flavoured water."
+    "groundTruthNote": "250g is one or two apples. Loose fruit priced per kg hits the target exactly and cheapest; a 5 or 6 pack overshoots to roughly 700g but is a defensible way to buy fresh fruit. Both are accepted. Corrected after the model chose loose and was right to — an earlier label named only the 6 pack. Processed apple products (crisps, snack packs, flavoured water, slices) must still lose."
   },
   {
     "id": "real-12",
