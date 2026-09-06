@@ -742,99 +742,6 @@
       "query": "Celery",
       "products": [
         {
-          "id": "311672834",
-          "supermarket": "tesco",
-          "title": "Tesco Celery",
-          "brand": "Tesco",
-          "price": 0.75,
-          "unitPrice": 0.75,
-          "unitPriceMeasure": "each",
-          "packageSize": null,
-          "packageUnit": null,
-          "packageDisplay": null,
-          "deal": {
-            "description": "65p Clubcard Price",
-            "type": "clubcard"
-          },
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
-        },
-        {
-          "id": "305943990",
-          "supermarket": "tesco",
-          "title": "Tesco Celery Sticks 250G",
-          "brand": "Tesco",
-          "price": 0.9,
-          "unitPrice": 3.6,
-          "unitPriceMeasure": "kg",
-          "packageSize": 250,
-          "packageUnit": "g",
-          "packageDisplay": "250g",
-          "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
-        },
-        {
-          "id": "281055568",
-          "supermarket": "tesco",
-          "title": "Tesco Organic Celery",
-          "brand": "Tesco",
-          "price": 1.4,
-          "unitPrice": 1.4,
-          "unitPriceMeasure": "each",
-          "packageSize": null,
-          "packageUnit": null,
-          "packageDisplay": null,
-          "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
-        },
-        {
-          "id": "320683139",
-          "supermarket": "tesco",
-          "title": "Tesco Celery Fruit & Nut 300g",
-          "brand": "Tesco",
-          "price": 1.9,
-          "unitPrice": 6.33,
-          "unitPriceMeasure": "kg",
-          "packageSize": 300,
-          "packageUnit": "g",
-          "packageDisplay": "300g",
-          "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
-        },
-        {
-          "id": "287336394",
-          "supermarket": "tesco",
-          "title": "Joseph Heler White Cheshire Cheese 200 G",
-          "brand": "Joseph",
-          "price": 2,
-          "unitPrice": 10,
-          "unitPriceMeasure": "kg",
-          "packageSize": 200,
-          "packageUnit": "g",
-          "packageDisplay": "200g",
-          "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
-        },
-        {
           "id": "8117540",
           "supermarket": "sainsburys",
           "title": "Sainsbury's Celery Sticks 250g",
@@ -851,6 +758,80 @@
           "inStock": true,
           "source": "direct",
           "confidenceSource": "direct"
+        },
+        {
+          "id": "311672834",
+          "supermarket": "tesco",
+          "title": "Tesco Celery",
+          "brand": "Tesco",
+          "price": 0.75,
+          "unitPrice": 0.75,
+          "unitPriceMeasure": "each",
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
+          "deal": {
+            "description": "65p Clubcard Price",
+            "type": "clubcard",
+            "raw": "65p Clubcard Price"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "305943990",
+          "supermarket": "tesco",
+          "title": "Tesco Celery Sticks 250G",
+          "brand": "Tesco",
+          "price": 0.9,
+          "unitPrice": 3.6,
+          "unitPriceMeasure": "kg",
+          "packageSize": 250,
+          "packageUnit": "g",
+          "packageDisplay": "250g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "281055568",
+          "supermarket": "tesco",
+          "title": "Tesco Organic Celery",
+          "brand": "Tesco",
+          "price": 1.4,
+          "unitPrice": 1.4,
+          "unitPriceMeasure": "each",
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "320683139",
+          "supermarket": "tesco",
+          "title": "Tesco Celery Fruit & Nut 300g",
+          "brand": "Tesco",
+          "price": 1.9,
+          "unitPrice": 6.33,
+          "unitPriceMeasure": "kg",
+          "packageSize": 300,
+          "packageUnit": "g",
+          "packageDisplay": "300g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "287336394",
+          "supermarket": "tesco",
+          "title": "Joseph Heler White Cheshire Cheese 200 G",
+          "brand": "Joseph",
+          "price": 2,
+          "unitPrice": 10,
+          "unitPriceMeasure": "kg",
+          "packageSize": 200,
+          "packageUnit": "g",
+          "packageDisplay": "200g",
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -1030,32 +1011,6 @@
       "query": "Maris Piper potatoes",
       "products": [
         {
-          "id": "254656543",
-          "supermarket": "tesco",
-          "title": "Tesco Maris Piper Potatoes 2Kg",
-          "price": 1.8,
-          "unitPrice": 0.9,
-          "unitPriceMeasure": "kg",
-          "packageSize": 2,
-          "packageUnit": "kg",
-          "packageDisplay": "2kg",
-          "inStock": true,
-          "source": "direct"
-        },
-        {
-          "id": "254656544",
-          "supermarket": "tesco",
-          "title": "Tesco Maris Piper Potatoes 1.25Kg",
-          "price": 1.45,
-          "unitPrice": 1.16,
-          "unitPriceMeasure": "kg",
-          "packageSize": 1.25,
-          "packageUnit": "kg",
-          "packageDisplay": "1.25kg",
-          "inStock": true,
-          "source": "direct"
-        },
-        {
           "id": "sb-mp-1",
           "supermarket": "sainsburys",
           "title": "Sainsbury's Maris Piper Potatoes 2kg",
@@ -1066,6 +1021,168 @@
           "packageUnit": "kg",
           "packageDisplay": "2kg",
           "inStock": true,
+          "source": "direct"
+        },
+        {
+          "id": "313165959",
+          "supermarket": "tesco",
+          "title": "Tesco All Rounder Potatoes 2Kg",
+          "brand": "Tesco",
+          "price": 1.32,
+          "unitPrice": 0.66,
+          "unitPriceMeasure": "kg",
+          "packageSize": 2,
+          "packageUnit": "kg",
+          "packageDisplay": "2kg",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "302290700",
+          "supermarket": "tesco",
+          "title": "Tesco Maris Piper Potatoes 2Kg",
+          "brand": "Tesco",
+          "price": 1.8,
+          "unitPrice": 0.9,
+          "unitPriceMeasure": "kg",
+          "packageSize": 2,
+          "packageUnit": "kg",
+          "packageDisplay": "2kg",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "304376337",
+          "supermarket": "tesco",
+          "title": "Tesco Maris Piper Potatoes 1.25Kg",
+          "brand": "Tesco",
+          "price": 1.45,
+          "unitPrice": 1.16,
+          "unitPriceMeasure": "kg",
+          "packageSize": 1.25,
+          "packageUnit": "kg",
+          "packageDisplay": "1.25kg",
+          "deal": {
+            "description": "£1.15 Clubcard Price",
+            "type": "clubcard",
+            "raw": "£1.15 Clubcard Price"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "253558183",
+          "supermarket": "tesco",
+          "title": "Tesco Large Baking Potatoes Loose",
+          "brand": "Tesco",
+          "price": 0.27,
+          "unitPrice": 0.9,
+          "unitPriceMeasure": "kg",
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "273150945",
+          "supermarket": "tesco",
+          "title": "Tesco Finest Baby Potatoes 750G",
+          "brand": "Tesco",
+          "price": 1.3,
+          "unitPrice": 1.73,
+          "unitPriceMeasure": "kg",
+          "packageSize": 750,
+          "packageUnit": "g",
+          "packageDisplay": "750g",
+          "deal": {
+            "description": "89p Clubcard Price",
+            "type": "clubcard",
+            "raw": "89p Clubcard Price"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "323506634",
+          "supermarket": "tesco",
+          "title": "Tesco Finest Suffolk New Potatoes 750g",
+          "brand": "Tesco",
+          "price": 1.6,
+          "unitPrice": 2.13,
+          "unitPriceMeasure": "kg",
+          "packageSize": 750,
+          "packageUnit": "g",
+          "packageDisplay": "750g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "305729979",
+          "supermarket": "tesco",
+          "title": "Tesco Baking Potatoes 4 Pack",
+          "brand": "Tesco",
+          "price": 0.79,
+          "unitPrice": 0.2,
+          "unitPriceMeasure": "each",
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "315744110",
+          "supermarket": "tesco",
+          "title": "Tesco Red Potatoes 2KG",
+          "brand": "Tesco",
+          "price": 1.56,
+          "unitPrice": 0.78,
+          "unitPriceMeasure": "kg",
+          "packageSize": 2,
+          "packageUnit": "kg",
+          "packageDisplay": "2kg",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "315591641",
+          "supermarket": "tesco",
+          "title": "Tesco Baking Potatoes 2kg",
+          "brand": "Tesco",
+          "price": 1.85,
+          "unitPrice": 0.92,
+          "unitPriceMeasure": "kg",
+          "packageSize": 2,
+          "packageUnit": "kg",
+          "packageDisplay": "2kg",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "315836557",
+          "supermarket": "tesco",
+          "title": "Tesco King Edward Potatoes 2kg",
+          "brand": "Tesco",
+          "price": 1.85,
+          "unitPrice": 0.92,
+          "unitPriceMeasure": "kg",
+          "packageSize": 2,
+          "packageUnit": "kg",
+          "packageDisplay": "2kg",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "310190037",
+          "supermarket": "tesco",
+          "title": "Tesco Sweet Potatoes 1Kg",
+          "brand": "Tesco",
+          "price": 1.19,
+          "unitPrice": 1.19,
+          "unitPriceMeasure": "kg",
+          "packageSize": 1,
+          "packageUnit": "kg",
+          "packageDisplay": "1kg",
+          "deal": null,
           "source": "direct"
         }
       ]
@@ -1090,13 +1207,10 @@
           "packageDisplay": "1litre",
           "deal": {
             "description": "£2.00 Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "£2.00 Clubcard Price"
           },
-          "clubcardPrice": 2,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "285157326",
@@ -1111,13 +1225,10 @@
           "packageDisplay": null,
           "deal": {
             "description": "65p Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "65p Clubcard Price"
           },
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "275280804",
@@ -1131,11 +1242,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "266419328",
@@ -1149,11 +1256,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "266420677",
@@ -1167,11 +1270,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "303869954",
@@ -1185,11 +1284,81 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "273420937",
+          "supermarket": "tesco",
+          "title": "Soreen Banana Lunchbox Loaves 5 Pack",
+          "brand": "Soreen",
+          "price": 1.8,
+          "unitPrice": 12,
+          "unitPriceMeasure": "kg",
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "254903706",
+          "supermarket": "tesco",
+          "title": "Angel Delight Banana 59G",
+          "brand": "Angel",
+          "price": 0.95,
+          "unitPrice": 16.1,
+          "unitPriceMeasure": "kg",
+          "packageSize": 59,
+          "packageUnit": "g",
+          "packageDisplay": "59g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "315074430",
+          "supermarket": "tesco",
+          "title": "Whitworths Banana Chips 150G",
+          "brand": "Whitworths",
+          "price": 2.2,
+          "unitPrice": 14.67,
+          "unitPriceMeasure": "kg",
+          "packageSize": 150,
+          "packageUnit": "g",
+          "packageDisplay": "150g",
+          "deal": {
+            "description": "Any 2 for £3.40 Clubcard Price - Selected Whitworths Dry Fruits & Nuts",
+            "type": "clubcard",
+            "raw": "Any 2 for £3.40 Clubcard Price - Selected Whitworths Dry Fruits & Nuts"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "312352287",
+          "supermarket": "tesco",
+          "title": "Tesco Chewy Dried Banana 200G",
+          "brand": "Tesco",
+          "price": 4.2,
+          "unitPrice": 21,
+          "unitPriceMeasure": "kg",
+          "packageSize": 200,
+          "packageUnit": "g",
+          "packageDisplay": "200g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "280823888",
+          "supermarket": "tesco",
+          "title": "Kubus Apple Banana Mousse 100g",
+          "brand": "Kubus",
+          "price": 0.85,
+          "unitPrice": 8.5,
+          "unitPriceMeasure": "kg",
+          "packageSize": 100,
+          "packageUnit": "g",
+          "packageDisplay": "100g",
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -2055,11 +2224,7 @@
           "packageUnit": "g",
           "packageDisplay": "400g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "318189710",
@@ -2074,13 +2239,10 @@
           "packageDisplay": "570g",
           "deal": {
             "description": "£2.60 Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "£2.60 Clubcard Price"
           },
-          "clubcardPrice": 2.6,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "315155202",
@@ -2095,13 +2257,10 @@
           "packageDisplay": "400g",
           "deal": {
             "description": "£1.40 Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "£1.40 Clubcard Price"
           },
-          "clubcardPrice": 1.4,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "262489469",
@@ -2115,11 +2274,7 @@
           "packageUnit": "g",
           "packageDisplay": "400g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "262167712",
@@ -2133,11 +2288,7 @@
           "packageUnit": "g",
           "packageDisplay": "400g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "262489966",
@@ -2151,11 +2302,81 @@
           "packageUnit": "g",
           "packageDisplay": "400g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "259061829",
+          "supermarket": "tesco",
+          "title": "Tesco Red Kidney Beans In Water 400G",
+          "brand": "Tesco",
+          "price": 0.39,
+          "unitPrice": 1.62,
+          "unitPriceMeasure": "kg DR.WT",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "302301620",
+          "supermarket": "tesco",
+          "title": "Tesco Pinto Beans In Water 390G",
+          "brand": "Tesco",
+          "price": 0.45,
+          "unitPrice": 1.92,
+          "unitPriceMeasure": "kg DR.WT",
+          "packageSize": 390,
+          "packageUnit": "g",
+          "packageDisplay": "390g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "264448861",
+          "supermarket": "tesco",
+          "title": "Napolina Red Kidney Beans In Water 400G",
+          "brand": "Napolina",
+          "price": 1,
+          "unitPrice": 4.17,
+          "unitPriceMeasure": "kg DR.WT",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": {
+            "description": "Any 3 for £2.50 Clubcard Price - Selected Napolina Canned Food",
+            "type": "clubcard",
+            "raw": "Any 3 for £2.50 Clubcard Price - Selected Napolina Canned Food"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "302282831",
+          "supermarket": "tesco",
+          "title": "Tesco Organic Red Kidney Beans In Water 400G",
+          "brand": "Tesco",
+          "price": 1.35,
+          "unitPrice": 5.62,
+          "unitPriceMeasure": "kg DR.WT",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "304383340",
+          "supermarket": "tesco",
+          "title": "Tesco Broad Beans In Water 300G",
+          "brand": "Tesco",
+          "price": 0.9,
+          "unitPrice": 4.74,
+          "unitPriceMeasure": "kg DR.WT",
+          "packageSize": 300,
+          "packageUnit": "g",
+          "packageDisplay": "300g",
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -2302,13 +2523,10 @@
           "packageDisplay": "400g",
           "deal": {
             "description": "£1.00 Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "£1.00 Clubcard Price"
           },
-          "clubcardPrice": 1,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "311430205",
@@ -2322,11 +2540,7 @@
           "packageUnit": "g",
           "packageDisplay": "325g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "292129321",
@@ -2340,11 +2554,7 @@
           "packageUnit": "kg",
           "packageDisplay": "1kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "267246790",
@@ -2359,13 +2569,10 @@
           "packageDisplay": null,
           "deal": {
             "description": "Any 2 for £4 Clubcard Price - Selected Tesco Fruits",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "Any 2 for £4 Clubcard Price - Selected Tesco Fruits"
           },
-          "clubcardPrice": 4,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "300522822",
@@ -2379,11 +2586,7 @@
           "packageUnit": "g",
           "packageDisplay": "400g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "251825037",
@@ -2397,11 +2600,81 @@
           "packageUnit": "g",
           "packageDisplay": "400g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "252514974",
+          "supermarket": "tesco",
+          "title": "Tesco Peeled Plum Tomatoes 4X400g",
+          "brand": "Tesco",
+          "price": 1.85,
+          "unitPrice": 1.16,
+          "unitPriceMeasure": "kg",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "257467704",
+          "supermarket": "tesco",
+          "title": "Napolina Plum Tomatoes 4 X 400G",
+          "brand": "Napolina",
+          "price": 3.5,
+          "unitPrice": 2.19,
+          "unitPriceMeasure": "kg",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "300413116",
+          "supermarket": "tesco",
+          "title": "Tesco Ploughman's Plum Chutney 295G",
+          "brand": "Tesco",
+          "price": 1.45,
+          "unitPrice": 4.92,
+          "unitPriceMeasure": "kg",
+          "packageSize": 295,
+          "packageUnit": "g",
+          "packageDisplay": "295g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "287873811",
+          "supermarket": "tesco",
+          "title": "Tiptree Ploughmans Plum Chutney 210G",
+          "brand": "Tiptree",
+          "price": 2.85,
+          "unitPrice": 13.57,
+          "unitPriceMeasure": "kg",
+          "packageSize": 210,
+          "packageUnit": "g",
+          "packageDisplay": "210g",
+          "deal": {
+            "description": "Any 4 for 3 Clubcard Price - Cheapest Product Free - Selected Table Sauces",
+            "type": "clubcard",
+            "raw": "Any 4 for 3 Clubcard Price - Cheapest Product Free - Selected Table Sauces"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "297661062",
+          "supermarket": "tesco",
+          "title": "Mutti Peeled Whole Plum Tomatoes 400g",
+          "brand": "Mutti",
+          "price": 1.6,
+          "unitPrice": 4,
+          "unitPriceMeasure": "kg",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -2424,11 +2697,7 @@
           "packageUnit": "g",
           "packageDisplay": "14g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "300456261",
@@ -2442,11 +2711,7 @@
           "packageUnit": "g",
           "packageDisplay": "30g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": false,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "263155235",
@@ -2461,13 +2726,10 @@
           "packageDisplay": "7g",
           "deal": {
             "description": "Any 2 for £3.50 Clubcard Price - Selected Schwartz Recipe Mix",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "Any 2 for £3.50 Clubcard Price - Selected Schwartz Recipe Mix"
           },
-          "clubcardPrice": 3.5,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "320399712",
@@ -2481,11 +2743,7 @@
           "packageUnit": "ml",
           "packageDisplay": "175ml",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "317642763",
@@ -2500,13 +2758,10 @@
           "packageDisplay": "400g",
           "deal": {
             "description": "Any 3 for 2 Clubcard Price - Cheapest Product Free - Selected Lily's Kitchen Pet Food",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "Any 3 for 2 Clubcard Price - Cheapest Product Free - Selected Lily's Kitchen Pet Food"
           },
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "257485607",
@@ -2521,13 +2776,60 @@
           "packageDisplay": "11g",
           "deal": {
             "description": "Any 2 for £3.50 Clubcard Price - Selected Schwartz Recipe Mix",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "Any 2 for £3.50 Clubcard Price - Selected Schwartz Recipe Mix"
           },
-          "clubcardPrice": 3.5,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "300456480",
+          "supermarket": "tesco",
+          "title": "Tesco Mixed Herbs 18G ..",
+          "brand": "Tesco",
+          "price": 1,
+          "unitPrice": 55.56,
+          "unitPriceMeasure": "kg",
+          "packageSize": 18,
+          "packageUnit": "g",
+          "packageDisplay": "18g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "301392459",
+          "supermarket": "tesco",
+          "title": "Schwartz Mixed Herbs 11G",
+          "brand": "Schwartz",
+          "price": 2,
+          "unitPrice": 181.82,
+          "unitPriceMeasure": "kg",
+          "packageSize": 11,
+          "packageUnit": "g",
+          "packageDisplay": "11g",
+          "deal": {
+            "description": "Any 2 for £3.50 Clubcard Price - Selected Schwartz Recipe Mix",
+            "type": "clubcard",
+            "raw": "Any 2 for £3.50 Clubcard Price - Selected Schwartz Recipe Mix"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "257485170",
+          "supermarket": "tesco",
+          "title": "Schwartz Basil 10g",
+          "brand": "Schwartz",
+          "price": 2,
+          "unitPrice": 200,
+          "unitPriceMeasure": "kg",
+          "packageSize": 10,
+          "packageUnit": "g",
+          "packageDisplay": "10g",
+          "deal": {
+            "description": "Any 2 for £3.50 Clubcard Price - Selected Schwartz Recipe Mix",
+            "type": "clubcard",
+            "raw": "Any 2 for £3.50 Clubcard Price - Selected Schwartz Recipe Mix"
+          },
+          "source": "direct"
         }
       ]
     },
@@ -2550,11 +2852,7 @@
           "packageUnit": "g",
           "packageDisplay": "20g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "316298486",
@@ -2568,11 +2866,7 @@
           "packageUnit": "g",
           "packageDisplay": "19g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "256204223",
@@ -2586,11 +2880,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "257498990",
@@ -2605,13 +2895,10 @@
           "packageDisplay": "11g",
           "deal": {
             "description": "Any 2 for £3.50 Clubcard Price - Selected Schwartz Recipe Mix",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "Any 2 for £3.50 Clubcard Price - Selected Schwartz Recipe Mix"
           },
-          "clubcardPrice": 3.5,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "283197863",
@@ -2625,11 +2912,7 @@
           "packageUnit": "g",
           "packageDisplay": "80g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "315861126",
@@ -2643,11 +2926,7 @@
           "packageUnit": "g",
           "packageDisplay": "120g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         }
       ]
     },
@@ -2670,11 +2949,7 @@
           "packageUnit": "g",
           "packageDisplay": "20g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "256149680",
@@ -2688,11 +2963,7 @@
           "packageUnit": "g",
           "packageDisplay": "27g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "285507466",
@@ -2706,11 +2977,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "257498667",
@@ -2725,13 +2992,10 @@
           "packageDisplay": "18g",
           "deal": {
             "description": "Any 2 for £3.50 Clubcard Price - Selected Schwartz Recipe Mix",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "Any 2 for £3.50 Clubcard Price - Selected Schwartz Recipe Mix"
           },
-          "clubcardPrice": 3.5,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "322738263",
@@ -2745,11 +3009,7 @@
           "packageUnit": "g",
           "packageDisplay": "500g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "323433760",
@@ -2764,13 +3024,60 @@
           "packageDisplay": "355ml",
           "deal": {
             "description": "£8.00 Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "£8.00 Clubcard Price"
           },
-          "clubcardPrice": 8,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "301804113",
+          "supermarket": "tesco",
+          "title": "Nairn's Gluten Free Rosemary & Sea Salt Flatbreads 150g",
+          "brand": "Nairn's",
+          "price": 1.9,
+          "unitPrice": 12.67,
+          "unitPriceMeasure": "kg",
+          "packageSize": 150,
+          "packageUnit": "g",
+          "packageDisplay": "150g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "323415246",
+          "supermarket": "tesco",
+          "title": "Mielle Rosemary Mint Strengthening Shampoo 355ml",
+          "brand": "Mielle",
+          "price": 11,
+          "unitPrice": 30.99,
+          "unitPriceMeasure": "litre",
+          "packageSize": 355,
+          "packageUnit": "ml",
+          "packageDisplay": "355ml",
+          "deal": {
+            "description": "£8.00 Clubcard Price",
+            "type": "clubcard",
+            "raw": "£8.00 Clubcard Price"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "313002767",
+          "supermarket": "tesco",
+          "title": "Tesco Finest Beef Chianti & Rosemary Potatoes 400G",
+          "brand": "Tesco",
+          "price": 4.75,
+          "unitPrice": 11.88,
+          "unitPriceMeasure": "kg",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": {
+            "description": "Any 2 for £8 Clubcard Price - Selected Tesco Finest* Ready Meals",
+            "type": "clubcard",
+            "raw": "Any 2 for £8 Clubcard Price - Selected Tesco Finest* Ready Meals"
+          },
+          "source": "direct"
         }
       ]
     },
@@ -2794,13 +3101,10 @@
           "packageDisplay": "490g",
           "deal": {
             "description": "Any 4 for 3 Clubcard Price - Cheapest Product Free - Selected Cooking Sauces & Meal Kits",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "Any 4 for 3 Clubcard Price - Cheapest Product Free - Selected Cooking Sauces & Meal Kits"
           },
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "292695686",
@@ -2814,11 +3118,7 @@
           "packageUnit": "g",
           "packageDisplay": "30g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "256180514",
@@ -2832,11 +3132,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "300456347",
@@ -2850,11 +3146,7 @@
           "packageUnit": "g",
           "packageDisplay": "18g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "323430256",
@@ -2868,11 +3160,7 @@
           "packageUnit": "g",
           "packageDisplay": "50g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "322050655",
@@ -2886,11 +3174,89 @@
           "packageUnit": "g",
           "packageDisplay": "20g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "317399238",
+          "supermarket": "tesco",
+          "title": "Tesco Finest Italian Sundried Tomatoes with Basil 280g",
+          "brand": "Tesco",
+          "price": 3.65,
+          "unitPrice": 25.17,
+          "unitPriceMeasure": "kg DR.WT",
+          "packageSize": 280,
+          "packageUnit": "g",
+          "packageDisplay": "280g",
+          "deal": {
+            "description": "Any 4 for 3 Clubcard Price - Cheapest Product Free - Selected Cooking Sauces & Meal Kits",
+            "type": "clubcard",
+            "raw": "Any 4 for 3 Clubcard Price - Cheapest Product Free - Selected Cooking Sauces & Meal Kits"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "257485170",
+          "supermarket": "tesco",
+          "title": "Schwartz Basil 10g",
+          "brand": "Schwartz",
+          "price": 2,
+          "unitPrice": 200,
+          "unitPriceMeasure": "kg",
+          "packageSize": 10,
+          "packageUnit": "g",
+          "packageDisplay": "10g",
+          "deal": {
+            "description": "Any 2 for £3.50 Clubcard Price - Selected Schwartz Recipe Mix",
+            "type": "clubcard",
+            "raw": "Any 2 for £3.50 Clubcard Price - Selected Schwartz Recipe Mix"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "283949873",
+          "supermarket": "tesco",
+          "title": "Sacla Vegan Basil Pesto 190G",
+          "brand": "Sacla",
+          "price": 3.1,
+          "unitPrice": 16.32,
+          "unitPriceMeasure": "kg",
+          "packageSize": 190,
+          "packageUnit": "g",
+          "packageDisplay": "190g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "323314688",
+          "supermarket": "tesco",
+          "title": "Tesco Tomato and Basil Pasta 200g",
+          "brand": "Tesco",
+          "price": 1.25,
+          "unitPrice": 6.25,
+          "unitPriceMeasure": "kg",
+          "packageSize": 200,
+          "packageUnit": "g",
+          "packageDisplay": "200g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "260748253",
+          "supermarket": "tesco",
+          "title": "Heinz Cream Of Tomato & Basil Soup 400G",
+          "brand": "Heinz",
+          "price": 1.59,
+          "unitPrice": 3.98,
+          "unitPriceMeasure": "kg",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": {
+            "description": "5 for £5 or 10 for £9 Clubcard Price - Heinz Soup 400g",
+            "type": "clubcard",
+            "raw": "5 for £5 or 10 for £9 Clubcard Price - Heinz Soup 400g"
+          },
+          "source": "direct"
         }
       ]
     },
@@ -2903,114 +3269,212 @@
       "products": [
         {
           "id": "292686582",
-          "supermarket": "tesco",
+          "supermarket": null,
           "title": "Tesco Fresh Cut Flat Leaf Parsley 30G",
-          "brand": "Tesco",
-          "price": 0.5,
-          "unitPrice": 16.67,
-          "unitPriceMeasure": "kg",
-          "packageSize": 30,
-          "packageUnit": "g",
-          "packageDisplay": "30g",
-          "deal": {
-            "description": "40p Clubcard Price",
-            "type": "clubcard"
+          "brand": null,
+          "price": {
+            "__typename": "PriceType",
+            "actual": 0.5,
+            "unitPrice": 16.67,
+            "unitOfMeasure": "kg"
           },
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "unitPrice": null,
+          "unitPriceMeasure": null,
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
+          "deal": null,
+          "source": "direct"
         },
         {
           "id": "257482311",
-          "supermarket": "tesco",
+          "supermarket": null,
           "title": "Tesco Flat Leaf Parsley 100G",
-          "brand": "Tesco",
-          "price": 1.25,
-          "unitPrice": 12.5,
-          "unitPriceMeasure": "kg",
-          "packageSize": 100,
-          "packageUnit": "g",
-          "packageDisplay": "100g",
+          "brand": null,
+          "price": {
+            "__typename": "PriceType",
+            "actual": 1.25,
+            "unitPrice": 12.5,
+            "unitOfMeasure": "kg"
+          },
+          "unitPrice": null,
+          "unitPriceMeasure": null,
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "256146844",
-          "supermarket": "tesco",
+          "supermarket": null,
           "title": "Tesco Dried Parsley 11G",
-          "brand": "Tesco",
-          "price": 1,
-          "unitPrice": 90.91,
-          "unitPriceMeasure": "kg",
-          "packageSize": 11,
-          "packageUnit": "g",
-          "packageDisplay": "11g",
+          "brand": null,
+          "price": {
+            "__typename": "PriceType",
+            "actual": 1,
+            "unitPrice": 90.91,
+            "unitOfMeasure": "kg"
+          },
+          "unitPrice": null,
+          "unitPriceMeasure": null,
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "292686720",
-          "supermarket": "tesco",
+          "supermarket": null,
           "title": "Tesco Curled Leaf Parsley 30g",
-          "brand": "Tesco",
-          "price": 0.5,
-          "unitPrice": 16.67,
-          "unitPriceMeasure": "kg",
-          "packageSize": 30,
-          "packageUnit": "g",
-          "packageDisplay": "30g",
+          "brand": null,
+          "price": {
+            "__typename": "PriceType",
+            "actual": 0.5,
+            "unitPrice": 16.67,
+            "unitOfMeasure": "kg"
+          },
+          "unitPrice": null,
+          "unitPriceMeasure": null,
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "257574329",
-          "supermarket": "tesco",
+          "supermarket": null,
           "title": "Tesco Flat Leaf Parsley Medium Pot",
-          "brand": "Tesco",
-          "price": 1.6,
-          "unitPrice": 1.6,
-          "unitPriceMeasure": "each",
+          "brand": null,
+          "price": {
+            "__typename": "PriceType",
+            "actual": 1.6,
+            "unitPrice": 1.6,
+            "unitOfMeasure": "each"
+          },
+          "unitPrice": null,
+          "unitPriceMeasure": null,
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "256212432",
-          "supermarket": "tesco",
+          "supermarket": null,
           "title": "Tesco Curled Parsley Medium Pot",
-          "brand": "Tesco",
-          "price": 1.6,
-          "unitPrice": 1.6,
-          "unitPriceMeasure": "each",
+          "brand": null,
+          "price": {
+            "__typename": "PriceType",
+            "actual": 1.6,
+            "unitPrice": 1.6,
+            "unitOfMeasure": "each"
+          },
+          "unitPrice": null,
+          "unitPriceMeasure": null,
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "323496949",
+          "supermarket": null,
+          "title": "Tesco Chopped Parsley 50g",
+          "brand": null,
+          "price": {
+            "__typename": "PriceType",
+            "actual": 1.8,
+            "unitPrice": 36,
+            "unitOfMeasure": "kg"
+          },
+          "unitPrice": null,
+          "unitPriceMeasure": null,
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "254919066",
+          "supermarket": null,
+          "title": "Schwartz Flat Leaf Parsley 3g",
+          "brand": null,
+          "price": {
+            "__typename": "PriceType",
+            "actual": 2,
+            "unitPrice": 666.67,
+            "unitOfMeasure": "kg"
+          },
+          "unitPrice": null,
+          "unitPriceMeasure": null,
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "299054109",
+          "supermarket": null,
+          "title": "Tesco Free From Cod & Parsley Fishcake 270G",
+          "brand": null,
+          "price": {
+            "__typename": "PriceType",
+            "actual": 3,
+            "unitPrice": 11.11,
+            "unitOfMeasure": "kg"
+          },
+          "unitPrice": null,
+          "unitPriceMeasure": null,
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "251563421",
+          "supermarket": null,
+          "title": "Robinsons Fruit & Barley with Vitamins Peach Squash 1L",
+          "brand": null,
+          "price": {
+            "__typename": "PriceType",
+            "actual": 2.2,
+            "unitPrice": 2.2,
+            "unitOfMeasure": "litre"
+          },
+          "unitPrice": null,
+          "unitPriceMeasure": null,
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "260074243",
+          "supermarket": null,
+          "title": "Robinsons Fruit & Barley with Vitamins Apple & Pear Squash 1L",
+          "brand": null,
+          "price": {
+            "__typename": "PriceType",
+            "actual": 2.2,
+            "unitPrice": 2.2,
+            "unitOfMeasure": "litre"
+          },
+          "unitPrice": null,
+          "unitPriceMeasure": null,
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -3021,42 +3485,6 @@
       "baseItem": "sage",
       "query": "sage",
       "products": [
-        {
-          "id": "268595414",
-          "supermarket": "tesco",
-          "title": "Tesco Dried Sage 12G",
-          "brand": "Tesco",
-          "price": 1,
-          "unitPrice": 83.33,
-          "unitPriceMeasure": "kg",
-          "packageSize": 12,
-          "packageUnit": "g",
-          "packageDisplay": "12g",
-          "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
-        },
-        {
-          "id": "304796018",
-          "supermarket": "tesco",
-          "title": "Tesco Sage 20G",
-          "brand": "Tesco",
-          "price": 0.5,
-          "unitPrice": 25,
-          "unitPriceMeasure": "kg",
-          "packageSize": 20,
-          "packageUnit": "g",
-          "packageDisplay": "20g",
-          "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
-        },
         {
           "id": "7477787",
           "supermarket": "sainsburys",
@@ -3128,6 +3556,34 @@
           "inStock": true,
           "source": "direct",
           "confidenceSource": "direct"
+        },
+        {
+          "id": "268595414",
+          "supermarket": "tesco",
+          "title": "Tesco Dried Sage 12G",
+          "brand": "Tesco",
+          "price": 1,
+          "unitPrice": 83.33,
+          "unitPriceMeasure": "kg",
+          "packageSize": 12,
+          "packageUnit": "g",
+          "packageDisplay": "12g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "304796018",
+          "supermarket": "tesco",
+          "title": "Tesco Sage 20G",
+          "brand": "Tesco",
+          "price": 0.5,
+          "unitPrice": 25,
+          "unitPriceMeasure": "kg",
+          "packageSize": 20,
+          "packageUnit": "g",
+          "packageDisplay": "20g",
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -3150,11 +3606,7 @@
           "packageUnit": "g",
           "packageDisplay": "64g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "316803903",
@@ -3168,11 +3620,7 @@
           "packageUnit": "g",
           "packageDisplay": "64g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "259095864",
@@ -3186,11 +3634,7 @@
           "packageUnit": "g",
           "packageDisplay": "30g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "261718731",
@@ -3204,11 +3648,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "300456468",
@@ -3222,11 +3662,7 @@
           "packageUnit": "g",
           "packageDisplay": "16g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "256993290",
@@ -3240,11 +3676,81 @@
           "packageUnit": "g",
           "packageDisplay": "185g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "296186862",
+          "supermarket": "tesco",
+          "title": "Colman's Mint Sauce 165G",
+          "brand": "Colman's",
+          "price": 1.9,
+          "unitPrice": 11.52,
+          "unitPriceMeasure": "kg",
+          "packageSize": 165,
+          "packageUnit": "g",
+          "packageDisplay": "165g",
+          "deal": {
+            "description": "Any 4 for 3 Clubcard Price - Cheapest Product Free - Selected Table Sauces",
+            "type": "clubcard",
+            "raw": "Any 4 for 3 Clubcard Price - Cheapest Product Free - Selected Table Sauces"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "314601788",
+          "supermarket": "tesco",
+          "title": "Tesco Mint Jelly 220g",
+          "brand": "Tesco",
+          "price": 1.35,
+          "unitPrice": 6.14,
+          "unitPriceMeasure": "kg",
+          "packageSize": 220,
+          "packageUnit": "g",
+          "packageDisplay": "220g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "315565448",
+          "supermarket": "tesco",
+          "title": "Stockwell & Co Mint Sauce 175g",
+          "brand": "Stockwell",
+          "price": 0.55,
+          "unitPrice": 3.14,
+          "unitPriceMeasure": "kg",
+          "packageSize": 175,
+          "packageUnit": "g",
+          "packageDisplay": "175g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "300523527",
+          "supermarket": "tesco",
+          "title": "Crucials Yogurt & Mint Sauce 500Ml",
+          "brand": "Crucials",
+          "price": 1.3,
+          "unitPrice": 2.6,
+          "unitPriceMeasure": "litre",
+          "packageSize": 500,
+          "packageUnit": "ml",
+          "packageDisplay": "500ml",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "321235519",
+          "supermarket": "tesco",
+          "title": "Heck Minted Lamb Burgers 2 Pack 320g",
+          "brand": "Heck",
+          "price": 5.25,
+          "unitPrice": 16.41,
+          "unitPriceMeasure": "kg",
+          "packageSize": 320,
+          "packageUnit": "g",
+          "packageDisplay": "320g",
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -3267,11 +3773,7 @@
           "packageUnit": "g",
           "packageDisplay": "200g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "330742591",
@@ -3285,11 +3787,7 @@
           "packageUnit": "g",
           "packageDisplay": "200g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "330742596",
@@ -3303,11 +3801,7 @@
           "packageUnit": "g",
           "packageDisplay": "200g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "254918424",
@@ -3321,11 +3815,7 @@
           "packageUnit": "l",
           "packageDisplay": "1l",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "255593768",
@@ -3339,11 +3829,7 @@
           "packageUnit": "ml",
           "packageDisplay": "500ml",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "253628953",
@@ -3357,11 +3843,77 @@
           "packageUnit": "litre",
           "packageDisplay": "1litre",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "254516076",
+          "supermarket": "tesco",
+          "title": "Tesco Extra Virgin Olive Oil 1Ltr",
+          "brand": "Tesco",
+          "price": 7.75,
+          "unitPrice": 7.75,
+          "unitPriceMeasure": "litre",
+          "packageSize": 1,
+          "packageUnit": "ltr",
+          "packageDisplay": "1ltr",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "258061785",
+          "supermarket": "tesco",
+          "title": "Tesco Olive Oil 250Ml",
+          "brand": "Tesco",
+          "price": 3.1,
+          "unitPrice": 12.4,
+          "unitPriceMeasure": "litre",
+          "packageSize": 250,
+          "packageUnit": "ml",
+          "packageDisplay": "250ml",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "322347921",
+          "supermarket": "tesco",
+          "title": "Terra Delyssa Extra Virgin Olive Oil 1000ml",
+          "brand": "Terra",
+          "price": 11.85,
+          "unitPrice": 11.85,
+          "unitPriceMeasure": "litre",
+          "packageSize": 1000,
+          "packageUnit": "ml",
+          "packageDisplay": "1000ml",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "257449231",
+          "supermarket": "tesco",
+          "title": "Napolina Olive Oil 500Ml",
+          "brand": "Napolina",
+          "price": 6.5,
+          "unitPrice": 13,
+          "unitPriceMeasure": "litre",
+          "packageSize": 500,
+          "packageUnit": "ml",
+          "packageDisplay": "500ml",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "254918418",
+          "supermarket": "tesco",
+          "title": "Tesco Olive Oil 500Ml",
+          "brand": "Tesco",
+          "price": 5.75,
+          "unitPrice": 11.5,
+          "unitPriceMeasure": "litre",
+          "packageSize": 500,
+          "packageUnit": "ml",
+          "packageDisplay": "500ml",
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -3507,11 +4059,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "253557034",
@@ -3525,11 +4073,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "255736044",
@@ -3543,11 +4087,7 @@
           "packageUnit": "kg",
           "packageDisplay": "1kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "281425851",
@@ -3561,11 +4101,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "258114107",
@@ -3579,11 +4115,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "305982539",
@@ -3597,11 +4129,81 @@
           "packageUnit": "kg",
           "packageDisplay": "1kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "262645072",
+          "supermarket": "tesco",
+          "title": "Tesco Red Onions Pack 1Kg",
+          "brand": "Tesco",
+          "price": 0.95,
+          "unitPrice": 0.95,
+          "unitPriceMeasure": "kg",
+          "packageSize": 1,
+          "packageUnit": "kg",
+          "packageDisplay": "1kg",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "281035500",
+          "supermarket": "tesco",
+          "title": "Tesco Bunched Spring Onions 100G",
+          "brand": "Tesco",
+          "price": 0.65,
+          "unitPrice": 6.5,
+          "unitPriceMeasure": "kg",
+          "packageSize": 100,
+          "packageUnit": "g",
+          "packageDisplay": "100g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "263352376",
+          "supermarket": "tesco",
+          "title": "Tesco Frozen Diced Onions 500G",
+          "brand": "Tesco",
+          "price": 0.99,
+          "unitPrice": 1.98,
+          "unitPriceMeasure": "kg",
+          "packageSize": 500,
+          "packageUnit": "g",
+          "packageDisplay": "500g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "312713935",
+          "supermarket": "tesco",
+          "title": "Tesco Finest Extra Large Brown Onions 2 Pack",
+          "brand": "Tesco",
+          "price": 1.6,
+          "unitPrice": 0.8,
+          "unitPriceMeasure": "each",
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "292632440",
+          "supermarket": "tesco",
+          "title": "Tesco Sliced Red Onion 180G",
+          "brand": "Tesco",
+          "price": 0.95,
+          "unitPrice": 5.28,
+          "unitPriceMeasure": "kg",
+          "packageSize": 180,
+          "packageUnit": "g",
+          "packageDisplay": "180g",
+          "deal": {
+            "description": "Any 3 for 2 Clubcard Price - Cheapest Product Free - Selected Vegetables 80g - 800g",
+            "type": "clubcard",
+            "raw": "Any 3 for 2 Clubcard Price - Cheapest Product Free - Selected Vegetables 80g - 800g"
+          },
+          "source": "direct"
         }
       ]
     },
@@ -3624,11 +4226,7 @@
           "packageUnit": "g",
           "packageDisplay": "375g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "257231200",
@@ -3642,11 +4240,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "305255289",
@@ -3660,11 +4254,7 @@
           "packageUnit": "g",
           "packageDisplay": "200g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "299389237",
@@ -3679,13 +4269,10 @@
           "packageDisplay": "330g",
           "deal": {
             "description": "£2.20 Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "£2.20 Clubcard Price"
           },
-          "clubcardPrice": 2.2,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "282485161",
@@ -3699,11 +4286,7 @@
           "packageUnit": "g",
           "packageDisplay": "900g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "320559339",
@@ -3717,11 +4300,85 @@
           "packageUnit": "g",
           "packageDisplay": "400g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "300537350",
+          "supermarket": "tesco",
+          "title": "Tesco Trimmed Tenderstem Broccoli 80G",
+          "brand": "Tesco",
+          "price": 1.3,
+          "unitPrice": 16.25,
+          "unitPriceMeasure": "kg",
+          "packageSize": 80,
+          "packageUnit": "g",
+          "packageDisplay": "80g",
+          "deal": {
+            "description": "Any 3 for 2 Clubcard Price - Cheapest Product Free - Selected Vegetables 80g - 800g",
+            "type": "clubcard",
+            "raw": "Any 3 for 2 Clubcard Price - Cheapest Product Free - Selected Vegetables 80g - 800g"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "308490402",
+          "supermarket": "tesco",
+          "title": "Tesco Organic Broccoli 335G",
+          "brand": "Tesco",
+          "price": 1.55,
+          "unitPrice": 4.63,
+          "unitPriceMeasure": "kg",
+          "packageSize": 335,
+          "packageUnit": "g",
+          "packageDisplay": "335g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "272852905",
+          "supermarket": "tesco",
+          "title": "Tesco Large Broccoli Pack 500G",
+          "brand": "Tesco",
+          "price": 1.2,
+          "unitPrice": 2.4,
+          "unitPriceMeasure": "kg",
+          "packageSize": 500,
+          "packageUnit": "g",
+          "packageDisplay": "500g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "315355720",
+          "supermarket": "tesco",
+          "title": "Tesco Finest Purple Sprouting Broccoli 200g",
+          "brand": "Tesco",
+          "price": 2.25,
+          "unitPrice": 11.25,
+          "unitPriceMeasure": "kg",
+          "packageSize": 200,
+          "packageUnit": "g",
+          "packageDisplay": "200g",
+          "deal": {
+            "description": "£1.70 Clubcard Price",
+            "type": "clubcard",
+            "raw": "£1.70 Clubcard Price"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "280108932",
+          "supermarket": "tesco",
+          "title": "Tesco Tenderstem Broccoli Tips 120G",
+          "brand": "Tesco",
+          "price": 1.5,
+          "unitPrice": 12.5,
+          "unitPriceMeasure": "kg",
+          "packageSize": 120,
+          "packageUnit": "g",
+          "packageDisplay": "120g",
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -3744,11 +4401,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "280379906",
@@ -3762,11 +4415,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "292663718",
@@ -3780,11 +4429,7 @@
           "packageUnit": "g",
           "packageDisplay": "200g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "251582605",
@@ -3798,11 +4443,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "323330680",
@@ -3816,11 +4457,7 @@
           "packageUnit": "g",
           "packageDisplay": "180g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "262007753",
@@ -3835,13 +4472,88 @@
           "packageDisplay": "540g",
           "deal": {
             "description": "£2.00 Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "£2.00 Clubcard Price"
           },
-          "clubcardPrice": 2,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "324097078",
+          "supermarket": "tesco",
+          "title": "Tesco Finest Strawberry, Cucumber & Mint Lemonade 750ml",
+          "brand": "Tesco",
+          "price": 2.5,
+          "unitPrice": 3.33,
+          "unitPriceMeasure": "litre",
+          "packageSize": 750,
+          "packageUnit": "ml",
+          "packageDisplay": "750ml",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "321775421",
+          "supermarket": "tesco",
+          "title": "Tesco Pickled Cucumber Salad 180g",
+          "brand": "Tesco",
+          "price": 1.45,
+          "unitPrice": 8.06,
+          "unitPriceMeasure": "kg",
+          "packageSize": 180,
+          "packageUnit": "g",
+          "packageDisplay": "180g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "281343475",
+          "supermarket": "tesco",
+          "title": "Kuchnia Polska Sour Cucumber 700G",
+          "brand": "Kuchnia",
+          "price": 2.4,
+          "unitPrice": 6,
+          "unitPriceMeasure": "kg",
+          "packageSize": 700,
+          "packageUnit": "g",
+          "packageDisplay": "700g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "315075509",
+          "supermarket": "tesco",
+          "title": "Tesco Cucumber With Soured Cream & Chive Dip 120g",
+          "brand": "Tesco",
+          "price": 1.65,
+          "unitPrice": 13.75,
+          "unitPriceMeasure": "kg",
+          "packageSize": 120,
+          "packageUnit": "g",
+          "packageDisplay": "120g",
+          "deal": {
+            "description": "Any 3 for 2 Clubcard Price - Cheapest Product Free - Selected Tesco Prep Fruits",
+            "type": "clubcard",
+            "raw": "Any 3 for 2 Clubcard Price - Cheapest Product Free - Selected Tesco Prep Fruits"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "322748700",
+          "supermarket": "tesco",
+          "title": "innocent Cucumber, Apple, Lemon and Spinach Smoothie 750ml",
+          "brand": "innocent",
+          "price": 3.5,
+          "unitPrice": 4.67,
+          "unitPriceMeasure": "litre",
+          "packageSize": 750,
+          "packageUnit": "ml",
+          "packageDisplay": "750ml",
+          "deal": {
+            "description": "£2.00 Clubcard Price",
+            "type": "clubcard",
+            "raw": "£2.00 Clubcard Price"
+          },
+          "source": "direct"
         }
       ]
     },
@@ -3864,11 +4576,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "253554170",
@@ -3883,13 +4591,10 @@
           "packageDisplay": null,
           "deal": {
             "description": "Any 2 for £3 Clubcard Price - Selected Fruits",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "Any 2 for £3 Clubcard Price - Selected Fruits"
           },
-          "clubcardPrice": 3,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "322450562",
@@ -3903,11 +4608,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "311438519",
@@ -3922,13 +4623,10 @@
           "packageDisplay": null,
           "deal": {
             "description": "Any 2 for £3 Clubcard Price - Selected Fruits",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "Any 2 for £3 Clubcard Price - Selected Fruits"
           },
-          "clubcardPrice": 3,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "292225110",
@@ -3942,11 +4640,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "322753405",
@@ -3961,13 +4655,88 @@
           "packageDisplay": null,
           "deal": {
             "description": "£1.70 Save 1/3 Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "£1.70 Save 1/3 Clubcard Price"
           },
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "292216000",
+          "supermarket": "tesco",
+          "title": "Suntrail Farms Soft Citrus Pack 600G",
+          "brand": "Suntrail",
+          "price": 1.19,
+          "unitPrice": 1.98,
+          "unitPriceMeasure": "kg",
+          "packageSize": 600,
+          "packageUnit": "g",
+          "packageDisplay": "600g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "320983412",
+          "supermarket": "tesco",
+          "title": "Terry's Milk Chocolate Orange Ball 145g.",
+          "brand": "Terry's",
+          "price": 2.5,
+          "unitPrice": 17.24,
+          "unitPriceMeasure": "kg",
+          "packageSize": 145,
+          "packageUnit": "g",
+          "packageDisplay": "145g",
+          "deal": {
+            "description": "£1.80 Clubcard Price",
+            "type": "clubcard",
+            "raw": "£1.80 Clubcard Price"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "311254840",
+          "supermarket": "tesco",
+          "title": "Mcvitie's Club Orange Biscuit Bars 7X22G",
+          "brand": "Mcvitie's",
+          "price": 1.39,
+          "unitPrice": 9.03,
+          "unitPriceMeasure": "kg",
+          "packageSize": 22,
+          "packageUnit": "g",
+          "packageDisplay": "22g",
+          "deal": {
+            "description": "£1.25 Clubcard Price",
+            "type": "clubcard",
+            "raw": "£1.25 Clubcard Price"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "252471998",
+          "supermarket": "tesco",
+          "title": "Hartleys Orange Jelly 135G",
+          "brand": "Hartleys",
+          "price": 1.15,
+          "unitPrice": 8.52,
+          "unitPriceMeasure": "kg",
+          "packageSize": 135,
+          "packageUnit": "g",
+          "packageDisplay": "135g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "285104453",
+          "supermarket": "tesco",
+          "title": "Tesco Mandarin In Orange Flavour Jelly 4 x 120g",
+          "brand": "Tesco",
+          "price": 1.75,
+          "unitPrice": 3.65,
+          "unitPriceMeasure": "kg",
+          "packageSize": 120,
+          "packageUnit": "g",
+          "packageDisplay": "120g",
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -4114,13 +4883,10 @@
           "packageDisplay": "230g",
           "deal": {
             "description": "£8.50 Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "£8.50 Clubcard Price"
           },
-          "clubcardPrice": 8.5,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "296920881",
@@ -4134,11 +4900,7 @@
           "packageUnit": "g",
           "packageDisplay": "260g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "309747513",
@@ -4153,13 +4915,10 @@
           "packageDisplay": "520g",
           "deal": {
             "description": "£7.85 Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "£7.85 Clubcard Price"
           },
-          "clubcardPrice": 7.85,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "275963204",
@@ -4173,11 +4932,7 @@
           "packageUnit": "g",
           "packageDisplay": "330g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "308103511",
@@ -4192,13 +4947,10 @@
           "packageDisplay": "230g",
           "deal": {
             "description": "Any 2 for £8 Clubcard Price - Selected Tesco Bbq Meat & Rtc Products",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "Any 2 for £8 Clubcard Price - Selected Tesco Bbq Meat & Rtc Products"
           },
-          "clubcardPrice": 8,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "310127031",
@@ -4213,13 +4965,80 @@
           "packageDisplay": "230g",
           "deal": {
             "description": "£3.75 Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "£3.75 Clubcard Price"
           },
-          "clubcardPrice": 3.75,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "314847192",
+          "supermarket": "tesco",
+          "title": "Tesco Finest 2 Scottish Salmon Fillets 260g ",
+          "brand": "Tesco",
+          "price": 6.5,
+          "unitPrice": 25,
+          "unitPriceMeasure": "kg",
+          "packageSize": 260,
+          "packageUnit": "g",
+          "packageDisplay": "260g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "302706337",
+          "supermarket": "tesco",
+          "title": "Tesco Wild Salmon Fillets 500G",
+          "brand": "Tesco",
+          "price": 6.5,
+          "unitPrice": 13,
+          "unitPriceMeasure": "kg",
+          "packageSize": 500,
+          "packageUnit": "g",
+          "packageDisplay": "500g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "281693238",
+          "supermarket": "tesco",
+          "title": "Tesco Hot Smoked Salmon Fillets 180G",
+          "brand": "Tesco",
+          "price": 5.65,
+          "unitPrice": 31.39,
+          "unitPriceMeasure": "kg",
+          "packageSize": 180,
+          "packageUnit": "g",
+          "packageDisplay": "180g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "299598669",
+          "supermarket": "tesco",
+          "title": "Tesco 6 Boneless Salmon Fillets 780G",
+          "brand": "Tesco",
+          "price": 13.5,
+          "unitPrice": 17.31,
+          "unitPriceMeasure": "kg",
+          "packageSize": 780,
+          "packageUnit": "g",
+          "packageDisplay": "780g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "297186912",
+          "supermarket": "tesco",
+          "title": "Tesco Boneless Salmon Fillet 130G",
+          "brand": "Tesco",
+          "price": 3,
+          "unitPrice": 23.08,
+          "unitPriceMeasure": "kg",
+          "packageSize": 130,
+          "packageUnit": "g",
+          "packageDisplay": "130g",
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -4242,11 +5061,7 @@
           "packageUnit": "g",
           "packageDisplay": "360g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "292916835",
@@ -4261,13 +5076,10 @@
           "packageDisplay": "280g",
           "deal": {
             "description": "£6.75 Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "£6.75 Clubcard Price"
           },
-          "clubcardPrice": 6.75,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "322555070",
@@ -4282,13 +5094,10 @@
           "packageDisplay": "250g",
           "deal": {
             "description": "£4.25 Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "£4.25 Clubcard Price"
           },
-          "clubcardPrice": 4.25,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "310150394",
@@ -4302,11 +5111,7 @@
           "packageUnit": "g",
           "packageDisplay": "250g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "320813309",
@@ -4320,11 +5125,7 @@
           "packageUnit": "g",
           "packageDisplay": "400g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "252798850",
@@ -4338,11 +5139,81 @@
           "packageUnit": "g",
           "packageDisplay": "350g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "289553605",
+          "supermarket": "tesco",
+          "title": "Tesco Lightly Dusted Cod Fillets 255G",
+          "brand": "Tesco",
+          "price": 5.75,
+          "unitPrice": 22.55,
+          "unitPriceMeasure": "kg",
+          "packageSize": 255,
+          "packageUnit": "g",
+          "packageDisplay": "255g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "266195171",
+          "supermarket": "tesco",
+          "title": "Tesco 4 Breaded Cod Fillets 500G",
+          "brand": "Tesco",
+          "price": 4,
+          "unitPrice": 8,
+          "unitPriceMeasure": "kg",
+          "packageSize": 500,
+          "packageUnit": "g",
+          "packageDisplay": "500g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "321231132",
+          "supermarket": "tesco",
+          "title": "Birds Eye 4 Breaded Cod Fish Fillets 400g",
+          "brand": "Birds",
+          "price": 6.6,
+          "unitPrice": 16.5,
+          "unitPriceMeasure": "kg",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": {
+            "description": "£5.50 Clubcard Price",
+            "type": "clubcard",
+            "raw": "£5.50 Clubcard Price"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "316183823",
+          "supermarket": "tesco",
+          "title": "Hearty Food Co. Breaded Cod Fillets 2 Pack 300g",
+          "brand": "Hearty",
+          "price": 2.99,
+          "unitPrice": 9.97,
+          "unitPriceMeasure": "kg",
+          "packageSize": 300,
+          "packageUnit": "g",
+          "packageDisplay": "300g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "323414155",
+          "supermarket": "tesco",
+          "title": "Youngs Chip Shop 2 Cod Fillets 200g",
+          "brand": "Youngs",
+          "price": 5,
+          "unitPrice": 25,
+          "unitPriceMeasure": "kg",
+          "packageSize": 200,
+          "packageUnit": "g",
+          "packageDisplay": "200g",
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -4488,11 +5359,7 @@
           "packageUnit": "g",
           "packageDisplay": "700g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "277925449",
@@ -4506,11 +5373,7 @@
           "packageUnit": "g",
           "packageDisplay": "550g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "305977270",
@@ -4524,11 +5387,7 @@
           "packageUnit": "g",
           "packageDisplay": "400g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "302676607",
@@ -4542,11 +5401,7 @@
           "packageUnit": "g",
           "packageDisplay": "400g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "268768873",
@@ -4561,13 +5416,10 @@
           "packageDisplay": "350g",
           "deal": {
             "description": "£3.00 Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "£3.00 Clubcard Price"
           },
-          "clubcardPrice": 3,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "268903247",
@@ -4581,11 +5433,77 @@
           "packageUnit": "g",
           "packageDisplay": "350g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "305951277",
+          "supermarket": "tesco",
+          "title": "Tesco Medium Cheddar 400G",
+          "brand": "Tesco",
+          "price": 3.25,
+          "unitPrice": 8.12,
+          "unitPriceMeasure": "kg",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "305973280",
+          "supermarket": "tesco",
+          "title": "Tesco British Mild Cheddar Cheese 400G",
+          "brand": "Tesco",
+          "price": 3.25,
+          "unitPrice": 8.12,
+          "unitPriceMeasure": "kg",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "288986209",
+          "supermarket": "tesco",
+          "title": "Cathedral City Extra Mature Cheddar Cheese 550 G",
+          "brand": "Cathedral",
+          "price": 5.45,
+          "unitPrice": 9.91,
+          "unitPriceMeasure": "kg",
+          "packageSize": 550,
+          "packageUnit": "g",
+          "packageDisplay": "550g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "302676567",
+          "supermarket": "tesco",
+          "title": "Creamfields Mild White Cheddar 400G",
+          "brand": "Creamfields",
+          "price": 2.45,
+          "unitPrice": 6.12,
+          "unitPriceMeasure": "kg",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "306665741",
+          "supermarket": "tesco",
+          "title": "Tesco Extra Mature Cheddar Cheese 400G",
+          "brand": "Tesco",
+          "price": 3.25,
+          "unitPrice": 8.12,
+          "unitPriceMeasure": "kg",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -4726,13 +5644,10 @@
           "packageDisplay": "10kg",
           "deal": {
             "description": "£14.00 Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "£14.00 Clubcard Price"
           },
-          "clubcardPrice": 14,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "293258638",
@@ -4746,11 +5661,7 @@
           "packageUnit": "kg",
           "packageDisplay": "10kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "293236653",
@@ -4764,11 +5675,7 @@
           "packageUnit": "kg",
           "packageDisplay": "5kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "254877477",
@@ -4782,11 +5689,7 @@
           "packageUnit": "kg",
           "packageDisplay": "1kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "251680648",
@@ -4800,11 +5703,7 @@
           "packageUnit": "g",
           "packageDisplay": "250g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "282265272",
@@ -4818,11 +5717,77 @@
           "packageUnit": "kg",
           "packageDisplay": "5kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "256148174",
+          "supermarket": "tesco",
+          "title": "Tesco Basmati Rice 2Kg",
+          "brand": "Tesco",
+          "price": 3.6,
+          "unitPrice": 1.8,
+          "unitPriceMeasure": "kg",
+          "packageSize": 2,
+          "packageUnit": "kg",
+          "packageDisplay": "2kg",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "262311847",
+          "supermarket": "tesco",
+          "title": "Tilda Pure Steamed Basmati Rice Classic 250G",
+          "brand": "Tilda",
+          "price": 1,
+          "unitPrice": 4,
+          "unitPriceMeasure": "kg",
+          "packageSize": 250,
+          "packageUnit": "g",
+          "packageDisplay": "250g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "255590785",
+          "supermarket": "tesco",
+          "title": "Tilda Pure Basmati Rice 500G",
+          "brand": "Tilda",
+          "price": 3,
+          "unitPrice": 6,
+          "unitPriceMeasure": "kg",
+          "packageSize": 500,
+          "packageUnit": "g",
+          "packageDisplay": "500g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "293247162",
+          "supermarket": "tesco",
+          "title": "Tilda Pure Basmati Rice 10Kg",
+          "brand": "Tilda",
+          "price": 31,
+          "unitPrice": 3.1,
+          "unitPriceMeasure": "kg",
+          "packageSize": 10,
+          "packageUnit": "kg",
+          "packageDisplay": "10kg",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "293354386",
+          "supermarket": "tesco",
+          "title": "Laila Basmati Rice 5Kg",
+          "brand": "Laila",
+          "price": 11.5,
+          "unitPrice": 2.3,
+          "unitPriceMeasure": "kg",
+          "packageSize": 5,
+          "packageUnit": "kg",
+          "packageDisplay": "5kg",
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -4845,11 +5810,7 @@
           "packageUnit": "kg",
           "packageDisplay": "1kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "254853776",
@@ -4863,11 +5824,7 @@
           "packageUnit": "kg",
           "packageDisplay": "1kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "292990837",
@@ -4881,11 +5838,7 @@
           "packageUnit": "kg",
           "packageDisplay": "2kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "271757922",
@@ -4899,11 +5852,7 @@
           "packageUnit": "kg",
           "packageDisplay": "1kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "252329675",
@@ -4918,13 +5867,10 @@
           "packageDisplay": "1kg",
           "deal": {
             "description": "£2.25 Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "£2.25 Clubcard Price"
           },
-          "clubcardPrice": 2.25,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "252329813",
@@ -4938,11 +5884,81 @@
           "packageUnit": "kg",
           "packageDisplay": "1kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "260194020",
+          "supermarket": "tesco",
+          "title": "Tesco Finest Scottish Porridge Oats 750g",
+          "brand": "Tesco",
+          "price": 2.1,
+          "unitPrice": 2.8,
+          "unitPriceMeasure": "kg",
+          "packageSize": 750,
+          "packageUnit": "g",
+          "packageDisplay": "750g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "256039303",
+          "supermarket": "tesco",
+          "title": "Tesco Organic Oats 750G",
+          "brand": "Tesco",
+          "price": 2.25,
+          "unitPrice": 3,
+          "unitPriceMeasure": "kg",
+          "packageSize": 750,
+          "packageUnit": "g",
+          "packageDisplay": "750g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "268588694",
+          "supermarket": "tesco",
+          "title": "Quaker Jumbo Porridge Oats 1kg",
+          "brand": "Quaker",
+          "price": 3.15,
+          "unitPrice": 3.15,
+          "unitPriceMeasure": "kg",
+          "packageSize": 1,
+          "packageUnit": "kg",
+          "packageDisplay": "1kg",
+          "deal": {
+            "description": "£2.25 Clubcard Price",
+            "type": "clubcard",
+            "raw": "£2.25 Clubcard Price"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "285091302",
+          "supermarket": "tesco",
+          "title": "Tesco Easy Oats Original Porridge 10 X27g",
+          "brand": "Tesco",
+          "price": 1.45,
+          "unitPrice": 5.37,
+          "unitPriceMeasure": "kg",
+          "packageSize": 27,
+          "packageUnit": "g",
+          "packageDisplay": "27g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "252330246",
+          "supermarket": "tesco",
+          "title": "Scott's Porage Old Fashioned Porridge Oats 1kg",
+          "brand": "Scott's",
+          "price": 3.15,
+          "unitPrice": 3.15,
+          "unitPriceMeasure": "kg",
+          "packageSize": 1,
+          "packageUnit": "kg",
+          "packageDisplay": "1kg",
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -4965,11 +5981,7 @@
           "packageUnit": "kg",
           "packageDisplay": "1kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "256534728",
@@ -4983,11 +5995,7 @@
           "packageUnit": "g",
           "packageDisplay": "500g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "261633312",
@@ -5001,11 +6009,7 @@
           "packageUnit": "g",
           "packageDisplay": "500g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "310121360",
@@ -5020,13 +6024,10 @@
           "packageDisplay": "2kg",
           "deal": {
             "description": "£3.00 Save 1/3 Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "£3.00 Save 1/3 Clubcard Price"
           },
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "254878142",
@@ -5040,11 +6041,7 @@
           "packageUnit": "g",
           "packageDisplay": "500g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "254869280",
@@ -5058,11 +6055,77 @@
           "packageUnit": "kg",
           "packageDisplay": "2kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "287604653",
+          "supermarket": "tesco",
+          "title": "Natco Red Lentils 1Kg",
+          "brand": "Natco",
+          "price": 3,
+          "unitPrice": 3,
+          "unitPriceMeasure": "kg",
+          "packageSize": 1,
+          "packageUnit": "kg",
+          "packageDisplay": "1kg",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "297484755",
+          "supermarket": "tesco",
+          "title": "Tesco Gluten Free Red Lentil Fusilli 250g",
+          "brand": "Tesco",
+          "price": 1.9,
+          "unitPrice": 7.6,
+          "unitPriceMeasure": "kg",
+          "packageSize": 250,
+          "packageUnit": "g",
+          "packageDisplay": "250g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "287652261",
+          "supermarket": "tesco",
+          "title": "Natco Red Kidney Beans 2Kg",
+          "brand": "Natco",
+          "price": 5,
+          "unitPrice": 2.5,
+          "unitPriceMeasure": "kg",
+          "packageSize": 2,
+          "packageUnit": "kg",
+          "packageDisplay": "2kg",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "261633272",
+          "supermarket": "tesco",
+          "title": "East End Red Kidney Beans 500G",
+          "brand": "East",
+          "price": 1.5,
+          "unitPrice": 3,
+          "unitPriceMeasure": "kg",
+          "packageSize": 500,
+          "packageUnit": "g",
+          "packageDisplay": "500g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "287651498",
+          "supermarket": "tesco",
+          "title": "Natco Red Kidney Beans 1Kg",
+          "brand": "Natco",
+          "price": 3.55,
+          "unitPrice": 3.55,
+          "unitPriceMeasure": "kg",
+          "packageSize": 1,
+          "packageUnit": "kg",
+          "packageDisplay": "1kg",
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -5085,11 +6148,7 @@
           "packageUnit": "g",
           "packageDisplay": "200g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "320673975",
@@ -5103,11 +6162,7 @@
           "packageUnit": "g",
           "packageDisplay": "200g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "290594510",
@@ -5121,11 +6176,7 @@
           "packageUnit": "g",
           "packageDisplay": "150g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "311792248",
@@ -5139,11 +6190,7 @@
           "packageUnit": "g",
           "packageDisplay": "500g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "309470252",
@@ -5157,11 +6204,7 @@
           "packageUnit": "g",
           "packageDisplay": "100g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "317295516",
@@ -5176,13 +6219,84 @@
           "packageDisplay": "150g",
           "deal": {
             "description": "Any 2 for £3.40 Clubcard Price - Selected Whitworths Dry Fruits & Nuts",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "Any 2 for £3.40 Clubcard Price - Selected Whitworths Dry Fruits & Nuts"
           },
-          "clubcardPrice": 3.4,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "301956831",
+          "supermarket": "tesco",
+          "title": "Naturya Organic Chia Seeds 175G",
+          "brand": "Naturya",
+          "price": 4,
+          "unitPrice": 22.86,
+          "unitPriceMeasure": "kg",
+          "packageSize": 175,
+          "packageUnit": "g",
+          "packageDisplay": "175g",
+          "deal": {
+            "description": "£3.20 Clubcard Price",
+            "type": "clubcard",
+            "raw": "£3.20 Clubcard Price"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "307159262",
+          "supermarket": "tesco",
+          "title": "Linwoods Organic Milled Hemp Flax & Chia Seeds 200G",
+          "brand": "Linwoods",
+          "price": 4.25,
+          "unitPrice": 21.25,
+          "unitPriceMeasure": "kg",
+          "packageSize": 200,
+          "packageUnit": "g",
+          "packageDisplay": "200g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "295057130",
+          "supermarket": "tesco",
+          "title": "Biona Organic Rye Bread Chia & Flax 500g",
+          "brand": "Biona",
+          "price": 2.95,
+          "unitPrice": 5.9,
+          "unitPriceMeasure": "kg",
+          "packageSize": 500,
+          "packageUnit": "g",
+          "packageDisplay": "500g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "266386982",
+          "supermarket": "tesco",
+          "title": "Tesco Sunflower Seeds 150G",
+          "brand": "Tesco",
+          "price": 1.8,
+          "unitPrice": 12,
+          "unitPriceMeasure": "kg",
+          "packageSize": 150,
+          "packageUnit": "g",
+          "packageDisplay": "150g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "256515195",
+          "supermarket": "tesco",
+          "title": "Tesco Sunflower Seeds 300G",
+          "brand": "Tesco",
+          "price": 3,
+          "unitPrice": 10,
+          "unitPriceMeasure": "kg",
+          "packageSize": 300,
+          "packageUnit": "g",
+          "packageDisplay": "300g",
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -5325,11 +6439,7 @@
           "packageUnit": "kg",
           "packageDisplay": "1.5kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "299623681",
@@ -5343,11 +6453,7 @@
           "packageUnit": "kg",
           "packageDisplay": "1.5kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "302154183",
@@ -5361,11 +6467,7 @@
           "packageUnit": "kg",
           "packageDisplay": "1.1kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "257067302",
@@ -5379,11 +6481,7 @@
           "packageUnit": "kg",
           "packageDisplay": "1kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "314096060",
@@ -5397,11 +6495,7 @@
           "packageUnit": "kg",
           "packageDisplay": "1kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "321843082",
@@ -5415,11 +6509,77 @@
           "packageUnit": "kg",
           "packageDisplay": "1kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "321839865",
+          "supermarket": "tesco",
+          "title": "Allinson's Plain White Flour 3kg",
+          "brand": "Allinson's",
+          "price": 3.25,
+          "unitPrice": 1.08,
+          "unitPriceMeasure": "kg",
+          "packageSize": 3,
+          "packageUnit": "kg",
+          "packageDisplay": "3kg",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "250304402",
+          "supermarket": "tesco",
+          "title": "Doves Farm Gluten Free Plain Flour 1Kg",
+          "brand": "Doves",
+          "price": 1.85,
+          "unitPrice": 1.85,
+          "unitPriceMeasure": "kg",
+          "packageSize": 1,
+          "packageUnit": "kg",
+          "packageDisplay": "1kg",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "260713778",
+          "supermarket": "tesco",
+          "title": "Allinson's Plain Wholemeal Baking Flour 1kg",
+          "brand": "Allinson's",
+          "price": 2.3,
+          "unitPrice": 2.3,
+          "unitPriceMeasure": "kg",
+          "packageSize": 1,
+          "packageUnit": "kg",
+          "packageDisplay": "1kg",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "258144405",
+          "supermarket": "tesco",
+          "title": "McDougalls Speciality '00' Extra Fine Pasta Pizza Plain Flour 1kg",
+          "brand": "McDougalls",
+          "price": 2.5,
+          "unitPrice": 2.5,
+          "unitPriceMeasure": "kg",
+          "packageSize": 1,
+          "packageUnit": "kg",
+          "packageDisplay": "1kg",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "309479006",
+          "supermarket": "tesco",
+          "title": "Matthews Flour Premium White Strong Flour 1.5Kg",
+          "brand": "Matthews",
+          "price": 2.65,
+          "unitPrice": 1.77,
+          "unitPriceMeasure": "kg",
+          "packageSize": 1.5,
+          "packageUnit": "kg",
+          "packageDisplay": "1.5kg",
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -5563,13 +6723,10 @@
           "packageDisplay": "70g",
           "deal": {
             "description": "Any 4 for 3 Clubcard Price - Cheapest Product Free - Selected Fred & Flo",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "Any 4 for 3 Clubcard Price - Cheapest Product Free - Selected Fred & Flo"
           },
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "322348494",
@@ -5584,13 +6741,10 @@
           "packageDisplay": "130g",
           "deal": {
             "description": "Any 4 for 3 Clubcard Price - Cheapest Product Free - Selected Fred & Flo",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "Any 4 for 3 Clubcard Price - Cheapest Product Free - Selected Fred & Flo"
           },
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "278234919",
@@ -5605,13 +6759,10 @@
           "packageDisplay": "100g",
           "deal": {
             "description": "Any 3 for £3 Clubcard Price - Selected Heinz Fruits Pouch 100g",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "Any 3 for £3 Clubcard Price - Selected Heinz Fruits Pouch 100g"
           },
-          "clubcardPrice": 3,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "271413379",
@@ -5625,11 +6776,7 @@
           "packageUnit": "g",
           "packageDisplay": "130g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "295487179",
@@ -5643,11 +6790,7 @@
           "packageUnit": "g",
           "packageDisplay": "130g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "271028138",
@@ -5661,11 +6804,85 @@
           "packageUnit": "g",
           "packageDisplay": "70g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "266901949",
+          "supermarket": "tesco",
+          "title": "Ella's Kitchen Organic Sweet Potatoes, Broccoli + Carrots Baby Food Pouch 6m+ 120g",
+          "brand": "Ella's",
+          "price": 1.4,
+          "unitPrice": 11.67,
+          "unitPriceMeasure": "kg",
+          "packageSize": 120,
+          "packageUnit": "g",
+          "packageDisplay": "120g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "278234113",
+          "supermarket": "tesco",
+          "title": "Heinz Apple & Strawberry Baby Food Fruit Puree Pouch 100g",
+          "brand": "Heinz",
+          "price": 1.25,
+          "unitPrice": 12.5,
+          "unitPriceMeasure": "kg",
+          "packageSize": 100,
+          "packageUnit": "g",
+          "packageDisplay": "100g",
+          "deal": {
+            "description": "Any 3 for £3 Clubcard Price - Selected Heinz Fruits Pouch 100g",
+            "type": "clubcard",
+            "raw": "Any 3 for £3 Clubcard Price - Selected Heinz Fruits Pouch 100g"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "278047012",
+          "supermarket": "tesco",
+          "title": "Ella's Kitchen Organic Bangers + Mash Baby Food Pouch 7m+ 130g",
+          "brand": "Ella's",
+          "price": 1.8,
+          "unitPrice": 13.85,
+          "unitPriceMeasure": "kg",
+          "packageSize": 130,
+          "packageUnit": "g",
+          "packageDisplay": "130g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "322330520",
+          "supermarket": "tesco",
+          "title": "TESCO FRED & FLO Organic Green Veggies 70g",
+          "brand": "TESCO",
+          "price": 0.7,
+          "unitPrice": 10,
+          "unitPriceMeasure": "kg",
+          "packageSize": 70,
+          "packageUnit": "g",
+          "packageDisplay": "70g",
+          "deal": {
+            "description": "Any 4 for 3 Clubcard Price - Cheapest Product Free - Selected Fred & Flo",
+            "type": "clubcard",
+            "raw": "Any 4 for 3 Clubcard Price - Cheapest Product Free - Selected Fred & Flo"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "273881978",
+          "supermarket": "tesco",
+          "title": "Ella's Kitchen Organic Chicken Roast Dinner Baby Food Pouch 7m+ 130g",
+          "brand": "Ella's",
+          "price": 1.8,
+          "unitPrice": 13.85,
+          "unitPriceMeasure": "kg",
+          "packageSize": 130,
+          "packageUnit": "g",
+          "packageDisplay": "130g",
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -5676,32 +6893,6 @@
       "baseItem": "Cherry/salad tomatoes",
       "query": "Cherry/salad tomatoes",
       "products": [
-        {
-          "id": "254999111",
-          "supermarket": "tesco",
-          "title": "Tesco Baby Plum Tomatoes 300G",
-          "price": 0.95,
-          "unitPrice": 3.17,
-          "unitPriceMeasure": "kg",
-          "packageSize": 300,
-          "packageUnit": "g",
-          "packageDisplay": "300g",
-          "inStock": true,
-          "source": "direct"
-        },
-        {
-          "id": "254999112",
-          "supermarket": "tesco",
-          "title": "Tesco Cherry Tomatoes 300G",
-          "price": 1,
-          "unitPrice": 3.33,
-          "unitPriceMeasure": "kg",
-          "packageSize": 300,
-          "packageUnit": "g",
-          "packageDisplay": "300g",
-          "inStock": true,
-          "source": "direct"
-        },
         {
           "id": "sb-ct-1",
           "supermarket": "sainsburys",
@@ -5727,6 +6918,168 @@
           "packageDisplay": "6 pack",
           "inStock": true,
           "source": "direct"
+        },
+        {
+          "id": "299768716",
+          "supermarket": "tesco",
+          "title": "Grower's Harvest Chopped Tomatoes 400G",
+          "brand": "Grower's",
+          "price": 0.43,
+          "unitPrice": 1.08,
+          "unitPriceMeasure": "kg",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "254757959",
+          "supermarket": "tesco",
+          "title": "Tesco Italian Finely Chopped Tomatoes 400G",
+          "brand": "Tesco",
+          "price": 0.47,
+          "unitPrice": 1.18,
+          "unitPriceMeasure": "kg",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "251825089",
+          "supermarket": "tesco",
+          "title": "Tesco Italian Chopped Tomatoes 400G",
+          "brand": "Tesco",
+          "price": 0.47,
+          "unitPrice": 1.18,
+          "unitPriceMeasure": "kg",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "252888323",
+          "supermarket": "tesco",
+          "title": "Tesco Italian Chopped Tomatoes 4 X 400G",
+          "brand": "Tesco",
+          "price": 1.85,
+          "unitPrice": 1.16,
+          "unitPriceMeasure": "kg",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "254299631",
+          "supermarket": "tesco",
+          "title": "Napolina Chopped Tomatoes 4 X 400G",
+          "brand": "Napolina",
+          "price": 3.5,
+          "unitPrice": 2.19,
+          "unitPriceMeasure": "kg",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "322448243",
+          "supermarket": "tesco",
+          "title": "Cirio Polpa Finissima Finely Chopped Tomatoes 4 x 400g",
+          "brand": "Cirio",
+          "price": 5,
+          "unitPrice": 12.5,
+          "unitPriceMeasure": "kg",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "254874209",
+          "supermarket": "tesco",
+          "title": "Napolina Chopped Tomatoes 400G",
+          "brand": "Napolina",
+          "price": 1.05,
+          "unitPrice": 2.62,
+          "unitPriceMeasure": "kg",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": {
+            "description": "Any 2 for £1.50 Clubcard Price - Selected Napolina Can Food 400g",
+            "type": "clubcard",
+            "raw": "Any 2 for £1.50 Clubcard Price - Selected Napolina Can Food 400g"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "289806987",
+          "supermarket": "tesco",
+          "title": "Mutti Finely Chopped Tomatoes 400g",
+          "brand": "Mutti",
+          "price": 1.6,
+          "unitPrice": 4,
+          "unitPriceMeasure": "kg",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "259318844",
+          "supermarket": "tesco",
+          "title": "Tesco Italian Chopped Tomatoes - A Hint of Garlic 390g",
+          "brand": "Tesco",
+          "price": 0.9,
+          "unitPrice": 2.31,
+          "unitPriceMeasure": "kg",
+          "packageSize": 390,
+          "packageUnit": "g",
+          "packageDisplay": "390g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "254051665",
+          "supermarket": "tesco",
+          "title": "Tesco Italian Chopped Tomatoes227g",
+          "brand": "Tesco",
+          "price": 0.45,
+          "unitPrice": 1.98,
+          "unitPriceMeasure": "kg",
+          "packageSize": 227,
+          "packageUnit": "g",
+          "packageDisplay": "227g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "316644181",
+          "supermarket": "tesco",
+          "title": "Mutti Finely Chopped Tomatoes 4x400g",
+          "brand": "Mutti",
+          "price": 5.95,
+          "unitPrice": 3.72,
+          "unitPriceMeasure": "kg",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": {
+            "description": "£4.25 Clubcard Price",
+            "type": "clubcard",
+            "raw": "£4.25 Clubcard Price"
+          },
+          "source": "direct"
         }
       ]
     },
@@ -5749,11 +7102,7 @@
           "packageUnit": "g",
           "packageDisplay": "400g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "300808531",
@@ -5767,11 +7116,7 @@
           "packageUnit": "g",
           "packageDisplay": "400g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "301956693",
@@ -5785,11 +7130,7 @@
           "packageUnit": "g",
           "packageDisplay": "390g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "264448861",
@@ -5804,13 +7145,10 @@
           "packageDisplay": "400g",
           "deal": {
             "description": "Any 3 for £2.50 Clubcard Price - Selected Napolina Canned Food",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "Any 3 for £2.50 Clubcard Price - Selected Napolina Canned Food"
           },
-          "clubcardPrice": 2.5,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "302282831",
@@ -5824,11 +7162,7 @@
           "packageUnit": "g",
           "packageDisplay": "400g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "287651498",
@@ -5842,11 +7176,81 @@
           "packageUnit": "kg",
           "packageDisplay": "1kg",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "261633272",
+          "supermarket": "tesco",
+          "title": "East End Red Kidney Beans 500G",
+          "brand": "East",
+          "price": 1.5,
+          "unitPrice": 3,
+          "unitPriceMeasure": "kg",
+          "packageSize": 500,
+          "packageUnit": "g",
+          "packageDisplay": "500g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "287652261",
+          "supermarket": "tesco",
+          "title": "Natco Red Kidney Beans 2Kg",
+          "brand": "Natco",
+          "price": 5,
+          "unitPrice": 2.5,
+          "unitPriceMeasure": "kg",
+          "packageSize": 2,
+          "packageUnit": "kg",
+          "packageDisplay": "2kg",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "313957420",
+          "supermarket": "tesco",
+          "title": "Summer Pride Red Kidney Beans In Salted Water 380g",
+          "brand": "Summer",
+          "price": 0.65,
+          "unitPrice": 2.83,
+          "unitPriceMeasure": "kg DR.WT",
+          "packageSize": 380,
+          "packageUnit": "g",
+          "packageDisplay": "380g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "258519888",
+          "supermarket": "tesco",
+          "title": "Dunns River Red Kidney Beans 400G",
+          "brand": "Dunns",
+          "price": 0.9,
+          "unitPrice": 2.25,
+          "unitPriceMeasure": "kg DR.WT",
+          "packageSize": 400,
+          "packageUnit": "g",
+          "packageDisplay": "400g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "275184389",
+          "supermarket": "tesco",
+          "title": "Heinz Baked Beans Fiery Chilli Beanz 390G",
+          "brand": "Heinz",
+          "price": 1.4,
+          "unitPrice": 3.59,
+          "unitPriceMeasure": "kg",
+          "packageSize": 390,
+          "packageUnit": "g",
+          "packageDisplay": "390g",
+          "deal": {
+            "description": "Any 2 for £2 Clubcard Price - Selected Heinz Beanz 390g - 415g",
+            "type": "clubcard",
+            "raw": "Any 2 for £2 Clubcard Price - Selected Heinz Beanz 390g - 415g"
+          },
+          "source": "direct"
         }
       ]
     },
@@ -6124,11 +7528,7 @@
           "packageUnit": "g",
           "packageDisplay": "400g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "273796618",
@@ -6143,13 +7543,10 @@
           "packageDisplay": "250g",
           "deal": {
             "description": "90p Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "90p Clubcard Price"
           },
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "280046454",
@@ -6163,11 +7560,7 @@
           "packageUnit": "g",
           "packageDisplay": "200g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "287571051",
@@ -6181,11 +7574,7 @@
           "packageUnit": "g",
           "packageDisplay": "250g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "299916749",
@@ -6200,13 +7589,10 @@
           "packageDisplay": "250g",
           "deal": {
             "description": "£1.00 Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "£1.00 Clubcard Price"
           },
-          "clubcardPrice": 1,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "279316390",
@@ -6220,11 +7606,77 @@
           "packageUnit": "g",
           "packageDisplay": "625g",
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "296652420",
+          "supermarket": "tesco",
+          "title": "Tesco Family Pack Chestnut Vitamin D Mushrooms 485G",
+          "brand": "Tesco",
+          "price": 2,
+          "unitPrice": 4.12,
+          "unitPriceMeasure": "kg",
+          "packageSize": 485,
+          "packageUnit": "g",
+          "packageDisplay": "485g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "293821231",
+          "supermarket": "tesco",
+          "title": "Tesco British Baby Chestnut Mushrooms 150g",
+          "brand": "Tesco",
+          "price": 1.15,
+          "unitPrice": 7.67,
+          "unitPriceMeasure": "kg",
+          "packageSize": 150,
+          "packageUnit": "g",
+          "packageDisplay": "150g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "281976198",
+          "supermarket": "tesco",
+          "title": "Tesco Frozen Sliced Mushrooms 500G",
+          "brand": "Tesco",
+          "price": 0.99,
+          "unitPrice": 1.98,
+          "unitPriceMeasure": "kg",
+          "packageSize": 500,
+          "packageUnit": "g",
+          "packageDisplay": "500g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "312571249",
+          "supermarket": "tesco",
+          "title": "Tesco Finest Portobello Vitamin D Mushrooms",
+          "brand": "Tesco",
+          "price": 1.5,
+          "unitPrice": 10,
+          "unitPriceMeasure": "kg",
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "254707265",
+          "supermarket": "tesco",
+          "title": "Tesco Organic Chestnut Mushrooms 250 G",
+          "brand": "Tesco",
+          "price": 2.25,
+          "unitPrice": 9,
+          "unitPriceMeasure": "kg",
+          "packageSize": 250,
+          "packageUnit": "g",
+          "packageDisplay": "250g",
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -6367,11 +7819,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "253556398",
@@ -6385,11 +7833,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "292216045",
@@ -6403,11 +7847,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "252201146",
@@ -6421,11 +7861,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "309172075",
@@ -6440,13 +7876,10 @@
           "packageDisplay": null,
           "deal": {
             "description": "Any 2 for £3 Clubcard Price - Selected Fruits",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "Any 2 for £3 Clubcard Price - Selected Fruits"
           },
-          "clubcardPrice": 3,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "322637405",
@@ -6461,13 +7894,80 @@
           "packageDisplay": null,
           "deal": {
             "description": "Any 2 for £3 Clubcard Price - Selected Fruits",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "Any 2 for £3 Clubcard Price - Selected Fruits"
           },
-          "clubcardPrice": 3,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "255547279",
+          "supermarket": "tesco",
+          "title": "Tesco Lemon Juice 500Ml",
+          "brand": "Tesco",
+          "price": 1.6,
+          "unitPrice": 3.2,
+          "unitPriceMeasure": "litre",
+          "packageSize": 500,
+          "packageUnit": "ml",
+          "packageDisplay": "500ml",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "256017387",
+          "supermarket": "tesco",
+          "title": "Opies Lemon Slices 350G",
+          "brand": "Opies",
+          "price": 2.25,
+          "unitPrice": 13.24,
+          "unitPriceMeasure": "kg DR.WT",
+          "packageSize": 350,
+          "packageUnit": "g",
+          "packageDisplay": "350g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "311442842",
+          "supermarket": "tesco",
+          "title": "Tesco Ultra Dishwasher Capsules - Lemon 40 Pack 500g",
+          "brand": "Tesco",
+          "price": 5.1,
+          "unitPrice": 10.2,
+          "unitPriceMeasure": "kg",
+          "packageSize": 500,
+          "packageUnit": "g",
+          "packageDisplay": "500g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "311213002",
+          "supermarket": "tesco",
+          "title": "Tesco All-in-One Dishwasher Tablets - Lemon 40 Pack 680g",
+          "brand": "Tesco",
+          "price": 3.7,
+          "unitPrice": 5.44,
+          "unitPriceMeasure": "kg",
+          "packageSize": 680,
+          "packageUnit": "g",
+          "packageDisplay": "680g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "268064818",
+          "supermarket": "tesco",
+          "title": "Tesco Finest Lemon Drizzle Cake",
+          "brand": "Tesco",
+          "price": 4,
+          "unitPrice": 4,
+          "unitPriceMeasure": "each",
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
+          "deal": null,
+          "source": "direct"
         }
       ]
     },
@@ -6479,32 +7979,6 @@
       "query": "Reduced-salt stock cubes",
       "products": [
         {
-          "id": "254111222",
-          "supermarket": "tesco",
-          "title": "Oxo Reduced Salt Vegetable Stock Cubes 12 Pack 71G",
-          "price": 2.65,
-          "unitPrice": 3.73,
-          "unitPriceMeasure": "100g",
-          "packageSize": 71,
-          "packageUnit": "g",
-          "packageDisplay": "12 pack",
-          "inStock": true,
-          "source": "direct"
-        },
-        {
-          "id": "254111223",
-          "supermarket": "tesco",
-          "title": "Knorr Zero Salt Vegetable Stock Cubes 8 Pack 72G",
-          "price": 1.9,
-          "unitPrice": 2.64,
-          "unitPriceMeasure": "100g",
-          "packageSize": 72,
-          "packageUnit": "g",
-          "packageDisplay": "8 pack",
-          "inStock": true,
-          "source": "direct"
-        },
-        {
           "id": "sb-sc-1",
           "supermarket": "sainsburys",
           "title": "Oxo Reduced Salt Vegetable Stock Cubes x12 71g",
@@ -6515,6 +7989,164 @@
           "packageUnit": "g",
           "packageDisplay": "12 pack",
           "inStock": true,
+          "source": "direct"
+        },
+        {
+          "id": "264767990",
+          "supermarket": "tesco",
+          "title": "Knorr Vegetable Stock Cubes 20 x 10g",
+          "brand": "Knorr",
+          "price": 3.3,
+          "unitPrice": 16.5,
+          "unitPriceMeasure": "kg",
+          "packageSize": 10,
+          "packageUnit": "g",
+          "packageDisplay": "10g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "264545918",
+          "supermarket": "tesco",
+          "title": "Tesco Vegetable Stock Cubes 10 Pack 100g",
+          "brand": "Tesco",
+          "price": 1.1,
+          "unitPrice": 11,
+          "unitPriceMeasure": "kg",
+          "packageSize": 100,
+          "packageUnit": "g",
+          "packageDisplay": "100g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "297461431",
+          "supermarket": "tesco",
+          "title": "Kallo Organic Vegetable Stock Cubes 8 Pack 88g",
+          "brand": "Kallo",
+          "price": 1.9,
+          "unitPrice": 21.59,
+          "unitPriceMeasure": "kg",
+          "packageSize": 88,
+          "packageUnit": "g",
+          "packageDisplay": "88g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "252077252",
+          "supermarket": "tesco",
+          "title": "Oxo Vegetable Stock Cubes 12 Pack 71g",
+          "brand": "Oxo",
+          "price": 2.65,
+          "unitPrice": 37.32,
+          "unitPriceMeasure": "kg",
+          "packageSize": 71,
+          "packageUnit": "g",
+          "packageDisplay": "71g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "272080228",
+          "supermarket": "tesco",
+          "title": "Oxo Reduced Salt Vegetable Stock Cubes 12 Pack 71G",
+          "brand": "Oxo",
+          "price": 2.65,
+          "unitPrice": 37.32,
+          "unitPriceMeasure": "kg",
+          "packageSize": 71,
+          "packageUnit": "g",
+          "packageDisplay": "71g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "255325148",
+          "supermarket": "tesco",
+          "title": "Kallo Organic Low Salt Vegetable Stock Cube 60G",
+          "brand": "Kallo",
+          "price": 1.4,
+          "unitPrice": 23.33,
+          "unitPriceMeasure": "kg",
+          "packageSize": 60,
+          "packageUnit": "g",
+          "packageDisplay": "60g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "279737484",
+          "supermarket": "tesco",
+          "title": "Oxo Vegetable Stock Cubes 24 Pack 142g",
+          "brand": "Oxo",
+          "price": 3.5,
+          "unitPrice": 24.65,
+          "unitPriceMeasure": "kg",
+          "packageSize": 142,
+          "packageUnit": "g",
+          "packageDisplay": "142g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "254881270",
+          "supermarket": "tesco",
+          "title": "Knorr Vegetable Stock Cubes 8 x 10g",
+          "brand": "Knorr",
+          "price": 2,
+          "unitPrice": 25,
+          "unitPriceMeasure": "kg",
+          "packageSize": 10,
+          "packageUnit": "g",
+          "packageDisplay": "10g",
+          "deal": {
+            "description": "£1.50 Save 25% Clubcard Price",
+            "type": "clubcard",
+            "raw": "£1.50 Save 25% Clubcard Price"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "293353047",
+          "supermarket": "tesco",
+          "title": "Knorr CKN Bouillon Stock Cubes 8 Pk 72g",
+          "brand": "Knorr",
+          "price": 2,
+          "unitPrice": 27.78,
+          "unitPriceMeasure": "kg",
+          "packageSize": 72,
+          "packageUnit": "g",
+          "packageDisplay": "72g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "317189927",
+          "supermarket": "tesco",
+          "title": "Knorr Bouillon Cubes Beef Flavour 8x9g",
+          "brand": "Knorr",
+          "price": 2,
+          "unitPrice": 27.78,
+          "unitPriceMeasure": "kg",
+          "packageSize": 9,
+          "packageUnit": "g",
+          "packageDisplay": "9g",
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "273967169",
+          "supermarket": "tesco",
+          "title": "Knorr Vegetable Stock Pot 8x28g",
+          "brand": "Knorr",
+          "price": 3.2,
+          "unitPrice": 14.29,
+          "unitPriceMeasure": "kg",
+          "packageSize": 28,
+          "packageUnit": "g",
+          "packageDisplay": "28g",
+          "deal": null,
           "source": "direct"
         }
       ]
@@ -6658,11 +8290,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "305965105",
@@ -6677,13 +8305,10 @@
           "packageDisplay": null,
           "deal": {
             "description": "2 for £6.30 or 3 for £9 Clubcard Price - Tesco Kitchen Towel 4 Rolls",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "2 for £6.30 or 3 for £9 Clubcard Price - Tesco Kitchen Towel 4 Rolls"
           },
-          "clubcardPrice": 9,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "305976553",
@@ -6697,11 +8322,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "262374000",
@@ -6715,11 +8336,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "296653200",
@@ -6733,11 +8350,7 @@
           "packageUnit": null,
           "packageDisplay": null,
           "deal": null,
-          "clubcardPrice": null,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
         },
         {
           "id": "311207459",
@@ -6752,13 +8365,88 @@
           "packageDisplay": null,
           "deal": {
             "description": "£2.50 Clubcard Price",
-            "type": "clubcard"
+            "type": "clubcard",
+            "raw": "£2.50 Clubcard Price"
           },
-          "clubcardPrice": 2.5,
-          "nectarPrice": null,
-          "inStock": true,
-          "source": "direct",
-          "confidenceSource": "direct"
+          "source": "direct"
+        },
+        {
+          "id": "305959695",
+          "supermarket": "tesco",
+          "title": "Tesco Decorated Kitchen Towel 2 Rolls",
+          "brand": "Tesco",
+          "price": 2.45,
+          "unitPrice": 1.22,
+          "unitPriceMeasure": "100sht",
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "304426550",
+          "supermarket": "tesco",
+          "title": "Regina Blitz Kitchen Roll 210 Supersized Sheets 3 Roll",
+          "brand": "Regina",
+          "price": 7,
+          "unitPrice": 3.33,
+          "unitPriceMeasure": "100sht",
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
+          "deal": {
+            "description": "£4.75 Clubcard Price",
+            "type": "clubcard",
+            "raw": "£4.75 Clubcard Price"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "330743693",
+          "supermarket": "tesco",
+          "title": "Plenty Ultrasorb Kitchen Roll 2 Rolls",
+          "brand": "Plenty",
+          "price": 5,
+          "unitPrice": 3.12,
+          "unitPriceMeasure": "100sht",
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
+          "deal": {
+            "description": "£3.00 Clubcard Price",
+            "type": "clubcard",
+            "raw": "£3.00 Clubcard Price"
+          },
+          "source": "direct"
+        },
+        {
+          "id": "330743704",
+          "supermarket": "tesco",
+          "title": "Plenty Ultrasorb Kitchen Roll 4 Rolls",
+          "brand": "Plenty",
+          "price": 8.25,
+          "unitPrice": 2.58,
+          "unitPriceMeasure": "100sht",
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
+          "deal": null,
+          "source": "direct"
+        },
+        {
+          "id": "313943649",
+          "supermarket": "tesco",
+          "title": "Tesco Multi-Purpose Household Towel 1 Roll",
+          "brand": "Tesco",
+          "price": 1.5,
+          "unitPrice": 1.5,
+          "unitPriceMeasure": "100sht",
+          "packageSize": null,
+          "packageUnit": null,
+          "packageDisplay": null,
+          "deal": null,
+          "source": "direct"
         }
       ]
     }

@@ -1562,6 +1562,27 @@
           "inStock": true,
           "source": "direct",
           "confidenceSource": "direct"
+        },
+        {
+          "schemaVersion": "1.0.0",
+          "id": "8013078",
+          "supermarket": "sainsburys",
+          "title": "Sundora Sultanas 500g",
+          "brand": "Sundora",
+          "price": 1.5,
+          "unitPrice": 3,
+          "unitPriceMeasure": "kg",
+          "packageSize": 500,
+          "packageUnit": "g",
+          "packageDisplay": "500g",
+          "deal": null,
+          "clubcardPrice": null,
+          "nectarPrice": null,
+          "inStock": true,
+          "productUrl": "https://www.sainsburys.co.uk/gol-ui/product/sundora-sultanas-500g",
+          "imageUrl": "https://assets.sainsburys-groceries.co.uk/gol/8013078/image.jpg",
+          "source": "direct",
+          "confidenceSource": "direct"
         }
       ]
     },

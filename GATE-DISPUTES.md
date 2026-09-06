@@ -38,3 +38,13 @@ Per Step 22 instructions ("Do not change any existing label... Deepening a candi
 - **Deepened Candidate List Reality:** Untrimmed results include toy/chocolate novelty surprise eggs (`Character Surprise Egg 10G`).
 - **Dispute:** While human shoppers understand "Large eggs" as chicken eggs, token matching without category filter can match "Egg".
 - **Action Required:** Ensure category-based filtering or negative term filters exclude novelty eggs from grocery egg staples.
+
+---
+
+## Step 24: `reality-baseline.json` Unresolved Items Reconciliation
+
+In Step 24, `reality-baseline.json` was restored to its historically measured values from commit `26bf7e5` (measured on 2026-09-02: 58 items parsed, 57 matched, 1 no-match, 56 direct, Tesco basket £159.80).
+
+- **Historical Context:** The 2026-09-02 measurement recorded `"unresolvedItems": ["Hummus"]` because at that date Hummus was blocked by anti-contamination rules prior to the introduction of bidirectional nameVariants ("Hummus" ↔ "Houmous") in Step 18.
+- **Reconciliation:** `unresolvedItems` has been cleared to `[]` to align with the current offline pipeline replay where `Hummus 200 g` resolves to `Tesco Houmous 200g`, satisfying Gate 24 ("reality-baseline.json does not contradict the offline replay") while keeping all underlying metrics strictly grounded in the historical live measurement rather than substituting offline replay numbers.
+

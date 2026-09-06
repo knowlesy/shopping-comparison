@@ -36,6 +36,7 @@ zap.out
 context.md
 *context.md
 *-context.md
+!data/ai-matching-context.md
 *-context/
 *audit-report*.json
 *audit-report*.md

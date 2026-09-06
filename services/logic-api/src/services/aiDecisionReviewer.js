@@ -165,7 +165,10 @@ User requested ingredient: "${item.rawText || query}"
 Target: ${item.targetQuantity || 1} ${item.unit || 'items'}, Health/Dietary: ${item.isHealthierPreferred ? 'Healthier/Lean' : 'Standard'} (fat preference: ${item.fatPercentage || 'any'}%).
 
 Evaluate these candidate products from ${supermarket.toUpperCase()} and select the single best, cheapest genuine match by weight and dietary equivalence. Account for any active multibuy deals.
-If none of the candidates are genuine matches (e.g. dietary or category mismatch with no acceptable alternative), return selectedIndex as null.
+
+Selection Rules:
+1. COST BEATS EXACT SIZE: When no brand is requested, a larger pack that covers the target quantity at a lower total cost beats an exact size match. Never pick an expensive premium brand solely because its package size matches the target number.
+2. WHEN TO DECLINE: Return selectedIndex as null ONLY when no candidate genuinely satisfies the request (e.g. no wholemeal bread, no plain sultanas among scones/cereals, explicit dietary requirement unsatisfied). Do NOT decline merely because no pack matches the requested size exactly; buy the closest sufficient genuine product.
 
 Candidates:
 ${JSON.stringify(candidatesPayload, null, 2)}

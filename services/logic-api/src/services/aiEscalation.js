@@ -112,7 +112,10 @@ export class AiEscalation {
     const prompt = `You are a Senior UK Supermarket Pricing Expert.
 The following grocery shopping items failed initial automated matching or had low confidence.
 For each item in this batch, review its FULL candidate list and select the single best, cheapest genuine match by weight and dietary equivalence. Account for any active multibuy deals.
-If none of the candidate products are genuine matches (e.g. dietary or category mismatch, or missing required fat percentage), return selectedIndex as null. An honest no-match is a correct outcome.
+
+Selection Rules:
+1. COST BEATS EXACT SIZE: When no brand is requested, a larger pack that covers the target quantity at a lower total cost beats an exact size match. Never pick an expensive premium brand solely because its package size matches the target number.
+2. WHEN TO DECLINE: Return selectedIndex as null ONLY when no candidate genuinely satisfies the request (e.g. no wholemeal bread, no plain sultanas among scones/cereals, explicit dietary requirement unsatisfied). Do NOT decline merely because no pack matches the requested size exactly; buy the closest sufficient genuine product.
 
 Batch Items:
 ${JSON.stringify(batchPayload, null, 2)}
