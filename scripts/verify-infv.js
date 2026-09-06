@@ -1673,6 +1673,70 @@ check(23, 'The real-corpus rules score does not slide backwards', async () => {
 });
 
 // ---------------------------------------------------------------------------
+// Step 24 — Honest baseline, selection guidance, and a clean holdout to come
+// ---------------------------------------------------------------------------
+check(24, 'reality-baseline.json does not contradict the offline replay', async () => {
+  const b = JSON.parse(read(r(BASELINE)) || '{}');
+  const unresolved = b.unresolvedItems || [];
+  if (!unresolved.length) return 'nothing recorded unresolved';
+  const { FuzzyMatcher } = await svc('fuzzyMatcher.js');
+  const { IngredientParser } = await svc('ingredientParser.js');
+  const lines = JSON.parse(read(r('tests/fixtures/real-list.json')) || '[]');
+  const fxPath = fs.existsSync(r('tests/fixtures/reality-fixtures.json'))
+    ? r('tests/fixtures/reality-fixtures.json')
+    : r('tests/fixtures/reality-sample.json');
+  const fx = JSON.parse(read(fxPath) || '{}');
+  const items = IngredientParser.parseList(lines);
+  const wrong = [];
+  for (const name of unresolved) {
+    const i = items.findIndex((x) => new RegExp(`^${name}`, 'i').test(x.rawText || x.name || ''));
+    if (i === -1) continue;
+    const cands = (fx.items?.[i]?.products || []).filter((p) => (p.supermarket || p.store) === 'tesco');
+    if (!cands.length) continue;
+    const m = FuzzyMatcher.matchProduct('tesco', items[i], cands, {});
+    if (m.product) wrong.push(`"${name}" is recorded unresolved but the replay resolves it to "${(m.product.title || '').trim()}"`);
+  }
+  if (wrong.length) {
+    fail(`the recorded baseline contradicts the current pipeline:\n          - ${wrong.join('\n          - ')}\n          This file records a LIVE measurement at a point in time. Hand-editing it produces a hybrid of a stale run and a fresh inference, which is neither. Restore the measured values and let the owner re-measure against live stores.`);
+  }
+});
+
+check(24, 'The AI context tells the model that cost beats an exact size match', () => {
+  const src = read(r('data/ai-matching-context.md'));
+  if (!src) fail('data/ai-matching-context.md missing');
+  const covers = /cheaper|lower total|best value|cost/i.test(src) && /exact\s+(?:size|weight|match)/i.test(src);
+  if (!covers) {
+    fail('data/ai-matching-context.md documents intent extraction only — it says nothing about how to CHOOSE between products, which is what the model is actually asked to do. On the live corpus this cost real money: the model picked Pip & Nut 300g at GBP 3.00 over Tesco Smooth 340g at GBP 0.95 in 3 of 3 runs, purely because 300g was the number requested. State that a larger pack which covers the target at lower total cost beats an exact size match when no brand was asked for.');
+  }
+});
+
+check(24, 'The AI context says when declining is right and when it is not', () => {
+  const src = read(r('data/ai-matching-context.md'));
+  const covers = /decline|none of these|no match/i.test(src);
+  if (!covers) {
+    fail('data/ai-matching-context.md gives no criteria for declining. The model can now answer "none of these", and it over-uses it — it declined apples, Fairy and 85% chocolate while a perfectly good product sat in the list. Declining is correct when nothing genuinely satisfies the request (no wholemeal loaf on the shelf, no plain sultanas). It is NOT correct merely because no pack matches the requested size exactly.');
+  }
+});
+
+check(24, 'The unused list items carry enough candidates to hold out honestly', () => {
+  const F = JSON.parse(read(r('tests/fixtures/ai-matching-fixtures.real.json')) || '[]');
+  const used = new Set(F.map((f) => Number(String(f.id).split('-')[1])));
+  const fxPath = fs.existsSync(r('tests/fixtures/reality-fixtures.json'))
+    ? r('tests/fixtures/reality-fixtures.json')
+    : r('tests/fixtures/reality-sample.json');
+  const fx = JSON.parse(read(fxPath) || '{}');
+  const shallow = [];
+  (fx.items || []).forEach((it, i) => {
+    if (used.has(i)) return;
+    const c = (it.products || []).filter((p) => (p.supermarket || p.store) === 'tesco');
+    if (c.length && c.length < 10) shallow.push(`${(it.rawText || '').trim()} (${c.length})`);
+  });
+  if (shallow.length > 5) {
+    fail(`${shallow.length} list items outside the tuned fixture set still carry fewer than 10 candidates — only the 26 already in use were deepened. A clean holdout must be drawn from these, and measuring on a 6-item shelf is what produced three wrong labels last round. Deepen them:\n          - ${shallow.slice(0, 8).join('\n          - ')}${shallow.length > 8 ? `\n          - ...and ${shallow.length - 8} more` : ''}`);
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 await Promise.allSettled(pending);
