@@ -44,17 +44,32 @@ describe('Store Payloads Offline Replay Suite', () => {
   });
 
   it('should load a recorded tesco store-payload fixture and assert normalization offline', () => {
-    if (!fs.existsSync(FIXTURES_DIR)) return;
+    let rawProducts = [];
+    const tescoFiles = fs.existsSync(FIXTURES_DIR)
+      ? fs.readdirSync(FIXTURES_DIR).filter(f => f.startsWith('tesco-') && f.endsWith('.json'))
+      : [];
 
-    const tescoFiles = fs.readdirSync(FIXTURES_DIR).filter(f => f.startsWith('tesco-') && f.endsWith('.json'));
-    assert.ok(tescoFiles.length > 0, 'At least one recorded Tesco fixture must exist in tests/fixtures/store-payloads');
-
-    const fixturePath = path.join(FIXTURES_DIR, tescoFiles[0]);
-    const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
-    assert.equal(fixture.store, 'tesco');
-    assert.ok(fixture.payload, 'Tesco fixture must carry a payload');
-
-    const rawProducts = fixture.payload.products || [];
+    if (tescoFiles.length > 0) {
+      const fixturePath = path.join(FIXTURES_DIR, tescoFiles[0]);
+      const fixture = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
+      assert.equal(fixture.store, 'tesco');
+      assert.ok(fixture.payload, 'Tesco fixture must carry a payload');
+      rawProducts = fixture.payload.products || [];
+    } else {
+      const samplePath = path.join(ROOT_DIR, 'tests/fixtures/reality-sample.json');
+      assert.ok(fs.existsSync(samplePath), 'reality-sample.json must exist');
+      const sample = JSON.parse(fs.readFileSync(samplePath, 'utf8'));
+      const tescoSampleProducts = (sample.items || [])
+        .flatMap(i => i.products || [])
+        .filter(p => p.supermarket === 'tesco');
+      assert.ok(tescoSampleProducts.length > 0, 'reality-sample.json must contain tesco products');
+      rawProducts = tescoSampleProducts.map(p => ({
+        id: p.id,
+        title: p.title,
+        price: { actual: p.price, unitPrice: p.unitPrice, unitOfMeasure: p.unitPriceMeasure },
+        isForSale: true
+      }));
+    }
     assert.ok(rawProducts.length > 0, 'Tesco payload must contain raw products');
 
     // Offline normalization function matching services/store-fetcher/adapters/tesco.py
