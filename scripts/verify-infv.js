@@ -1038,6 +1038,88 @@ check(17, 'Eval harness does not report rates over a placeholder denominator', (
 });
 
 // ---------------------------------------------------------------------------
+// Step 18 — Close the naming gap: UK spelling variants, data-driven query terms
+// ---------------------------------------------------------------------------
+check(18, 'A nameVariants table lives in data, not hardcoded in a matcher', () => {
+  const p = r('data/matching-rules.json');
+  const rules = JSON.parse(read(p) || '{}');
+  const nv = rules.nameVariants;
+  if (!nv) {
+    fail('data/matching-rules.json has no `nameVariants` key — UK stores spell things differently to shopping lists (houmous/hummus, yoghurt/yogurt); that belongs in the rules data next to speciesRules, not in a JS literal');
+  }
+  const groups = Array.isArray(nv) ? nv : Object.entries(nv).map(([k, v]) => [k, ...(v || [])]);
+  if (!groups.length) fail('`nameVariants` is empty');
+  const flat = JSON.stringify(groups).toLowerCase();
+  if (!/houmous/.test(flat) || !/hummus/.test(flat)) {
+    fail('`nameVariants` does not relate "hummus" to "houmous" — that is the one unresolved item on the real list');
+  }
+  const ke = read(r('services/logic-api/src/services/keywordExtractor.js'));
+  const qs = read(r('services/logic-api/src/services/queryStrategist.js'));
+  if (/houmous/i.test(ke) || /houmous/i.test(qs)) {
+    fail('a specific product spelling is hardcoded in keywordExtractor.js or queryStrategist.js — read it from the nameVariants table so the next variant is a data edit, not a code edit');
+  }
+});
+
+check(18, 'Spelling variants resolve bidirectionally in noun evidence', async () => {
+  const { KeywordExtractor } = await svc('keywordExtractor.js');
+  if (!KeywordExtractor.hasNounEvidence(['hummus'], 'Tesco Houmous 200g')) {
+    fail('hasNounEvidence(["hummus"], "Tesco Houmous 200g") is false — this is the exact veto that leaves Hummus unmatched: penaltyRules scores it -500 before any fuzzy weight applies');
+  }
+  if (!KeywordExtractor.hasNounEvidence(['houmous'], 'Sainsburys Hummus 200g')) {
+    fail('variant resolution is one-way — a list written as "houmous" must match a product titled "Hummus" too');
+  }
+  if (KeywordExtractor.hasNounEvidence(['hummus'], 'Tesco Beef Steak Mince 500g')) {
+    fail('noun evidence now passes for an unrelated product — the variant table has been applied too broadly');
+  }
+});
+
+check(18, 'Store-specific query phrasing is data, not a chain of if-branches', () => {
+  const src = read(r('services/logic-api/src/services/queryStrategist.js'));
+  const hardcoded = /supermarket\s*===\s*['"](?:sainsburys|morrisons|tesco|asda|iceland)['"]/.test(src);
+  if (hardcoded) {
+    fail('queryStrategist.js still branches on a hardcoded store+term pair (e.g. `supermarket === "sainsburys" && core.includes("lettuce")`) — every new term needs a code change and none of it is inspectable; move store phrasing into the rules data alongside nameVariants');
+  }
+});
+
+check(18, 'The real "Hummus" item resolves to a plain tub, offline', async () => {
+  const p = fs.existsSync(r('tests/fixtures/reality-fixtures.json'))
+    ? r('tests/fixtures/reality-fixtures.json')
+    : r('tests/fixtures/reality-sample.json');
+  if (!fs.existsSync(p)) fail('no reality fixtures to replay');
+  const j = JSON.parse(read(p));
+  const entry = (j.items || []).find((i) => /hummus/i.test(i.rawText || ''));
+  if (!entry) fail('no hummus item in the reality fixtures');
+  const { FuzzyMatcher } = await svc('fuzzyMatcher.js');
+  const item = {
+    name: entry.name, baseItem: entry.baseItem, category: entry.category,
+    targetQuantity: entry.targetQuantity, unit: entry.unit
+  };
+  const stocked = (entry.products || []).filter((x) => /houmous|hummus/i.test(x.title || ''));
+  if (!stocked.length) return 'fixtures carry no hummus product — honest negative';
+
+  const m = FuzzyMatcher.matchProduct('tesco', item, entry.products || [], {});
+  if (!m || !m.product) {
+    fail(`tesco stocks ${stocked.length} houmous product(s) in the fixtures (e.g. "${stocked[0].title.trim()}") but the matcher still returns no match`);
+  }
+  const t = m.product.title || '';
+  if (/chips|crisps/i.test(t)) fail(`matched contamination "${t.trim()}"`);
+  if (/red pepper|sun dried|tomato|caramelis|beetroot/i.test(t)) {
+    fail(`matched a flavoured variant "${t.trim()}" — the list asked for plain hummus; variant resolution must not cost flavour discrimination`);
+  }
+  if (!/houmous|hummus/i.test(t)) fail(`matched an unrelated product "${t.trim()}"`);
+});
+
+check(18, 'TODO.md does not still list shipped work as outstanding', () => {
+  const src = read(r('TODO.md'));
+  if (!src) return 'no TODO.md';
+  const open = src.split('\n').filter((l) => /^\s*[-*]\s*\[ \]/.test(l));
+  const shipped = open.filter((l) => /direct\s+supermarket\s+scraping/i.test(l));
+  if (shipped.length) {
+    fail(`TODO.md still lists as unchecked work that Steps 1-15 delivered and gated:\n          - ${shipped.map((s) => s.trim()).join('\n          - ')}`);
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 await Promise.allSettled(pending);
