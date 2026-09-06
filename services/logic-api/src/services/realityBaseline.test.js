@@ -63,8 +63,8 @@ describe('Step 13: Reality Baseline Offline Ratchet Suite', () => {
   });
 
   it('should replay recorded reality fixtures offline and ratchet match counts', () => {
-    const fixturePath = fs.existsSync(FIXTURES_PATH) ? FIXTURES_PATH : SAMPLE_PATH;
-    assert.ok(fs.existsSync(fixturePath), 'reality-fixtures.json or reality-sample.json must exist');
+    const fixturePath = fs.existsSync(SAMPLE_PATH) ? SAMPLE_PATH : FIXTURES_PATH;
+    assert.ok(fs.existsSync(fixturePath), 'reality-sample.json or reality-fixtures.json must exist');
     const baseline = JSON.parse(fs.readFileSync(BASELINE_PATH, 'utf8'));
     const fixtures = JSON.parse(fs.readFileSync(fixturePath, 'utf8'));
 

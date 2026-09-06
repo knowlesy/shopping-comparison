@@ -849,6 +849,26 @@ check(15, 'Raw scraped corpora are not published in the public repo', () => {
   }
 });
 
+check(15, 'Ignored raw payloads are actually UNTRACKED, not merely gitignored', async () => {
+  const { execSync } = await import('node:child_process');
+  let tracked = '';
+  try {
+    tracked = execSync('git ls-files tests/fixtures/store-payloads/', { cwd: ROOT, encoding: 'utf8' });
+  } catch {
+    return 'git unavailable — skipped';
+  }
+  const raw = tracked
+    .split('\n')
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .filter((f) => !/_reachability\.json$/.test(f));
+  if (raw.length) {
+    fail(
+      `.gitignore was added but these raw scraped payloads are STILL TRACKED in a public repo — gitignore does not untrack existing files, use \`git rm --cached\`:\n          - ${raw.join('\n          - ')}`
+    );
+  }
+});
+
 check(15, 'A trimmed sample still exists so the CI ratchet can run on a fresh checkout', () => {
   const sample =
     fs.existsSync(r('tests/fixtures/reality-sample.json')) ||
@@ -971,6 +991,49 @@ check(16, 'Per-basket AI budget is actually enforced and reported', () => {
   const compare = read(r('services/logic-api/src/routes/compare.js'));
   if (!/aiCalls|aiCallsUsed|aiBudget/i.test(compare)) {
     fail('compare response does not report AI calls used — cost must be visible, not silent');
+  }
+});
+
+// ---------------------------------------------------------------------------
+// Step 17 — Documentation and onboarding drift (found in the deep-dive review)
+// ---------------------------------------------------------------------------
+check(17, '.env.example documents the variables the code actually reads', () => {
+  const example = read(r('.env.example'));
+  if (!example) fail('.env.example missing');
+  // Vars a fresh operator cannot start the stack without.
+  const required = ['FETCHER_TOKEN', 'STORE_FETCHER_URL', 'SCRAPE_TOKEN', 'GEMINI_API_KEY', 'PROXY_URL', 'PROXY_TYPE'];
+  const missing = required.filter((v) => !new RegExp(`^\\s*#?\\s*${v}\\s*=`, 'm').test(example));
+  if (missing.length) {
+    fail(`.env.example omits variables the stack needs: ${missing.join(', ')} — a fresh setup silently misses the sidecar config`);
+  }
+});
+
+check(17, 'README describes the current architecture, not the pre-adapter one', () => {
+  const readme = read(r('README.md'));
+  if (!readme) fail('README.md missing');
+  for (const [what, re] of [
+    ['the store-fetcher sidecar', /store-fetcher/i],
+    ['direct per-store adapters', /direct (store |supermarket )?adapter/i],
+    ['the confidence tiers', /0?\.9|90%/]
+  ]) {
+    if (!re.test(readme)) fail(`README does not describe ${what}`);
+  }
+});
+
+check(17, 'CHANGELOG keeps its boilerplate above the version entries', () => {
+  const lines = read(r('CHANGELOG.md')).split('\n');
+  const firstVersion = lines.findIndex((l) => /^##\s*\[\d/.test(l));
+  const boilerplate = lines.findIndex((l) => /All notable changes/i.test(l));
+  if (firstVersion === -1) fail('no version entries in CHANGELOG.md');
+  if (boilerplate > firstVersion) {
+    fail(`the "All notable changes" preamble is at line ${boilerplate + 1}, below the first version entry at line ${firstVersion + 1} — a release was inserted above the header`);
+  }
+});
+
+check(17, 'Eval harness does not report rates over a placeholder denominator', () => {
+  const src = read(r('scripts/eval-ai-matching.js'));
+  if (/\$\{\w*(?:FiredCount|OutcomeCount)\s*\|\|\s*1\}/.test(src)) {
+    fail('eval prints "0/1 (100%)" when nothing fired — `count || 1` fakes a denominator; report n/a instead, or these are the numbers you tune AI against');
   }
 });
 

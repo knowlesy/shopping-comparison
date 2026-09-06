@@ -147,3 +147,11 @@ When migrating the sidecar from local residential execution to cloud container e
 - [x] Token storage encrypted at rest with explicit revocation hooks.
 - [x] Basket creation bounded: no checkout, no payment, opt-in only.
 - [x] Politeness engine and circuit breakers stay active across all tiers.
+
+---
+
+## 6. Public Repository Data Hygiene & Historical Fixtures
+
+- **Raw Payload Untracking**: In accordance with Step 15 & 17 repository sanitization policies, large raw retailer payloads (`tests/fixtures/store-payloads/*.json` and `tests/fixtures/reality-fixtures.json`) are untracked from git via `git rm --cached` and excluded via `.gitignore`.
+- **Sample Tracking for CI**: To allow offline replay testing and verification ratchets on fresh checkouts without network calls, a sanitized, trimmed subset (`tests/fixtures/reality-sample.json` < 256KB) and reachability status (`_reachability.json`) remain tracked in version control.
+- **Git History Retention Notice**: Per project policy, git history is not rewritten; earlier historical commits retain the scrubbed initial payload fixtures, but no ongoing retailer corpora are committed.

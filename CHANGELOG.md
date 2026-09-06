@@ -1,5 +1,10 @@
 # Changelog
 
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
 ## [1.3.0] - 2026-09-01
 
 ### Added
@@ -9,11 +14,6 @@
 - **Offline Query Strategist**: Proposes ranked, store-specific search queries and variant size targets ahead of adapter calls.
 - **Camoufox Tier 2 Escalation & Reachability Reporting**: Verified Asda and Iceland client-side SPA shells and established reachability criteria.
 - **Scraping Architecture & Basket Creation Specification**: Comprehensive architectural design document covering split-plane session management, credential encryption at rest, and safe basket synchronization bounds.
-
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.2.0] - 2026-08-28
 

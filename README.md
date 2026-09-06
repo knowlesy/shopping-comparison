@@ -52,9 +52,46 @@ A high-performance grocery price comparison and basket optimization engine for U
 
 ---
 
-## 📐 Architecture & Documentation
+## 📐 Architecture & Three-Tier Data Pipeline
 
+ShoppingWise UK operates a resilient multi-tier data pipeline designed for accurate, real-world supermarket pricing:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                        Node candidatePipeline                          │
+├────────────────────────────────────────────────────────────────────────┤
+│ 1. 72h PriceCache (LRU + Disk Persistence, TTL 72h)                    │
+│ 2. Tier 1: Direct Store Adapters (Python store-fetcher via curl_cffi)  │
+│ 3. Tier 2: Aggregator Scraper (Trolley fallback via scraper-pod)       │
+│ 4. Tier 3: Verified Offline Catalog Benchmarks (Labelled Estimated)    │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### 1. Three Data Tiers & Store Reachability
+- **Tier 1: Direct Supermarket Adapters (Data Confidence: 0.90 / 90%)**:
+  - High-performance, direct extraction through the **`store-fetcher`** Python sidecar utilizing `curl_cffi` TLS browser impersonation.
+  - **Reachable Grocers**:
+    - **Tesco**: GraphQL gateway (`xapi.tesco.com`) and dehydrated Apollo Client SSR state.
+    - **Sainsbury's**: Groceries Online REST API (`/groceries-api/gol-services`).
+    - **Morrisons**: Server-rendered `window.__INITIAL_STATE__` parsing.
+  - **Estimated-Only / Unreachable Grocers**:
+    - **ASDA** & **Iceland**: Modern client-side SPA / Mobify shells returning unhydrated HTML over stateless HTTP; fallback to Tier 2 aggregator or Tier 3 catalog.
+    - **Aldi** & **Lidl**: UK online home delivery discontinued (in-store only); labelled as estimated catalog benchmarks.
+- **Tier 2: Aggregator Scraper (Data Confidence: 0.60 / 60%)**:
+  - Sandboxed Chromium microservice (`scraper-pod`) scraping Trolley aggregator search when direct adapters are blocked or unconfigured.
+- **Tier 3: Verified Offline Catalog (Data Confidence: 0.40 / 40%)**:
+  - Curated 635+ product benchmark catalog with real loyalty (Clubcard/Nectar) and multibuy deal mechanics, ensuring 100% offline testability and resilience.
+
+### 2. Two-Axis Confidence Model
+Prices and matches are evaluated on two independent axes:
+$$\text{confidenceScore} = \min(\text{dataConfidence}, \text{dataConfidence} \times \text{matchConfidence})$$
+- **Data Confidence**: Governed strictly by source tier (`direct` = 0.90, `aggregator` = 0.60, `catalog` = 0.40).
+- **Match Confidence**: Computed by local fuzzy scoring or optional Gemini AI candidate review ($0.0 \dots 1.0$).
+- **AI Safety Invariant**: AI adjusts match confidence only and **never upgrades the data tier**. An AI-picked catalog item reports $\le 0.40$ (40%) and can never outrank verified 90% direct store pricing.
+
+### 3. Key Technical Specifications
 - [**System Architecture & Technical Specs**](docs/architecture.md): Deep-dive into microservices, data models, and scoring algorithms.
+- [**Direct Adapter Architecture & Auth Bounds**](docs/scraping-architecture.md): Specifications for sidecar adapters, split-plane sessions, and safety constraints.
 - [**User Journey & Interactive Workflows**](docs/user-journey.md): Visual UI process flows, state transitions, and modal interactions.
 - [**CI/CD & Security Pipelines**](docs/workflows.md): Concurrency cancellation, release-gated container publishing, and OWASP audit architecture.
 
@@ -62,10 +99,11 @@ A high-performance grocery price comparison and basket optimization engine for U
 
 ## 🚀 Quick Start (Docker Compose — Recommended)
 
-The canonical stack consists of two isolated microservices and a client SPA:
+The canonical stack consists of four isolated microservices and a client SPA:
 1. **`client`**: React 18 + Vite + Tailwind UI (`http://localhost:5173`)
-2. **`logic-api`**: Comparison engine, NLP parsing, and basket optimizer (`http://localhost:3001`)
-3. **`scraper-pod`**: Sandboxed Chromium scraping engine (`http://scraper-pod:3002`)
+2. **`logic-api`**: Express comparison engine, NLP parsing, and basket optimizer (`http://localhost:3001`)
+3. **`store-fetcher`**: Python 3.12 FastAPI sidecar running direct supermarket adapters (`http://127.0.0.1:3003`)
+4. **`scraper-pod`**: Sandboxed Chromium scraping engine (`http://scraper-pod:3002`)
 
 ### 1. Launch Services
 ```bash
@@ -85,7 +123,10 @@ npm --prefix client install
 npm --prefix services/logic-api install
 npm --prefix services/scraper-pod install
 
-# 2. Run all services concurrently
+# 2. Setup Python sidecar (optional for local direct scraping)
+cd services/store-fetcher && pip install -r requirements.txt && cd ../..
+
+# 3. Run all services concurrently
 npm run dev
 ```
 
@@ -94,8 +135,11 @@ npm run dev
 ## 🧪 Testing & Verification
 
 ```bash
-# Run unit test suite (110 node:test tests)
+# Run unit test suite (139 node:test tests across 41 suites)
 npm test
+
+# Run direct store adapters verification (all 17 steps)
+npm run verify:infv
 
 # Run ESLint & Catalog integrity validator
 npm run lint

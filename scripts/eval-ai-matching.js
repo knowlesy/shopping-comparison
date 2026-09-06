@@ -134,16 +134,22 @@ async function runAiEval() {
   const accuracy = Number(((correctPicks / fixtures.length) * 100).toFixed(1));
   const rulesAccuracy = Number(((rulesCorrectPicks / fixtures.length) * 100).toFixed(1));
   const fireRate = Number(((aiFiredCount / fixtures.length) * 100).toFixed(1));
-  const impactRate = aiFiredCount > 0 ? Number(((aiChangedOutcomeCount / aiFiredCount) * 100).toFixed(1)) : 0;
-  const precision = aiChangedOutcomeCount > 0 ? Number(((aiChangedCorrectlyCount / aiChangedOutcomeCount) * 100).toFixed(1)) : 100;
+  const impactRate = aiFiredCount > 0 ? `${((aiChangedOutcomeCount / aiFiredCount) * 100).toFixed(1)}%` : 'n/a';
+  const impactDisplay = aiFiredCount > 0
+    ? `${aiChangedOutcomeCount}/${aiFiredCount} (${impactRate})`
+    : 'n/a';
+  const precision = aiChangedOutcomeCount > 0 ? `${((aiChangedCorrectlyCount / aiChangedOutcomeCount) * 100).toFixed(1)}%` : 'n/a';
+  const precisionDisplay = aiChangedOutcomeCount > 0
+    ? `${aiChangedCorrectlyCount}/${aiChangedOutcomeCount} (${precision})`
+    : 'n/a';
 
   console.log('-------------------------------------------------------------------------------');
   console.log(`Final Accuracy:           ${correctPicks}/${fixtures.length} (${accuracy}%)`);
   console.log(`Deterministic Baseline:   ${rulesCorrectPicks}/${fixtures.length} (${rulesAccuracy}%)`);
   console.log(`AI Policy Evaluation:`);
   console.log(`  - AI Fire Rate:         ${aiFiredCount}/${fixtures.length} (${fireRate}%)`);
-  console.log(`  - Changed Outcomes:     ${aiChangedOutcomeCount}/${aiFiredCount || 1} (${impactRate}%)`);
-  console.log(`  - Correct Changes:      ${aiChangedCorrectlyCount}/${aiChangedOutcomeCount || 1} (${precision}%)`);
+  console.log(`  - Changed Outcomes:     ${impactDisplay}`);
+  console.log(`  - Correct Changes:      ${precisionDisplay}`);
   console.log('-------------------------------------------------------------------------------\n');
 
   const reportDir = path.resolve(__dirname, '../test-results');
@@ -166,10 +172,10 @@ async function runAiEval() {
           aiFiredCount,
           aiFireRate: `${fireRate}%`,
           aiChangedOutcomeCount,
-          aiOutcomeImpactRate: `${impactRate}%`,
+          aiOutcomeImpactRate: impactRate,
           aiChangedCorrectlyCount,
           aiChangedIncorrectlyCount,
-          aiPolicyPrecision: `${precision}%`
+          aiPolicyPrecision: precision
         },
         results
       },
