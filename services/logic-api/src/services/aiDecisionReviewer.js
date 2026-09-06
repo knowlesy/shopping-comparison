@@ -5,6 +5,10 @@ import { composeConfidence } from './confidence.js';
 import { AiPolicy } from './aiPolicy.js';
 import { isContaminated } from './contaminationRules.js';
 
+try {
+  process.loadEnvFile();
+} catch {}
+
 /**
  * AI Decision Reviewer (Hybrid Matching Engine)
  *

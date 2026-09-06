@@ -21,6 +21,10 @@ import { KeywordExtractor } from '../services/logic-api/src/services/keywordExtr
 import { PenaltyRules } from '../services/logic-api/src/services/penaltyRules.js';
 import { AiDecisionReviewer } from '../services/logic-api/src/services/aiDecisionReviewer.js';
 
+try {
+  process.loadEnvFile();
+} catch {}
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const FIXTURES = path.join(ROOT, 'tests/fixtures/ai-matching-fixtures.real.json');
