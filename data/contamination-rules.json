@@ -3,7 +3,7 @@
     "category": "eggs",
     "matchPattern": "\\b(?:egg|eggs)\\b",
     "matchNegatePattern": "\\b(?:scotch|mayo|salad in mayo|custard|noodle)\\b",
-    "prohibitedPattern": "\\b(?:scotch|mayo|salad in mayo|mayonnaise|custard|creme egg|easter|chocolate egg|noodles?|sandwich|fried egg sweets|sweets)\\b"
+    "prohibitedPattern": "\\b(?:scotch|mayo|salad in mayo|mayonnaise|custard|creme egg|easter|chocolate eggs?|noodles?|sandwich|fried egg sweets|sweets|surprise|toy|kinder|powder|pickled)\\b"
   },
   {
     "category": "potatoes",
@@ -53,10 +53,22 @@
     "prohibitedPattern": "\\b(?:chips?|crisps?|crackers?|snack|flavoured)\\b"
   },
   {
+    "category": "peppers",
+    "matchPattern": "\\b(?:red\\s+)?peppers?\\b",
+    "matchNegatePattern": "\\b(?:jalapeno|chilli|chili|habanero|scotch bonnet|cayenne|peppadew|roasted|chargrilled|black pepper|white pepper|cracked pepper)\\b",
+    "prohibitedPattern": "\\b(?:jalapeno|chilli|chili|habanero|scotch bonnet|cayenne|peppadew|roasted|chargrilled|pickled|in brine|bruschetta|pastr(?:y|ies)|topping|for dogs|dog food|cat food|pet food)\\b"
+  },
+  {
     "category": "produce-derivatives",
-    "matchPattern": "\\b(?:banana|bananas|carrot|carrots|cucumber|cucumbers|apple|apples|orange|oranges|lemon|lemons|pear|pears|plum|plums|berry|berries|grape|grapes|fruit|fruits|vegetable|vegetables|celery|broccoli|cabbage|onion|onions|courgette|courgettes|lettuce)\\b",
+    "matchPattern": "\\b(?:banana|bananas|carrot|carrots|cucumber|cucumbers|apple|apples|orange|oranges|lemon|lemons|pear|pears|plum|plums|berry|berries|grape|grapes|fruit|fruits|vegetable|vegetables|celery|broccoli|cabbage|onion|onions|courgette|courgettes|lettuce|pepper|peppers)\\b",
     "matchNegatePattern": "\\b(?:drink|drinks|juice|juices|smoothie|smoothies|shake|shakes|cordial|squash|milkshake|cake|cakes|muffin|muffins|dessert|desserts|bake|relish|chutney|pickle|pickles|dip|dips|sauce)\\b",
-    "prohibitedPattern": "\\b(?:drink|drinks|juice|juices|smoothie|smoothies|oat\\s+drink|cordial|squash|milkshake|cake|cakes|muffin|muffins|dessert|desserts|relish|chutneys?|pickles?|dip|dips)\\b"
+    "prohibitedPattern": "\\b(?:drink|drinks|juice|juices|smoothie|smoothies|oat\\s+drink|cordial|squash|milkshake|cake|cakes|muffin|muffins|dessert|desserts|relish|chutneys?|pickles?|dip|dips|snack\\s*pack|snacks?|crisps?|chips?|dried|flavoured\\s+water)\\b"
+  },
+  {
+    "category": "dried-fruit",
+    "matchPattern": "\\b(?:sultana|sultanas|raisin|raisins|currant|currants)\\b",
+    "matchNegatePattern": "\\b(?:scone|scones|cereal|cookie|cookies|biscuit|biscuits|cake|cakes|bran|porridge|bread)\\b",
+    "prohibitedPattern": "\\b(?:scones?|cereal|bran|porridge|granola|muesli|creamed rice|rice pudding|cookies?|biscuits?|cakes?|buns?|bread|pudding)\\b"
   },
   {
     "category": "cooking-oil",

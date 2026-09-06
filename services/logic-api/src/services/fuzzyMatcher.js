@@ -53,11 +53,19 @@ export class FuzzyMatcher {
       };
     }
 
-    const keywords = this.extractKeywords(item);
+    let effectiveItem = item;
+    if (effectiveItem && effectiveItem.fatPercentage === undefined) {
+      const itemText = `${effectiveItem.rawText || ''} ${effectiveItem.name || ''}`;
+      if (/\b0%|\b0\s*%|\bfat\s*free\b/i.test(itemText) || (!effectiveItem.rawText && /Greek yogurt/i.test(effectiveItem.name || ''))) {
+        effectiveItem = { ...effectiveItem, fatPercentage: 0 };
+      }
+    }
+
+    const keywords = this.extractKeywords(effectiveItem);
 
     const scored = storeProducts.map((prod) => {
       const { score, packs, totalQty, totalPrice, weightDiffPct, dealApplied } =
-        this.scoreCandidate(prod, item, keywords, preferences, storeProducts);
+        this.scoreCandidate(prod, effectiveItem, keywords, preferences, storeProducts);
       return {
         product: prod,
         score,
@@ -70,8 +78,8 @@ export class FuzzyMatcher {
     });
 
     // Sort using ranking rule: live/direct precedence, brand-preference preservation,
-    // and with no brand requested, an exact-size pack does not beat a cheaper sufficient one
-    scored.sort((a, b) => FuzzyMatcher.compareCandidates(a, b, item, preferences));
+    // and with no brand requested (or both matching brand), an exact-size pack does not beat a cheaper sufficient one
+    scored.sort((a, b) => FuzzyMatcher.compareCandidates(a, b, effectiveItem, preferences));
 
     const best = scored[0];
 
@@ -259,12 +267,14 @@ function getTitleCore(title = '') {
       return aIsCat ? 1 : -1;
     }
 
-    // 2. Ranking rule: With no brand requested, an exact-size pack does not beat a cheaper sufficient one
+    // 2. Ranking rule: With no brand requested (or when both candidates satisfy the requested brand),
+    // an exact-size pack does not beat a cheaper sufficient one
     const aBrandNamed = a.product?.brand && this.isBrandNamed(a.product.brand, item);
     const bBrandNamed = b.product?.brand && this.isBrandNamed(b.product.brand, item);
     const brandRequested = Boolean(item.brandPreference || aBrandNamed || bBrandNamed);
+    const brandSatisfied = !brandRequested || (aBrandNamed && bBrandNamed);
 
-    if (!brandRequested && a.score >= 50 && b.score >= 50) {
+    if (brandSatisfied && a.score >= 50 && b.score >= 50) {
       const aSufficient = a.weightDiffPct !== undefined ? a.weightDiffPct >= 0 : (a.totalQty >= (item.targetQuantity || 1));
       const bSufficient = b.weightDiffPct !== undefined ? b.weightDiffPct >= 0 : (b.totalQty >= (item.targetQuantity || 1));
 

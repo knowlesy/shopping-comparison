@@ -144,4 +144,36 @@ describe('contaminationRules', () => {
       );
     });
   });
+
+  describe('Novelty eggs, Peppers, Produce snacks, and Dried fruit', () => {
+    it('should prohibit novelty, toy, and chocolate eggs for fresh egg queries', () => {
+      assert.equal(isContaminated('Large eggs 17', 'Character Surprise Egg 10G'), true);
+      assert.equal(isContaminated('Large eggs 17', 'Kinder Bueno Chocolate Eggs 80G'), true);
+      assert.equal(isContaminated('Large eggs 17', 'Dr.Oetker Egg White Powder Multipack Sachet 4X5g'), true);
+      assert.equal(isContaminated('Large eggs 17', 'GARNERS PICKLED EGGS 440g'), true);
+      assert.equal(isContaminated('Large eggs 17', 'Big & Fresh Barn Eggs 6 Large'), false);
+    });
+
+    it('should prohibit chillies, jalapenos, and prepared food for fresh red pepper queries', () => {
+      assert.equal(isContaminated('Red peppers 4', 'Aleyna Sliced Red Jalapeno Peppers 480G'), true);
+      assert.equal(isContaminated('Red peppers 4', 'Aleyna Hot Chilli Peppers 470g'), true);
+      assert.equal(isContaminated('Red peppers 4', 'Tesco Red Pepper & 3 Bean Chilli 392G'), true);
+      assert.equal(isContaminated('Red peppers 4', 'Aleyna Roasted Red Peppers 480G'), true);
+      assert.equal(isContaminated('Red peppers 4', 'Aleyna Specialities Roasted Red Pepper and Artichoke Bruschetta Topping 190g'), true);
+      assert.equal(isContaminated('Red peppers 4', 'Tesco Red Peppers Each'), false);
+    });
+
+    it('should prohibit dried snacks and crisps for fresh apple queries', () => {
+      assert.equal(isContaminated('Apples 250 g', 'Tesco Apple Snack Pack 80G'), true);
+      assert.equal(isContaminated('Apples 250 g', 'Scrapples Crunchy Plain Apple Crisps Multipack (5x12g)'), true);
+      assert.equal(isContaminated('Apples 250 g', 'Rosedene Farms Small Apple 6 Pack'), false);
+    });
+
+    it('should prohibit baked goods, cereals, and desserts for plain sultana queries', () => {
+      assert.equal(isContaminated('Sultanas 500 g', 'Tesco Sultana Scones 6 Pack'), true);
+      assert.equal(isContaminated('Sultanas 500 g', "Kellogg's Sultana Bran Breakfast Cereal 500g"), true);
+      assert.equal(isContaminated('Sultanas 500 g', 'Ambrosia Creamed Rice Sultanas & Nutmeg 400G Tin'), true);
+      assert.equal(isContaminated('Sultanas 500 g', 'Tesco Sultana & Oat Cookies 200G'), true);
+    });
+  });
 });

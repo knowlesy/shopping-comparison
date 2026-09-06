@@ -105,6 +105,23 @@ export function extractProductMeasure(prod, targetUnit = '') {
     return { size: totalSize, unit, kind, isLoose: false };
   }
 
+  // 1b. For COUNT targets or eggs, prioritize pack/piece count from title over gross package weight
+  if (targetKind === MEASURE_KINDS.COUNT || /\beggs?\b/i.test(titleLower)) {
+    const packMatch =
+      title.match(/\b(\d+)\s*(?:pack|pk|piece|pieces|eggs?)\b/i) ||
+      title.match(/\b(?:pack|pk)\s*of\s*(\d+)\b/i) ||
+      title.match(/\b(\d+)\s*(?:large|medium|small)\b/i) ||
+      title.match(/\bminimum\s*(\d+)\s*pack\b/i) ||
+      title.match(/\b(\d+)\s*pack\s*minimum\b/i);
+
+    if (packMatch) {
+      const count = parseInt(packMatch[1], 10);
+      if (count > 0) {
+        return { size: count, unit: 'count', kind: MEASURE_KINDS.COUNT, isLoose };
+      }
+    }
+  }
+
   // 2. Explicit packageSize and packageUnit on product object
   if (prod?.packageSize && Number(prod.packageSize) > 0) {
     const rawUnit = String(prod.packageUnit || '').toLowerCase().trim();

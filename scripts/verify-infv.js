@@ -1665,7 +1665,7 @@ check(23, 'The real-corpus rules score does not slide backwards', async () => {
     if (good) ok++;
     else failed.push(`${f.query} -> ${(m.product?.title || 'NO MATCH').trim()}`);
   }
-  const FLOOR = 19;
+  const FLOOR = 26;
   if (ok < FLOOR) {
     fail(`rules resolve ${ok}/${F.length} of the hand-labelled corpus, below the agreed floor of ${FLOOR}:\n          - ${failed.join('\n          - ')}`);
   }

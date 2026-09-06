@@ -23,6 +23,7 @@ export class PackSelector {
     // Dimension mismatch checks:
     // 1. Explicit MASS or VOLUME target must match product dimension
     // 2. Fresh produce (solid fruit/veg) count targets must never be satisfied by a liquid VOLUME product
+    // 3. Multi-unit count targets (e.g. 17 eggs, 4 peppers) must not be satisfied by a continuous MASS or VOLUME pack
     const isExplicitMeasure = targetKind === MEASURE_KINDS.MASS || targetKind === MEASURE_KINDS.VOLUME;
     const isProduceLiquidMismatch = item?.category === 'produce' && prodMeasure.kind === MEASURE_KINDS.VOLUME;
     const dimensionMismatch = (isExplicitMeasure && targetKind !== prodMeasure.kind) || isProduceLiquidMismatch;

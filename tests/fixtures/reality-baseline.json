@@ -8,22 +8,22 @@
   ],
   "totals": {
     "itemsParsed": 58,
-    "matchedCount": 57,
-    "noMatchCount": 1,
+    "matchedCount": 56,
+    "noMatchCount": 2,
     "suspectMatches": 0
   },
   "suspectMatches": 0,
   "suspectItems": [],
   "bySource": {
-    "direct": 56,
+    "direct": 55,
     "aggregator": 0,
     "catalog": 1
   },
   "perStore": {
     "tesco": {
-      "itemsFound": 57,
-      "matchRate": 0.98,
-      "basketTotal": 159.8
+      "itemsFound": 56,
+      "matchRate": 0.965,
+      "basketTotal": 157.95
     },
     "sainsburys": {
       "itemsFound": 30,
@@ -42,11 +42,12 @@
     "0.4": 52
   },
   "unresolvedItems": [
-    "Hummus"
+    "Hummus",
+    "Sultanas"
   ],
   "comparisonToCatalogOnly": {
     "catalogOnlyNoMatch": 28,
-    "directNoMatch": 1,
-    "explanation": "Direct fetch tier resolved 27 previously unmatchable items across Tesco, Sainsbury's, and Morrisons."
+    "directNoMatch": 2,
+    "explanation": "Direct fetch tier resolved 26 previously unmatchable items across Tesco, Sainsbury's, and Morrisons."
   }
 }

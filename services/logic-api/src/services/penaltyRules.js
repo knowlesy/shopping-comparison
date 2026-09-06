@@ -124,6 +124,22 @@ export class PenaltyRules {
       }
     }
 
+    // Hard Attribute Constraint: Explicit percentage (e.g. cocoa 85%, etc.) in notes/name/rawText
+    const explicitPctMatch =
+      (Array.isArray(item.notes) && item.notes.join(' ').match(/\b(\d+)%/)) ||
+      (item.rawText && item.rawText.match(/\b(\d+)%/)) ||
+      (item.name && item.name.match(/\b(\d+)%/));
+
+    if (explicitPctMatch && item.fatPercentage === undefined) {
+      const targetPct = parseInt(explicitPctMatch[1], 10);
+      const candPctMatch = titleLower.match(/\b(\d+)%/);
+      const candPct = candPctMatch ? parseInt(candPctMatch[1], 10) : null;
+
+      if (candPct === null || candPct !== targetPct) {
+        return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
+      }
+    }
+
     // Hard Dietary Constraint: Wholemeal / Wholewheat must not match white or non-wholemeal
     const isWholemealRequested = item.isWholewheat || /\b(?:wholemeal|wholegrain|wholewheat|whole\s+wheat)\b/i.test(itemLower);
     if (isWholemealRequested) {
@@ -162,6 +178,42 @@ export class PenaltyRules {
 
     if (isWholemealRequested) {
       score += 35;
+    }
+
+    // Size attribute preference (e.g. Large eggs vs Medium eggs)
+    const isLargeRequested = /\blarge\b/i.test(itemText);
+    const isMediumRequested = /\bmedium\b/i.test(itemText);
+    const isSmallRequested = /\bsmall\b/i.test(itemText);
+
+    if (isLargeRequested) {
+      if (/\blarge\b/i.test(titleLower)) {
+        score += 25;
+      } else if (/\b(?:medium|small)\b/i.test(titleLower)) {
+        score -= 35;
+      }
+    } else if (isMediumRequested) {
+      if (/\bmedium\b/i.test(titleLower)) {
+        score += 25;
+      } else if (/\b(?:large|small)\b/i.test(titleLower)) {
+        score -= 35;
+      }
+    } else if (isSmallRequested) {
+      if (/\bsmall\b/i.test(titleLower)) {
+        score += 25;
+      } else if (/\b(?:large|medium)\b/i.test(titleLower)) {
+        score -= 35;
+      }
+    }
+
+    // Plain / Original preference when no fragrance/flavour is specified
+    const hasExplicitScentOrFlavour = /\b(?:eucalyptus|lemon|lime|pomegranate|grapefruit|orange|apple|berry|vanilla|mint|lavender|antibacterial|anti-bacterial|aloe)\b/i.test(itemText);
+    if (!hasExplicitScentOrFlavour) {
+      if (/\b(?:original|plain|natural)\b/i.test(titleLower)) {
+        score += 20;
+      }
+      if (/\b(?:eucalyptus|pomegranate|grapefruit|lemon|anti-bacterial|antibacterial|max\s+power)\b/i.test(titleLower)) {
+        score -= 35;
+      }
     }
 
     // 1. Semantic Cut & Form Flexibility
