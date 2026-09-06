@@ -20,6 +20,7 @@ import { FuzzyMatcher } from '../services/logic-api/src/services/fuzzyMatcher.js
 import { KeywordExtractor } from '../services/logic-api/src/services/keywordExtractor.js';
 import { PenaltyRules } from '../services/logic-api/src/services/penaltyRules.js';
 import { AiDecisionReviewer } from '../services/logic-api/src/services/aiDecisionReviewer.js';
+import { AiEscalation } from '../services/logic-api/src/services/aiEscalation.js';
 
 try {
   process.loadEnvFile();
@@ -98,7 +99,12 @@ async function aiResolve(f) {
     qty: reviewed?.totalQty,
     price: reviewed?.totalPrice,
     reasoning: reviewed?.aiReasoning || '',
-    answered
+    confidence: reviewed?.matchConfidence || 0,
+    answered,
+    scored,
+    candidates: f.candidates,
+    item: f.item,
+    query: f.query
   };
 }
 
@@ -151,26 +157,67 @@ const delayMs = (() => {
 })();
 console.log(`\npacing: ${delayMs}ms between calls (--delay 0 to disable)`);
 
+let totalEscalationCalls = 0;
+let totalEscalationTokens = 0;
+
 const perFixture = new Map(fixtures.map((f) => [f.id, []]));
 let unanswered = 0;
 for (let run = 1; run <= runs; run++) {
   process.stdout.write(`\nAI run ${run}/${runs} `);
+  const runResults = [];
   for (const f of fixtures) {
     let res;
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
         res = await aiResolve(f);
       } catch (err) {
-        res = { id: null, title: `ERROR: ${err.message}`, reasoning: '', answered: false };
+        res = { id: null, title: `ERROR: ${err.message}`, reasoning: '', answered: false, candidates: f.candidates, item: f.item, query: f.query };
       }
       if (res.answered) break;
       if (attempt < 2) await sleep(22000);
     }
+    const preJudge = judge(f, res.id, res.packs, res.qty);
+    runResults.push({ f, res, preJudge });
+    process.stdout.write(res.answered ? (preJudge.ok ? '.' : 'x') : '?');
+    if (delayMs) await sleep(delayMs);
+  }
+
+  // Escalation: collect items that finished unresolved or low-confidence
+  const toEscalate = runResults.filter(({ res }) => (!res.id || !res.answered || (res.confidence && res.confidence < 0.7)) && (res.candidates || []).length > 0);
+  if (toEscalate.length > 0) {
+    const problemBatch = toEscalate.map(({ f, res }) => ({
+      query: f.query,
+      item: f.item,
+      candidates: res.scored || f.candidates,
+      supermarket: 'tesco'
+    }));
+    try {
+      const escRes = await AiEscalation.escalateBatch(problemBatch, {
+        maxItems: 10
+      });
+      totalEscalationCalls += escRes.calls;
+      totalEscalationTokens += escRes.tokensUsed;
+      escRes.results.forEach((escResult, idx) => {
+        if (escResult.product) {
+          const target = toEscalate[idx];
+          target.res.id = escResult.product.id;
+          target.res.title = escResult.product.title.trim();
+          target.res.packs = escResult.packsNeeded;
+          target.res.qty = escResult.totalQuantity;
+          target.res.price = escResult.totalPrice;
+          target.res.reasoning = escResult.aiReasoning || target.res.reasoning;
+          target.res.answered = true;
+        }
+      });
+    } catch (err) {
+      console.warn(`\n[Escalation error]: ${err.message}`);
+    }
+  }
+
+  for (const { f, res } of runResults) {
     if (!res.answered) unanswered++;
     const v = judge(f, res.id, res.packs, res.qty);
     perFixture.get(f.id).push({ ok: v.ok, why: v.why, res });
-    process.stdout.write(res.answered ? (v.ok ? '.' : 'x') : '?');
-    if (delayMs) await sleep(delayMs);
   }
 }
 console.log('\n');
@@ -216,5 +263,6 @@ if (runs > 1) {
     console.log(`                 ${aiRows.length - measurable.length} fixture(s) excluded: the model did not answer every run, so their stability is unmeasured`);
   }
 }
+console.log(`ESCALATION       ${totalEscalationCalls} call(s), ${totalEscalationTokens} tokens used`);
 console.log('-'.repeat(79));
 console.log('Holdout is the honest number: those fixtures are not for tuning against.');

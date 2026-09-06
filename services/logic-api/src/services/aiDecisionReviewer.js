@@ -140,8 +140,9 @@ export class AiDecisionReviewer {
         ? this._clientFactory({ apiKey, model })
         : new GoogleGenAI({ apiKey });
 
-      // Model sees only the top 5 candidates; indexing must be bounded to this payload
-      const candidatesPayload = scoredCandidates.slice(0, 5).map((c, idx) => ({
+      // Model candidate review cap: configurable via AI_CANDIDATE_CAP or preferences, defaulting to 25
+      const candidateCap = Number(process.env.AI_CANDIDATE_CAP) || preferences.candidateCap || 25;
+      const candidatesPayload = scoredCandidates.slice(0, candidateCap).map((c, idx) => ({
         index: idx,
         id: c.product?.id,
         title: c.product?.title,
