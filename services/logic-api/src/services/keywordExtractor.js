@@ -48,7 +48,7 @@ const GENERIC_STOPWORDS = new Set([
   'target', 'item', 'items', 'mix', 'raw', 'organic', 'pure', 'lean', 'extra',
   'good', 'quality', 'british', 'standard', 'large', 'medium', 'small', 'baby',
   'red', 'green', 'white', 'yellow', 'brown', 'dark', 'light', 'sweet', 'water',
-  'brine', 'oil', 'spring', 'salted', 'unsalted', 'smoked', 'unsmoked', 'in', 'with',
+  'brine', 'spring', 'salted', 'unsalted', 'smoked', 'unsmoked', 'in', 'with',
   'of', 'and', 'for', 'to', 'on', 'at', 'from', 'or', 'kg', 'g', 'ml', 'l', 'lt',
   'litre', 'litres', 'oz', 'lb', 'pt', 'pint', 'pints', 'x'
 ]);

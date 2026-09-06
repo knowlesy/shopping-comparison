@@ -25,8 +25,8 @@
   {
     "category": "raw-meat",
     "matchPattern": "\\b(?:mince|steak|beef|chicken|pork|lamb|turkey|breast|fillet)\\b",
-    "matchNegatePattern": "\\b(?:canned|tinned|gravy|pie|stew|meal)\\b",
-    "prohibitedPattern": "\\b(?:in gravy|& gravy|and gravy|& onions|and onions|canned|tinned|pie filling|pie\\b|cat food|dog food|pet food)\\b"
+    "matchNegatePattern": "\\b(?:canned|tinned|gravy|pie|stew|meal|breaded|battered|nugget|kiev|goujon)\\b",
+    "prohibitedPattern": "\\b(?:in gravy|& gravy|and gravy|& onions|and onions|canned|tinned|pie filling|pie\\b|cat food|dog food|pet food|breaded|battered|nuggets?|kievs?|goujons?)\\b"
   },
   {
     "category": "garlic",
@@ -51,5 +51,22 @@
     "matchPattern": "\\b(?:hummus|houmous)\\b",
     "matchNegatePattern": "\\b(?:crisps?|chips?|crackers?|dip)\\b",
     "prohibitedPattern": "\\b(?:chips?|crisps?|crackers?|snack|flavoured)\\b"
+  },
+  {
+    "category": "produce-derivatives",
+    "matchPattern": "\\b(?:banana|bananas|carrot|carrots|cucumber|cucumbers|apple|apples|orange|oranges|lemon|lemons|pear|pears|plum|plums|berry|berries|grape|grapes|fruit|fruits|vegetable|vegetables|celery|broccoli|cabbage|onion|onions|courgette|courgettes|lettuce)\\b",
+    "matchNegatePattern": "\\b(?:drink|drinks|juice|juices|smoothie|smoothies|shake|shakes|cordial|squash|milkshake|cake|cakes|muffin|muffins|dessert|desserts|bake|relish|chutney|pickle|pickles|dip|dips|sauce)\\b",
+    "prohibitedPattern": "\\b(?:drink|drinks|juice|juices|smoothie|smoothies|oat\\s+drink|cordial|squash|milkshake|cake|cakes|muffin|muffins|dessert|desserts|relish|chutneys?|pickles?|dip|dips)\\b"
+  },
+  {
+    "category": "cooking-oil",
+    "matchPattern": "\\b(?:(?:olive|vegetable|sunflower|sesame|rapeseed|coconut|cooking)\\s+oil|oil)\\b",
+    "matchNegatePattern": "\\b(?:in\\s+oil|olives\\b|seeds?\\b)\\b",
+    "prohibitedPattern": "\\b(?:olives?\\b(?!.*\\boil\\b)|garlic\\s+&\\s+basil|halkidiki|kalamata)\\b"
+  },
+  {
+    "category": "vinegar",
+    "matchPattern": "\\b(?:vinegar)\\b",
+    "prohibitedPattern": "\\b(?:wine\\b(?!\\s*vinegar)|cider\\b(?!\\s*vinegar))\\b"
   }
 ]

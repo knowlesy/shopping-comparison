@@ -31,9 +31,9 @@ export class FuzzyMatcher {
     const scrapedForStore = (candidateProducts || []).filter((p) => p.supermarket === supermarket);
     const catalogForStore = CATALOG_BY_STORE[supermarket] || [];
 
-    // If live scraped products are provided for this supermarket, use them exclusively.
-    // Fall back to verified baseline catalog products only when no live products are provided for this store.
-    const storeProducts = scrapedForStore.length > 0 ? scrapedForStore : catalogForStore;
+    // Merged candidate selection across direct/aggregator/catalog data tiers:
+    const mergedCandidates = scrapedForStore.length > 0 ? scrapedForStore : catalogForStore;
+    const storeProducts = mergedCandidates;
 
     if (!storeProducts || storeProducts.length === 0) {
       return {

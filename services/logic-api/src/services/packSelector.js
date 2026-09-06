@@ -20,10 +20,12 @@ export class PackSelector {
 
     const prodMeasure = extractProductMeasure(prod, targetUnit);
 
-    // Dimension mismatch only applies when an explicit physical measure (MASS or VOLUME) was requested
-    // and the product cannot satisfy that dimension (e.g. volume of water for mass of apples, or loose count for mass)
+    // Dimension mismatch checks:
+    // 1. Explicit MASS or VOLUME target must match product dimension
+    // 2. Fresh produce (solid fruit/veg) count targets must never be satisfied by a liquid VOLUME product
     const isExplicitMeasure = targetKind === MEASURE_KINDS.MASS || targetKind === MEASURE_KINDS.VOLUME;
-    const dimensionMismatch = isExplicitMeasure && targetKind !== prodMeasure.kind;
+    const isProduceLiquidMismatch = item?.category === 'produce' && prodMeasure.kind === MEASURE_KINDS.VOLUME;
+    const dimensionMismatch = (isExplicitMeasure && targetKind !== prodMeasure.kind) || isProduceLiquidMismatch;
 
     if (dimensionMismatch) {
       const targetBase = toBaseQuantity(targetAmount, targetUnit).amountInBase;
