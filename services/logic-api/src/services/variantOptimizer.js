@@ -5,48 +5,35 @@
  */
 
 import { DealCalculator } from './dealCalculator.js';
+import {
+  MEASURE_KINDS,
+  getMeasureKind,
+  toBaseQuantity,
+  fromBaseQuantity,
+  extractProductMeasure
+} from './unitMeasure.js';
 
 /**
- * Normalize product size to target units (g or ml or count)
- */
-function normalizeSize(packageSize, packageUnit, targetUnit) {
-  const size = Number(packageSize) || 0;
-  const unit = String(packageUnit || '').toLowerCase().trim();
-  const target = String(targetUnit || '').toLowerCase().trim();
-
-  if (target === 'g') {
-    if (unit === 'kg') return size * 1000;
-    return size;
-  }
-  if (target === 'kg') {
-    if (unit === 'g') return size / 1000;
-    return size;
-  }
-  if (target === 'ml') {
-    if (unit === 'l' || unit === 'litre' || unit === 'ltr') return size * 1000;
-    if (unit === 'pt' || unit === 'pint' || unit === 'pints') return size * 568.261;
-    return size;
-  }
-  if (target === 'l' || target === 'litre') {
-    if (unit === 'ml') return size / 1000;
-    return size;
-  }
-  return size;
-}
-
-/**
- * Extract size from title if packageSize is missing
+ * Extract and normalize size to target units (g, ml, pints, count)
  */
 function inferSize(product, targetUnit) {
-  if (product.packageSize && Number(product.packageSize) > 0) {
-    return normalizeSize(product.packageSize, product.packageUnit, targetUnit);
+  const targetKind = getMeasureKind(targetUnit);
+  const measure = extractProductMeasure(product, targetUnit);
+
+  // Loose produce cannot satisfy a mass target (e.g. courgettes/carrots)
+  if (measure.isLoose && targetKind === MEASURE_KINDS.MASS) {
+    return 0;
   }
-  const title = String(product.title || product.name || '');
-  const match = title.match(/(\d+(?:\.\d+)?)\s*(kg|g|litre|ltr|l|ml|pints?|pt)\b/i);
-  if (match) {
-    return normalizeSize(parseFloat(match[1]), match[2], targetUnit);
+
+  // Cross-dimension guard: product measure kind must match target kind
+  if (measure.kind !== targetKind) {
+    return 0;
   }
-  return 1;
+
+  // Both share physical dimension: convert product size to targetUnit
+  const inBase = toBaseQuantity(measure.size, measure.unit).amountInBase;
+  const inTarget = fromBaseQuantity(inBase, targetUnit);
+  return Number(inTarget.toFixed(3));
 }
 
 /**

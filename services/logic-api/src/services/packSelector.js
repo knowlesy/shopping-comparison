@@ -2,45 +2,84 @@
  * Pack Sizing, Quantity Calculation, & Shortfall Detection Engine
  */
 import { DealCalculator } from './dealCalculator.js';
+import {
+  MEASURE_KINDS,
+  getMeasureKind,
+  toBaseQuantity,
+  extractProductMeasure
+} from './unitMeasure.js';
 
 export class PackSelector {
   /**
    * Normalizes target quantity and product package size into comparable units (grams, ml, pieces).
    */
   static normalizeAmounts(item, prod) {
-    let targetAmount = item.targetQuantity || 1;
-    let prodAmount = prod.packageSize || 1;
+    const targetUnit = String(item?.unit || '').toLowerCase().trim();
+    const targetAmount = Number(item?.targetQuantity) || 1;
+    const targetKind = getMeasureKind(targetUnit);
 
-    if (item.unit === 'kg') targetAmount *= 1000;
-    if (item.unit === 'l') targetAmount *= 1000;
-    if (item.unit === 'pints' || item.unit === 'pint') targetAmount *= 568;
+    const prodMeasure = extractProductMeasure(prod, targetUnit);
 
-    if (prod.packageUnit === 'kg') prodAmount *= 1000;
-    if (prod.packageUnit === 'l') prodAmount *= 1000;
+    // Dimension mismatch only applies when an explicit physical measure (MASS or VOLUME) was requested
+    // and the product cannot satisfy that dimension (e.g. volume of water for mass of apples, or loose count for mass)
+    const isExplicitMeasure = targetKind === MEASURE_KINDS.MASS || targetKind === MEASURE_KINDS.VOLUME;
+    const dimensionMismatch = isExplicitMeasure && targetKind !== prodMeasure.kind;
 
-    // Bunch of bananas / produce handling (approx 5 items per bunch)
-    if (
-      (item.unit === 'item' || item.unit === 'piece' || !item.unit) &&
-      (prod.packageUnit === 'bunch' || (prod.title && prod.title.toLowerCase().includes('bunch')))
-    ) {
-      prodAmount = 5;
+    if (dimensionMismatch) {
+      const targetBase = toBaseQuantity(targetAmount, targetUnit).amountInBase;
+      return {
+        targetAmount: targetBase,
+        prodAmount: 0,
+        targetBase,
+        prodBase: 0,
+        dimensionMismatch: true
+      };
     }
 
-    if ((item.unit === 'g' || item.unit === 'kg') && prodAmount <= 1) {
-      prodAmount = 500;
-    }
-    if ((item.unit === 'l' || item.unit === 'ml' || item.unit === 'pints') && prodAmount <= 1) {
-      prodAmount = 1000;
+    if (!isExplicitMeasure && prodMeasure.kind !== MEASURE_KINDS.COUNT) {
+      // Unspecified target unit (e.g. "Hummus"): single pack match
+      return {
+        targetAmount,
+        prodAmount: targetAmount,
+        targetBase: targetAmount,
+        prodBase: targetAmount,
+        dimensionMismatch: false
+      };
     }
 
-    return { targetAmount, prodAmount };
+    // Both share the same physical dimension (MASS, VOLUME, or COUNT)
+    const targetBase = toBaseQuantity(targetAmount, targetUnit).amountInBase;
+    const prodBase = toBaseQuantity(prodMeasure.size, prodMeasure.unit).amountInBase;
+
+    return {
+      targetAmount: targetBase,
+      prodAmount: prodBase || 1,
+      targetBase,
+      prodBase,
+      dimensionMismatch: false
+    };
   }
 
   /**
    * Calculates packs needed, total delivered quantity, deal prices, and weight difference percentage.
    */
   static calculatePacks(prod, item, preferences = {}) {
-    const { targetAmount, prodAmount } = this.normalizeAmounts(item, prod);
+    const { targetAmount, prodAmount, dimensionMismatch } = this.normalizeAmounts(item, prod);
+    const includeDeals = preferences.includeDeals !== false;
+    const loyaltyPrice = prod.clubcardPrice || prod.nectarPrice || prod.loyaltyPrice;
+    const basePrice = (includeDeals && loyaltyPrice) ? loyaltyPrice : prod.price;
+
+    if (dimensionMismatch) {
+      return {
+        packs: 1,
+        totalQty: 0,
+        totalPrice: Number((basePrice || 0).toFixed(2)),
+        weightDiffPct: -100,
+        dealApplied: undefined,
+        dimensionMismatch: true
+      };
+    }
+
     const ratio = targetAmount / (prodAmount || 1);
     let packs;
     const policy = preferences.packSizingPolicy || 'closest';
@@ -71,9 +110,6 @@ export class PackSelector {
     // Safeguard: grocery pack cap
     packs = Math.min(packs, 12);
 
-    const includeDeals = preferences.includeDeals !== false;
-    const loyaltyPrice = prod.clubcardPrice || prod.nectarPrice || prod.loyaltyPrice;
-    const basePrice = (includeDeals && loyaltyPrice) ? loyaltyPrice : prod.price;
     const totalQty = packs * prodAmount;
     let totalPrice = Number((packs * basePrice).toFixed(2));
     let dealApplied = undefined;

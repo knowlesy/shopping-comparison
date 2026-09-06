@@ -100,8 +100,63 @@ export class PenaltyRules {
       return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
     }
 
-    let score = 0;
     const itemLower = (item.name || '').toLowerCase();
+
+    // Hard Dietary Constraint: Explicit Fat Percentage must veto, not lose to price
+    if (item.fatPercentage !== undefined && item.fatPercentage !== null) {
+      let prodFat = prod.fatPercentage;
+      if (prodFat === undefined || prodFat === null) {
+        const fatMatch = prod.title && prod.title.match(/\b(\d+)%\s*(?:fat|lean)\b/i);
+        if (fatMatch) {
+          prodFat = parseInt(fatMatch[1], 10);
+        }
+      }
+      if (prodFat !== undefined && prodFat !== null) {
+        if (prodFat !== item.fatPercentage) {
+          return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
+        }
+      }
+    }
+
+    // Hard Dietary Constraint: Wholemeal / Wholewheat must not match white or non-wholemeal
+    const isWholemealRequested = item.isWholewheat || /\b(?:wholemeal|wholegrain|wholewheat|whole\s+wheat)\b/i.test(itemLower);
+    if (isWholemealRequested) {
+      const isWhite = /\bwhite\b/i.test(titleLower);
+      const hasWholemealMarker = prod.isWholewheat || /\b(?:wholemeal|wholegrain|wholewheat|whole\s+wheat|brown|granary)\b/i.test(titleLower);
+      if (isWhite || !hasWholemealMarker) {
+        return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
+      }
+    }
+
+    let score = 0;
+
+    // Weight targets must not be satisfied by tallying loose items
+    const targetUnit = String(item.unit || '').toLowerCase().trim();
+    if (targetUnit === 'g' || targetUnit === 'kg') {
+      if (/\bloose\b/i.test(titleLower)) {
+        score -= 60;
+      }
+    }
+
+    // Explicit fat percentage bonus / unlabelled penalty
+    if (item.fatPercentage !== undefined && item.fatPercentage !== null) {
+      let prodFat = prod.fatPercentage;
+      if (prodFat === undefined || prodFat === null) {
+        const fatMatch = prod.title && prod.title.match(/\b(\d+)%\s*(?:fat|lean)\b/i);
+        if (fatMatch) {
+          prodFat = parseInt(fatMatch[1], 10);
+        }
+      }
+      if (prodFat === item.fatPercentage) {
+        score += 40;
+      } else if (prodFat === undefined || prodFat === null) {
+        score -= 10;
+      }
+    }
+
+    if (isWholemealRequested) {
+      score += 35;
+    }
 
     // 1. Semantic Cut & Form Flexibility
     const isStrictCut = preferences.cutMatchingStrategy === 'strict_cut';
@@ -193,17 +248,6 @@ export class PenaltyRules {
 
     // 3. Health & Dietary Preferences
     if (preferences.healthierDefault || item.isHealthierPreferred) {
-      if (item.fatPercentage !== undefined) {
-        if (prod.fatPercentage === item.fatPercentage) {
-          score += 35;
-        } else if (prod.fatPercentage !== undefined && prod.fatPercentage <= item.fatPercentage) {
-          score += 25;
-        } else {
-          score -= 20;
-        }
-      }
-
-      if (item.isWholewheat && prod.isWholewheat) score += 30;
       if (item.isFreeRange && prod.isFreeRange) score += 30;
       if (item.isOrganic && prod.isOrganic) score += 30;
     }
@@ -232,11 +276,15 @@ export class PenaltyRules {
     }
 
     // 5. Pack Sizing & Weight Distance via PackSelector
-    const { packs, totalQty, totalPrice, weightDiffPct, dealApplied } = PackSelector.calculatePacks(
+    const { packs, totalQty, totalPrice, weightDiffPct, dealApplied, dimensionMismatch } = PackSelector.calculatePacks(
       prod,
       item,
       preferences
     );
+
+    if (dimensionMismatch) {
+      score -= 60;
+    }
 
     const absDiff = Math.abs(weightDiffPct);
     const distanceScore = Math.max(-10, Math.round(20 - absDiff * 0.4));

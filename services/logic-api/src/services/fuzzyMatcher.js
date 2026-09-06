@@ -31,8 +31,9 @@ export class FuzzyMatcher {
     const scrapedForStore = (candidateProducts || []).filter((p) => p.supermarket === supermarket);
     const catalogForStore = CATALOG_BY_STORE[supermarket] || [];
 
-    // Merge scraped live products with verified baseline catalog products
-    const storeProducts = [...scrapedForStore, ...catalogForStore];
+    // If live scraped products are provided for this supermarket, use them exclusively.
+    // Fall back to verified baseline catalog products only when no live products are provided for this store.
+    const storeProducts = scrapedForStore.length > 0 ? scrapedForStore : catalogForStore;
 
     if (!storeProducts || storeProducts.length === 0) {
       return {
@@ -110,11 +111,14 @@ function getTitleCore(title = '') {
     // Filter candidate size variants sharing the same product line and source tier as best match
     const bestTitleCore = getTitleCore(best.product.title);
     const isBestCatalog = best.product.source === 'catalog';
+    const isBestLoose = /\bloose\b/i.test(best.product.title);
     const productVariants = scored
       .filter((s) => s.product && s.score >= 25 && s.product.price > 0)
       .filter((s) => {
         const isCat = s.product.source === 'catalog';
         if (isBestCatalog !== isCat) return false;
+        const isCandLoose = /\bloose\b/i.test(s.product.title);
+        if (isBestLoose !== isCandLoose) return false;
         if (s.product.id === best.product.id) return true;
         const sTitleCore = getTitleCore(s.product.title);
         const titleMatches = sTitleCore === bestTitleCore || (sTitleCore.length > 5 && (bestTitleCore.includes(sTitleCore) || sTitleCore.includes(bestTitleCore)));
