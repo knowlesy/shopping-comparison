@@ -1120,7 +1120,114 @@ check(18, 'TODO.md does not still list shipped work as outstanding', () => {
 });
 
 // ---------------------------------------------------------------------------
-// Step 19 — AI robustness: the pipeline must be safe when the model misbehaves
+// Step 19 — Match correctness: unit sanity, hard attributes, honest no-match
+// ---------------------------------------------------------------------------
+// Replays the real 52-line list against the real Tesco scrape. Every expected
+// answer below is a product sitting in the same candidate list the matcher saw.
+const realPick = async (startsWith) => {
+  const { FuzzyMatcher } = await svc('fuzzyMatcher.js');
+  const { IngredientParser } = await svc('ingredientParser.js');
+  const lines = JSON.parse(read(r('tests/fixtures/real-list.json')) || '[]');
+  const fxPath = fs.existsSync(r('tests/fixtures/reality-fixtures.json'))
+    ? r('tests/fixtures/reality-fixtures.json')
+    : r('tests/fixtures/reality-sample.json');
+  const fx = JSON.parse(read(fxPath) || '{}');
+  const items = IngredientParser.parseList(lines);
+  const i = items.findIndex((x) => (x.rawText || x.name || '').startsWith(startsWith));
+  if (i === -1) fail(`no list item starting "${startsWith}"`);
+  const cands = (fx.items?.[i]?.products || []).filter((p) => (p.supermarket || p.store) === 'tesco');
+  if (!cands.length) return null;
+  const m = FuzzyMatcher.matchProduct('tesco', items[i], cands, {});
+  return { item: items[i], match: m, cands, title: (m.product?.title || '').trim() };
+};
+
+check(19, 'A count target counts units in the pack, not the number of packs', async () => {
+  const res = await realPick('Large eggs 17');
+  if (!res) return 'no tesco candidates';
+  const { match, title } = res;
+  if (match.packsNeeded > 4) {
+    fail(`"Large eggs 17" buys ${match.packsNeeded} x "${title}" for £${match.totalPrice} — totalQuantity comes back as ${match.totalQuantity}, i.e. it is counting PACKS toward a target of 17 EGGS instead of reading the 6 in the title. A 10-pack sits in the same list; the sane answer is 2-3 packs for well under £10.`);
+  }
+  if (Number(match.totalQuantity) < 17) {
+    fail(`"Large eggs 17" resolves to only ${match.totalQuantity} eggs`);
+  }
+});
+
+check(19, 'A target in pints is not measured against a package size in litres', async () => {
+  const res = await realPick('Semi-skimmed milk 4 pints');
+  if (!res) return 'no tesco candidates';
+  const { match, title } = res;
+  if (/2 Pints/i.test(title) && match.packsNeeded >= 4) {
+    fail(`"Semi-skimmed milk 4 pints" buys ${match.packsNeeded} x "${title}" = £${match.totalPrice} (8 pints), while "Tesco British Semi Skimmed Milk 2.272L, 4 Pints" at £1.75 is in the same list. totalQuantity is ${match.totalQuantity} — litres summed against a target of 4 pints. Wrong quantity AND ~2.7x the price, in a price-comparison app.`);
+  }
+  if (Number(match.totalPrice) > 3) {
+    fail(`"Semi-skimmed milk 4 pints" costs £${match.totalPrice} when the exact 4-pint bottle is £1.75`);
+  }
+});
+
+check(19, 'A weight target is not satisfied by counting loose items', async () => {
+  const res = await realPick('Courgettes 500');
+  if (!res) return 'no tesco candidates';
+  const { match, title } = res;
+  if (match.packsNeeded > 4) {
+    fail(`"Courgettes 500 g" buys ${match.packsNeeded} x "${title}" for £${match.totalPrice}, with totalQuantity ${match.totalQuantity} — a count, not grams. A 500g target is being met by tallying loose courgettes, so the basket is ~12x the intended amount.`);
+  }
+});
+
+check(19, 'An explicit fat percentage is a hard constraint, not a price-led preference', async () => {
+  const res = await realPick('Beef mince 5%');
+  if (!res) return 'no tesco candidates';
+  const { title, match } = res;
+  const pct = title.match(/(\d+)%\s*Fat/i);
+  if (pct && Number(pct[1]) !== 5) {
+    fail(`"Beef mince 5% 1.9 kg" resolves to "${title}" (${pct[1]}% fat) for £${match.totalPrice}. Three 5% products are in the same candidate list; the 20% is simply cheaper. A stated fat percentage is a dietary requirement — it must veto, not lose to price.`);
+  }
+});
+
+check(19, 'No wholemeal on the shelf means no match, not the nearest white loaf', async () => {
+  const res = await realPick('Wholemeal bread');
+  if (!res) return 'no tesco candidates';
+  const { match, title, cands } = res;
+  const hasWholemeal = cands.some((c) => /wholemeal|wholegrain|granary|brown/i.test(c.title || ''));
+  if (hasWholemeal) return 'a wholemeal loaf is stocked — different case';
+  if (match.product && /white/i.test(title)) {
+    fail(`"Wholemeal bread 1 loaf" resolves to "${title}". Tesco returned six loaves and not one is wholemeal, so the honest answer is no match. Substituting white bread for wholemeal is a fabricated result, and an honest negative is supposed to be a passing outcome in this project.`);
+  }
+});
+
+check(19, 'Every weight-based line resolves to a quantity actually measured in grams', async () => {
+  const { FuzzyMatcher } = await svc('fuzzyMatcher.js');
+  const { IngredientParser } = await svc('ingredientParser.js');
+  const lines = JSON.parse(read(r('tests/fixtures/real-list.json')) || '[]');
+  const fxPath = fs.existsSync(r('tests/fixtures/reality-fixtures.json'))
+    ? r('tests/fixtures/reality-fixtures.json')
+    : r('tests/fixtures/reality-sample.json');
+  const fx = JSON.parse(read(fxPath) || '{}');
+  const items = IngredientParser.parseList(lines);
+  const bad = [];
+  for (let i = 0; i < items.length; i++) {
+    const cands = (fx.items?.[i]?.products || []).filter((p) => (p.supermarket || p.store) === 'tesco');
+    if (!cands.length) continue;
+    const m = FuzzyMatcher.matchProduct('tesco', items[i], cands, {});
+    if (!m.product) continue;
+    // Only weight-based lines: normalise the target to grams and check the
+    // resolved quantity is even in the same unit of measure.
+    const unit = String(items[i].unit || '').toLowerCase();
+    if (unit !== 'g' && unit !== 'kg') continue;
+    const targetG = unit === 'kg' ? Number(items[i].targetQuantity) * 1000 : Number(items[i].targetQuantity);
+    if (!Number.isFinite(targetG) || targetG <= 0) continue;
+    const got = Number(m.totalQuantity);
+    if (Number.isFinite(got) && got < targetG / 2) {
+      bad.push(`${items[i].rawText || items[i].name} (target ${targetG}g) -> ${m.packsNeeded}x "${(m.product.title || '').trim()}" reports totalQuantity ${got}, which is a pack COUNT, not grams`);
+    }
+  }
+  if (bad.length) {
+    fail(`weight-based lines resolve to a quantity that is not in grams at all — the signature of a unit mismatch inflating packsNeeded:\n          - ${bad.join('\n          - ')}`);
+  }
+});
+
+// ---------------------------------------------------------------------------
+// Step 20 — AI robustness: the pipeline must be safe when the model misbehaves
 // ---------------------------------------------------------------------------
 const AIR = 'services/logic-api/src/services/aiDecisionReviewer.js';
 
@@ -1149,7 +1256,7 @@ const fakeClient = (text, opts = {}) => ({
   }
 });
 
-check(19, 'The Gemini client is injectable so misbehaviour can be tested at all', async () => {
+check(20, 'The Gemini client is injectable so misbehaviour can be tested at all', async () => {
   const mod = await svc('aiDecisionReviewer.js');
   const R = mod.AiDecisionReviewer || mod.default;
   if (!R) fail('AiDecisionReviewer is not exported');
@@ -1158,7 +1265,7 @@ check(19, 'The Gemini client is injectable so misbehaviour can be tested at all'
   }
 });
 
-check(19, 'An out-of-range selectedIndex is rejected, not laundered into candidate 0', async () => {
+check(20, 'An out-of-range selectedIndex is rejected, not laundered into candidate 0', async () => {
   const mod = await svc('aiDecisionReviewer.js');
   const R = mod.AiDecisionReviewer || mod.default;
   if (typeof R.setClientFactory !== 'function') fail('no client seam yet (see the injectability gate)');
@@ -1174,7 +1281,7 @@ check(19, 'An out-of-range selectedIndex is rejected, not laundered into candida
   }
 });
 
-check(19, 'A negative selectedIndex is rejected', async () => {
+check(20, 'A negative selectedIndex is rejected', async () => {
   const mod = await svc('aiDecisionReviewer.js');
   const R = mod.AiDecisionReviewer || mod.default;
   if (typeof R.setClientFactory !== 'function') fail('no client seam yet');
@@ -1188,7 +1295,7 @@ check(19, 'A negative selectedIndex is rejected', async () => {
   }
 });
 
-check(19, 'Contamination rules are re-applied to the AI pick, not just the rules pick', async () => {
+check(20, 'Contamination rules are re-applied to the AI pick, not just the rules pick', async () => {
   const mod = await svc('aiDecisionReviewer.js');
   const R = mod.AiDecisionReviewer || mod.default;
   if (typeof R.setClientFactory !== 'function') fail('no client seam yet');
@@ -1205,7 +1312,7 @@ check(19, 'Contamination rules are re-applied to the AI pick, not just the rules
   }
 });
 
-check(19, 'Malformed JSON fails closed to rules without an AI confidence stamp', async () => {
+check(20, 'Malformed JSON fails closed to rules without an AI confidence stamp', async () => {
   const mod = await svc('aiDecisionReviewer.js');
   const R = mod.AiDecisionReviewer || mod.default;
   if (typeof R.setClientFactory !== 'function') fail('no client seam yet');
@@ -1221,7 +1328,7 @@ check(19, 'Malformed JSON fails closed to rules without an AI confidence stamp',
   }
 });
 
-check(19, 'A bounded timeout is enforced, as ai-matching-context.md already promises', async () => {
+check(20, 'A bounded timeout is enforced, as ai-matching-context.md already promises', async () => {
   const mod = await svc('aiDecisionReviewer.js');
   const R = mod.AiDecisionReviewer || mod.default;
   if (typeof R.setClientFactory !== 'function') fail('no client seam yet');
@@ -1239,14 +1346,14 @@ check(19, 'A bounded timeout is enforced, as ai-matching-context.md already prom
   }
 });
 
-check(19, "The model's own reported confidence is used, not a hardcoded 0.95", async () => {
+check(20, "The model's own reported confidence is used, not a hardcoded 0.95", async () => {
   const src = read(r(AIR));
   if (/matchConfidence:\s*0\.95/.test(src)) {
     fail(`${AIR}:170 hardcodes matchConfidence: 0.95 while parsing parsed.confidence and discarding it — a hesitant AI pick is recorded as confidently as a certain one, and the number the eval harness tunes against is fiction. Use the model's reported confidence, clamped to a sane ceiling.`);
   }
 });
 
-check(19, 'Prompt injection in a product title cannot steer the selection', async () => {
+check(20, 'Prompt injection in a product title cannot steer the selection', async () => {
   const mod = await svc('aiDecisionReviewer.js');
   const R = mod.AiDecisionReviewer || mod.default;
   if (typeof R.setClientFactory !== 'function') fail('no client seam yet');
@@ -1264,7 +1371,7 @@ check(19, 'Prompt injection in a product title cannot steer the selection', asyn
   }
 });
 
-check(19, 'The budget counts attempts, not only successful calls', async () => {
+check(20, 'The budget counts attempts, not only successful calls', async () => {
   const mod = await svc('aiDecisionReviewer.js');
   const R = mod.AiDecisionReviewer || mod.default;
   if (typeof R.setClientFactory !== 'function') fail('no client seam yet');
@@ -1281,7 +1388,7 @@ check(19, 'The budget counts attempts, not only successful calls', async () => {
   }
 });
 
-check(19, 'Model id and temperature are configurable and pinned for reproducibility', () => {
+check(20, 'Model id and temperature are configurable and pinned for reproducibility', () => {
   const src = read(r(AIR));
   if (/model:\s*['"]gemini-[\d.]+-[a-z-]+['"]/.test(src)) {
     fail(`${AIR}:143 hardcodes the model id — read it from GEMINI_MODEL (with a documented default) so the eval can compare tiers and cost without a code change`);
@@ -1294,7 +1401,7 @@ check(19, 'Model id and temperature are configurable and pinned for reproducibil
   }
 });
 
-check(19, 'A robustness suite runs offline in npm test with no key and no network', () => {
+check(20, 'A robustness suite runs offline in npm test with no key and no network', () => {
   const p = r('services/logic-api/src/services/aiDecisionReviewer.robustness.test.js');
   if (!fs.existsSync(p)) {
     fail('no aiDecisionReviewer.robustness.test.js — these properties must be locked in npm test, not only in this gate, so they survive future edits');
@@ -1311,7 +1418,7 @@ check(19, 'A robustness suite runs offline in npm test with no key and no networ
   }
 });
 
-check(19, 'No API key can reach the public repo via settings or eval artifacts', async () => {
+check(20, 'No API key can reach the public repo via settings or eval artifacts', async () => {
   const { execSync } = await import('node:child_process');
   const ignored = (p) => {
     try {
