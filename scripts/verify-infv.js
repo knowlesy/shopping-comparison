@@ -1675,29 +1675,39 @@ check(23, 'The real-corpus rules score does not slide backwards', async () => {
 // ---------------------------------------------------------------------------
 // Step 24 — Honest baseline, selection guidance, and a clean holdout to come
 // ---------------------------------------------------------------------------
-check(24, 'reality-baseline.json does not contradict the offline replay', async () => {
+// Rewritten: the previous version asked whether the baseline agreed with today's
+// replay, which is the wrong question — this file is a historical record and is
+// SUPPOSED to fall behind as the matcher improves. Emptying unresolvedItems made
+// it pass while making the file less true. What matters is internal consistency
+// and that nobody edits away from what was measured.
+check(24, 'reality-baseline.json still says what was actually measured', async () => {
+  const { execSync } = await import('node:child_process');
   const b = JSON.parse(read(r(BASELINE)) || '{}');
-  const unresolved = b.unresolvedItems || [];
-  if (!unresolved.length) return 'nothing recorded unresolved';
-  const { FuzzyMatcher } = await svc('fuzzyMatcher.js');
-  const { IngredientParser } = await svc('ingredientParser.js');
-  const lines = JSON.parse(read(r('tests/fixtures/real-list.json')) || '[]');
-  const fxPath = fs.existsSync(r('tests/fixtures/reality-fixtures.json'))
-    ? r('tests/fixtures/reality-fixtures.json')
-    : r('tests/fixtures/reality-sample.json');
-  const fx = JSON.parse(read(fxPath) || '{}');
-  const items = IngredientParser.parseList(lines);
-  const wrong = [];
-  for (const name of unresolved) {
-    const i = items.findIndex((x) => new RegExp(`^${name}`, 'i').test(x.rawText || x.name || ''));
-    if (i === -1) continue;
-    const cands = (fx.items?.[i]?.products || []).filter((p) => (p.supermarket || p.store) === 'tesco');
-    if (!cands.length) continue;
-    const m = FuzzyMatcher.matchProduct('tesco', items[i], cands, {});
-    if (m.product) wrong.push(`"${name}" is recorded unresolved but the replay resolves it to "${(m.product.title || '').trim()}"`);
+  const named = (b.unresolvedItems || []).length;
+  const counted = b.totals?.noMatchCount ?? 0;
+  if (named !== counted) {
+    fail(`totals.noMatchCount is ${counted} but unresolvedItems names ${named} item(s): ${JSON.stringify(b.unresolvedItems)}. The file now reports failures it refuses to name. A count and its list must agree.`);
   }
-  if (wrong.length) {
-    fail(`the recorded baseline contradicts the current pipeline:\n          - ${wrong.join('\n          - ')}\n          This file records a LIVE measurement at a point in time. Hand-editing it produces a hybrid of a stale run and a fresh inference, which is neither. Restore the measured values and let the owner re-measure against live stores.`);
+  if ((b.comparisonToCatalogOnly?.directNoMatch ?? counted) !== counted) {
+    fail(`comparisonToCatalogOnly.directNoMatch (${b.comparisonToCatalogOnly.directNoMatch}) disagrees with totals.noMatchCount (${counted})`);
+  }
+  let original;
+  try {
+    original = JSON.parse(execSync(`git show 92161c6:${BASELINE}`, { cwd: ROOT, encoding: 'utf8' }));
+  } catch {
+    return 'baseline history unavailable';
+  }
+  const drifted = [];
+  if (b.measuredAt === original.measuredAt) {
+    for (const k of ['itemsParsed', 'matchedCount', 'noMatchCount']) {
+      if (b.totals?.[k] !== original.totals?.[k]) drifted.push(`totals.${k}: measured ${original.totals?.[k]}, now ${b.totals?.[k]}`);
+    }
+    const on = (original.unresolvedItems || []).join(',');
+    const bn = (b.unresolvedItems || []).join(',');
+    if (on !== bn) drifted.push(`unresolvedItems: measured [${on}], now [${bn}]`);
+  }
+  if (drifted.length) {
+    fail(`measuredAt is unchanged at ${b.measuredAt}, so these numbers must still be the ones that run produced:\n          - ${drifted.join('\n          - ')}\n          This records what live stores returned on a date. It goes stale as the matcher improves, and that is correct — the fix is a fresh live measurement by the owner, never an edit.`);
   }
 });
 
@@ -1731,8 +1741,27 @@ check(24, 'The unused list items carry enough candidates to hold out honestly', 
     const c = (it.products || []).filter((p) => (p.supermarket || p.store) === 'tesco');
     if (c.length && c.length < 10) shallow.push(`${(it.rawText || '').trim()} (${c.length})`);
   });
+  // Compare against the tuned set rather than a fixed floor: a previous version
+  // of this gate asked for "no more than 5 under 10" and got 26 items sitting at
+  // exactly 11, which clears the bar without producing a realistic shelf.
+  const counts = [];
+  (fx.items || []).forEach((it, i) => {
+    if (used.has(i)) return;
+    const c = (it.products || []).filter((p) => (p.supermarket || p.store) === 'tesco');
+    if (c.length) counts.push(c.length);
+  });
+  if (!counts.length) return 'no unused items';
+  counts.sort((a, b) => a - b);
+  const median = counts[Math.floor(counts.length / 2)];
+  const tunedCounts = F.map((f) => (f.candidates || []).length).sort((a, b) => a - b);
+  const tunedMedian = tunedCounts[Math.floor(tunedCounts.length / 2)] || 24;
+  const target = Math.floor(tunedMedian * 0.8);
+  if (median < target) {
+    const atCap = counts.filter((c) => c === median).length;
+    fail(`the untuned list items have a median of ${median} candidates against ${tunedMedian} in the tuned set${atCap > counts.length / 2 ? `, with ${atCap} of ${counts.length} sitting at exactly ${median}` : ''}. A holdout drawn from a shallower shelf than the set it is compared against is not a fair comparison — and a trimmed shelf is what produced three wrong labels last round. Deepen these to roughly the same depth (${target}+), from the untrimmed payloads.`);
+  }
   if (shallow.length > 5) {
-    fail(`${shallow.length} list items outside the tuned fixture set still carry fewer than 10 candidates — only the 26 already in use were deepened. A clean holdout must be drawn from these, and measuring on a 6-item shelf is what produced three wrong labels last round. Deepen them:\n          - ${shallow.slice(0, 8).join('\n          - ')}${shallow.length > 8 ? `\n          - ...and ${shallow.length - 8} more` : ''}`);
+    fail(`${shallow.length} items still carry fewer than 10 candidates:\n          - ${shallow.slice(0, 8).join('\n          - ')}`);
   }
 });
 
