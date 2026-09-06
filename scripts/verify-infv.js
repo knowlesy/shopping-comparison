@@ -1226,6 +1226,48 @@ check(19, 'Every weight-based line resolves to a quantity actually measured in g
   }
 });
 
+// A ratchet over lines whose correct answer has been verified by hand against
+// the real Tesco scrape. Guards the unit/attribute work from trading one wrong
+// pick for another: a drink is not the fruit, and olives are not olive oil.
+check(19, 'Fixing units and attributes does not break lines that already worked', async () => {
+  const { FuzzyMatcher } = await svc('fuzzyMatcher.js');
+  const { IngredientParser } = await svc('ingredientParser.js');
+  const lines = JSON.parse(read(r('tests/fixtures/real-list.json')) || '[]');
+  const fxPath = fs.existsSync(r('tests/fixtures/reality-fixtures.json'))
+    ? r('tests/fixtures/reality-fixtures.json')
+    : r('tests/fixtures/reality-sample.json');
+  const fx = JSON.parse(read(fxPath) || '{}');
+  const items = IngredientParser.parseList(lines);
+
+  const expectations = [
+    { starts: 'Bananas', must: /banana/i, mustNot: /drink|oat|juice|smoothie/i,
+      note: 'five real banana products are in the list, from Tesco Bananas Loose at GBP 0.16' },
+    { starts: 'Olive oil', must: /\boil\b/i, mustNot: /olives/i,
+      note: 'Tesco Olive Oil 1L, Napolina and Filippo Berio are all in the list' },
+    { starts: 'Carrots', must: /carrot/i, mustNot: /drink|juice|cake/i, note: '' },
+    { starts: 'Cucumber', must: /cucumber/i, mustNot: /drink|relish/i, note: '' },
+    { starts: 'Chicken breast fillets', must: /chicken/i, mustNot: /breaded|nugget|kiev/i, note: '' },
+    { starts: 'Red wine vinegar', must: /vinegar/i, mustNot: /\bwine\b(?!\s*vinegar)/i, note: '' }
+  ];
+
+  const broken = [];
+  for (const e of expectations) {
+    const i = items.findIndex((x) => (x.rawText || x.name || '').startsWith(e.starts));
+    if (i === -1) continue;
+    const cands = (fx.items?.[i]?.products || []).filter((p) => (p.supermarket || p.store) === 'tesco');
+    if (!cands.length) continue;
+    const m = FuzzyMatcher.matchProduct('tesco', items[i], cands, {});
+    if (!m.product) continue;
+    const t = (m.product.title || '').trim();
+    if (!e.must.test(t) || e.mustNot.test(t)) {
+      broken.push(`"${items[i].rawText || items[i].name}" -> "${t}" (GBP ${m.totalPrice})${e.note ? ' — ' + e.note : ''}`);
+    }
+  }
+  if (broken.length) {
+    fail(`lines now resolve to the wrong kind of product entirely:\n          - ${broken.join('\n          - ')}`);
+  }
+});
+
 // ---------------------------------------------------------------------------
 // Step 20 — AI robustness: the pipeline must be safe when the model misbehaves
 // ---------------------------------------------------------------------------
