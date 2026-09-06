@@ -69,10 +69,12 @@ export class AiEscalation {
     const maxItems = Number(process.env.AI_ESCALATION_MAX_ITEMS) || options.maxItems || options.escalationLimit || 10;
     const batchToProcess = problemItems.slice(0, maxItems);
 
+    // Escalation is one batched call per basket, so a 20-per-day model is
+    // affordable here where it is not for per-item review.
     const escalationModel =
       process.env.GEMINI_ESCALATION_MODEL ||
       options.escalationModel ||
-      "gemini-2.5-flash";
+      "gemini-3.5-flash";
 
     // Prepare full candidate list for each item in the batch
     const batchPayload = batchToProcess.map((p, bIdx) => {

@@ -135,7 +135,10 @@ export class AiDecisionReviewer {
     }
 
     try {
-      const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+      // Free-tier daily caps differ 25x between families: the 2.5/3.x Flash
+      // models allow 20 requests per day, the Lite models 500. Per-item review
+      // is the high-volume path, so it defaults to a Lite model.
+      const model = process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
       const ai = this._clientFactory
         ? this._clientFactory({ apiKey, model })
         : new GoogleGenAI({ apiKey });
