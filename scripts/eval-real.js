@@ -78,7 +78,8 @@ async function aiResolve(f) {
     aiMatchingEnabled: true,
     aiAssistLevel: 'balanced',
     supermarket: 'tesco',
-    aiCallsContext: { callsUsed: 0 }
+    aiCallsContext: { callsUsed: 0 },
+    bypassCache: true
   });
   const prod = reviewed?.product || null;
   // A rules fallback is NOT an AI answer. reviewCandidates swallows upstream

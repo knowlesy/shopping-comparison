@@ -99,8 +99,8 @@ export class AiDecisionReviewer {
     const supermarket = scoredCandidates[0]?.product?.supermarket || 'store';
     const cacheKey = `ai-match:${item.name || query}:${item.targetQuantity || 1}:${item.unit || ''}:${supermarket}`;
 
-    // Token minimisation: check 72h cache
-    const cachedDecision = PriceCache.get(cacheKey);
+    // Token minimisation: check 72h cache unless explicitly bypassed
+    const cachedDecision = preferences.bypassCache ? null : PriceCache.get(cacheKey);
     if (cachedDecision && cachedDecision.productId) {
       const match = scoredCandidates.find((c) => c.product?.id === cachedDecision.productId);
       if (match) {
@@ -242,12 +242,14 @@ Respond with JSON only in this exact format:
       const matchConfidence = Math.min(Math.max(rawConfidence, 0.5), 0.99);
 
       // Cache decision for 72h to minimise API calls
-      PriceCache.set(cacheKey, {
-        productId: chosen.product.id,
-        selectedIndex: chosenIdx,
-        confidence: matchConfidence,
-        reasoning: parsed.reasoning || 'Selected optimal match by weight and deal structure'
-      });
+      if (!preferences.bypassCache) {
+        PriceCache.set(cacheKey, {
+          productId: chosen.product.id,
+          selectedIndex: chosenIdx,
+          confidence: matchConfidence,
+          reasoning: parsed.reasoning || 'Selected optimal match by weight and deal structure'
+        });
+      }
 
       const dataSource = chosen.product.source || 'catalog';
       const conf = composeConfidence({
