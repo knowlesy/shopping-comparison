@@ -1229,6 +1229,33 @@ check(19, 'Every weight-based line resolves to a quantity actually measured in g
 // A ratchet over lines whose correct answer has been verified by hand against
 // the real Tesco scrape. Guards the unit/attribute work from trading one wrong
 // pick for another: a drink is not the fruit, and olives are not olive oil.
+check(19, 'With no brand requested, an exact-size pack does not beat a cheaper sufficient one', async () => {
+  const res = await realPick('Smooth peanut butter');
+  if (!res) return 'no tesco candidates';
+  const { match, title, cands } = res;
+  if (!match.product) fail('no match for smooth peanut butter');
+  const paid = Number(match.totalPrice);
+  // Any single pack that also covers 300g of smooth peanut butter, but cheaper.
+  const cheaper = cands.filter(
+    (c) => /smooth/i.test(c.title || '') && Number(c.packageSize) >= 300 && Number(c.price) < paid
+  );
+  if (cheaper.length) {
+    const best = cheaper.sort((a, b) => a.price - b.price)[0];
+    fail(`"Smooth peanut butter 300 g" resolves to "${title}" at GBP ${paid}, while "${(best.title || '').trim()}" covers the same 300g for GBP ${best.price}. No brand was requested, so preferring an exact size match over a cheaper sufficient pack costs the shopper money in a price-comparison app.`);
+  }
+});
+
+check(19, 'A stated fat requirement is not met by a product that never states its fat', async () => {
+  const res = await realPick('Greek yogurt 0%');
+  if (!res) return 'no tesco candidates';
+  const { match, title, cands } = res;
+  const states0 = cands.some((c) => /\b0\s*%|\bfat\s*free\b|\bvirtually fat free\b/i.test(c.title || '') || Number(c.fatPercentage) === 0);
+  if (states0) return 'a 0% product is stocked — different case';
+  if (match.product) {
+    fail(`"Greek yogurt 0% 1 kg" resolves to "${title}". The parser reads fatPercentage 0, but the veto in penaltyRules only fires when the CANDIDATE states a percentage — so a product that never declares its fat content passes as fat free. Not one candidate here is 0%; the honest answer is no match. The live AI eval declined this correctly while the rules engine substituted full-fat yogurt.`);
+  }
+});
+
 check(19, 'Fixing units and attributes does not break lines that already worked', async () => {
   const { FuzzyMatcher } = await svc('fuzzyMatcher.js');
   const { IngredientParser } = await svc('ingredientParser.js');

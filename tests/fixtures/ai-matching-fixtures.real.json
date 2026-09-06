@@ -107,6 +107,110 @@
     "groundTruthNote": "A stated fat percentage is a dietary requirement. Rules pick the 20% because it is cheaper."
   },
   {
+    "id": "real-1",
+    "split": "holdout",
+    "query": "Walnuts 200 g",
+    "item": {
+      "name": "Walnuts",
+      "baseItem": "Walnuts",
+      "category": "pantry",
+      "targetQuantity": 200,
+      "unit": "g"
+    },
+    "candidates": [
+      {
+        "id": "256514378",
+        "supermarket": "tesco",
+        "title": "Tesco Walnut Halves 250G",
+        "brand": "Tesco",
+        "price": 2.75,
+        "packageSize": 250,
+        "packageUnit": "g",
+        "unitPrice": 11,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "296546961",
+        "supermarket": "tesco",
+        "title": "Tesco Walnuts 200G",
+        "brand": "Tesco",
+        "price": 2.25,
+        "packageSize": 200,
+        "packageUnit": "g",
+        "unitPrice": 11.25,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "320976865",
+        "supermarket": "tesco",
+        "title": "Tesco Walnuts 500g",
+        "brand": "Tesco",
+        "price": 5.25,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "unitPrice": 10.5,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "312356580",
+        "supermarket": "tesco",
+        "title": "Tesco Walnut Pieces 250G",
+        "brand": "Tesco",
+        "price": 3.5,
+        "packageSize": 250,
+        "packageUnit": "g",
+        "unitPrice": 14,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "317049521",
+        "supermarket": "tesco",
+        "title": "Whitworths Walnuts 110g",
+        "brand": "Whitworths",
+        "price": 2.2,
+        "packageSize": 110,
+        "packageUnit": "g",
+        "unitPrice": 20,
+        "unitPriceMeasure": "kg",
+        "deal": "Any 2 for £3.40 Clubcard Price - Selected Whitworths Dry Fruits & Nuts",
+        "source": "direct"
+      },
+      {
+        "id": "309461113",
+        "supermarket": "tesco",
+        "title": "Tesco Organic Walnut Halves 100G",
+        "brand": "Tesco",
+        "price": 3.1,
+        "packageSize": 100,
+        "packageUnit": "g",
+        "unitPrice": 31,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "296546961",
+    "expectedTitle": "Tesco Walnuts 200G",
+    "acceptablePicks": [
+      "256514378",
+      "320976865",
+      "312356580"
+    ],
+    "mustNotPick": [
+      "309461113"
+    ],
+    "groundTruthNote": "Exact 200g at GBP 2.25. Halves and pieces are still walnuts and are acceptable; the 100g organic pack cannot reach 200g economically."
+  },
+  {
     "id": "real-2",
     "split": "train",
     "query": "Large eggs 17",
@@ -417,6 +521,110 @@
     "groundTruthNote": "Exact 120g sardines in olive oil. Distractors: anchovies, a bottle of olive oil."
   },
   {
+    "id": "real-5",
+    "split": "train",
+    "query": "Little gem lettuce 2-pack",
+    "item": {
+      "name": "Little gem lettuce",
+      "baseItem": "Little gem lettuce",
+      "category": "produce",
+      "targetQuantity": 2,
+      "unit": "pack"
+    },
+    "candidates": [
+      {
+        "id": "253560041",
+        "supermarket": "tesco",
+        "title": "Tesco Little Gem Lettuce Twin Pack",
+        "brand": "Tesco",
+        "price": 0.77,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.38,
+        "unitPriceMeasure": "each",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "264534350",
+        "supermarket": "tesco",
+        "title": "Tesco Sweet Gem Lettuce",
+        "brand": "Tesco",
+        "price": 1.1,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.55,
+        "unitPriceMeasure": "each",
+        "deal": "79p Clubcard Price",
+        "source": "direct"
+      },
+      {
+        "id": "310693807",
+        "supermarket": "tesco",
+        "title": "Tesco Butterhead Lettuce",
+        "brand": "Tesco",
+        "price": 0.95,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.95,
+        "unitPriceMeasure": "each",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "316641719",
+        "supermarket": "tesco",
+        "title": "Tesco Finest Sweetheart Lettuce",
+        "brand": "Tesco",
+        "price": 1.4,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 1.4,
+        "unitPriceMeasure": "each",
+        "deal": "90p Clubcard Price",
+        "source": "direct"
+      },
+      {
+        "id": "323662540",
+        "supermarket": "tesco",
+        "title": "Tesco Trio of Living Lettuce",
+        "brand": "Tesco",
+        "price": 1.5,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 1.5,
+        "unitPriceMeasure": "each",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "253557495",
+        "supermarket": "tesco",
+        "title": "Tesco Iceberg Lettuce Each",
+        "brand": "Tesco",
+        "price": 0.89,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.89,
+        "unitPriceMeasure": "each",
+        "deal": null,
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "253560041",
+    "expectedTitle": "Tesco Little Gem Lettuce Twin Pack",
+    "acceptablePicks": [],
+    "mustNotPick": [
+      "264534350",
+      "310693807",
+      "253557495",
+      "316641719",
+      "323662540"
+    ],
+    "groundTruthNote": "A named variety and a named pack size. Other lettuces are not little gem."
+  },
+  {
     "id": "real-7",
     "split": "holdout",
     "query": "Garlic 1 bulb",
@@ -519,6 +727,52 @@
       "330746960"
     ],
     "groundTruthNote": "A bulb of fresh garlic, not paste or puree or a sauce."
+  },
+  {
+    "id": "real-8",
+    "split": "holdout",
+    "query": "Tomato puree 1 tube",
+    "item": {
+      "name": "Tomato puree",
+      "baseItem": "Tomato puree",
+      "category": "produce",
+      "targetQuantity": 1,
+      "unit": "tube"
+    },
+    "candidates": [
+      {
+        "id": "254789012",
+        "supermarket": "tesco",
+        "title": "Tesco Tomato Puree 200G",
+        "price": 0.59,
+        "packageSize": 200,
+        "packageUnit": "g",
+        "unitPrice": 2.95,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "254789013",
+        "supermarket": "tesco",
+        "title": "Napolina Double Concentrate Tomato Puree 200g",
+        "price": 1.5,
+        "packageSize": 200,
+        "packageUnit": "g",
+        "unitPrice": 7.5,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "254789012",
+    "expectedTitle": "Tesco Tomato Puree 200G",
+    "acceptablePicks": [
+      "254789013"
+    ],
+    "mustNotPick": [],
+    "groundTruthNote": "One tube of tomato puree; the Tesco tube is the cheaper of two valid options."
   },
   {
     "id": "real-11",
@@ -1248,6 +1502,319 @@
     "groundTruthNote": "Frozen peas. Distractors: pea guacamole and tinned peas in water."
   },
   {
+    "id": "real-19",
+    "split": "train",
+    "query": "Smooth peanut butter 300 g",
+    "item": {
+      "name": "Smooth peanut butter",
+      "baseItem": "Smooth peanut butter",
+      "category": "pantry",
+      "targetQuantity": 300,
+      "unit": "g"
+    },
+    "candidates": [
+      {
+        "id": "309486619",
+        "supermarket": "tesco",
+        "title": "Pip & Nut Smooth Peanut Butter 300G",
+        "brand": "Pip",
+        "price": 3.5,
+        "packageSize": 300,
+        "packageUnit": "g",
+        "unitPrice": 11.67,
+        "unitPriceMeasure": "kg",
+        "deal": "£2.25 Clubcard Price",
+        "source": "direct"
+      },
+      {
+        "id": "311440752",
+        "supermarket": "tesco",
+        "title": "Pip & Nut Smooth Peanut Butter 1Kg",
+        "brand": "Pip",
+        "price": 7.5,
+        "packageSize": 1,
+        "packageUnit": "kg",
+        "unitPrice": 7.5,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "264769626",
+        "supermarket": "tesco",
+        "title": "Tesco Smooth Peanut Butter 340G",
+        "brand": "Tesco",
+        "price": 0.95,
+        "packageSize": 340,
+        "packageUnit": "g",
+        "unitPrice": 2.79,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "307157609",
+        "supermarket": "tesco",
+        "title": "Nuts About Nature Peanut Butter Smooth 340G",
+        "brand": "Nuts",
+        "price": 2.35,
+        "packageSize": 340,
+        "packageUnit": "g",
+        "unitPrice": 6.91,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "264604671",
+        "supermarket": "tesco",
+        "title": "Tesco Smooth Peanut Butter 700G",
+        "brand": "Tesco",
+        "price": 2,
+        "packageSize": 700,
+        "packageUnit": "g",
+        "unitPrice": 2.86,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "284847836",
+        "supermarket": "tesco",
+        "title": "Meridian Smooth Peanut Butter 100% Nuts 280g",
+        "brand": "Meridian",
+        "price": 2.8,
+        "packageSize": 280,
+        "packageUnit": "g",
+        "unitPrice": 10,
+        "unitPriceMeasure": "kg",
+        "deal": "£2.20 Clubcard Price",
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "264769626",
+    "expectedTitle": "Tesco Smooth Peanut Butter 340G",
+    "acceptablePicks": [
+      "264604671",
+      "307157609"
+    ],
+    "mustNotPick": [
+      "309486619",
+      "311440752"
+    ],
+    "groundTruthNote": "No brand was requested, so the cheapest smooth peanut butter covering 300g wins. Rules pick Pip & Nut 300g at GBP 3.50 when Tesco 340g is GBP 0.95 — an exact size match beating a cheaper sufficient one is a cost failure in a price comparison app."
+  },
+  {
+    "id": "real-29",
+    "split": "holdout",
+    "query": "Carrots 1 kg",
+    "item": {
+      "name": "Carrots",
+      "baseItem": "Carrots",
+      "category": "produce",
+      "targetQuantity": 1,
+      "unit": "kg"
+    },
+    "candidates": [
+      {
+        "id": "305953125",
+        "supermarket": "tesco",
+        "title": "Tesco Carrots 1Kg",
+        "brand": "Tesco",
+        "price": 0.69,
+        "packageSize": 1,
+        "packageUnit": "kg",
+        "unitPrice": 0.69,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "254638565",
+        "supermarket": "tesco",
+        "title": "Tesco Carrots Loose",
+        "brand": "Tesco",
+        "price": 0.11,
+        "packageSize": null,
+        "packageUnit": null,
+        "unitPrice": 0.69,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "321328928",
+        "supermarket": "tesco",
+        "title": "Tesco Carrots 500g",
+        "brand": "Tesco",
+        "price": 0.44,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "unitPrice": 0.88,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "256687445",
+        "supermarket": "tesco",
+        "title": "Tesco Organic Carrots 700G",
+        "brand": "Tesco",
+        "price": 1.35,
+        "packageSize": 700,
+        "packageUnit": "g",
+        "unitPrice": 1.93,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "312693894",
+        "supermarket": "tesco",
+        "title": "Tesco Carrot Batons 400G",
+        "brand": "Tesco",
+        "price": 1.1,
+        "packageSize": 400,
+        "packageUnit": "g",
+        "unitPrice": 2.75,
+        "unitPriceMeasure": "kg",
+        "deal": "Any 3 for 2 Clubcard Price - Cheapest Product Free - Selected Vegetables 80g - 800g",
+        "source": "direct"
+      },
+      {
+        "id": "315469741",
+        "supermarket": "tesco",
+        "title": "Tesco Chantenay Carrots 400g",
+        "brand": "Tesco",
+        "price": 1,
+        "packageSize": 400,
+        "packageUnit": "g",
+        "unitPrice": 2.5,
+        "unitPriceMeasure": "kg",
+        "deal": "80p Clubcard Price",
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "305953125",
+    "expectedTitle": "Tesco Carrots 1Kg",
+    "acceptablePicks": [
+      "321328928"
+    ],
+    "mustNotPick": [
+      "254638565",
+      "312693894",
+      "315469741",
+      "256687445"
+    ],
+    "groundTruthNote": "Exact 1kg pack at GBP 0.69. Loose carrots invite the count-versus-weight bug; batons and chantenay are different products."
+  },
+  {
+    "id": "real-34",
+    "split": "train",
+    "query": "Chicken breast fillets 1 kg",
+    "item": {
+      "name": "Chicken breast fillets",
+      "baseItem": "Chicken breast fillets",
+      "category": "meat",
+      "targetQuantity": 1,
+      "unit": "kg"
+    },
+    "candidates": [
+      {
+        "id": "323658459",
+        "supermarket": "tesco",
+        "title": "Tesco British Chicken Breast Fillets 1KG",
+        "brand": "Tesco",
+        "price": 6.69,
+        "packageSize": 1,
+        "packageUnit": "kg",
+        "unitPrice": 6.69,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "294007923",
+        "supermarket": "tesco",
+        "title": "Tesco British Chicken Breast Fillets 650G",
+        "brand": "Tesco",
+        "price": 4.9,
+        "packageSize": 650,
+        "packageUnit": "g",
+        "unitPrice": 7.54,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "320661079",
+        "supermarket": "tesco",
+        "title": "Tesco Chicken Breast Fillets 320g",
+        "brand": "Tesco",
+        "price": 2.44,
+        "packageSize": 320,
+        "packageUnit": "g",
+        "unitPrice": 7.62,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "304410539",
+        "supermarket": "tesco",
+        "title": "Tesco Chicken Breast Mini Fillets 650g",
+        "brand": "Tesco",
+        "price": 5.4,
+        "packageSize": 650,
+        "packageUnit": "g",
+        "unitPrice": 8.31,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "303152949",
+        "supermarket": "tesco",
+        "title": "Tesco Large Chicken Fillet Pack 1.6Kg",
+        "brand": "Tesco",
+        "price": 10.65,
+        "packageSize": 1.6,
+        "packageUnit": "kg",
+        "unitPrice": 6.66,
+        "unitPriceMeasure": "kg",
+        "deal": "£9.50 Clubcard Price",
+        "source": "direct"
+      },
+      {
+        "id": "304368923",
+        "supermarket": "tesco",
+        "title": "Tesco British Chicken Breast Mini Fillets 400G",
+        "brand": "Tesco",
+        "price": 4,
+        "packageSize": 400,
+        "packageUnit": "g",
+        "unitPrice": 10,
+        "unitPriceMeasure": "kg",
+        "deal": "£3.50 Clubcard Price",
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "323658459",
+    "expectedTitle": "Tesco British Chicken Breast Fillets 1KG",
+    "acceptablePicks": [
+      "294007923"
+    ],
+    "mustNotPick": [
+      "304410539",
+      "304368923",
+      "303152949"
+    ],
+    "groundTruthNote": "Exact 1kg of breast fillets. Mini fillets are a different cut and the 1.6kg pack overshoots."
+  },
+  {
     "id": "real-37",
     "split": "train",
     "query": "Greek yogurt 0% 1 kg",
@@ -1338,20 +1905,19 @@
         "source": "direct"
       }
     ],
-    "expectNoMatch": false,
-    "expectedPick": "256381115",
-    "expectedTitle": "Tesco Finest Greek Yogurt 500G",
-    "acceptablePicks": [
-      "258170229"
-    ],
+    "expectNoMatch": true,
+    "expectedPick": null,
+    "expectedTitle": null,
+    "acceptablePicks": [],
     "mustNotPick": [
       "315161816",
-      "323871309",
       "315073742",
       "293836686",
+      "258170229",
+      "256381115",
       "323871309"
     ],
-    "groundTruthNote": "Plain Greek yogurt. Nothing is 0% so the fat spec cannot be met; flavoured and dairy-free must still lose."
+    "groundTruthNote": "0% is an explicit fat requirement and not one candidate states 0% fat. Greek Style and Finest Greek are both full fat, the rest are flavoured or dairy free. Corrected from an earlier label that accepted a full-fat substitute: by this project rule an honest no match beats a substitution the shopper did not ask for."
   },
   {
     "id": "real-39",
@@ -1666,6 +2232,216 @@
       "300794948"
     ],
     "groundTruthNote": "85% is stated and an exact 85% bar exists. Rules pick a plain bar of unstated cocoa content."
+  },
+  {
+    "id": "real-50",
+    "split": "holdout",
+    "query": "Chickpeas 400 g",
+    "item": {
+      "name": "Chickpeas",
+      "baseItem": "Chickpeas",
+      "category": "pantry",
+      "targetQuantity": 400,
+      "unit": "g"
+    },
+    "candidates": [
+      {
+        "id": "323872648",
+        "supermarket": "tesco",
+        "title": "Heinz Curry Chickpeas with Coconut and Spinach 250g",
+        "brand": "Heinz",
+        "price": 2.5,
+        "packageSize": 250,
+        "packageUnit": "g",
+        "unitPrice": 2.5,
+        "unitPriceMeasure": "each",
+        "deal": "£1.75 Clubcard Price",
+        "source": "direct"
+      },
+      {
+        "id": "262490576",
+        "supermarket": "tesco",
+        "title": "Tesco Chickpeas In Water 400G",
+        "brand": "Tesco",
+        "price": 0.41,
+        "packageSize": 400,
+        "packageUnit": "g",
+        "unitPrice": 1.71,
+        "unitPriceMeasure": "kg DR.WT",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "264447977",
+        "supermarket": "tesco",
+        "title": "Napolina Chickpeas In Water 400g",
+        "brand": "Napolina",
+        "price": 1,
+        "packageSize": 400,
+        "packageUnit": "g",
+        "unitPrice": 4.17,
+        "unitPriceMeasure": "kg DR.WT",
+        "deal": "Any 3 for £2.50 Clubcard Price - Selected Napolina Canned Food",
+        "source": "direct"
+      },
+      {
+        "id": "302319006",
+        "supermarket": "tesco",
+        "title": "Tesco Organic Chickpeas In Water 400g",
+        "brand": "Tesco",
+        "price": 1.35,
+        "packageSize": 400,
+        "packageUnit": "g",
+        "unitPrice": 5.62,
+        "unitPriceMeasure": "kg DR.WT",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "314300787",
+        "supermarket": "tesco",
+        "title": "Summer Pride Chickpeas In Salted Water 380g",
+        "brand": "Summer",
+        "price": 0.75,
+        "packageSize": 380,
+        "packageUnit": "g",
+        "unitPrice": 3.26,
+        "unitPriceMeasure": "kg DR.WT",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "310108624",
+        "supermarket": "tesco",
+        "title": "Laila Chickpeas 2Kg",
+        "brand": "Laila",
+        "price": 4,
+        "packageSize": 2,
+        "packageUnit": "kg",
+        "unitPrice": 2,
+        "unitPriceMeasure": "kg",
+        "deal": "£3.00 Save 25% Clubcard Price",
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "262490576",
+    "expectedTitle": "Tesco Chickpeas In Water 400G",
+    "acceptablePicks": [
+      "264447977",
+      "302319006",
+      "314300787"
+    ],
+    "mustNotPick": [
+      "323872648",
+      "310108624"
+    ],
+    "groundTruthNote": "Plain tinned chickpeas at 400g. A curry ready meal containing chickpeas is not chickpeas, and 2kg overshoots five times over."
+  },
+  {
+    "id": "real-51",
+    "split": "train",
+    "query": "Spinach 250 g",
+    "item": {
+      "name": "Spinach",
+      "baseItem": "Spinach",
+      "category": "produce",
+      "targetQuantity": 250,
+      "unit": "g"
+    },
+    "candidates": [
+      {
+        "id": "307364859",
+        "supermarket": "tesco",
+        "title": "Strong Roots The Pumpkin & Spinach Burger 300G",
+        "brand": "Strong",
+        "price": 3.3,
+        "packageSize": 300,
+        "packageUnit": "g",
+        "unitPrice": 11,
+        "unitPriceMeasure": "kg",
+        "deal": "£2.50 Clubcard Price",
+        "source": "direct"
+      },
+      {
+        "id": "323872648",
+        "supermarket": "tesco",
+        "title": "Heinz Curry Chickpeas with Coconut and Spinach 250g",
+        "brand": "Heinz",
+        "price": 2.5,
+        "packageSize": 250,
+        "packageUnit": "g",
+        "unitPrice": 2.5,
+        "unitPriceMeasure": "each",
+        "deal": "£1.75 Clubcard Price",
+        "source": "direct"
+      },
+      {
+        "id": "301219119",
+        "supermarket": "tesco",
+        "title": "Tesco Baby Spinach 250G",
+        "brand": "Tesco",
+        "price": 1.3,
+        "packageSize": 250,
+        "packageUnit": "g",
+        "unitPrice": 5.2,
+        "unitPriceMeasure": "kg",
+        "deal": "95p Save 25% Clubcard Price",
+        "source": "direct"
+      },
+      {
+        "id": "272107544",
+        "supermarket": "tesco",
+        "title": "Fresh & Naked Spinach 125G",
+        "brand": "Fresh",
+        "price": 1.2,
+        "packageSize": 125,
+        "packageUnit": "g",
+        "unitPrice": 9.6,
+        "unitPriceMeasure": "kg",
+        "deal": "£1.00 Clubcard Price",
+        "source": "direct"
+      },
+      {
+        "id": "275549004",
+        "supermarket": "tesco",
+        "title": "Tesco Spinach 500G",
+        "brand": "Tesco",
+        "price": 1.77,
+        "packageSize": 500,
+        "packageUnit": "g",
+        "unitPrice": 3.54,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      },
+      {
+        "id": "304401971",
+        "supermarket": "tesco",
+        "title": "Tesco Baby Spinach 220G",
+        "brand": "Tesco",
+        "price": 1.65,
+        "packageSize": 220,
+        "packageUnit": "g",
+        "unitPrice": 7.5,
+        "unitPriceMeasure": "kg",
+        "deal": null,
+        "source": "direct"
+      }
+    ],
+    "expectNoMatch": false,
+    "expectedPick": "301219119",
+    "expectedTitle": "Tesco Baby Spinach 250G",
+    "acceptablePicks": [
+      "304401971",
+      "272107544",
+      "275549004"
+    ],
+    "mustNotPick": [
+      "307364859",
+      "323872648"
+    ],
+    "groundTruthNote": "Exact 250g of leaf spinach. A spinach burger and a curry containing spinach both share the word and neither is spinach."
   },
   {
     "id": "real-53",
