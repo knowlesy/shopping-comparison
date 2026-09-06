@@ -1388,6 +1388,22 @@ check(20, 'A bounded timeout is enforced, as ai-matching-context.md already prom
   }
 });
 
+check(20, 'The model can decline: "none of these" is a representable answer', async () => {
+  const mod = await svc('aiDecisionReviewer.js');
+  const R = mod.AiDecisionReviewer || mod.default;
+  if (typeof R.setClientFactory !== 'function') fail('no client seam yet');
+  process.env.GEMINI_API_KEY = process.env.GEMINI_API_KEY || 'gate-fake-key';
+  try {
+    R.setClientFactory(() => fakeClient('{"selectedIndex": null, "confidence": 0.9, "reasoning": "none of these are wholemeal"}'));
+    const out = await R.reviewCandidates('Wholemeal bread 1 loaf', fakeItem(), fakeCandidates(), aiPrefs());
+    if (out && out.product) {
+      fail(`the model declined (selectedIndex null) and the pipeline still returned "${(out.product.title || '').trim()}". reviewCandidates always resolves to a candidate, so on the real corpus the model reasoned "None of the candidate products are wholemeal bread... this is the closest" and white bread shipped anyway — the model was right and the code discarded the answer. A decline must become an honest no match.`);
+    }
+  } finally {
+    R.resetClientFactory?.();
+  }
+});
+
 check(20, "The model's own reported confidence is used, not a hardcoded 0.95", async () => {
   const src = read(r(AIR));
   if (/matchConfidence:\s*0\.95/.test(src)) {
