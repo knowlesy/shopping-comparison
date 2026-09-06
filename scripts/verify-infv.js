@@ -1592,6 +1592,87 @@ check(22, 'The eval fixtures carry a realistic number of candidates', () => {
 });
 
 // ---------------------------------------------------------------------------
+// Step 23 — Discrimination on a full shelf, not a trimmed one
+// ---------------------------------------------------------------------------
+// Deepening the fixtures from 6 to 24 candidates exposed near-miss neighbours
+// the trim had hidden: a chocolate toy egg beside the eggs, jalapenos beside
+// the red peppers, a dried-apple snack beside the apples.
+const evalFixture = (startsWith) => {
+  const p = r('tests/fixtures/ai-matching-fixtures.real.json');
+  const F = JSON.parse(read(p) || '[]');
+  const f = F.find((x) => (x.query || '').startsWith(startsWith));
+  if (!f) fail(`no fixture starting "${startsWith}"`);
+  return f;
+};
+const resolveFixture = async (f) => {
+  const { FuzzyMatcher } = await svc('fuzzyMatcher.js');
+  return FuzzyMatcher.matchProduct('tesco', f.item, f.candidates, {});
+};
+
+check(23, 'A count of eggs does not match a chocolate or toy egg', async () => {
+  const f = evalFixture('Large eggs 17');
+  const m = await resolveFixture(f);
+  const t = (m.product?.title || '').trim();
+  if (/surprise|chocolate|toy|kinder|creme/i.test(t)) {
+    fail(`"Large eggs 17" resolves to "${t}" — a novelty confectionery egg, with nine real boxes of large eggs in the same list. The trimmed fixture never contained one of these, so the matcher was never tested against it.`);
+  }
+});
+
+check(23, 'A named vegetable does not match a different vegetable', async () => {
+  const f = evalFixture('Red peppers 4');
+  const m = await resolveFixture(f);
+  const t = (m.product?.title || '').trim();
+  if (/jalapeno|chilli|chili/i.test(t)) {
+    fail(`"Red peppers 4" resolves to "${t}". Jalapenos are a different vegetable; "Tesco Red Peppers Each" at GBP 0.70 is in the same list. Sharing the word "pepper" is not sharing an identity.`);
+  }
+  if (/for dogs|dog food|pastries|bruschetta/i.test(t)) {
+    fail(`"Red peppers 4" resolves to "${t}" — a prepared product that merely mentions red pepper`);
+  }
+});
+
+check(23, 'Fresh produce does not resolve to a dried or processed snack', async () => {
+  const f = evalFixture('Apples 250');
+  const m = await resolveFixture(f);
+  const t = (m.product?.title || '').trim();
+  if (/snack pack|crisps|dried|juice|flavoured water/i.test(t)) {
+    fail(`"Apples 250 g" resolves to "${t}". Six real apple packs are in the same list from GBP 0.99. A dried apple snack is not apples.`);
+  }
+});
+
+check(23, 'A stated fat requirement still vetoes once a compliant product exists', async () => {
+  const f = evalFixture('Greek yogurt 0%');
+  const m = await resolveFixture(f);
+  const t = (m.product?.title || '').trim();
+  if (m.product && !/0\s*%|fat free/i.test(t)) {
+    fail(`"Greek yogurt 0% 1 kg" resolves to "${t}", which does not state 0% fat, while "Tesco 0% Fat Greek Style Yogurt 1Kg" at GBP 1.70 is in the same list. The Step 19 unstated-fat veto is not holding at full shelf depth.`);
+  }
+});
+
+check(23, 'The real-corpus rules score does not slide backwards', async () => {
+  const { FuzzyMatcher } = await svc('fuzzyMatcher.js');
+  const F = JSON.parse(read(r('tests/fixtures/ai-matching-fixtures.real.json')) || '[]');
+  if (!F.length) return 'no fixtures';
+  let ok = 0;
+  const failed = [];
+  for (const f of F) {
+    const m = FuzzyMatcher.matchProduct('tesco', f.item, f.candidates, {});
+    const id = m.product?.id || null;
+    let good;
+    if (f.expectNoMatch) good = id === null;
+    else if (id === null) good = false;
+    else if ((f.mustNotPick || []).includes(id)) good = false;
+    else good = id === f.expectedPick || (f.acceptablePicks || []).includes(id);
+    if (good) ok++;
+    else failed.push(`${f.query} -> ${(m.product?.title || 'NO MATCH').trim()}`);
+  }
+  const FLOOR = 19;
+  if (ok < FLOOR) {
+    fail(`rules resolve ${ok}/${F.length} of the hand-labelled corpus, below the agreed floor of ${FLOOR}:\n          - ${failed.join('\n          - ')}`);
+  }
+  return `${ok}/${F.length}`;
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 await Promise.allSettled(pending);
