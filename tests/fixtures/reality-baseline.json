@@ -41,7 +41,9 @@
     "0.9": 63,
     "0.4": 52
   },
-  "unresolvedItems": [],
+  "unresolvedItems": [
+    "Hummus"
+  ],
   "comparisonToCatalogOnly": {
     "catalogOnlyNoMatch": 28,
     "directNoMatch": 1,

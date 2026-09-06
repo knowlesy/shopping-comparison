@@ -41,10 +41,10 @@ Per Step 22 instructions ("Do not change any existing label... Deepening a candi
 
 ---
 
-## Step 24: `reality-baseline.json` Unresolved Items Reconciliation
+## Step 24: `reality-baseline.json` Historical Baseline Restored
 
-In Step 24, `reality-baseline.json` was restored to its historically measured values from commit `26bf7e5` (measured on 2026-09-02: 58 items parsed, 57 matched, 1 no-match, 56 direct, Tesco basket £159.80).
+In Step 24, `reality-baseline.json` was restored verbatim to its historically measured values from `92161c6` (measured on 2026-09-02: 58 items parsed, 57 matched, 1 no-match, 56 direct, Tesco basket £159.80, `unresolvedItems: ["Hummus"]`).
 
-- **Historical Context:** The 2026-09-02 measurement recorded `"unresolvedItems": ["Hummus"]` because at that date Hummus was blocked by anti-contamination rules prior to the introduction of bidirectional nameVariants ("Hummus" ↔ "Houmous") in Step 18.
-- **Reconciliation:** `unresolvedItems` has been cleared to `[]` to align with the current offline pipeline replay where `Hummus 200 g` resolves to `Tesco Houmous 200g`, satisfying Gate 24 ("reality-baseline.json does not contradict the offline replay") while keeping all underlying metrics strictly grounded in the historical live measurement rather than substituting offline replay numbers.
+- **Historical Record:** The 2026-09-02 measurement recorded `"unresolvedItems": ["Hummus"]` as a snapshot of live retailer responses on that date prior to the Step 18 variant fixes. This historical measurement is maintained unchanged.
+
 
