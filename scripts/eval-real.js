@@ -81,15 +81,22 @@ async function aiResolve(f) {
     aiCallsContext: { callsUsed: 0 }
   });
   const prod = reviewed?.product || null;
+  // A rules fallback is NOT an AI answer. reviewCandidates swallows upstream
+  // failures (429s especially) and returns the top rules candidate, which the
+  // harness would otherwise score as if the model had chosen it.
+  const answered = Boolean(reviewed && reviewed.matchSource === 'ai');
   return {
     id: prod?.id || null,
     title: (prod?.title || 'NO MATCH').trim(),
     packs: reviewed?.packs,
     qty: reviewed?.totalQty,
     price: reviewed?.totalPrice,
-    reasoning: reviewed?.aiReasoning || ''
+    reasoning: reviewed?.aiReasoning || '',
+    answered
   };
 }
+
+const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
 const fixtures = JSON.parse(fs.readFileSync(FIXTURES, 'utf8'));
 const tally = (rows) => `${rows.filter((r) => r.ok).length}/${rows.length}`;
@@ -130,7 +137,16 @@ if (!hasKey) {
   process.exit(1);
 }
 
+// Free-tier Gemini keys throttle at a handful of requests per minute. Without
+// pacing, 429s become silent rules fallbacks and corrupt the scores.
+const delayMs = (() => {
+  const i = process.argv.indexOf('--delay');
+  return i > -1 ? Math.max(0, Number(process.argv[i + 1]) || 0) : 13000;
+})();
+console.log(`\npacing: ${delayMs}ms between calls (--delay 0 to disable)`);
+
 const perFixture = new Map(fixtures.map((f) => [f.id, []]));
+let unanswered = 0;
 for (let run = 1; run <= runs; run++) {
   process.stdout.write(`\nAI run ${run}/${runs} `);
   for (const f of fixtures) {
@@ -138,14 +154,20 @@ for (let run = 1; run <= runs; run++) {
     try {
       res = await aiResolve(f);
     } catch (err) {
-      res = { id: null, title: `ERROR: ${err.message}`, reasoning: '' };
+      res = { id: null, title: `ERROR: ${err.message}`, reasoning: '', answered: false };
     }
+    if (!res.answered) unanswered++;
     const v = judge(f, res.id, res.packs, res.qty);
     perFixture.get(f.id).push({ ok: v.ok, why: v.why, res });
-    process.stdout.write(v.ok ? '.' : 'x');
+    process.stdout.write(res.answered ? (v.ok ? '.' : 'x') : '?');
+    if (delayMs) await sleep(delayMs);
   }
 }
 console.log('\n');
+if (unanswered) {
+  console.log(`WARNING: ${unanswered} of ${fixtures.length * runs} calls never reached the model (shown as "?").`);
+  console.log('Those scored the rules fallback, not an AI decision. Raise --delay or use a paid key.\n');
+}
 
 let uplift = 0;
 let regress = 0;
@@ -156,7 +178,8 @@ for (const f of fixtures) {
   const majorityOk = okCount * 2 > attempts.length;
   const rulesOk = rulesRows.find((r) => r.id === f.id).ok;
   const stable = new Set(attempts.map((a) => a.res.id)).size === 1;
-  aiRows.push({ id: f.id, split: f.split, ok: majorityOk, stable });
+  const answeredAll = attempts.every((a) => a.res.answered);
+  aiRows.push({ id: f.id, split: f.split, ok: majorityOk, stable, answeredAll });
   if (!rulesOk && majorityOk) uplift++;
   if (rulesOk && !majorityOk) regress++;
 
@@ -169,13 +192,19 @@ for (const f of fixtures) {
 
 const aTrain = aiRows.filter((r) => r.split === 'train');
 const aHold = aiRows.filter((r) => r.split === 'holdout');
-const unstable = aiRows.filter((r) => !r.stable).length;
 
 console.log('\n' + '-'.repeat(79));
 console.log(`RULES BASELINE   overall ${tally(rulesRows)}   train ${tally(rTrain)}   holdout ${tally(rHold)}`);
 console.log(`WITH AI          overall ${tally(aiRows)}   train ${tally(aTrain)}   holdout ${tally(aHold)}`);
 console.log(`UPLIFT           ${uplift} fixture(s) rules got wrong that AI got right`);
 console.log(`REGRESSIONS      ${regress} fixture(s) rules got right that AI got wrong`);
-if (runs > 1) console.log(`STABILITY        ${aiRows.length - unstable}/${aiRows.length} fixtures returned the same pick every run`);
+const measurable = aiRows.filter((r) => r.answeredAll);
+if (runs > 1) {
+  const unstableMeasurable = measurable.filter((r) => !r.stable).length;
+  console.log(`STABILITY        ${measurable.length - unstableMeasurable}/${measurable.length} fixtures the model actually answered every run returned the same pick`);
+  if (measurable.length < aiRows.length) {
+    console.log(`                 ${aiRows.length - measurable.length} fixture(s) excluded: the model did not answer every run, so their stability is unmeasured`);
+  }
+}
 console.log('-'.repeat(79));
 console.log('Holdout is the honest number: those fixtures are not for tuning against.');
