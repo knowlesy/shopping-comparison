@@ -69,16 +69,9 @@ export class FuzzyMatcher {
       };
     });
 
-    // Sort: live/direct products take precedence over catalog fallback when score >= 25,
-    // then highest match score, then lowest total price
-    scored.sort((a, b) => {
-      const aIsCat = a.product.source === 'catalog';
-      const bIsCat = b.product.source === 'catalog';
-      if (aIsCat !== bIsCat && a.score >= 25 && b.score >= 25) {
-        return aIsCat ? 1 : -1;
-      }
-      return b.score - a.score || a.totalPrice - b.totalPrice;
-    });
+    // Sort using ranking rule: live/direct precedence, brand-preference preservation,
+    // and with no brand requested, an exact-size pack does not beat a cheaper sufficient one
+    scored.sort((a, b) => FuzzyMatcher.compareCandidates(a, b, item, preferences));
 
     const best = scored[0];
 
@@ -245,5 +238,44 @@ function getTitleCore(title = '') {
 
   static extractKeywords(item) {
     return KeywordExtractor.extractKeywords(item);
+  }
+
+  static isBrandNamed(brand, item = {}) {
+    if (!brand || typeof brand !== 'string' || brand.length < 2) return false;
+    if (item.brandPreference && item.brandPreference.toLowerCase().includes(brand.toLowerCase())) {
+      return true;
+    }
+    const itemText = `${item.rawText || ''} ${item.name || ''}`.toLowerCase();
+    const brandLower = brand.toLowerCase();
+    const escaped = brandLower.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return new RegExp(`\\b${escaped}\\b`, 'i').test(itemText);
+  }
+
+  static compareCandidates(a, b, item = {}, _preferences = {}) {
+    // 1. Live/direct products take precedence over catalog fallback when score >= 25
+    const aIsCat = a.product?.source === 'catalog';
+    const bIsCat = b.product?.source === 'catalog';
+    if (aIsCat !== bIsCat && a.score >= 25 && b.score >= 25) {
+      return aIsCat ? 1 : -1;
+    }
+
+    // 2. Ranking rule: With no brand requested, an exact-size pack does not beat a cheaper sufficient one
+    const aBrandNamed = a.product?.brand && this.isBrandNamed(a.product.brand, item);
+    const bBrandNamed = b.product?.brand && this.isBrandNamed(b.product.brand, item);
+    const brandRequested = Boolean(item.brandPreference || aBrandNamed || bBrandNamed);
+
+    if (!brandRequested && a.score >= 50 && b.score >= 50) {
+      const aSufficient = a.weightDiffPct !== undefined ? a.weightDiffPct >= 0 : (a.totalQty >= (item.targetQuantity || 1));
+      const bSufficient = b.weightDiffPct !== undefined ? b.weightDiffPct >= 0 : (b.totalQty >= (item.targetQuantity || 1));
+
+      if (aSufficient && bSufficient && Math.abs(a.score - b.score) <= 15) {
+        if (a.totalPrice !== b.totalPrice) {
+          return a.totalPrice - b.totalPrice;
+        }
+      }
+    }
+
+    // 3. Default: highest match score, then lowest total price
+    return b.score - a.score || a.totalPrice - b.totalPrice;
   }
 }

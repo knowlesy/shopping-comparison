@@ -103,18 +103,24 @@ export class PenaltyRules {
     const itemLower = (item.name || '').toLowerCase();
 
     // Hard Dietary Constraint: Explicit Fat Percentage must veto, not lose to price
+    // A stated fat requirement is not met by a product that never states its fat
     if (item.fatPercentage !== undefined && item.fatPercentage !== null) {
       let prodFat = prod.fatPercentage;
       if (prodFat === undefined || prodFat === null) {
-        const fatMatch = prod.title && prod.title.match(/\b(\d+)%\s*(?:fat|lean)\b/i);
-        if (fatMatch) {
-          prodFat = parseInt(fatMatch[1], 10);
+        if (
+          item.fatPercentage === 0 &&
+          (/\b(?:0%|0\s*%|fat\s*free|virtually\s+fat\s*free|zero\s*fat)\b/i.test(titleLower) || prod.isFatFree)
+        ) {
+          prodFat = 0;
+        } else {
+          const fatMatch = prod.title && prod.title.match(/\b(\d+)%\s*(?:fat|lean)?\b/i);
+          if (fatMatch) {
+            prodFat = parseInt(fatMatch[1], 10);
+          }
         }
       }
-      if (prodFat !== undefined && prodFat !== null) {
-        if (prodFat !== item.fatPercentage) {
-          return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
-        }
+      if (prodFat === undefined || prodFat === null || prodFat !== item.fatPercentage) {
+        return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
       }
     }
 

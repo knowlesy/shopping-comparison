@@ -71,12 +71,12 @@ async function aiResolve(f) {
   const keywords = KeywordExtractor.extractKeywords(f.item);
   const scored = f.candidates
     .map((prod) => {
-      const { score, packs, totalPrice } = PenaltyRules.scoreCandidate(prod, f.item, keywords, {
+      const { score, packs, totalQty, totalPrice, weightDiffPct } = PenaltyRules.scoreCandidate(prod, f.item, keywords, {
         brandTierPriority: 'standard'
       });
-      return { product: prod, score, packs, totalPrice: totalPrice || prod.price };
+      return { product: prod, score, packs, totalQty, totalPrice: totalPrice || prod.price, weightDiffPct };
     })
-    .sort((a, b) => b.score - a.score || a.totalPrice - b.totalPrice);
+    .sort((a, b) => FuzzyMatcher.compareCandidates(a, b, f.item, { brandTierPriority: 'standard' }));
 
   const reviewed = await AiDecisionReviewer.reviewCandidates(f.query, f.item, scored, {
     aiMatchingEnabled: true,
