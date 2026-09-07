@@ -1830,6 +1830,58 @@ check(25, 'Produce categories are not a hand-maintained list of fruit names', ()
 });
 
 // ---------------------------------------------------------------------------
+// Step 26 — Use the retailer's own taxonomy instead of guessing from titles
+// ---------------------------------------------------------------------------
+check(26, "The unified product schema carries the retailer's own categorisation", () => {
+  const src = read(r('services/store-fetcher/schema.py'));
+  if (!src) fail('schema.py missing');
+  const has = /aisle|department|shelf|taxonomy/i.test(src);
+  if (!has) {
+    fail(`UnifiedProduct has no field for the retailer's categorisation. Every raw Tesco product carries superDepartmentName, departmentName, aisleName and shelfName — e.g. aisleName "Mince & Meatballs", shelfName "Beef Mince & Meatballs" — and the adapter discards all of it. The pipeline then spends its effort guessing categories back out of product titles with regex.`);
+  }
+});
+
+check(26, 'The Tesco adapter keeps the taxonomy it is already given', () => {
+  const src = read(r('services/store-fetcher/adapters/tesco.py'));
+  if (!/aisleName|departmentName|shelfName/.test(src)) {
+    fail('adapters/tesco.py never reads aisleName, departmentName or shelfName from the payload it already parses. These are free — they arrive in the same response as the price.');
+  }
+});
+
+check(26, 'Matching consults the product category rather than only the title', async () => {
+  const cont = read(r('services/logic-api/src/services/contaminationRules.js'));
+  const pen = read(r('services/logic-api/src/services/penaltyRules.js'));
+  if (!/aisle|department|shelf/i.test(cont + pen)) {
+    fail('neither contaminationRules.js nor penaltyRules.js looks at the product\'s own aisle or department. Title-pattern blocklists are why the clean holdout failures MOVED rather than went away: blocking jelly and mousse simply promoted Angel Delight Banana 59G and a Cadbury Twirl Orange bar in their place. The space of confectionery named after fruit is unbounded, so enumerating it cannot converge — but "is this in a fresh produce aisle" is one authoritative check.');
+  }
+});
+
+check(26, 'A produce request rejects a candidate from a confectionery aisle', async () => {
+  const { isContaminated } = await svc('contaminationRules.js');
+  if (isContaminated.length < 3) {
+    return 'classifier does not yet accept product metadata — structural gates above cover this';
+  }
+  const cases = [
+    [{ name: 'bananas', category: 'produce' }, { title: 'Angel Delight Banana 59G', aisleName: 'Desserts', superDepartmentName: 'Food Cupboard' }],
+    [{ name: 'oranges', category: 'produce' }, { title: 'Cadbury Twirl Orange Chocolate Bar 43g', aisleName: 'Chocolate Blocks & Bars', superDepartmentName: 'Confectionery' }]
+  ];
+  const through = cases.filter(([i, p]) => !isContaminated(i, p.title.toLowerCase(), p));
+  if (through.length) {
+    fail(`a produce request still accepts a confectionery-aisle product:\n          - ${through.map(([i, p]) => `"${i.name}" vs "${p.title}" [${p.superDepartmentName} / ${p.aisleName}]`).join('\n          - ')}`);
+  }
+});
+
+check(26, 'Recorded fixtures carry the taxonomy so matching can be tested offline', () => {
+  const p = r('tests/fixtures/reality-fixtures.json');
+  if (!fs.existsSync(p)) return 'no reality fixtures';
+  const src = read(p);
+  const hits = (src.match(/"(?:aisleName|departmentName|superDepartmentName)"/g) || []).length;
+  if (hits === 0) {
+    fail('no recorded fixture carries any retailer taxonomy, so none of this can be verified offline. Re-record with the taxonomy preserved. Respect the politeness rules in infv-context.md section 3 if that needs fresh requests.');
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 await Promise.allSettled(pending);
