@@ -25,7 +25,6 @@
           "brand": "Tesco",
           "price": 5.05,
           "unitPrice": 10.1,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -34,7 +33,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "279704092",
@@ -43,7 +43,6 @@
           "brand": "Tesco",
           "price": 2.55,
           "unitPrice": 10.2,
-          "unitPriceMeasure": "kg",
           "packageSize": 250,
           "packageUnit": "g",
           "packageDisplay": "250g",
@@ -52,7 +51,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "308083458",
@@ -61,7 +61,6 @@
           "brand": "Tesco",
           "price": 3.25,
           "unitPrice": 6.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -70,7 +69,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "282470731",
@@ -79,7 +79,6 @@
           "brand": "Tesco",
           "price": 7.09,
           "unitPrice": 9.45,
-          "unitPriceMeasure": "kg",
           "packageSize": 750,
           "packageUnit": "g",
           "packageDisplay": "750g",
@@ -88,7 +87,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "261958659",
@@ -97,7 +97,6 @@
           "brand": "Tesco",
           "price": 6,
           "unitPrice": 12,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -106,7 +105,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "premium"
         },
         {
           "id": "296422890",
@@ -115,7 +115,6 @@
           "brand": "Tesco",
           "price": 7.1,
           "unitPrice": 9.47,
-          "unitPriceMeasure": "kg",
           "packageSize": 750,
           "packageUnit": "g",
           "packageDisplay": "750g",
@@ -124,7 +123,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -142,7 +142,6 @@
           "brand": "Tesco",
           "price": 2.75,
           "unitPrice": 11,
-          "unitPriceMeasure": "kg",
           "packageSize": 250,
           "packageUnit": "g",
           "packageDisplay": "250g",
@@ -151,7 +150,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "296546961",
@@ -160,7 +160,6 @@
           "brand": "Tesco",
           "price": 2.25,
           "unitPrice": 11.25,
-          "unitPriceMeasure": "kg",
           "packageSize": 200,
           "packageUnit": "g",
           "packageDisplay": "200g",
@@ -169,7 +168,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "320976865",
@@ -178,7 +178,6 @@
           "brand": "Tesco",
           "price": 5.25,
           "unitPrice": 10.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -187,7 +186,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "312356580",
@@ -196,7 +196,6 @@
           "brand": "Tesco",
           "price": 3.5,
           "unitPrice": 14,
-          "unitPriceMeasure": "kg",
           "packageSize": 250,
           "packageUnit": "g",
           "packageDisplay": "250g",
@@ -205,7 +204,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "317049521",
@@ -214,19 +214,19 @@
           "brand": "Whitworths",
           "price": 2.2,
           "unitPrice": 20,
-          "unitPriceMeasure": "kg",
           "packageSize": 110,
           "packageUnit": "g",
           "packageDisplay": "110g",
           "deal": {
-            "description": "Any 2 for £3.40 Clubcard Price - Selected Whitworths Dry Fruits & Nuts",
+            "description": "Any 2 for \u00a33.40 Clubcard Price - Selected Whitworths Dry Fruits & Nuts",
             "type": "clubcard"
           },
           "clubcardPrice": 3.4,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "309461113",
@@ -235,7 +235,6 @@
           "brand": "Tesco",
           "price": 3.1,
           "unitPrice": 31,
-          "unitPriceMeasure": "kg",
           "packageSize": 100,
           "packageUnit": "g",
           "packageDisplay": "100g",
@@ -244,7 +243,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isOrganic": true
         }
       ]
     },
@@ -262,7 +263,6 @@
           "brand": "Happy",
           "price": 2.9,
           "unitPrice": 0.48,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -271,7 +271,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isFreeRange": true
         },
         {
           "id": "274457564",
@@ -280,7 +282,6 @@
           "brand": "Happy",
           "price": 4,
           "unitPrice": 0.4,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -289,7 +290,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isFreeRange": true
         },
         {
           "id": "306934262",
@@ -298,7 +301,6 @@
           "brand": "Big",
           "price": 3.35,
           "unitPrice": 0.34,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -307,7 +309,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isFreeRange": true
         },
         {
           "id": "305838838",
@@ -316,7 +320,6 @@
           "brand": "Big",
           "price": 2.1,
           "unitPrice": 0.35,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -325,7 +328,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "value"
         },
         {
           "id": "315445078",
@@ -334,19 +338,20 @@
           "brand": "St.",
           "price": 3.5,
           "unitPrice": 0.58,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
           "deal": {
-            "description": "£2.95 Clubcard Price",
+            "description": "\u00a32.95 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 2.95,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isFreeRange": true
         },
         {
           "id": "316810278",
@@ -355,7 +360,6 @@
           "brand": "St",
           "price": 4.1,
           "unitPrice": 0.41,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -364,7 +368,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isFreeRange": true
         }
       ]
     },
@@ -382,7 +388,6 @@
           "brand": "Arla",
           "price": 2.1,
           "unitPrice": 2.1,
-          "unitPriceMeasure": "litre",
           "packageSize": 1,
           "packageUnit": "l",
           "packageDisplay": "1l",
@@ -391,7 +396,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isOrganic": true
         },
         {
           "id": "254656543",
@@ -400,7 +407,6 @@
           "brand": "Tesco",
           "price": 1.75,
           "unitPrice": 0.77,
-          "unitPriceMeasure": "litre",
           "packageSize": 2.272,
           "packageUnit": "l",
           "packageDisplay": "2.272l",
@@ -409,7 +415,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "252207537",
@@ -418,7 +425,6 @@
           "brand": "Tesco",
           "price": 1.2,
           "unitPrice": 1.06,
-          "unitPriceMeasure": "litre",
           "packageSize": 1.13,
           "packageUnit": "l",
           "packageDisplay": "1.13l",
@@ -427,7 +433,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "251314158",
@@ -436,7 +443,6 @@
           "brand": "Tesco",
           "price": 0.85,
           "unitPrice": 1.5,
-          "unitPriceMeasure": "litre",
           "packageSize": 568,
           "packageUnit": "ml",
           "packageDisplay": "568ml",
@@ -445,7 +451,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "257264875",
@@ -454,19 +461,19 @@
           "brand": "Cravendale",
           "price": 2.65,
           "unitPrice": 1.32,
-          "unitPriceMeasure": "litre",
           "packageSize": 2,
           "packageUnit": "l",
           "packageDisplay": "2l",
           "deal": {
-            "description": "Any 2 for £4 Clubcard Price - Selected Dairy Products 2 Litre",
+            "description": "Any 2 for \u00a34 Clubcard Price - Selected Dairy Products 2 Litre",
             "type": "clubcard"
           },
           "clubcardPrice": 4,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "253737115",
@@ -475,19 +482,19 @@
           "brand": "Tesco",
           "price": 2.2,
           "unitPrice": 1.1,
-          "unitPriceMeasure": "litre",
           "packageSize": 2,
           "packageUnit": "litre",
           "packageDisplay": "2litre",
           "deal": {
-            "description": "£1.90 Clubcard Price",
+            "description": "\u00a31.90 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 1.9,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -505,7 +512,6 @@
           "brand": "John",
           "price": 2,
           "unitPrice": 29.85,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 95,
           "packageUnit": "g",
           "packageDisplay": "95g",
@@ -514,7 +520,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "322328869",
@@ -523,7 +530,6 @@
           "brand": "Parmentier",
           "price": 2.1,
           "unitPrice": 15.56,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 135,
           "packageUnit": "g",
           "packageDisplay": "135g",
@@ -532,7 +538,8 @@
           "nectarPrice": null,
           "inStock": false,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "252737883",
@@ -541,7 +548,6 @@
           "brand": "John",
           "price": 1.4,
           "unitPrice": 15.56,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -550,7 +556,8 @@
           "nectarPrice": null,
           "inStock": false,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "310103367",
@@ -559,7 +566,6 @@
           "brand": "John",
           "price": 3.2,
           "unitPrice": 64,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 95,
           "packageUnit": "g",
           "packageDisplay": "95g",
@@ -568,7 +574,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "303544169",
@@ -577,7 +584,6 @@
           "brand": "Sea",
           "price": 3,
           "unitPrice": 24,
-          "unitPriceMeasure": "kg",
           "packageSize": 125,
           "packageUnit": "g",
           "packageDisplay": "125g",
@@ -586,7 +592,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "322650227",
@@ -595,19 +602,19 @@
           "brand": "Terra",
           "price": 7,
           "unitPrice": 14,
-          "unitPriceMeasure": "litre",
           "packageSize": 500,
           "packageUnit": "ml",
           "packageDisplay": "500ml",
           "deal": {
-            "description": "£5.00 Clubcard Price",
+            "description": "\u00a35.00 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 5,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -625,7 +632,6 @@
           "brand": "Tesco",
           "price": 0.77,
           "unitPrice": 0.38,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -634,7 +640,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "264534350",
@@ -643,7 +650,6 @@
           "brand": "Tesco",
           "price": 1.1,
           "unitPrice": 0.55,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -655,7 +661,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "310693807",
@@ -664,7 +671,6 @@
           "brand": "Tesco",
           "price": 0.95,
           "unitPrice": 0.95,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -673,7 +679,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "316641719",
@@ -682,7 +689,6 @@
           "brand": "Tesco",
           "price": 1.4,
           "unitPrice": 1.4,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -694,7 +700,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "premium"
         },
         {
           "id": "323662540",
@@ -703,7 +710,6 @@
           "brand": "Tesco",
           "price": 1.5,
           "unitPrice": 1.5,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -712,7 +718,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "253557495",
@@ -721,7 +728,6 @@
           "brand": "Tesco",
           "price": 0.89,
           "unitPrice": 0.89,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -730,7 +736,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -748,7 +755,6 @@
           "brand": "Tesco",
           "price": 0.75,
           "unitPrice": 0.75,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -760,7 +766,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "305943990",
@@ -769,7 +776,6 @@
           "brand": "Tesco",
           "price": 0.9,
           "unitPrice": 3.6,
-          "unitPriceMeasure": "kg",
           "packageSize": 250,
           "packageUnit": "g",
           "packageDisplay": "250g",
@@ -778,7 +784,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "281055568",
@@ -787,7 +794,6 @@
           "brand": "Tesco",
           "price": 1.4,
           "unitPrice": 1.4,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -796,7 +802,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isOrganic": true
         },
         {
           "id": "320683139",
@@ -805,7 +813,6 @@
           "brand": "Tesco",
           "price": 1.9,
           "unitPrice": 6.33,
-          "unitPriceMeasure": "kg",
           "packageSize": 300,
           "packageUnit": "g",
           "packageDisplay": "300g",
@@ -814,7 +821,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "287336394",
@@ -823,7 +831,6 @@
           "brand": "Joseph",
           "price": 2,
           "unitPrice": 10,
-          "unitPriceMeasure": "kg",
           "packageSize": 200,
           "packageUnit": "g",
           "packageDisplay": "200g",
@@ -832,7 +839,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "8117540",
@@ -841,7 +849,6 @@
           "brand": "Sainsbury's",
           "price": 0.9,
           "unitPrice": 3.6,
-          "unitPriceMeasure": "kg",
           "packageSize": 250,
           "packageUnit": "g",
           "packageDisplay": "250g",
@@ -850,7 +857,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -868,7 +876,6 @@
           "brand": "Heinz",
           "price": 3.55,
           "unitPrice": 7.24,
-          "unitPriceMeasure": "kg",
           "packageSize": 490,
           "packageUnit": "g",
           "packageDisplay": "490g",
@@ -880,7 +887,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "313168547",
@@ -889,7 +897,6 @@
           "brand": "Tesco",
           "price": 0.5,
           "unitPrice": 0.5,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -898,7 +905,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "315384380",
@@ -907,7 +915,6 @@
           "brand": "Tesco",
           "price": 0.87,
           "unitPrice": 0.22,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -916,7 +923,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "278392921",
@@ -925,7 +933,6 @@
           "brand": "Tesco",
           "price": 1.8,
           "unitPrice": 20,
-          "unitPriceMeasure": "kg",
           "packageSize": 90,
           "packageUnit": "g",
           "packageDisplay": "90g",
@@ -934,7 +941,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "257949060",
@@ -943,7 +951,6 @@
           "brand": "Very",
           "price": 1.95,
           "unitPrice": 9.75,
-          "unitPriceMeasure": "kg",
           "packageSize": 200,
           "packageUnit": "g",
           "packageDisplay": "200g",
@@ -952,7 +959,8 @@
           "nectarPrice": null,
           "inStock": false,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "253126769",
@@ -961,7 +969,6 @@
           "brand": "Gia",
           "price": 1.1,
           "unitPrice": 12.22,
-          "unitPriceMeasure": "kg",
           "packageSize": 90,
           "packageUnit": "g",
           "packageDisplay": "90g",
@@ -970,7 +977,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -987,12 +995,12 @@
           "title": "Tesco Tomato Puree 200G",
           "price": 0.59,
           "unitPrice": 2.95,
-          "unitPriceMeasure": "kg",
           "packageSize": 200,
           "packageUnit": "g",
           "packageDisplay": "200g",
           "inStock": true,
-          "source": "direct"
+          "source": "direct",
+          "tier": "standard"
         },
         {
           "id": "254789013",
@@ -1000,12 +1008,12 @@
           "title": "Napolina Double Concentrate Tomato Puree 200g",
           "price": 1.5,
           "unitPrice": 7.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 200,
           "packageUnit": "g",
           "packageDisplay": "200g",
           "inStock": true,
-          "source": "direct"
+          "source": "direct",
+          "tier": "standard"
         },
         {
           "id": "sb-tp-1",
@@ -1013,12 +1021,12 @@
           "title": "Sainsbury's Tomato Puree, Double Concentrate 200g",
           "price": 0.59,
           "unitPrice": 2.95,
-          "unitPriceMeasure": "kg",
           "packageSize": 200,
           "packageUnit": "g",
           "packageDisplay": "200g",
           "inStock": true,
-          "source": "direct"
+          "source": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -1035,12 +1043,12 @@
           "title": "Tesco Maris Piper Potatoes 2Kg",
           "price": 1.8,
           "unitPrice": 0.9,
-          "unitPriceMeasure": "kg",
           "packageSize": 2,
           "packageUnit": "kg",
           "packageDisplay": "2kg",
           "inStock": true,
-          "source": "direct"
+          "source": "direct",
+          "tier": "standard"
         },
         {
           "id": "254656544",
@@ -1048,12 +1056,12 @@
           "title": "Tesco Maris Piper Potatoes 1.25Kg",
           "price": 1.45,
           "unitPrice": 1.16,
-          "unitPriceMeasure": "kg",
           "packageSize": 1.25,
           "packageUnit": "kg",
           "packageDisplay": "1.25kg",
           "inStock": true,
-          "source": "direct"
+          "source": "direct",
+          "tier": "standard"
         },
         {
           "id": "sb-mp-1",
@@ -1061,12 +1069,12 @@
           "title": "Sainsbury's Maris Piper Potatoes 2kg",
           "price": 1.8,
           "unitPrice": 0.9,
-          "unitPriceMeasure": "kg",
           "packageSize": 2,
           "packageUnit": "kg",
           "packageDisplay": "2kg",
           "inStock": true,
-          "source": "direct"
+          "source": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -1084,19 +1092,19 @@
           "brand": "POTINA",
           "price": 2.8,
           "unitPrice": 2.8,
-          "unitPriceMeasure": "litre",
           "packageSize": 1,
           "packageUnit": "litre",
           "packageDisplay": "1litre",
           "deal": {
-            "description": "£2.00 Clubcard Price",
+            "description": "\u00a32.00 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 2,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "285157326",
@@ -1105,7 +1113,6 @@
           "brand": "Tesco",
           "price": 0.75,
           "unitPrice": 0.12,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -1117,7 +1124,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "275280804",
@@ -1126,7 +1134,6 @@
           "brand": "Tesco",
           "price": 0.16,
           "unitPrice": 0.9,
-          "unitPriceMeasure": "kg",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -1135,7 +1142,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "266419328",
@@ -1144,7 +1152,6 @@
           "brand": "Tesco",
           "price": 0.78,
           "unitPrice": 0.16,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -1153,7 +1160,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "266420677",
@@ -1162,7 +1170,6 @@
           "brand": "Tesco",
           "price": 0.78,
           "unitPrice": 0.16,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -1171,7 +1178,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "303869954",
@@ -1180,7 +1188,6 @@
           "brand": "Tesco",
           "price": 1.6,
           "unitPrice": 0.32,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -1189,7 +1196,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isOrganic": true
         }
       ]
     },
@@ -1207,19 +1216,19 @@
           "brand": "Scrapples",
           "price": 2.95,
           "unitPrice": 49.17,
-          "unitPriceMeasure": "kg",
           "packageSize": 12,
           "packageUnit": "g",
           "packageDisplay": "12g",
           "deal": {
-            "description": "£2.50 Clubcard Price",
+            "description": "\u00a32.50 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 2.5,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "322549014",
@@ -1228,19 +1237,19 @@
           "brand": "Scrapples",
           "price": 2.95,
           "unitPrice": 49.17,
-          "unitPriceMeasure": "kg",
           "packageSize": 12,
           "packageUnit": "g",
           "packageDisplay": "12g",
           "deal": {
-            "description": "£2.50 Clubcard Price",
+            "description": "\u00a32.50 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 2.5,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "316300058",
@@ -1249,19 +1258,19 @@
           "brand": "Highland",
           "price": 1.25,
           "unitPrice": 1,
-          "unitPriceMeasure": "litre",
           "packageSize": 1.25,
           "packageUnit": "litre",
           "packageDisplay": "1.25litre",
           "deal": {
-            "description": "Any 3 for £3 Clubcard Price - Selected Drinks",
+            "description": "Any 3 for \u00a33 Clubcard Price - Selected Drinks",
             "type": "clubcard"
           },
           "clubcardPrice": 3,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "284475550",
@@ -1270,7 +1279,6 @@
           "brand": "Tesco",
           "price": 1.8,
           "unitPrice": 0.36,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -1279,7 +1287,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "284477542",
@@ -1288,7 +1297,6 @@
           "brand": "Tesco",
           "price": 2.9,
           "unitPrice": 0.58,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -1297,7 +1305,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "292249576",
@@ -1306,7 +1315,6 @@
           "brand": "Rosedene",
           "price": 0.99,
           "unitPrice": 0.16,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -1318,7 +1326,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "value"
         }
       ]
     },
@@ -1336,7 +1345,6 @@
           "brand": "Do",
           "price": 2.25,
           "unitPrice": 15,
-          "unitPriceMeasure": "kg",
           "packageSize": 150,
           "packageUnit": "g",
           "packageDisplay": "150g",
@@ -1345,7 +1353,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "320968345",
@@ -1354,19 +1363,19 @@
           "brand": "Tesco",
           "price": 1.3,
           "unitPrice": 6.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 200,
           "packageUnit": "g",
           "packageDisplay": "200g",
           "deal": {
-            "description": "Any 2 for £2.20 Clubcard Price - Selected Tesco Dips 163g - 211g",
+            "description": "Any 2 for \u00a32.20 Clubcard Price - Selected Tesco Dips 163g - 211g",
             "type": "clubcard"
           },
           "clubcardPrice": 2.2,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "320673572",
@@ -1375,19 +1384,19 @@
           "brand": "Tesco",
           "price": 1.3,
           "unitPrice": 7.14,
-          "unitPriceMeasure": "kg",
           "packageSize": 182,
           "packageUnit": "g",
           "packageDisplay": "182g",
           "deal": {
-            "description": "Any 2 for £2.20 Clubcard Price - Selected Tesco Dips 163g - 211g",
+            "description": "Any 2 for \u00a32.20 Clubcard Price - Selected Tesco Dips 163g - 211g",
             "type": "clubcard"
           },
           "clubcardPrice": 2.2,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "320967265",
@@ -1396,7 +1405,6 @@
           "brand": "Tesco",
           "price": 1.5,
           "unitPrice": 5,
-          "unitPriceMeasure": "kg",
           "packageSize": 300,
           "packageUnit": "g",
           "packageDisplay": "300g",
@@ -1405,7 +1413,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "311254788",
@@ -1414,7 +1423,6 @@
           "brand": "Ramona's",
           "price": 3.7,
           "unitPrice": 7.4,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -1423,7 +1431,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "320547526",
@@ -1432,19 +1441,19 @@
           "brand": "Tesco",
           "price": 1.3,
           "unitPrice": 6.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 200,
           "packageUnit": "g",
           "packageDisplay": "200g",
           "deal": {
-            "description": "Any 2 for £2.20 Clubcard Price - Selected Tesco Dips 163g - 211g",
+            "description": "Any 2 for \u00a32.20 Clubcard Price - Selected Tesco Dips 163g - 211g",
             "type": "clubcard"
           },
           "clubcardPrice": 2.2,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -1462,7 +1471,6 @@
           "brand": "Tesco",
           "price": 1.85,
           "unitPrice": 0.31,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -1471,7 +1479,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "253846591",
@@ -1480,7 +1489,6 @@
           "brand": "Tesco",
           "price": 2.1,
           "unitPrice": 0.52,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -1489,7 +1497,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "premium"
         },
         {
           "id": "290350049",
@@ -1498,7 +1507,6 @@
           "brand": "Tesco",
           "price": 1.4,
           "unitPrice": 7,
-          "unitPriceMeasure": "kg",
           "packageSize": 200,
           "packageUnit": "g",
           "packageDisplay": "200g",
@@ -1507,7 +1515,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "259650305",
@@ -1516,7 +1525,6 @@
           "brand": "Tesco",
           "price": 3,
           "unitPrice": 4,
-          "unitPriceMeasure": "kg",
           "packageSize": 750,
           "packageUnit": "g",
           "packageDisplay": "750g",
@@ -1525,7 +1533,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "254852604",
@@ -1534,7 +1543,6 @@
           "brand": "Kellogg's",
           "price": 2.5,
           "unitPrice": 5,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -1543,7 +1551,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "271245404",
@@ -1552,7 +1561,6 @@
           "brand": "Ambrosia",
           "price": 1.95,
           "unitPrice": 4.88,
-          "unitPriceMeasure": "kg",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
@@ -1561,7 +1569,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "schemaVersion": "1.0.0",
@@ -1571,7 +1580,6 @@
           "brand": "Sundora",
           "price": 1.5,
           "unitPrice": 3,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -1582,7 +1590,8 @@
           "productUrl": "https://www.sainsburys.co.uk/gol-ui/product/sundora-sultanas-500g",
           "imageUrl": "https://assets.sainsburys-groceries.co.uk/gol/8013078/image.jpg",
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -1600,7 +1609,6 @@
           "brand": "Tesco",
           "price": 0.75,
           "unitPrice": 1.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -1609,7 +1617,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "303732718",
@@ -1618,7 +1627,6 @@
           "brand": "Tesco",
           "price": 2,
           "unitPrice": 8,
-          "unitPriceMeasure": "kg",
           "packageSize": 250,
           "packageUnit": "g",
           "packageDisplay": "250g",
@@ -1627,7 +1635,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "284210294",
@@ -1636,19 +1645,19 @@
           "brand": "Barilla",
           "price": 1.75,
           "unitPrice": 3.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
           "deal": {
-            "description": "£1.25 Clubcard Price",
+            "description": "\u00a31.25 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 1.25,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "314943129",
@@ -1657,7 +1666,6 @@
           "brand": "Napolina",
           "price": 1.65,
           "unitPrice": 4.4,
-          "unitPriceMeasure": "kg",
           "packageSize": 375,
           "packageUnit": "g",
           "packageDisplay": "375g",
@@ -1666,7 +1674,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "264890284",
@@ -1675,7 +1684,6 @@
           "brand": "Tesco",
           "price": 0.75,
           "unitPrice": 3,
-          "unitPriceMeasure": "kg",
           "packageSize": 250,
           "packageUnit": "g",
           "packageDisplay": "250g",
@@ -1684,7 +1692,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "287546940",
@@ -1693,7 +1702,6 @@
           "brand": "Tesco",
           "price": 1.45,
           "unitPrice": 3.02,
-          "unitPriceMeasure": "kg",
           "packageSize": 480,
           "packageUnit": "g",
           "packageDisplay": "480g",
@@ -1702,7 +1710,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -1720,7 +1729,6 @@
           "brand": "Tesco",
           "price": 0.7,
           "unitPrice": 0.7,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -1729,7 +1737,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "278774752",
@@ -1738,7 +1747,6 @@
           "brand": "Aleyna",
           "price": 2.15,
           "unitPrice": 6.72,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 480,
           "packageUnit": "g",
           "packageDisplay": "480g",
@@ -1747,7 +1755,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "316068027",
@@ -1756,7 +1765,6 @@
           "brand": "Peppadew",
           "price": 4.1,
           "unitPrice": 8.82,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 465,
           "packageUnit": "g",
           "packageDisplay": "465g",
@@ -1765,7 +1773,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "293425320",
@@ -1774,7 +1783,6 @@
           "brand": "Tesco",
           "price": 1.15,
           "unitPrice": 16.43,
-          "unitPriceMeasure": "kg",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -1783,7 +1791,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "311956597",
@@ -1792,7 +1801,6 @@
           "brand": "Tesco",
           "price": 2,
           "unitPrice": 5.1,
-          "unitPriceMeasure": "kg",
           "packageSize": 392,
           "packageUnit": "g",
           "packageDisplay": "392g",
@@ -1801,7 +1809,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "309766369",
@@ -1810,7 +1819,6 @@
           "brand": "Epicure",
           "price": 4,
           "unitPrice": 7.55,
-          "unitPriceMeasure": "kg",
           "packageSize": 970,
           "packageUnit": "g",
           "packageDisplay": "970g",
@@ -1819,7 +1827,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -1837,7 +1846,6 @@
           "brand": "Tesco",
           "price": 1.55,
           "unitPrice": 4.43,
-          "unitPriceMeasure": "litre",
           "packageSize": 350,
           "packageUnit": "ml",
           "packageDisplay": "350ml",
@@ -1846,7 +1854,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "260511700",
@@ -1855,7 +1864,6 @@
           "brand": "Tesco",
           "price": 1.55,
           "unitPrice": 4.43,
-          "unitPriceMeasure": "litre",
           "packageSize": 350,
           "packageUnit": "ml",
           "packageDisplay": "350ml",
@@ -1864,7 +1872,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "255247726",
@@ -1873,7 +1882,6 @@
           "brand": "Stone's",
           "price": 8.25,
           "unitPrice": 11.79,
-          "unitPriceMeasure": "litre",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -1882,7 +1890,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "285477477",
@@ -1891,7 +1900,6 @@
           "brand": "The",
           "price": 5,
           "unitPrice": 6.67,
-          "unitPriceMeasure": "litre",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -1900,7 +1908,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "314949371",
@@ -1909,7 +1918,6 @@
           "brand": "La",
           "price": 15.75,
           "unitPrice": 10.5,
-          "unitPriceMeasure": "litre",
           "packageSize": 1.5,
           "packageUnit": "l",
           "packageDisplay": "1.5l",
@@ -1918,7 +1926,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "308084739",
@@ -1927,7 +1936,6 @@
           "brand": "Campo",
           "price": 9,
           "unitPrice": 12,
-          "unitPriceMeasure": "litre",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -1936,7 +1944,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -1954,7 +1963,6 @@
           "brand": "Do",
           "price": 2.25,
           "unitPrice": 15,
-          "unitPriceMeasure": "kg",
           "packageSize": 150,
           "packageUnit": "g",
           "packageDisplay": "150g",
@@ -1963,7 +1971,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "299539406",
@@ -1972,7 +1981,6 @@
           "brand": "Grower's",
           "price": 1.15,
           "unitPrice": 1.28,
-          "unitPriceMeasure": "kg",
           "packageSize": 900,
           "packageUnit": "g",
           "packageDisplay": "900g",
@@ -1981,7 +1989,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "value"
         },
         {
           "id": "250172580",
@@ -1990,7 +1999,6 @@
           "brand": "Tesco",
           "price": 1.7,
           "unitPrice": 1.7,
-          "unitPriceMeasure": "kg",
           "packageSize": 1,
           "packageUnit": "kg",
           "packageDisplay": "1kg",
@@ -1999,7 +2007,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "250172608",
@@ -2008,7 +2017,6 @@
           "brand": "Tesco",
           "price": 2,
           "unitPrice": 2,
-          "unitPriceMeasure": "kg",
           "packageSize": 1,
           "packageUnit": "kg",
           "packageDisplay": "1kg",
@@ -2017,7 +2025,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "256789198",
@@ -2026,7 +2035,6 @@
           "brand": "Tesco",
           "price": 0.41,
           "unitPrice": 2.34,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 290,
           "packageUnit": "g",
           "packageDisplay": "290g",
@@ -2035,7 +2043,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "296118224",
@@ -2044,7 +2053,6 @@
           "brand": "Birds",
           "price": 2.25,
           "unitPrice": 2.81,
-          "unitPriceMeasure": "kg",
           "packageSize": 800,
           "packageUnit": "g",
           "packageDisplay": "800g",
@@ -2053,7 +2061,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -2071,7 +2080,6 @@
           "brand": "Tesco",
           "price": 0.45,
           "unitPrice": 1.92,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
@@ -2080,7 +2088,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "318189710",
@@ -2089,19 +2098,19 @@
           "brand": "Bold",
           "price": 3.25,
           "unitPrice": 8.12,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 570,
           "packageUnit": "g",
           "packageDisplay": "570g",
           "deal": {
-            "description": "£2.60 Clubcard Price",
+            "description": "\u00a32.60 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 2.6,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "315155202",
@@ -2110,19 +2119,20 @@
           "brand": "Biona",
           "price": 1.75,
           "unitPrice": 7.29,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
           "deal": {
-            "description": "£1.40 Clubcard Price",
+            "description": "\u00a31.40 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 1.4,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isOrganic": true
         },
         {
           "id": "262489469",
@@ -2131,7 +2141,6 @@
           "brand": "Tesco",
           "price": 0.45,
           "unitPrice": 0,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
@@ -2140,7 +2149,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "262167712",
@@ -2149,7 +2159,6 @@
           "brand": "Tesco",
           "price": 0.45,
           "unitPrice": 1.88,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
@@ -2158,7 +2167,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "262489966",
@@ -2167,7 +2177,6 @@
           "brand": "Tesco",
           "price": 0.49,
           "unitPrice": 1.99,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
@@ -2176,7 +2185,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -2194,19 +2204,19 @@
           "brand": "Pip",
           "price": 3.5,
           "unitPrice": 11.67,
-          "unitPriceMeasure": "kg",
           "packageSize": 300,
           "packageUnit": "g",
           "packageDisplay": "300g",
           "deal": {
-            "description": "£2.25 Clubcard Price",
+            "description": "\u00a32.25 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 2.25,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "311440752",
@@ -2215,7 +2225,6 @@
           "brand": "Pip",
           "price": 7.5,
           "unitPrice": 7.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 1,
           "packageUnit": "kg",
           "packageDisplay": "1kg",
@@ -2224,7 +2233,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "264769626",
@@ -2233,7 +2243,6 @@
           "brand": "Tesco",
           "price": 0.95,
           "unitPrice": 2.79,
-          "unitPriceMeasure": "kg",
           "packageSize": 340,
           "packageUnit": "g",
           "packageDisplay": "340g",
@@ -2242,7 +2251,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "307157609",
@@ -2251,7 +2261,6 @@
           "brand": "Nuts",
           "price": 2.35,
           "unitPrice": 6.91,
-          "unitPriceMeasure": "kg",
           "packageSize": 340,
           "packageUnit": "g",
           "packageDisplay": "340g",
@@ -2260,7 +2269,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "264604671",
@@ -2269,7 +2279,6 @@
           "brand": "Tesco",
           "price": 2,
           "unitPrice": 2.86,
-          "unitPriceMeasure": "kg",
           "packageSize": 700,
           "packageUnit": "g",
           "packageDisplay": "700g",
@@ -2278,7 +2287,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "284847836",
@@ -2287,19 +2297,19 @@
           "brand": "Meridian",
           "price": 2.8,
           "unitPrice": 10,
-          "unitPriceMeasure": "kg",
           "packageSize": 280,
           "packageUnit": "g",
           "packageDisplay": "280g",
           "deal": {
-            "description": "£2.20 Clubcard Price",
+            "description": "\u00a32.20 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 2.2,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -2317,19 +2327,19 @@
           "brand": "Tesco",
           "price": 1.4,
           "unitPrice": 3.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
           "deal": {
-            "description": "£1.00 Clubcard Price",
+            "description": "\u00a31.00 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 1,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "311430205",
@@ -2338,7 +2348,6 @@
           "brand": "Tesco",
           "price": 2.65,
           "unitPrice": 8.15,
-          "unitPriceMeasure": "kg",
           "packageSize": 325,
           "packageUnit": "g",
           "packageDisplay": "325g",
@@ -2347,7 +2356,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "292129321",
@@ -2356,7 +2366,6 @@
           "brand": "Suntrail",
           "price": 1.99,
           "unitPrice": 1.99,
-          "unitPriceMeasure": "kg",
           "packageSize": 1,
           "packageUnit": "kg",
           "packageDisplay": "1kg",
@@ -2365,7 +2374,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "value"
         },
         {
           "id": "267246790",
@@ -2374,19 +2384,19 @@
           "brand": "Tesco",
           "price": 3,
           "unitPrice": 0.75,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
           "deal": {
-            "description": "Any 2 for £4 Clubcard Price - Selected Tesco Fruits",
+            "description": "Any 2 for \u00a34 Clubcard Price - Selected Tesco Fruits",
             "type": "clubcard"
           },
           "clubcardPrice": 4,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "premium"
         },
         {
           "id": "300522822",
@@ -2395,7 +2405,6 @@
           "brand": "Grower's",
           "price": 0.43,
           "unitPrice": 1.08,
-          "unitPriceMeasure": "kg",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
@@ -2404,7 +2413,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "value"
         },
         {
           "id": "251825037",
@@ -2413,7 +2423,6 @@
           "brand": "Tesco",
           "price": 0.47,
           "unitPrice": 1.18,
-          "unitPriceMeasure": "kg",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
@@ -2422,7 +2431,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -2440,7 +2450,6 @@
           "brand": "Tesco",
           "price": 1,
           "unitPrice": 71.43,
-          "unitPriceMeasure": "kg",
           "packageSize": 14,
           "packageUnit": "g",
           "packageDisplay": "14g",
@@ -2449,7 +2458,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "300456261",
@@ -2458,7 +2468,6 @@
           "brand": "Tesco",
           "price": 1.8,
           "unitPrice": 60,
-          "unitPriceMeasure": "kg",
           "packageSize": 30,
           "packageUnit": "g",
           "packageDisplay": "30g",
@@ -2467,7 +2476,8 @@
           "nectarPrice": null,
           "inStock": false,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "263155235",
@@ -2476,19 +2486,19 @@
           "brand": "Schwartz",
           "price": 2,
           "unitPrice": 285.71,
-          "unitPriceMeasure": "kg",
           "packageSize": 7,
           "packageUnit": "g",
           "packageDisplay": "7g",
           "deal": {
-            "description": "Any 2 for £3.50 Clubcard Price - Selected Schwartz Recipe Mix",
+            "description": "Any 2 for \u00a33.50 Clubcard Price - Selected Schwartz Recipe Mix",
             "type": "clubcard"
           },
           "clubcardPrice": 3.5,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "320399712",
@@ -2497,7 +2507,6 @@
           "brand": "Tesco",
           "price": 1.5,
           "unitPrice": 8.57,
-          "unitPriceMeasure": "litre",
           "packageSize": 175,
           "packageUnit": "ml",
           "packageDisplay": "175ml",
@@ -2506,7 +2515,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "317642763",
@@ -2515,7 +2525,6 @@
           "brand": "Lily's",
           "price": 3.35,
           "unitPrice": 8.38,
-          "unitPriceMeasure": "kg",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
@@ -2527,7 +2536,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "257485607",
@@ -2536,19 +2546,19 @@
           "brand": "Schwartz",
           "price": 2,
           "unitPrice": 181.82,
-          "unitPriceMeasure": "kg",
           "packageSize": 11,
           "packageUnit": "g",
           "packageDisplay": "11g",
           "deal": {
-            "description": "Any 2 for £3.50 Clubcard Price - Selected Schwartz Recipe Mix",
+            "description": "Any 2 for \u00a33.50 Clubcard Price - Selected Schwartz Recipe Mix",
             "type": "clubcard"
           },
           "clubcardPrice": 3.5,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -2566,7 +2576,6 @@
           "brand": "Tesco",
           "price": 0.5,
           "unitPrice": 25,
-          "unitPriceMeasure": "kg",
           "packageSize": 20,
           "packageUnit": "g",
           "packageDisplay": "20g",
@@ -2575,7 +2584,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "316298486",
@@ -2584,7 +2594,6 @@
           "brand": "Tesco",
           "price": 1,
           "unitPrice": 52.63,
-          "unitPriceMeasure": "kg",
           "packageSize": 19,
           "packageUnit": "g",
           "packageDisplay": "19g",
@@ -2593,7 +2602,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "256204223",
@@ -2602,7 +2612,6 @@
           "brand": "Tesco",
           "price": 1.6,
           "unitPrice": 1.6,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -2611,7 +2620,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "257498990",
@@ -2620,19 +2630,19 @@
           "brand": "Schwartz",
           "price": 2,
           "unitPrice": 181.82,
-          "unitPriceMeasure": "kg",
           "packageSize": 11,
           "packageUnit": "g",
           "packageDisplay": "11g",
           "deal": {
-            "description": "Any 2 for £3.50 Clubcard Price - Selected Schwartz Recipe Mix",
+            "description": "Any 2 for \u00a33.50 Clubcard Price - Selected Schwartz Recipe Mix",
             "type": "clubcard"
           },
           "clubcardPrice": 3.5,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "283197863",
@@ -2641,7 +2651,6 @@
           "brand": "John",
           "price": 1.8,
           "unitPrice": 22.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 80,
           "packageUnit": "g",
           "packageDisplay": "80g",
@@ -2650,7 +2659,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "315861126",
@@ -2659,7 +2669,6 @@
           "brand": "Fragata",
           "price": 2.1,
           "unitPrice": 17.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 120,
           "packageUnit": "g",
           "packageDisplay": "120g",
@@ -2668,7 +2677,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -2686,7 +2696,6 @@
           "brand": "Tesco",
           "price": 0.5,
           "unitPrice": 25,
-          "unitPriceMeasure": "kg",
           "packageSize": 20,
           "packageUnit": "g",
           "packageDisplay": "20g",
@@ -2695,7 +2704,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "256149680",
@@ -2704,7 +2714,6 @@
           "brand": "Tesco",
           "price": 1,
           "unitPrice": 37.04,
-          "unitPriceMeasure": "kg",
           "packageSize": 27,
           "packageUnit": "g",
           "packageDisplay": "27g",
@@ -2713,7 +2722,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "285507466",
@@ -2722,7 +2732,6 @@
           "brand": "Tesco",
           "price": 1.6,
           "unitPrice": 1.6,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -2731,7 +2740,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "257498667",
@@ -2740,19 +2750,19 @@
           "brand": "Schwartz",
           "price": 2,
           "unitPrice": 111.11,
-          "unitPriceMeasure": "kg",
           "packageSize": 18,
           "packageUnit": "g",
           "packageDisplay": "18g",
           "deal": {
-            "description": "Any 2 for £3.50 Clubcard Price - Selected Schwartz Recipe Mix",
+            "description": "Any 2 for \u00a33.50 Clubcard Price - Selected Schwartz Recipe Mix",
             "type": "clubcard"
           },
           "clubcardPrice": 3.5,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "322738263",
@@ -2761,7 +2771,6 @@
           "brand": "Tesco",
           "price": 1.35,
           "unitPrice": 2.7,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -2770,7 +2779,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "premium"
         },
         {
           "id": "323433760",
@@ -2779,19 +2789,19 @@
           "brand": "Mielle",
           "price": 11,
           "unitPrice": 30.99,
-          "unitPriceMeasure": "litre",
           "packageSize": 355,
           "packageUnit": "ml",
           "packageDisplay": "355ml",
           "deal": {
-            "description": "£8.00 Clubcard Price",
+            "description": "\u00a38.00 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 8,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -2809,7 +2819,6 @@
           "brand": "Heinz",
           "price": 3,
           "unitPrice": 6.12,
-          "unitPriceMeasure": "kg",
           "packageSize": 490,
           "packageUnit": "g",
           "packageDisplay": "490g",
@@ -2821,7 +2830,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "292695686",
@@ -2830,7 +2840,6 @@
           "brand": "Tesco",
           "price": 0.5,
           "unitPrice": 16.67,
-          "unitPriceMeasure": "kg",
           "packageSize": 30,
           "packageUnit": "g",
           "packageDisplay": "30g",
@@ -2839,7 +2848,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "256180514",
@@ -2848,7 +2858,6 @@
           "brand": "Tesco",
           "price": 1.6,
           "unitPrice": 1.6,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -2857,7 +2866,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "300456347",
@@ -2866,7 +2876,6 @@
           "brand": "Tesco",
           "price": 1,
           "unitPrice": 55.56,
-          "unitPriceMeasure": "kg",
           "packageSize": 18,
           "packageUnit": "g",
           "packageDisplay": "18g",
@@ -2875,7 +2884,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "323430256",
@@ -2884,7 +2894,6 @@
           "brand": "Tesco",
           "price": 1.8,
           "unitPrice": 36,
-          "unitPriceMeasure": "kg",
           "packageSize": 50,
           "packageUnit": "g",
           "packageDisplay": "50g",
@@ -2893,7 +2902,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "322050655",
@@ -2902,7 +2912,6 @@
           "brand": "Tesco",
           "price": 0.9,
           "unitPrice": 45,
-          "unitPriceMeasure": "kg",
           "packageSize": 20,
           "packageUnit": "g",
           "packageDisplay": "20g",
@@ -2911,7 +2920,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "premium"
         }
       ]
     },
@@ -2929,7 +2939,6 @@
           "brand": "Tesco",
           "price": 0.5,
           "unitPrice": 16.67,
-          "unitPriceMeasure": "kg",
           "packageSize": 30,
           "packageUnit": "g",
           "packageDisplay": "30g",
@@ -2941,7 +2950,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "257482311",
@@ -2950,7 +2960,6 @@
           "brand": "Tesco",
           "price": 1.25,
           "unitPrice": 12.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 100,
           "packageUnit": "g",
           "packageDisplay": "100g",
@@ -2959,7 +2968,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "256146844",
@@ -2968,7 +2978,6 @@
           "brand": "Tesco",
           "price": 1,
           "unitPrice": 90.91,
-          "unitPriceMeasure": "kg",
           "packageSize": 11,
           "packageUnit": "g",
           "packageDisplay": "11g",
@@ -2977,7 +2986,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "292686720",
@@ -2986,7 +2996,6 @@
           "brand": "Tesco",
           "price": 0.5,
           "unitPrice": 16.67,
-          "unitPriceMeasure": "kg",
           "packageSize": 30,
           "packageUnit": "g",
           "packageDisplay": "30g",
@@ -2995,7 +3004,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "257574329",
@@ -3004,7 +3014,6 @@
           "brand": "Tesco",
           "price": 1.6,
           "unitPrice": 1.6,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -3013,7 +3022,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "256212432",
@@ -3022,7 +3032,6 @@
           "brand": "Tesco",
           "price": 1.6,
           "unitPrice": 1.6,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -3031,7 +3040,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -3049,7 +3059,6 @@
           "brand": "Tesco",
           "price": 1,
           "unitPrice": 83.33,
-          "unitPriceMeasure": "kg",
           "packageSize": 12,
           "packageUnit": "g",
           "packageDisplay": "12g",
@@ -3058,7 +3067,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "304796018",
@@ -3067,7 +3077,6 @@
           "brand": "Tesco",
           "price": 0.5,
           "unitPrice": 25,
-          "unitPriceMeasure": "kg",
           "packageSize": 20,
           "packageUnit": "g",
           "packageDisplay": "20g",
@@ -3076,7 +3085,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "7477787",
@@ -3085,7 +3095,6 @@
           "brand": "Sainsbury's",
           "price": 0.45,
           "unitPrice": 2.65,
-          "unitPriceMeasure": "kg",
           "packageSize": 170,
           "packageUnit": "g",
           "packageDisplay": "170g",
@@ -3094,7 +3103,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "8074186",
@@ -3103,7 +3113,6 @@
           "brand": "Sainsbury's",
           "price": 3.5,
           "unitPrice": 14,
-          "unitPriceMeasure": "kg",
           "packageSize": 250,
           "packageUnit": "g",
           "packageDisplay": "250g",
@@ -3112,7 +3121,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "premium"
         },
         {
           "id": "7568726",
@@ -3121,7 +3131,6 @@
           "brand": "Sainsbury's",
           "price": 0.9,
           "unitPrice": 2.65,
-          "unitPriceMeasure": "kg",
           "packageSize": 340,
           "packageUnit": "g",
           "packageDisplay": "340g",
@@ -3130,7 +3139,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "2012841",
@@ -3139,7 +3149,6 @@
           "brand": "Paxo",
           "price": 1.5,
           "unitPrice": 17.65,
-          "unitPriceMeasure": "kg",
           "packageSize": 85,
           "packageUnit": "g",
           "packageDisplay": "85g",
@@ -3148,7 +3157,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -3166,7 +3176,6 @@
           "brand": "Wrigley's",
           "price": 2.5,
           "unitPrice": 39.06,
-          "unitPriceMeasure": "kg",
           "packageSize": 64,
           "packageUnit": "g",
           "packageDisplay": "64g",
@@ -3175,7 +3184,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "316803903",
@@ -3184,7 +3194,6 @@
           "brand": "Extra",
           "price": 2.5,
           "unitPrice": 39.06,
-          "unitPriceMeasure": "kg",
           "packageSize": 64,
           "packageUnit": "g",
           "packageDisplay": "64g",
@@ -3193,7 +3202,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "259095864",
@@ -3202,7 +3212,6 @@
           "brand": "Tesco",
           "price": 0.5,
           "unitPrice": 16.67,
-          "unitPriceMeasure": "kg",
           "packageSize": 30,
           "packageUnit": "g",
           "packageDisplay": "30g",
@@ -3211,7 +3220,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "261718731",
@@ -3220,7 +3230,6 @@
           "brand": "Tesco",
           "price": 1.6,
           "unitPrice": 1.6,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -3229,7 +3238,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "300456468",
@@ -3238,7 +3248,6 @@
           "brand": "Tesco",
           "price": 1,
           "unitPrice": 62.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 16,
           "packageUnit": "g",
           "packageDisplay": "16g",
@@ -3247,7 +3256,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "256993290",
@@ -3256,7 +3266,6 @@
           "brand": "Tesco",
           "price": 0.75,
           "unitPrice": 4.05,
-          "unitPriceMeasure": "kg",
           "packageSize": 185,
           "packageUnit": "g",
           "packageDisplay": "185g",
@@ -3265,7 +3274,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -3283,7 +3293,6 @@
           "brand": "Olly's",
           "price": 4,
           "unitPrice": 20,
-          "unitPriceMeasure": "kg",
           "packageSize": 200,
           "packageUnit": "g",
           "packageDisplay": "200g",
@@ -3292,7 +3301,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "330742591",
@@ -3301,7 +3311,6 @@
           "brand": "Olly's",
           "price": 4,
           "unitPrice": 20,
-          "unitPriceMeasure": "kg",
           "packageSize": 200,
           "packageUnit": "g",
           "packageDisplay": "200g",
@@ -3310,7 +3319,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "330742596",
@@ -3319,7 +3329,6 @@
           "brand": "Olly's",
           "price": 4,
           "unitPrice": 20,
-          "unitPriceMeasure": "kg",
           "packageSize": 200,
           "packageUnit": "g",
           "packageDisplay": "200g",
@@ -3328,7 +3337,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "254918424",
@@ -3337,7 +3347,6 @@
           "brand": "Tesco",
           "price": 7.25,
           "unitPrice": 7.25,
-          "unitPriceMeasure": "litre",
           "packageSize": 1,
           "packageUnit": "l",
           "packageDisplay": "1l",
@@ -3346,7 +3355,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "255593768",
@@ -3355,7 +3365,6 @@
           "brand": "Napolina",
           "price": 6.5,
           "unitPrice": 13,
-          "unitPriceMeasure": "litre",
           "packageSize": 500,
           "packageUnit": "ml",
           "packageDisplay": "500ml",
@@ -3364,7 +3373,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "253628953",
@@ -3373,7 +3383,6 @@
           "brand": "Filippo",
           "price": 12.75,
           "unitPrice": 12.75,
-          "unitPriceMeasure": "litre",
           "packageSize": 1,
           "packageUnit": "litre",
           "packageDisplay": "1litre",
@@ -3382,7 +3391,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -3400,7 +3410,6 @@
           "brand": "Tesco",
           "price": 0.69,
           "unitPrice": 0.69,
-          "unitPriceMeasure": "kg",
           "packageSize": 1,
           "packageUnit": "kg",
           "packageDisplay": "1kg",
@@ -3409,7 +3418,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "254638565",
@@ -3418,7 +3428,6 @@
           "brand": "Tesco",
           "price": 0.11,
           "unitPrice": 0.69,
-          "unitPriceMeasure": "kg",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -3427,7 +3436,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "321328928",
@@ -3436,7 +3446,6 @@
           "brand": "Tesco",
           "price": 0.44,
           "unitPrice": 0.88,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -3445,7 +3454,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "256687445",
@@ -3454,7 +3464,6 @@
           "brand": "Tesco",
           "price": 1.35,
           "unitPrice": 1.93,
-          "unitPriceMeasure": "kg",
           "packageSize": 700,
           "packageUnit": "g",
           "packageDisplay": "700g",
@@ -3463,7 +3472,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isOrganic": true
         },
         {
           "id": "312693894",
@@ -3472,7 +3483,6 @@
           "brand": "Tesco",
           "price": 1.1,
           "unitPrice": 2.75,
-          "unitPriceMeasure": "kg",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
@@ -3484,7 +3494,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "315469741",
@@ -3493,7 +3504,6 @@
           "brand": "Tesco",
           "price": 1,
           "unitPrice": 2.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
@@ -3505,7 +3515,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -3523,7 +3534,6 @@
           "brand": "Tesco",
           "price": 0.95,
           "unitPrice": 0.32,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -3532,7 +3542,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "253557034",
@@ -3541,7 +3552,6 @@
           "brand": "Tesco",
           "price": 0.11,
           "unitPrice": 0.95,
-          "unitPriceMeasure": "kg",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -3550,7 +3560,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "255736044",
@@ -3559,7 +3570,6 @@
           "brand": "Tesco",
           "price": 0.95,
           "unitPrice": 0.95,
-          "unitPriceMeasure": "kg",
           "packageSize": 1,
           "packageUnit": "kg",
           "packageDisplay": "1kg",
@@ -3568,7 +3578,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "281425851",
@@ -3577,7 +3588,6 @@
           "brand": "Tesco",
           "price": 0.95,
           "unitPrice": 0.32,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -3586,7 +3596,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "258114107",
@@ -3595,7 +3606,6 @@
           "brand": "Tesco",
           "price": 0.2,
           "unitPrice": 0.95,
-          "unitPriceMeasure": "kg",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -3604,7 +3614,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "305982539",
@@ -3613,7 +3624,6 @@
           "brand": "Tesco",
           "price": 0.95,
           "unitPrice": 0.95,
-          "unitPriceMeasure": "kg",
           "packageSize": 1,
           "packageUnit": "kg",
           "packageDisplay": "1kg",
@@ -3622,7 +3632,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -3640,7 +3651,6 @@
           "brand": "Tesco",
           "price": 0.9,
           "unitPrice": 2.4,
-          "unitPriceMeasure": "kg",
           "packageSize": 375,
           "packageUnit": "g",
           "packageDisplay": "375g",
@@ -3649,7 +3659,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "257231200",
@@ -3658,7 +3669,6 @@
           "brand": "Tesco",
           "price": 0.9,
           "unitPrice": 2.39,
-          "unitPriceMeasure": "kg",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -3667,7 +3677,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "305255289",
@@ -3676,7 +3687,6 @@
           "brand": "Tesco",
           "price": 1.6,
           "unitPrice": 8,
-          "unitPriceMeasure": "kg",
           "packageSize": 200,
           "packageUnit": "g",
           "packageDisplay": "200g",
@@ -3685,7 +3695,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "299389237",
@@ -3694,19 +3705,19 @@
           "brand": "Tesco",
           "price": 2.5,
           "unitPrice": 7.58,
-          "unitPriceMeasure": "kg",
           "packageSize": 330,
           "packageUnit": "g",
           "packageDisplay": "330g",
           "deal": {
-            "description": "£2.20 Clubcard Price",
+            "description": "\u00a32.20 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 2.2,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "282485161",
@@ -3715,7 +3726,6 @@
           "brand": "Tesco",
           "price": 1.16,
           "unitPrice": 1.29,
-          "unitPriceMeasure": "kg",
           "packageSize": 900,
           "packageUnit": "g",
           "packageDisplay": "900g",
@@ -3724,7 +3734,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "320559339",
@@ -3733,7 +3744,6 @@
           "brand": "TESCO",
           "price": 1.29,
           "unitPrice": 3.22,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
@@ -3742,7 +3752,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -3760,7 +3771,6 @@
           "brand": "Tesco",
           "price": 0.99,
           "unitPrice": 0.99,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -3769,7 +3779,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "280379906",
@@ -3778,7 +3789,6 @@
           "brand": "Tesco",
           "price": 1.15,
           "unitPrice": 1.15,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -3787,7 +3797,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "292663718",
@@ -3796,7 +3807,6 @@
           "brand": "Tesco",
           "price": 1.1,
           "unitPrice": 5.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 200,
           "packageUnit": "g",
           "packageDisplay": "200g",
@@ -3805,7 +3815,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "251582605",
@@ -3814,7 +3825,6 @@
           "brand": "Tesco",
           "price": 1.3,
           "unitPrice": 1.3,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -3823,7 +3833,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isOrganic": true
         },
         {
           "id": "323330680",
@@ -3832,7 +3844,6 @@
           "brand": "Popits",
           "price": 1.5,
           "unitPrice": 8.33,
-          "unitPriceMeasure": "kg",
           "packageSize": 180,
           "packageUnit": "g",
           "packageDisplay": "180g",
@@ -3841,7 +3852,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "262007753",
@@ -3850,19 +3862,19 @@
           "brand": "Mrs",
           "price": 2.75,
           "unitPrice": 8.87,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 540,
           "packageUnit": "g",
           "packageDisplay": "540g",
           "deal": {
-            "description": "£2.00 Clubcard Price",
+            "description": "\u00a32.00 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 2,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -3880,7 +3892,6 @@
           "brand": "Tesco",
           "price": 1.5,
           "unitPrice": 0.3,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -3889,7 +3900,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "253554170",
@@ -3898,19 +3910,19 @@
           "brand": "Jaffa",
           "price": 2.2,
           "unitPrice": 0.44,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
           "deal": {
-            "description": "Any 2 for £3 Clubcard Price - Selected Fruits",
+            "description": "Any 2 for \u00a33 Clubcard Price - Selected Fruits",
             "type": "clubcard"
           },
           "clubcardPrice": 3,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "322450562",
@@ -3919,7 +3931,6 @@
           "brand": "Tesco",
           "price": 0.35,
           "unitPrice": 0.35,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -3928,7 +3939,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "311438519",
@@ -3937,19 +3949,19 @@
           "brand": "Jaffa",
           "price": 2.2,
           "unitPrice": 0.55,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
           "deal": {
-            "description": "Any 2 for £3 Clubcard Price - Selected Fruits",
+            "description": "Any 2 for \u00a33 Clubcard Price - Selected Fruits",
             "type": "clubcard"
           },
           "clubcardPrice": 3,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "292225110",
@@ -3958,7 +3970,6 @@
           "brand": "Suntrail",
           "price": 0.99,
           "unitPrice": 0.2,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -3967,7 +3978,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "value"
         },
         {
           "id": "322753405",
@@ -3976,19 +3988,19 @@
           "brand": "Tesco",
           "price": 2.6,
           "unitPrice": 0.65,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
           "deal": {
-            "description": "£1.70 Save 1/3 Clubcard Price",
+            "description": "\u00a31.70 Save 1/3 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": null,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "premium"
         }
       ]
     },
@@ -4006,7 +4018,6 @@
           "brand": "Tesco",
           "price": 6.69,
           "unitPrice": 6.69,
-          "unitPriceMeasure": "kg",
           "packageSize": 1,
           "packageUnit": "kg",
           "packageDisplay": "1kg",
@@ -4015,7 +4026,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "294007923",
@@ -4024,7 +4036,6 @@
           "brand": "Tesco",
           "price": 4.9,
           "unitPrice": 7.54,
-          "unitPriceMeasure": "kg",
           "packageSize": 650,
           "packageUnit": "g",
           "packageDisplay": "650g",
@@ -4033,7 +4044,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "320661079",
@@ -4042,7 +4054,6 @@
           "brand": "Tesco",
           "price": 2.44,
           "unitPrice": 7.62,
-          "unitPriceMeasure": "kg",
           "packageSize": 320,
           "packageUnit": "g",
           "packageDisplay": "320g",
@@ -4051,7 +4062,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "304410539",
@@ -4060,7 +4072,6 @@
           "brand": "Tesco",
           "price": 5.4,
           "unitPrice": 8.31,
-          "unitPriceMeasure": "kg",
           "packageSize": 650,
           "packageUnit": "g",
           "packageDisplay": "650g",
@@ -4069,7 +4080,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "303152949",
@@ -4078,19 +4090,19 @@
           "brand": "Tesco",
           "price": 10.65,
           "unitPrice": 6.66,
-          "unitPriceMeasure": "kg",
           "packageSize": 1.6,
           "packageUnit": "kg",
           "packageDisplay": "1.6kg",
           "deal": {
-            "description": "£9.50 Clubcard Price",
+            "description": "\u00a39.50 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 9.5,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "304368923",
@@ -4099,19 +4111,19 @@
           "brand": "Tesco",
           "price": 4,
           "unitPrice": 10,
-          "unitPriceMeasure": "kg",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
           "deal": {
-            "description": "£3.50 Clubcard Price",
+            "description": "\u00a33.50 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 3.5,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -4129,19 +4141,19 @@
           "brand": "Tesco",
           "price": 10.75,
           "unitPrice": 46.74,
-          "unitPriceMeasure": "kg",
           "packageSize": 230,
           "packageUnit": "g",
           "packageDisplay": "230g",
           "deal": {
-            "description": "£8.50 Clubcard Price",
+            "description": "\u00a38.50 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 8.5,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "premium"
         },
         {
           "id": "296920881",
@@ -4150,7 +4162,6 @@
           "brand": "Tesco",
           "price": 4.9,
           "unitPrice": 18.85,
-          "unitPriceMeasure": "kg",
           "packageSize": 260,
           "packageUnit": "g",
           "packageDisplay": "260g",
@@ -4159,7 +4170,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "309747513",
@@ -4168,19 +4180,19 @@
           "brand": "Tesco",
           "price": 9.25,
           "unitPrice": 17.79,
-          "unitPriceMeasure": "kg",
           "packageSize": 520,
           "packageUnit": "g",
           "packageDisplay": "520g",
           "deal": {
-            "description": "£7.85 Clubcard Price",
+            "description": "\u00a37.85 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 7.85,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "275963204",
@@ -4189,7 +4201,6 @@
           "brand": "Tesco",
           "price": 5,
           "unitPrice": 15.15,
-          "unitPriceMeasure": "kg",
           "packageSize": 330,
           "packageUnit": "g",
           "packageDisplay": "330g",
@@ -4198,7 +4209,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "308103511",
@@ -4207,19 +4219,19 @@
           "brand": "Tesco",
           "price": 6,
           "unitPrice": 26.09,
-          "unitPriceMeasure": "kg",
           "packageSize": 230,
           "packageUnit": "g",
           "packageDisplay": "230g",
           "deal": {
-            "description": "Any 2 for £8 Clubcard Price - Selected Tesco Bbq Meat & Rtc Products",
+            "description": "Any 2 for \u00a38 Clubcard Price - Selected Tesco Bbq Meat & Rtc Products",
             "type": "clubcard"
           },
           "clubcardPrice": 8,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "310127031",
@@ -4228,19 +4240,19 @@
           "brand": "Mowi",
           "price": 6.75,
           "unitPrice": 29.35,
-          "unitPriceMeasure": "kg",
           "packageSize": 230,
           "packageUnit": "g",
           "packageDisplay": "230g",
           "deal": {
-            "description": "£3.75 Clubcard Price",
+            "description": "\u00a33.75 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 3.75,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -4258,7 +4270,6 @@
           "brand": "Tesco",
           "price": 6.5,
           "unitPrice": 18.06,
-          "unitPriceMeasure": "kg",
           "packageSize": 360,
           "packageUnit": "g",
           "packageDisplay": "360g",
@@ -4267,7 +4278,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "292916835",
@@ -4276,19 +4288,19 @@
           "brand": "Tesco",
           "price": 8.15,
           "unitPrice": 29.11,
-          "unitPriceMeasure": "kg",
           "packageSize": 280,
           "packageUnit": "g",
           "packageDisplay": "280g",
           "deal": {
-            "description": "£6.75 Clubcard Price",
+            "description": "\u00a36.75 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 6.75,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "322555070",
@@ -4297,19 +4309,19 @@
           "brand": "Tesco",
           "price": 4.95,
           "unitPrice": 19.8,
-          "unitPriceMeasure": "kg",
           "packageSize": 250,
           "packageUnit": "g",
           "packageDisplay": "250g",
           "deal": {
-            "description": "£4.25 Clubcard Price",
+            "description": "\u00a34.25 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 4.25,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "310150394",
@@ -4318,7 +4330,6 @@
           "brand": "Tesco",
           "price": 1.79,
           "unitPrice": 7.16,
-          "unitPriceMeasure": "kg",
           "packageSize": 250,
           "packageUnit": "g",
           "packageDisplay": "250g",
@@ -4327,7 +4338,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "320813309",
@@ -4336,7 +4348,6 @@
           "brand": "Birds",
           "price": 6.6,
           "unitPrice": 16.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
@@ -4345,7 +4356,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "252798850",
@@ -4354,7 +4366,6 @@
           "brand": "Tesco",
           "price": 5.5,
           "unitPrice": 15.71,
-          "unitPriceMeasure": "kg",
           "packageSize": 350,
           "packageUnit": "g",
           "packageDisplay": "350g",
@@ -4363,7 +4374,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -4381,7 +4393,6 @@
           "brand": "The",
           "price": 2.95,
           "unitPrice": 6.94,
-          "unitPriceMeasure": "kg",
           "packageSize": 425,
           "packageUnit": "g",
           "packageDisplay": "425g",
@@ -4390,7 +4401,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "315073742",
@@ -4399,7 +4411,6 @@
           "brand": "The",
           "price": 2.95,
           "unitPrice": 6.94,
-          "unitPriceMeasure": "kg",
           "packageSize": 425,
           "packageUnit": "g",
           "packageDisplay": "425g",
@@ -4408,7 +4419,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "293836686",
@@ -4417,19 +4429,19 @@
           "brand": "Alpro",
           "price": 2.5,
           "unitPrice": 6.25,
-          "unitPriceMeasure": "kg",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
           "deal": {
-            "description": "£2.15 Clubcard Price",
+            "description": "\u00a32.15 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 2.15,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "258170229",
@@ -4438,7 +4450,6 @@
           "brand": "Tesco",
           "price": 1.15,
           "unitPrice": 2.3,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -4447,7 +4458,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "256381115",
@@ -4456,7 +4468,6 @@
           "brand": "Tesco",
           "price": 2.5,
           "unitPrice": 5,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -4465,7 +4476,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "premium"
         },
         {
           "id": "323871309",
@@ -4474,19 +4486,19 @@
           "brand": "Muller",
           "price": 1.65,
           "unitPrice": 9.71,
-          "unitPriceMeasure": "kg",
           "packageSize": 170,
           "packageUnit": "g",
           "packageDisplay": "170g",
           "deal": {
-            "description": "Any 3 for £4 Clubcard Price - Selected Breakfast Toppers",
+            "description": "Any 3 for \u00a34 Clubcard Price - Selected Breakfast Toppers",
             "type": "clubcard"
           },
           "clubcardPrice": 4,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -4504,7 +4516,6 @@
           "brand": "Tesco",
           "price": 4.25,
           "unitPrice": 6.07,
-          "unitPriceMeasure": "kg",
           "packageSize": 700,
           "packageUnit": "g",
           "packageDisplay": "700g",
@@ -4513,7 +4524,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "277925449",
@@ -4522,7 +4534,6 @@
           "brand": "Cathedral",
           "price": 5.45,
           "unitPrice": 9.91,
-          "unitPriceMeasure": "kg",
           "packageSize": 550,
           "packageUnit": "g",
           "packageDisplay": "550g",
@@ -4531,7 +4542,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "305977270",
@@ -4540,7 +4552,6 @@
           "brand": "Tesco",
           "price": 3.25,
           "unitPrice": 8.12,
-          "unitPriceMeasure": "kg",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
@@ -4549,7 +4560,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "302676607",
@@ -4558,7 +4570,6 @@
           "brand": "Creamfields",
           "price": 2.45,
           "unitPrice": 6.12,
-          "unitPriceMeasure": "kg",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
@@ -4567,7 +4578,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "value"
         },
         {
           "id": "268768873",
@@ -4576,19 +4588,19 @@
           "brand": "Cathedral",
           "price": 3.5,
           "unitPrice": 10,
-          "unitPriceMeasure": "kg",
           "packageSize": 350,
           "packageUnit": "g",
           "packageDisplay": "350g",
           "deal": {
-            "description": "£3.00 Clubcard Price",
+            "description": "\u00a33.00 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 3,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "268903247",
@@ -4597,7 +4609,6 @@
           "brand": "Pilgrims",
           "price": 4.25,
           "unitPrice": 12.14,
-          "unitPriceMeasure": "kg",
           "packageSize": 350,
           "packageUnit": "g",
           "packageDisplay": "350g",
@@ -4606,7 +4617,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -4624,7 +4636,6 @@
           "brand": "Tesco",
           "price": 1.19,
           "unitPrice": 1.19,
-          "unitPriceMeasure": "kg",
           "packageSize": 1,
           "packageUnit": "kg",
           "packageDisplay": "1kg",
@@ -4633,7 +4644,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "254878545",
@@ -4642,7 +4654,6 @@
           "brand": "Tesco",
           "price": 0.75,
           "unitPrice": 1.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -4651,7 +4662,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "251966083",
@@ -4660,7 +4672,6 @@
           "brand": "De",
           "price": 2,
           "unitPrice": 4,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -4669,7 +4680,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "255343007",
@@ -4678,7 +4690,6 @@
           "brand": "Tesco",
           "price": 3.55,
           "unitPrice": 1.18,
-          "unitPriceMeasure": "kg",
           "packageSize": 3,
           "packageUnit": "kg",
           "packageDisplay": "3kg",
@@ -4687,7 +4698,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "254878614",
@@ -4696,7 +4708,6 @@
           "brand": "Tesco",
           "price": 0.75,
           "unitPrice": 1.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -4705,7 +4716,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "254878522",
@@ -4714,7 +4726,6 @@
           "brand": "Tesco",
           "price": 0.75,
           "unitPrice": 1.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -4723,7 +4734,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -4741,19 +4753,19 @@
           "brand": "Kohinoor",
           "price": 23,
           "unitPrice": 2.3,
-          "unitPriceMeasure": "kg",
           "packageSize": 10,
           "packageUnit": "kg",
           "packageDisplay": "10kg",
           "deal": {
-            "description": "£14.00 Clubcard Price",
+            "description": "\u00a314.00 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 14,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "293258638",
@@ -4762,7 +4774,6 @@
           "brand": "Kohinoor",
           "price": 25,
           "unitPrice": 2.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 10,
           "packageUnit": "kg",
           "packageDisplay": "10kg",
@@ -4771,7 +4782,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "293236653",
@@ -4780,7 +4792,6 @@
           "brand": "Tilda",
           "price": 16,
           "unitPrice": 3.2,
-          "unitPriceMeasure": "kg",
           "packageSize": 5,
           "packageUnit": "kg",
           "packageDisplay": "5kg",
@@ -4789,7 +4800,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "254877477",
@@ -4798,7 +4810,6 @@
           "brand": "Tesco",
           "price": 1.79,
           "unitPrice": 1.79,
-          "unitPriceMeasure": "kg",
           "packageSize": 1,
           "packageUnit": "kg",
           "packageDisplay": "1kg",
@@ -4807,7 +4818,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "251680648",
@@ -4816,7 +4828,6 @@
           "brand": "Tesco",
           "price": 0.7,
           "unitPrice": 2.8,
-          "unitPriceMeasure": "kg",
           "packageSize": 250,
           "packageUnit": "g",
           "packageDisplay": "250g",
@@ -4825,7 +4836,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "282265272",
@@ -4834,7 +4846,6 @@
           "brand": "Tilda",
           "price": 16,
           "unitPrice": 3.2,
-          "unitPriceMeasure": "kg",
           "packageSize": 5,
           "packageUnit": "kg",
           "packageDisplay": "5kg",
@@ -4843,7 +4854,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -4861,7 +4873,6 @@
           "brand": "Grower's",
           "price": 0.85,
           "unitPrice": 0.85,
-          "unitPriceMeasure": "kg",
           "packageSize": 1,
           "packageUnit": "kg",
           "packageDisplay": "1kg",
@@ -4870,7 +4881,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "value"
         },
         {
           "id": "254853776",
@@ -4879,7 +4891,6 @@
           "brand": "Tesco",
           "price": 1.35,
           "unitPrice": 1.35,
-          "unitPriceMeasure": "kg",
           "packageSize": 1,
           "packageUnit": "kg",
           "packageDisplay": "1kg",
@@ -4888,7 +4899,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "292990837",
@@ -4897,7 +4909,6 @@
           "brand": "Tesco",
           "price": 2.6,
           "unitPrice": 1.3,
-          "unitPriceMeasure": "kg",
           "packageSize": 2,
           "packageUnit": "kg",
           "packageDisplay": "2kg",
@@ -4906,7 +4917,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "271757922",
@@ -4915,7 +4927,6 @@
           "brand": "Flahavans",
           "price": 3,
           "unitPrice": 3,
-          "unitPriceMeasure": "kg",
           "packageSize": 1,
           "packageUnit": "kg",
           "packageDisplay": "1kg",
@@ -4924,7 +4935,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isOrganic": true
         },
         {
           "id": "252329675",
@@ -4933,19 +4946,19 @@
           "brand": "Quaker",
           "price": 2.95,
           "unitPrice": 2.95,
-          "unitPriceMeasure": "kg",
           "packageSize": 1,
           "packageUnit": "kg",
           "packageDisplay": "1kg",
           "deal": {
-            "description": "£2.25 Clubcard Price",
+            "description": "\u00a32.25 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 2.25,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "252329813",
@@ -4954,7 +4967,6 @@
           "brand": "Scott's",
           "price": 2.95,
           "unitPrice": 2.95,
-          "unitPriceMeasure": "kg",
           "packageSize": 1,
           "packageUnit": "kg",
           "packageDisplay": "1kg",
@@ -4963,7 +4975,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -4981,7 +4994,6 @@
           "brand": "Tesco",
           "price": 2.6,
           "unitPrice": 2.6,
-          "unitPriceMeasure": "kg",
           "packageSize": 1,
           "packageUnit": "kg",
           "packageDisplay": "1kg",
@@ -4990,7 +5002,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "256534728",
@@ -4999,7 +5012,6 @@
           "brand": "Tesco",
           "price": 2.1,
           "unitPrice": 4.2,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -5008,7 +5020,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "261633312",
@@ -5017,7 +5030,6 @@
           "brand": "East",
           "price": 1.5,
           "unitPrice": 3,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -5026,7 +5038,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "310121360",
@@ -5035,19 +5048,19 @@
           "brand": "Laila",
           "price": 4.5,
           "unitPrice": 2.25,
-          "unitPriceMeasure": "kg",
           "packageSize": 2,
           "packageUnit": "kg",
           "packageDisplay": "2kg",
           "deal": {
-            "description": "£3.00 Save 1/3 Clubcard Price",
+            "description": "\u00a33.00 Save 1/3 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": null,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "254878142",
@@ -5056,7 +5069,6 @@
           "brand": "Great",
           "price": 2.1,
           "unitPrice": 4.2,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -5065,7 +5077,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "254869280",
@@ -5074,7 +5087,6 @@
           "brand": "Natco",
           "price": 4,
           "unitPrice": 2,
-          "unitPriceMeasure": "kg",
           "packageSize": 2,
           "packageUnit": "kg",
           "packageDisplay": "2kg",
@@ -5083,7 +5095,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -5101,7 +5114,6 @@
           "brand": "Peachie",
           "price": 11,
           "unitPrice": 55,
-          "unitPriceMeasure": "kg",
           "packageSize": 200,
           "packageUnit": "g",
           "packageDisplay": "200g",
@@ -5110,7 +5122,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "320673975",
@@ -5119,7 +5132,6 @@
           "brand": "Peachie",
           "price": 11,
           "unitPrice": 55,
-          "unitPriceMeasure": "kg",
           "packageSize": 200,
           "packageUnit": "g",
           "packageDisplay": "200g",
@@ -5128,7 +5140,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "290594510",
@@ -5137,7 +5150,6 @@
           "brand": "Tesco",
           "price": 1.8,
           "unitPrice": 12,
-          "unitPriceMeasure": "kg",
           "packageSize": 150,
           "packageUnit": "g",
           "packageDisplay": "150g",
@@ -5146,7 +5158,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "311792248",
@@ -5155,7 +5168,6 @@
           "brand": "Tesco",
           "price": 3.95,
           "unitPrice": 7.9,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -5164,7 +5176,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "309470252",
@@ -5173,7 +5186,6 @@
           "brand": "Tesco",
           "price": 1.2,
           "unitPrice": 12,
-          "unitPriceMeasure": "kg",
           "packageSize": 100,
           "packageUnit": "g",
           "packageDisplay": "100g",
@@ -5182,7 +5194,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "317295516",
@@ -5191,19 +5204,19 @@
           "brand": "Whitworths",
           "price": 2.2,
           "unitPrice": 14.67,
-          "unitPriceMeasure": "kg",
           "packageSize": 150,
           "packageUnit": "g",
           "packageDisplay": "150g",
           "deal": {
-            "description": "Any 2 for £3.40 Clubcard Price - Selected Whitworths Dry Fruits & Nuts",
+            "description": "Any 2 for \u00a33.40 Clubcard Price - Selected Whitworths Dry Fruits & Nuts",
             "type": "clubcard"
           },
           "clubcardPrice": 3.4,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -5221,19 +5234,19 @@
           "brand": "Soreen",
           "price": 1.75,
           "unitPrice": 6.03,
-          "unitPriceMeasure": "kg",
           "packageSize": 290,
           "packageUnit": "g",
           "packageDisplay": "290g",
           "deal": {
-            "description": "£1.25 Clubcard Price",
+            "description": "\u00a31.25 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 1.25,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "330743207",
@@ -5242,7 +5255,6 @@
           "brand": "Wildfarmed",
           "price": 2.5,
           "unitPrice": 3.91,
-          "unitPriceMeasure": "kg",
           "packageSize": 640,
           "packageUnit": "g",
           "packageDisplay": "640g",
@@ -5251,7 +5263,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "299425748",
@@ -5260,7 +5273,6 @@
           "brand": "Tesco",
           "price": 0.75,
           "unitPrice": 0.94,
-          "unitPriceMeasure": "kg",
           "packageSize": 800,
           "packageUnit": "g",
           "packageDisplay": "800g",
@@ -5269,7 +5281,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "256174499",
@@ -5278,7 +5291,6 @@
           "brand": "Hovis",
           "price": 1.25,
           "unitPrice": 1.56,
-          "unitPriceMeasure": "kg",
           "packageSize": 800,
           "packageUnit": "g",
           "packageDisplay": "800g",
@@ -5287,7 +5299,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "299389116",
@@ -5296,7 +5309,6 @@
           "brand": "Tesco",
           "price": 0.74,
           "unitPrice": 0.92,
-          "unitPriceMeasure": "kg",
           "packageSize": 800,
           "packageUnit": "g",
           "packageDisplay": "800g",
@@ -5305,7 +5317,8 @@
           "nectarPrice": null,
           "inStock": false,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "254942325",
@@ -5314,7 +5327,6 @@
           "brand": "Warburtons",
           "price": 1.4,
           "unitPrice": 1.75,
-          "unitPriceMeasure": "kg",
           "packageSize": 800,
           "packageUnit": "g",
           "packageDisplay": "800g",
@@ -5323,7 +5335,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -5341,7 +5354,6 @@
           "brand": "Tesco",
           "price": 0.8,
           "unitPrice": 0.53,
-          "unitPriceMeasure": "kg",
           "packageSize": 1.5,
           "packageUnit": "kg",
           "packageDisplay": "1.5kg",
@@ -5350,7 +5362,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "299623681",
@@ -5359,7 +5372,6 @@
           "brand": "Stockwell",
           "price": 0.7,
           "unitPrice": 0.47,
-          "unitPriceMeasure": "kg",
           "packageSize": 1.5,
           "packageUnit": "kg",
           "packageDisplay": "1.5kg",
@@ -5368,7 +5380,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "value"
         },
         {
           "id": "302154183",
@@ -5377,7 +5390,6 @@
           "brand": "McDougalls",
           "price": 1.75,
           "unitPrice": 1.59,
-          "unitPriceMeasure": "kg",
           "packageSize": 1.1,
           "packageUnit": "kg",
           "packageDisplay": "1.1kg",
@@ -5386,7 +5398,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "257067302",
@@ -5395,7 +5408,6 @@
           "brand": "Tesco",
           "price": 1.75,
           "unitPrice": 1.75,
-          "unitPriceMeasure": "kg",
           "packageSize": 1,
           "packageUnit": "kg",
           "packageDisplay": "1kg",
@@ -5404,7 +5416,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isOrganic": true
         },
         {
           "id": "314096060",
@@ -5413,7 +5427,6 @@
           "brand": "Carr's",
           "price": 1.1,
           "unitPrice": 1.1,
-          "unitPriceMeasure": "kg",
           "packageSize": 1,
           "packageUnit": "kg",
           "packageDisplay": "1kg",
@@ -5422,7 +5435,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "321843082",
@@ -5431,7 +5445,6 @@
           "brand": "Wildfarmed",
           "price": 2,
           "unitPrice": 2,
-          "unitPriceMeasure": "kg",
           "packageSize": 1,
           "packageUnit": "kg",
           "packageDisplay": "1kg",
@@ -5440,7 +5453,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -5458,7 +5472,6 @@
           "brand": "Tesco",
           "price": 2.4,
           "unitPrice": 24,
-          "unitPriceMeasure": "kg",
           "packageSize": 100,
           "packageUnit": "g",
           "packageDisplay": "100g",
@@ -5467,7 +5480,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "premium"
         },
         {
           "id": "300795095",
@@ -5476,7 +5490,6 @@
           "brand": "Ms",
           "price": 0.59,
           "unitPrice": 5.9,
-          "unitPriceMeasure": "kg",
           "packageSize": 100,
           "packageUnit": "g",
           "packageDisplay": "100g",
@@ -5485,7 +5498,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "value"
         },
         {
           "id": "315377302",
@@ -5494,7 +5508,6 @@
           "brand": "Tesco",
           "price": 2.4,
           "unitPrice": 24,
-          "unitPriceMeasure": "kg",
           "packageSize": 100,
           "packageUnit": "g",
           "packageDisplay": "100g",
@@ -5503,7 +5516,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "premium"
         },
         {
           "id": "300794948",
@@ -5512,19 +5526,19 @@
           "brand": "Tesco",
           "price": 2.3,
           "unitPrice": 11.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 200,
           "packageUnit": "g",
           "packageDisplay": "200g",
           "deal": {
-            "description": "£2.00 Clubcard Price",
+            "description": "\u00a32.00 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 2,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "286265409",
@@ -5533,7 +5547,6 @@
           "brand": "Cadbury",
           "price": 2.75,
           "unitPrice": 15.28,
-          "unitPriceMeasure": "kg",
           "packageSize": 180,
           "packageUnit": "g",
           "packageDisplay": "180g",
@@ -5542,7 +5555,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "259301725",
@@ -5551,7 +5565,6 @@
           "brand": "Lindt",
           "price": 3.5,
           "unitPrice": 35,
-          "unitPriceMeasure": "kg",
           "packageSize": 100,
           "packageUnit": "g",
           "packageDisplay": "100g",
@@ -5560,7 +5573,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -5578,7 +5592,6 @@
           "brand": "TESCO",
           "price": 0.7,
           "unitPrice": 10,
-          "unitPriceMeasure": "kg",
           "packageSize": 70,
           "packageUnit": "g",
           "packageDisplay": "70g",
@@ -5590,7 +5603,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isOrganic": true
         },
         {
           "id": "322348494",
@@ -5599,7 +5614,6 @@
           "brand": "TESCO",
           "price": 0.9,
           "unitPrice": 6.92,
-          "unitPriceMeasure": "kg",
           "packageSize": 130,
           "packageUnit": "g",
           "packageDisplay": "130g",
@@ -5611,7 +5625,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isOrganic": true
         },
         {
           "id": "278234919",
@@ -5620,19 +5636,19 @@
           "brand": "Heinz",
           "price": 1.25,
           "unitPrice": 12.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 100,
           "packageUnit": "g",
           "packageDisplay": "100g",
           "deal": {
-            "description": "Any 3 for £3 Clubcard Price - Selected Heinz Fruits Pouch 100g",
+            "description": "Any 3 for \u00a33 Clubcard Price - Selected Heinz Fruits Pouch 100g",
             "type": "clubcard"
           },
           "clubcardPrice": 3,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "271413379",
@@ -5641,7 +5657,6 @@
           "brand": "Ella's",
           "price": 1.8,
           "unitPrice": 13.85,
-          "unitPriceMeasure": "kg",
           "packageSize": 130,
           "packageUnit": "g",
           "packageDisplay": "130g",
@@ -5650,7 +5665,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isOrganic": true
         },
         {
           "id": "295487179",
@@ -5659,7 +5676,6 @@
           "brand": "Ella's",
           "price": 1.8,
           "unitPrice": 13.85,
-          "unitPriceMeasure": "kg",
           "packageSize": 130,
           "packageUnit": "g",
           "packageDisplay": "130g",
@@ -5668,7 +5684,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isOrganic": true
         },
         {
           "id": "271028138",
@@ -5677,7 +5695,6 @@
           "brand": "Ella's",
           "price": 0.85,
           "unitPrice": 12.14,
-          "unitPriceMeasure": "kg",
           "packageSize": 70,
           "packageUnit": "g",
           "packageDisplay": "70g",
@@ -5686,7 +5703,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isOrganic": true
         }
       ]
     },
@@ -5703,12 +5722,12 @@
           "title": "Tesco Baby Plum Tomatoes 300G",
           "price": 0.95,
           "unitPrice": 3.17,
-          "unitPriceMeasure": "kg",
           "packageSize": 300,
           "packageUnit": "g",
           "packageDisplay": "300g",
           "inStock": true,
-          "source": "direct"
+          "source": "direct",
+          "tier": "standard"
         },
         {
           "id": "254999112",
@@ -5716,12 +5735,12 @@
           "title": "Tesco Cherry Tomatoes 300G",
           "price": 1,
           "unitPrice": 3.33,
-          "unitPriceMeasure": "kg",
           "packageSize": 300,
           "packageUnit": "g",
           "packageDisplay": "300g",
           "inStock": true,
-          "source": "direct"
+          "source": "direct",
+          "tier": "standard"
         },
         {
           "id": "sb-ct-1",
@@ -5729,12 +5748,12 @@
           "title": "Sainsbury's 330g Cherry Tomatoes",
           "price": 0.89,
           "unitPrice": 2.7,
-          "unitPriceMeasure": "kg",
           "packageSize": 330,
           "packageUnit": "g",
           "packageDisplay": "330g",
           "inStock": true,
-          "source": "direct"
+          "source": "direct",
+          "tier": "standard"
         },
         {
           "id": "sb-ct-2",
@@ -5742,12 +5761,12 @@
           "title": "Sainsbury's Salad Tomatoes 6 Pack",
           "price": 1.1,
           "unitPrice": 1.1,
-          "unitPriceMeasure": "pack",
           "packageSize": 6,
           "packageUnit": "item",
           "packageDisplay": "6 pack",
           "inStock": true,
-          "source": "direct"
+          "source": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -5765,7 +5784,6 @@
           "brand": "Tesco",
           "price": 0.39,
           "unitPrice": 1.62,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
@@ -5774,7 +5792,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "300808531",
@@ -5783,7 +5802,6 @@
           "brand": "Growers",
           "price": 0.35,
           "unitPrice": 0,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
@@ -5792,7 +5810,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "value"
         },
         {
           "id": "301956693",
@@ -5801,7 +5820,6 @@
           "brand": "Tesco",
           "price": 0.79,
           "unitPrice": 2.03,
-          "unitPriceMeasure": "kg",
           "packageSize": 390,
           "packageUnit": "g",
           "packageDisplay": "390g",
@@ -5810,7 +5828,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "264448861",
@@ -5819,19 +5838,19 @@
           "brand": "Napolina",
           "price": 1,
           "unitPrice": 4.17,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
           "deal": {
-            "description": "Any 3 for £2.50 Clubcard Price - Selected Napolina Canned Food",
+            "description": "Any 3 for \u00a32.50 Clubcard Price - Selected Napolina Canned Food",
             "type": "clubcard"
           },
           "clubcardPrice": 2.5,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "302282831",
@@ -5840,7 +5859,6 @@
           "brand": "Tesco",
           "price": 1.35,
           "unitPrice": 5.62,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
@@ -5849,7 +5867,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isOrganic": true
         },
         {
           "id": "287651498",
@@ -5858,7 +5878,6 @@
           "brand": "Natco",
           "price": 3.55,
           "unitPrice": 3.55,
-          "unitPriceMeasure": "kg",
           "packageSize": 1,
           "packageUnit": "kg",
           "packageDisplay": "1kg",
@@ -5867,7 +5886,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -5885,19 +5905,19 @@
           "brand": "Heinz",
           "price": 2.5,
           "unitPrice": 2.5,
-          "unitPriceMeasure": "each",
           "packageSize": 250,
           "packageUnit": "g",
           "packageDisplay": "250g",
           "deal": {
-            "description": "£1.75 Clubcard Price",
+            "description": "\u00a31.75 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 1.75,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "262490576",
@@ -5906,7 +5926,6 @@
           "brand": "Tesco",
           "price": 0.41,
           "unitPrice": 1.71,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
@@ -5915,7 +5934,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "264447977",
@@ -5924,19 +5944,19 @@
           "brand": "Napolina",
           "price": 1,
           "unitPrice": 4.17,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
           "deal": {
-            "description": "Any 3 for £2.50 Clubcard Price - Selected Napolina Canned Food",
+            "description": "Any 3 for \u00a32.50 Clubcard Price - Selected Napolina Canned Food",
             "type": "clubcard"
           },
           "clubcardPrice": 2.5,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "302319006",
@@ -5945,7 +5965,6 @@
           "brand": "Tesco",
           "price": 1.35,
           "unitPrice": 5.62,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
@@ -5954,7 +5973,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isOrganic": true
         },
         {
           "id": "314300787",
@@ -5963,7 +5984,6 @@
           "brand": "Summer",
           "price": 0.75,
           "unitPrice": 3.26,
-          "unitPriceMeasure": "kg DR.WT",
           "packageSize": 380,
           "packageUnit": "g",
           "packageDisplay": "380g",
@@ -5972,7 +5992,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "310108624",
@@ -5981,19 +6002,19 @@
           "brand": "Laila",
           "price": 4,
           "unitPrice": 2,
-          "unitPriceMeasure": "kg",
           "packageSize": 2,
           "packageUnit": "kg",
           "packageDisplay": "2kg",
           "deal": {
-            "description": "£3.00 Save 25% Clubcard Price",
+            "description": "\u00a33.00 Save 25% Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": null,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -6011,19 +6032,19 @@
           "brand": "Strong",
           "price": 3.3,
           "unitPrice": 11,
-          "unitPriceMeasure": "kg",
           "packageSize": 300,
           "packageUnit": "g",
           "packageDisplay": "300g",
           "deal": {
-            "description": "£2.50 Clubcard Price",
+            "description": "\u00a32.50 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 2.5,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "323872648",
@@ -6032,19 +6053,19 @@
           "brand": "Heinz",
           "price": 2.5,
           "unitPrice": 2.5,
-          "unitPriceMeasure": "each",
           "packageSize": 250,
           "packageUnit": "g",
           "packageDisplay": "250g",
           "deal": {
-            "description": "£1.75 Clubcard Price",
+            "description": "\u00a31.75 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 1.75,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "301219119",
@@ -6053,7 +6074,6 @@
           "brand": "Tesco",
           "price": 1.3,
           "unitPrice": 5.2,
-          "unitPriceMeasure": "kg",
           "packageSize": 250,
           "packageUnit": "g",
           "packageDisplay": "250g",
@@ -6065,7 +6085,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "272107544",
@@ -6074,19 +6095,19 @@
           "brand": "Fresh",
           "price": 1.2,
           "unitPrice": 9.6,
-          "unitPriceMeasure": "kg",
           "packageSize": 125,
           "packageUnit": "g",
           "packageDisplay": "125g",
           "deal": {
-            "description": "£1.00 Clubcard Price",
+            "description": "\u00a31.00 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 1,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "275549004",
@@ -6095,7 +6116,6 @@
           "brand": "Tesco",
           "price": 1.77,
           "unitPrice": 3.54,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -6104,7 +6124,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "304401971",
@@ -6113,7 +6134,6 @@
           "brand": "Tesco",
           "price": 1.65,
           "unitPrice": 7.5,
-          "unitPriceMeasure": "kg",
           "packageSize": 220,
           "packageUnit": "g",
           "packageDisplay": "220g",
@@ -6122,7 +6142,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -6140,7 +6161,6 @@
           "brand": "Tesco",
           "price": 1.29,
           "unitPrice": 3.22,
-          "unitPriceMeasure": "kg",
           "packageSize": 400,
           "packageUnit": "g",
           "packageDisplay": "400g",
@@ -6149,7 +6169,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "273796618",
@@ -6158,7 +6179,6 @@
           "brand": "Tesco",
           "price": 1.1,
           "unitPrice": 4.4,
-          "unitPriceMeasure": "kg",
           "packageSize": 250,
           "packageUnit": "g",
           "packageDisplay": "250g",
@@ -6170,7 +6190,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "280046454",
@@ -6179,7 +6200,6 @@
           "brand": "Tesco",
           "price": 1.2,
           "unitPrice": 6,
-          "unitPriceMeasure": "kg",
           "packageSize": 200,
           "packageUnit": "g",
           "packageDisplay": "200g",
@@ -6188,7 +6208,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "287571051",
@@ -6197,7 +6218,6 @@
           "brand": "Tesco",
           "price": 1.35,
           "unitPrice": 5.4,
-          "unitPriceMeasure": "kg",
           "packageSize": 250,
           "packageUnit": "g",
           "packageDisplay": "250g",
@@ -6206,7 +6226,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "299916749",
@@ -6215,19 +6236,19 @@
           "brand": "Tesco",
           "price": 1.25,
           "unitPrice": 5,
-          "unitPriceMeasure": "kg",
           "packageSize": 250,
           "packageUnit": "g",
           "packageDisplay": "250g",
           "deal": {
-            "description": "£1.00 Clubcard Price",
+            "description": "\u00a31.00 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 1,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "279316390",
@@ -6236,7 +6257,6 @@
           "brand": "Tesco",
           "price": 1.95,
           "unitPrice": 3.12,
-          "unitPriceMeasure": "kg",
           "packageSize": 625,
           "packageUnit": "g",
           "packageDisplay": "625g",
@@ -6245,7 +6265,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -6263,7 +6284,6 @@
           "brand": "Tesco",
           "price": 1.39,
           "unitPrice": 0.46,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -6272,7 +6292,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "253554596",
@@ -6281,7 +6302,6 @@
           "brand": "Tesco",
           "price": 0.56,
           "unitPrice": 2.78,
-          "unitPriceMeasure": "kg",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -6290,7 +6310,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "262018816",
@@ -6299,7 +6320,6 @@
           "brand": "Tesco",
           "price": 2.5,
           "unitPrice": 0.83,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -6308,7 +6328,9 @@
           "nectarPrice": null,
           "inStock": false,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isOrganic": true
         },
         {
           "id": "1253665",
@@ -6317,7 +6339,6 @@
           "brand": "Sainsbury's",
           "price": 1.15,
           "unitPrice": 2.3,
-          "unitPriceMeasure": "kg",
           "packageSize": 500,
           "packageUnit": "g",
           "packageDisplay": "500g",
@@ -6329,7 +6350,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "1192056",
@@ -6338,7 +6360,6 @@
           "brand": "Sainsbury's",
           "price": 2.78,
           "unitPrice": 2.78,
-          "unitPriceMeasure": "kg",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -6347,7 +6368,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "1091922",
@@ -6356,7 +6378,6 @@
           "brand": "Sainsbury's",
           "price": 2.45,
           "unitPrice": 8.17,
-          "unitPriceMeasure": "kg",
           "packageSize": 300,
           "packageUnit": "g",
           "packageDisplay": "300g",
@@ -6365,7 +6386,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isOrganic": true
         }
       ]
     },
@@ -6383,7 +6406,6 @@
           "brand": "Tesco",
           "price": 1.45,
           "unitPrice": 0.36,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -6392,7 +6414,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "253556398",
@@ -6401,7 +6424,6 @@
           "brand": "Tesco",
           "price": 0.37,
           "unitPrice": 0.37,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -6410,7 +6432,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "292216045",
@@ -6419,7 +6442,6 @@
           "brand": "Suntrail",
           "price": 0.89,
           "unitPrice": 0.22,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -6428,7 +6450,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "value"
         },
         {
           "id": "252201146",
@@ -6437,7 +6460,6 @@
           "brand": "Tesco",
           "price": 1.9,
           "unitPrice": 0.63,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -6446,7 +6468,9 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard",
+          "isOrganic": true
         },
         {
           "id": "309172075",
@@ -6455,19 +6479,19 @@
           "brand": "Jaffa",
           "price": 2.2,
           "unitPrice": 0.55,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
           "deal": {
-            "description": "Any 2 for £3 Clubcard Price - Selected Fruits",
+            "description": "Any 2 for \u00a33 Clubcard Price - Selected Fruits",
             "type": "clubcard"
           },
           "clubcardPrice": 3,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "322637405",
@@ -6476,19 +6500,19 @@
           "brand": "Jaffa",
           "price": 2.2,
           "unitPrice": 0.37,
-          "unitPriceMeasure": "each",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
           "deal": {
-            "description": "Any 2 for £3 Clubcard Price - Selected Fruits",
+            "description": "Any 2 for \u00a33 Clubcard Price - Selected Fruits",
             "type": "clubcard"
           },
           "clubcardPrice": 3,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -6505,12 +6529,12 @@
           "title": "Oxo Reduced Salt Vegetable Stock Cubes 12 Pack 71G",
           "price": 2.65,
           "unitPrice": 3.73,
-          "unitPriceMeasure": "100g",
           "packageSize": 71,
           "packageUnit": "g",
           "packageDisplay": "12 pack",
           "inStock": true,
-          "source": "direct"
+          "source": "direct",
+          "tier": "standard"
         },
         {
           "id": "254111223",
@@ -6518,12 +6542,12 @@
           "title": "Knorr Zero Salt Vegetable Stock Cubes 8 Pack 72G",
           "price": 1.9,
           "unitPrice": 2.64,
-          "unitPriceMeasure": "100g",
           "packageSize": 72,
           "packageUnit": "g",
           "packageDisplay": "8 pack",
           "inStock": true,
-          "source": "direct"
+          "source": "direct",
+          "tier": "standard"
         },
         {
           "id": "sb-sc-1",
@@ -6531,12 +6555,12 @@
           "title": "Oxo Reduced Salt Vegetable Stock Cubes x12 71g",
           "price": 2.25,
           "unitPrice": 3.17,
-          "unitPriceMeasure": "100g",
           "packageSize": 71,
           "packageUnit": "g",
           "packageDisplay": "12 pack",
           "inStock": true,
-          "source": "direct"
+          "source": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -6554,7 +6578,6 @@
           "brand": "Fairy",
           "price": 1.8,
           "unitPrice": 2.75,
-          "unitPriceMeasure": "litre",
           "packageSize": 654,
           "packageUnit": "ml",
           "packageDisplay": "654ml",
@@ -6563,7 +6586,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "313518537",
@@ -6572,7 +6596,6 @@
           "brand": "Fairy",
           "price": 0.89,
           "unitPrice": 2.78,
-          "unitPriceMeasure": "litre",
           "packageSize": 320,
           "packageUnit": "ml",
           "packageDisplay": "320ml",
@@ -6581,7 +6604,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "315753393",
@@ -6590,19 +6614,19 @@
           "brand": "Fairy",
           "price": 3.95,
           "unitPrice": 2.72,
-          "unitPriceMeasure": "litre",
           "packageSize": 1450,
           "packageUnit": "ml",
           "packageDisplay": "1450ml",
           "deal": {
-            "description": "£3.55 Clubcard Price",
+            "description": "\u00a33.55 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 3.55,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "318251817",
@@ -6611,7 +6635,6 @@
           "brand": "Fairy",
           "price": 3,
           "unitPrice": 5.5,
-          "unitPriceMeasure": "litre",
           "packageSize": 545,
           "packageUnit": "ml",
           "packageDisplay": "545ml",
@@ -6620,7 +6643,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "315145462",
@@ -6629,7 +6653,6 @@
           "brand": "Fairy",
           "price": 0.89,
           "unitPrice": 2.78,
-          "unitPriceMeasure": "litre",
           "packageSize": 320,
           "packageUnit": "ml",
           "packageDisplay": "320ml",
@@ -6638,7 +6661,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "313610427",
@@ -6647,7 +6671,6 @@
           "brand": "Fairy",
           "price": 1.8,
           "unitPrice": 2.75,
-          "unitPriceMeasure": "litre",
           "packageSize": 654,
           "packageUnit": "ml",
           "packageDisplay": "654ml",
@@ -6656,7 +6679,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     },
@@ -6674,7 +6698,6 @@
           "brand": "Springforce",
           "price": 1.15,
           "unitPrice": 0.48,
-          "unitPriceMeasure": "100sht",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -6683,7 +6706,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "305965105",
@@ -6692,19 +6716,19 @@
           "brand": "Tesco",
           "price": 3.9,
           "unitPrice": 0.98,
-          "unitPriceMeasure": "100sht",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
           "deal": {
-            "description": "2 for £6.30 or 3 for £9 Clubcard Price - Tesco Kitchen Towel 4 Rolls",
+            "description": "2 for \u00a36.30 or 3 for \u00a39 Clubcard Price - Tesco Kitchen Towel 4 Rolls",
             "type": "clubcard"
           },
           "clubcardPrice": 9,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "305976553",
@@ -6713,7 +6737,6 @@
           "brand": "Tesco",
           "price": 2.45,
           "unitPrice": 1.22,
-          "unitPriceMeasure": "100sht",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -6722,7 +6745,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "262374000",
@@ -6731,7 +6755,6 @@
           "brand": "Regina",
           "price": 4.75,
           "unitPrice": 3.39,
-          "unitPriceMeasure": "100sht",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -6740,7 +6763,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "296653200",
@@ -6749,7 +6773,6 @@
           "brand": "Tesco",
           "price": 2.55,
           "unitPrice": 1.28,
-          "unitPriceMeasure": "100sht",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
@@ -6758,7 +6781,8 @@
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         },
         {
           "id": "311207459",
@@ -6767,19 +6791,19 @@
           "brand": "Regina",
           "price": 4,
           "unitPrice": 2.67,
-          "unitPriceMeasure": "100sht",
           "packageSize": null,
           "packageUnit": null,
           "packageDisplay": null,
           "deal": {
-            "description": "£2.50 Clubcard Price",
+            "description": "\u00a32.50 Clubcard Price",
             "type": "clubcard"
           },
           "clubcardPrice": 2.5,
           "nectarPrice": null,
           "inStock": true,
           "source": "direct",
-          "confidenceSource": "direct"
+          "confidenceSource": "direct",
+          "tier": "standard"
         }
       ]
     }

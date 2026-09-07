@@ -41,7 +41,10 @@ export function trimProduct(p) {
     superDepartmentName: p.superDepartmentName || undefined,
     departmentName: p.departmentName || undefined,
     aisleName: p.aisleName || undefined,
-    shelfName: p.shelfName || undefined
+    shelfName: p.shelfName || undefined,
+    tier: p.tier || undefined,
+    isOrganic: p.isOrganic !== undefined ? p.isOrganic : undefined,
+    isFreeRange: p.isFreeRange !== undefined ? p.isFreeRange : undefined
   };
 }
 

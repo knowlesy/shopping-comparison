@@ -21,6 +21,7 @@ import { KeywordExtractor } from '../services/logic-api/src/services/keywordExtr
 import { PenaltyRules } from '../services/logic-api/src/services/penaltyRules.js';
 import { AiDecisionReviewer } from '../services/logic-api/src/services/aiDecisionReviewer.js';
 import { AiEscalation } from '../services/logic-api/src/services/aiEscalation.js';
+import { getUserSettings } from '../services/logic-api/src/routes/settings.js';
 
 try {
   process.loadEnvFile();
@@ -65,7 +66,8 @@ function judge(f, productId, packsNeeded, totalQuantity) {
 }
 
 function rulesResolve(f) {
-  const m = FuzzyMatcher.matchProduct('tesco', f.item, f.candidates, {});
+  const prefs = { ...getUserSettings(), ...(f.preferences || {}) };
+  const m = FuzzyMatcher.matchProduct('tesco', f.item, f.candidates, prefs);
   return {
     id: m.product?.id || null,
     title: (m.product?.title || 'NO MATCH').trim(),
@@ -76,15 +78,14 @@ function rulesResolve(f) {
 }
 
 async function aiResolve(f) {
+  const prefs = { ...getUserSettings(), ...(f.preferences || {}) };
   const keywords = KeywordExtractor.extractKeywords(f.item);
   const scored = f.candidates
     .map((prod) => {
-      const { score, packs, totalQty, totalPrice, weightDiffPct } = PenaltyRules.scoreCandidate(prod, f.item, keywords, {
-        brandTierPriority: 'standard'
-      });
+      const { score, packs, totalQty, totalPrice, weightDiffPct } = PenaltyRules.scoreCandidate(prod, f.item, keywords, prefs);
       return { product: prod, score, packs, totalQty, totalPrice: totalPrice || prod.price, weightDiffPct };
     })
-    .sort((a, b) => FuzzyMatcher.compareCandidates(a, b, f.item, { brandTierPriority: 'standard' }));
+    .sort((a, b) => FuzzyMatcher.compareCandidates(a, b, f.item, prefs));
 
   const reviewed = await AiDecisionReviewer.reviewCandidates(f.query, f.item, scored, {
     aiMatchingEnabled: true,

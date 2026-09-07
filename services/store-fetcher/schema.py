@@ -37,4 +37,8 @@ class UnifiedProduct(BaseModel):
     departmentName: Optional[str] = Field(None, description="Retailer department (e.g. 'Fresh Fruit')")
     aisleName: Optional[str] = Field(None, description="Retailer aisle (e.g. 'Bananas')")
     shelfName: Optional[str] = Field(None, description="Retailer shelf (e.g. 'Loose Bananas')")
+    # Brand tier and dietary indicators
+    tier: Optional[str] = Field(None, description="Brand tier: 'premium', 'value', or 'standard'")
+    isOrganic: Optional[bool] = Field(None, description="Whether product is certified organic")
+    isFreeRange: Optional[bool] = Field(None, description="Whether product is free range")
 

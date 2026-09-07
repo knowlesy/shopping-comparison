@@ -63,6 +63,51 @@ export const rules = rawRules || {
 const hasAny = (text, terms) => Array.isArray(terms) && terms.some((t) => text.indexOf(t) !== -1);
 
 export class PenaltyRules {
+  static getProductTier(prod) {
+    if (!prod) return 'standard';
+    if (prod.tier) return prod.tier;
+    const brandLower = (prod.brand || '').toLowerCase();
+    const titleLower = (prod.title || '').toLowerCase();
+    const combined = `${brandLower} ${titleLower}`;
+
+    const premiumMarkers = rules.brandTiers?.premium || [
+      'tesco finest', 'taste the difference', 'the best', 'extra special', 'finest'
+    ];
+    for (const marker of premiumMarkers) {
+      const escaped = marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      if (new RegExp(`\\b${escaped}\\b`, 'i').test(combined) || (prod.title || '').startsWith('Tesco Finest')) {
+        return 'premium';
+      }
+    }
+
+    const valueMarkers = rules.brandTiers?.value || [
+      'stockwell & co.', 'stockwell & co', 'stockwell', 'growers harvest', "grower's harvest",
+      'creamfields', 'hearty food co.', 'hearty food co', "ms molly's", 'ms molly',
+      'big & fresh', 'big & free', 'suntrail farms', 'suntrail', 'rosedene farms', 'rosedene',
+      'just essentials', 'savers', 'woodside farms', 'willow farms', 'redmere farms', 'nightingale farms'
+    ];
+    for (const marker of valueMarkers) {
+      const escaped = marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      if (new RegExp(`\\b${escaped}\\b`, 'i').test(combined)) {
+        return 'value';
+      }
+    }
+
+    return 'standard';
+  }
+
+  static getIsOrganic(prod) {
+    if (!prod) return false;
+    if (prod.isOrganic !== undefined) return Boolean(prod.isOrganic);
+    return /\borganic\b/i.test(prod.title || '');
+  }
+
+  static getIsFreeRange(prod) {
+    if (!prod) return false;
+    if (prod.isFreeRange !== undefined) return Boolean(prod.isFreeRange);
+    return /\bfree[\s-]range\b/i.test(prod.title || '');
+  }
+
   /**
    * Evaluates and scores candidate products against parsed user items.
    */
@@ -248,10 +293,12 @@ export class PenaltyRules {
     let effectiveTitle = titleLower;
 
     if (!isStrictCut) {
-      if (item.category === 'fish' && rules.fishCuts.some((cut) => titleLower.indexOf(cut) !== -1)) {
+      const isFish = item.category === 'fish' || /\b(?:fish|salmon|cod|haddock|tuna|prawn|trout)\b/i.test(itemLower);
+      const isMeat = item.category === 'meat' || /\b(?:meat|beef|chicken|pork|turkey|lamb|steak)\b/i.test(itemLower);
+      if (isFish && rules.fishCuts.some((cut) => titleLower.indexOf(cut) !== -1)) {
         effectiveTitle += ' loin loins fillet fillets portion portions';
       }
-      if (item.category === 'meat' && rules.meatCuts.some((cut) => titleLower.indexOf(cut) !== -1)) {
+      if (isMeat && rules.meatCuts.some((cut) => titleLower.indexOf(cut) !== -1)) {
         effectiveTitle += ' mince minced steak breast fillets';
       }
     } else {
@@ -262,7 +309,11 @@ export class PenaltyRules {
       }
     }
 
-    const effectiveAttributes = `${effectiveTitle} ${prod.fatPercentage !== undefined ? `${prod.fatPercentage} ${prod.fatPercentage}% lean fat` : ''} ${prod.isFrozen ? 'frozen' : 'fresh'} ${prod.isOrganic ? 'organic' : ''}`;
+    const prodTier = prod.tier || PenaltyRules.getProductTier(prod);
+    const prodIsOrganic = prod.isOrganic !== undefined ? prod.isOrganic : PenaltyRules.getIsOrganic(prod);
+    const prodIsFreeRange = prod.isFreeRange !== undefined ? prod.isFreeRange : PenaltyRules.getIsFreeRange(prod);
+
+    const effectiveAttributes = `${effectiveTitle} ${prod.fatPercentage !== undefined ? `${prod.fatPercentage} ${prod.fatPercentage}% lean fat` : ''} ${prod.isFrozen ? 'frozen' : 'fresh'} ${prodIsOrganic ? 'organic' : ''}`;
     const matchCount = keywords.filter((kw) => KeywordExtractor.wordMatches(kw, effectiveAttributes)).length;
 
     if (matchCount === 0) {
@@ -292,12 +343,12 @@ export class PenaltyRules {
 
     // Species / ingredient enforcement from matching-rules.json
     for (const rule of rules.speciesRules || []) {
-      if (new RegExp(`\\b${rule.trigger}s?\\b`, 'i').test(itemLower) && !new RegExp(`\\b${rule.mustContain}s?\\b`, 'i').test(titleLower)) {
+      if (new RegExp(`\\b${rule.trigger}s?\\b`, 'i').test(itemLower) && !new RegExp(`\\b(?:${rule.mustContain})s?\\b`, 'i').test(titleLower)) {
         score -= rule.penalty;
       }
     }
     for (const rule of rules.pulseRules || []) {
-      if (new RegExp(`\\b${rule.trigger}s?\\b`, 'i').test(itemLower) && !new RegExp(`\\b${rule.mustContain}s?\\b`, 'i').test(titleLower)) {
+      if (new RegExp(`\\b${rule.trigger}s?\\b`, 'i').test(itemLower) && !new RegExp(`\\b(?:${rule.mustContain})s?\\b`, 'i').test(titleLower)) {
         score -= rule.penalty;
       }
     }
@@ -332,21 +383,48 @@ export class PenaltyRules {
     }
 
     // 3. Health & Dietary Preferences
-    if (preferences.healthierDefault || item.isHealthierPreferred) {
-      if (item.isFreeRange && prod.isFreeRange) score += 30;
-      if (item.isOrganic && prod.isOrganic) score += 30;
-    }
-
-    // 4. Brand Tier Priority
-    if (preferences.brandTierPriority) {
-      if (prod.tier === preferences.brandTierPriority) {
+    if (preferences.preferOrganic) {
+      if (prodIsOrganic) {
         score += 35;
       } else {
         score -= 20;
       }
-    } else if (prod.tier === 'standard' || prod.tier === 'value') {
+    } else if (item.isOrganic && prodIsOrganic) {
+      score += 30;
+    }
+
+    const isFreeRangeApplicable = item.isFreeRange || (preferences.preferFreeRange && (/\beggs?\b/i.test(itemLower) || /\b(?:chicken|poultry|turkey)\b/i.test(itemLower)));
+    if (isFreeRangeApplicable) {
+      if (prodIsFreeRange) {
+        score += 35;
+      } else {
+        score -= 20;
+      }
+    }
+
+    // Healthier default lean meat preference when not explicitly specified
+    if (preferences.healthierDefault && item.fatPercentage === undefined && /\bmince\b/i.test(itemLower)) {
+      const targetFat = preferences.fatPercentagePreference !== undefined ? preferences.fatPercentagePreference : 5;
+      let prodFat = prod.fatPercentage;
+      if (prodFat === undefined) {
+        const fatMatch = prod.title && prod.title.match(/\b(\d+)%\s*(?:fat|lean)\b/i);
+        if (fatMatch) prodFat = parseInt(fatMatch[1], 10);
+      }
+      if (prodFat !== undefined && prodFat <= targetFat) {
+        score += 25;
+      }
+    }
+
+    // 4. Brand Tier Priority
+    if (preferences.brandTierPriority) {
+      if (prodTier === preferences.brandTierPriority) {
+        score += 35;
+      } else {
+        score -= 20;
+      }
+    } else if (prodTier === 'standard' || prodTier === 'value') {
       score += 25;
-    } else if (prod.tier === 'premium') {
+    } else if (prodTier === 'premium') {
       score -= 30;
     }
 

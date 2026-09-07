@@ -156,6 +156,28 @@ class TescoAdapter(BaseAdapter):
         aisle = raw.get("aisleName")
         shelf = raw.get("shelfName")
 
+        # Brand tier & dietary indicators
+        title_lower = title.lower()
+        brand_lower = (brand or "").lower()
+        combined_text = f"{brand_lower} {title_lower}"
+
+        tier = "standard"
+        premium_markers = ["tesco finest", "taste the difference", "extra special", "the best"]
+        value_markers = [
+            "stockwell & co", "stockwell", "growers harvest", "grower's harvest",
+            "creamfields", "hearty food co", "ms molly's", "ms molly", "big & fresh", "big & free",
+            "suntrail farms", "suntrail", "rosedene farms", "rosedene", "just essentials",
+            "savers", "woodside farms", "willow farms", "redmere farms", "nightingale farms"
+        ]
+
+        if any(re.search(rf"\b{re.escape(m)}\b", combined_text) for m in premium_markers) or title.startswith("Tesco Finest"):
+            tier = "premium"
+        elif any(re.search(rf"\b{re.escape(m)}\b", combined_text) for m in value_markers):
+            tier = "value"
+
+        is_organic = True if re.search(r"\borganic\b", title_lower) else None
+        is_free_range = True if re.search(r"\bfree[\s-]range\b", title_lower) else None
+
         return UnifiedProduct(
             id=product_id,
             supermarket="tesco",
@@ -176,6 +198,9 @@ class TescoAdapter(BaseAdapter):
             superDepartmentName=super_department,
             departmentName=department,
             aisleName=aisle,
-            shelfName=shelf
+            shelfName=shelf,
+            tier=tier,
+            isOrganic=is_organic,
+            isFreeRange=is_free_range
         )
 

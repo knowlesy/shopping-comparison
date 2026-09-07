@@ -105,13 +105,18 @@ export class DealCalculator {
       }
     }
 
-    // 4. Loyalty Card Pricing: "£1.50 Clubcard Price", "£1.25 Nectar Price", "Price with Nectar £1.25"
-    const loyaltyMatch = clean.match(/(?:£([\d.]+)\s+)?(clubcard|nectar|morrisons\s+more|asda\s+rewards|lidl\s+plus)(?:\s+price)?(?:\s+£([\d.]+))?/i);
+    // 4. Loyalty Card Pricing: "£1.50 Clubcard Price", "95p Clubcard Price", "£1.25 Nectar Price", "Price with Nectar £1.25"
+    const loyaltyMatch = clean.match(/(?:(?:£([\d.]+)|(\d+)p)\s+)?(clubcard|nectar|morrisons\s+more|asda\s+rewards|lidl\s+plus)(?:\s+price)?(?:\s+(?:£([\d.]+)|(\d+)p))?/i)
+      || clean.match(/(\d+)p\s+(?:save\s+\d+%\s+)?(clubcard|nectar|morrisons\s+more|asda\s+rewards|lidl\s+plus)/i);
     if (loyaltyMatch) {
-      const priceStr = loyaltyMatch[1] || loyaltyMatch[3];
-      const scheme = loyaltyMatch[2].toLowerCase();
-      if (priceStr) {
-        const loyaltyPrice = parseFloat(priceStr);
+      let loyaltyPrice = null;
+      if (loyaltyMatch[1]) loyaltyPrice = parseFloat(loyaltyMatch[1]);
+      else if (loyaltyMatch[2]) loyaltyPrice = parseInt(loyaltyMatch[2], 10) / 100;
+      else if (loyaltyMatch[4]) loyaltyPrice = parseFloat(loyaltyMatch[4]);
+      else if (loyaltyMatch[5]) loyaltyPrice = parseInt(loyaltyMatch[5], 10) / 100;
+
+      const scheme = (loyaltyMatch[3] || loyaltyMatch[2] || 'loyalty').toLowerCase();
+      if (loyaltyPrice !== null && !isNaN(loyaltyPrice)) {
         const schemeFormatted = scheme.charAt(0).toUpperCase() + scheme.slice(1);
         return {
           rawText: clean,
@@ -154,7 +159,16 @@ export class DealCalculator {
       };
     }
 
-    const deal = typeof dealInput === 'string' ? this.parseDeal(dealInput) : dealInput;
+    let deal = typeof dealInput === 'string' ? this.parseDeal(dealInput) : dealInput;
+    if (deal && typeof deal === 'object' && !deal.bundleQuantity && !deal.loyaltyPrice) {
+      const descStr = deal.description || deal.raw || deal.rawText || deal.badge;
+      if (typeof descStr === 'string') {
+        const parsed = this.parseDeal(descStr);
+        if (parsed) {
+          deal = { ...deal, ...parsed };
+        }
+      }
+    }
     if (!deal) {
       return {
         totalPrice: standardPrice,

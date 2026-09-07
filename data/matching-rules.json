@@ -20,7 +20,7 @@
   ],
   "speciesRules": [
     { "trigger": "cod", "mustContain": "cod", "penalty": 80 },
-    { "trigger": "beef", "mustContain": "beef", "penalty": 80 },
+    { "trigger": "beef", "mustContain": "beef|angus", "penalty": 80 },
     { "trigger": "sweet potato", "mustContain": "sweet potato", "penalty": 150 }
   ],
   "pulseRules": [
@@ -75,7 +75,8 @@
   },
   "nameVariants": {
     "houmous": ["hummus"],
-    "yoghurt": ["yogurt"]
+    "yoghurt": ["yogurt"],
+    "beef": ["angus", "aberdeen angus"]
   },
   "storePhrasing": {
     "sainsburys": [
@@ -83,6 +84,48 @@
     ],
     "morrisons": [
       { "trigger": "milk", "phrase": "british semi skimmed milk" }
+    ]
+  },
+  "brandTiers": {
+    "premium": [
+      "Tesco Finest",
+      "Taste the Difference",
+      "The Best",
+      "Extra Special",
+      "Finest",
+      "Best"
+    ],
+    "value": [
+      "Stockwell & Co.",
+      "Stockwell & Co",
+      "Stockwell",
+      "Growers Harvest",
+      "Grower's Harvest",
+      "Creamfields",
+      "Hearty Food Co.",
+      "Hearty Food Co",
+      "Ms Molly's",
+      "Ms Molly",
+      "Big & Fresh",
+      "Suntrail Farms",
+      "Suntrail",
+      "Rosedene Farms",
+      "Rosedene",
+      "Just Essentials",
+      "Savers",
+      "Woodside Farms",
+      "Willow Farms",
+      "Redmere Farms",
+      "Nightingale Farms"
+    ]
+  },
+  "dietaryIndicators": {
+    "organic": [
+      "organic"
+    ],
+    "freeRange": [
+      "free range",
+      "free-range"
     ]
   }
 }
