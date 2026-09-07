@@ -22,7 +22,9 @@
         "unitPrice": 0.66,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Potatoes & Sweet Potatoes"
       },
       {
         "id": "302290700",
@@ -35,7 +37,9 @@
         "unitPrice": 0.9,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Potatoes & Sweet Potatoes"
       },
       {
         "id": "304376337",
@@ -48,7 +52,9 @@
         "unitPrice": 1.16,
         "unitPriceMeasure": "kg",
         "deal": "£1.15 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Potatoes & Sweet Potatoes"
       },
       {
         "id": "253558183",
@@ -109,7 +115,9 @@
         "unitPrice": 0.78,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Potatoes & Sweet Potatoes"
       },
       {
         "id": "315591641",
@@ -135,7 +143,9 @@
         "unitPrice": 0.92,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Potatoes & Sweet Potatoes"
       },
       {
         "id": "310190037",
@@ -248,7 +258,9 @@
         "unitPrice": 1.13,
         "unitPriceMeasure": "kg DR.WT",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Tinned Vegetables"
       },
       {
         "id": "288043116",
@@ -261,7 +273,9 @@
         "unitPrice": 1.23,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Potatoes & Sweet Potatoes"
       },
       {
         "id": "282059833",
@@ -371,7 +385,9 @@
         "unitPrice": 2.8,
         "unitPriceMeasure": "litre",
         "deal": "£2.00 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Drinks",
+        "aisleName": "Dairy Free Drinks"
       },
       {
         "id": "285157326",
@@ -382,7 +398,9 @@
         "unitPrice": 0.12,
         "unitPriceMeasure": "each",
         "deal": "65p Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Bananas"
       },
       {
         "id": "275280804",
@@ -393,7 +411,9 @@
         "unitPrice": 0.9,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Bananas"
       },
       {
         "id": "266419328",
@@ -404,7 +424,9 @@
         "unitPrice": 0.16,
         "unitPriceMeasure": "each",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Bananas"
       },
       {
         "id": "266420677",
@@ -415,7 +437,9 @@
         "unitPrice": 0.16,
         "unitPriceMeasure": "each",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Bananas"
       },
       {
         "id": "303869954",
@@ -426,7 +450,9 @@
         "unitPrice": 0.32,
         "unitPriceMeasure": "each",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Bananas"
       },
       {
         "id": "273420937",
@@ -437,7 +463,9 @@
         "unitPrice": 12,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Bakery",
+        "aisleName": "Mini Rolls, Cake Slices & Small Cakes"
       },
       {
         "id": "254903706",
@@ -450,7 +478,9 @@
         "unitPrice": 16.1,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Dessert Mixes & Kits"
       },
       {
         "id": "315074430",
@@ -463,7 +493,9 @@
         "unitPrice": 14.67,
         "unitPriceMeasure": "kg",
         "deal": "Any 2 for £3.40 Clubcard Price - Selected Whitworths Dry Fruits & Nuts",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Treats & Snacks",
+        "aisleName": "Dried Fruit"
       },
       {
         "id": "312352287",
@@ -476,7 +508,9 @@
         "unitPrice": 21,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Treats & Snacks",
+        "aisleName": "Dried Fruit, Nut & Seed Mixes"
       },
       {
         "id": "280823888",
@@ -489,7 +523,9 @@
         "unitPrice": 8.5,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Eastern European"
       },
       {
         "id": "301576635",
@@ -502,7 +538,9 @@
         "unitPrice": 14.33,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Treats & Snacks",
+        "aisleName": "Fruit & Nut Bars"
       },
       {
         "id": "300534756",
@@ -515,7 +553,9 @@
         "unitPrice": 14.33,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Treats & Snacks",
+        "aisleName": "Fruit & Nut Bars"
       },
       {
         "id": "302038799",
@@ -528,7 +568,9 @@
         "unitPrice": 11.2,
         "unitPriceMeasure": "kg",
         "deal": "Any 3 for £3 Clubcard Price - Selected Wagg Dog Treats",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Pets",
+        "aisleName": "Dog Treats"
       },
       {
         "id": "305435877",
@@ -541,7 +583,9 @@
         "unitPrice": 14,
         "unitPriceMeasure": "kg",
         "deal": "£2.50 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Cake Mixes"
       },
       {
         "id": "309488940",
@@ -716,7 +760,9 @@
         "unitPrice": 1.92,
         "unitPriceMeasure": "kg DR.WT",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Pulses, Lentils & Beans"
       },
       {
         "id": "318189710",
@@ -729,7 +775,9 @@
         "unitPrice": 8.12,
         "unitPriceMeasure": "kg DR.WT",
         "deal": "£2.60 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Speciality Ingredients"
       },
       {
         "id": "315155202",
@@ -742,7 +790,9 @@
         "unitPrice": 7.29,
         "unitPriceMeasure": "kg DR.WT",
         "deal": "£1.40 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Pulses, Lentils & Beans"
       },
       {
         "id": "262489469",
@@ -755,7 +805,9 @@
         "unitPrice": 0,
         "unitPriceMeasure": "kg DR.WT",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Pulses, Lentils & Beans"
       },
       {
         "id": "262167712",
@@ -768,7 +820,9 @@
         "unitPrice": 1.88,
         "unitPriceMeasure": "kg DR.WT",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Pulses, Lentils & Beans"
       },
       {
         "id": "262489966",
@@ -781,7 +835,9 @@
         "unitPrice": 1.99,
         "unitPriceMeasure": "kg DR.WT",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Pulses, Lentils & Beans"
       },
       {
         "id": "259061829",
@@ -794,7 +850,9 @@
         "unitPrice": 1.62,
         "unitPriceMeasure": "kg DR.WT",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Pulses, Lentils & Beans"
       },
       {
         "id": "302301620",
@@ -807,7 +865,9 @@
         "unitPrice": 1.92,
         "unitPriceMeasure": "kg DR.WT",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Pulses, Lentils & Beans"
       },
       {
         "id": "264448861",
@@ -820,7 +880,9 @@
         "unitPrice": 4.17,
         "unitPriceMeasure": "kg DR.WT",
         "deal": "Any 3 for £2.50 Clubcard Price - Selected Napolina Canned Food",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Pulses, Lentils & Beans"
       },
       {
         "id": "302282831",
@@ -833,7 +895,9 @@
         "unitPrice": 5.62,
         "unitPriceMeasure": "kg DR.WT",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Pulses, Lentils & Beans"
       },
       {
         "id": "304383340",
@@ -846,7 +910,9 @@
         "unitPrice": 4.74,
         "unitPriceMeasure": "kg DR.WT",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Tinned Vegetables"
       },
       {
         "id": "264209442",
@@ -859,7 +925,9 @@
         "unitPrice": 6.36,
         "unitPriceMeasure": "kg DR.WT",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Tinned Vegetables"
       },
       {
         "id": "300808531",
@@ -872,7 +940,9 @@
         "unitPrice": 0,
         "unitPriceMeasure": "kg DR.WT",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Pulses, Lentils & Beans"
       },
       {
         "id": "262489348",
@@ -885,7 +955,9 @@
         "unitPrice": 1.83,
         "unitPriceMeasure": "kg DR.WT",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Pulses, Lentils & Beans"
       },
       {
         "id": "313957420",
@@ -898,7 +970,9 @@
         "unitPrice": 2.83,
         "unitPriceMeasure": "kg DR.WT",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Pulses, Lentils & Beans"
       },
       {
         "id": "264449186",
@@ -911,7 +985,9 @@
         "unitPrice": 4.17,
         "unitPriceMeasure": "kg DR.WT",
         "deal": "Any 3 for £2.50 Clubcard Price - Selected Napolina Canned Food",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Pulses, Lentils & Beans"
       },
       {
         "id": "262489095",
@@ -924,7 +1000,9 @@
         "unitPrice": 2.8,
         "unitPriceMeasure": "kg DR.WT",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Pulses, Lentils & Beans"
       },
       {
         "id": "303887546",
@@ -937,7 +1015,9 @@
         "unitPrice": 6.37,
         "unitPriceMeasure": "kg DR.WT",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Tinned Tuna"
       },
       {
         "id": "273724002",
@@ -950,7 +1030,9 @@
         "unitPrice": 3.37,
         "unitPriceMeasure": "kg",
         "deal": "Any 2 for £2 Clubcard Price - Selected Heinz Beanz 390g - 415g",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Baked Beans"
       },
       {
         "id": "310164746",
@@ -963,7 +1045,9 @@
         "unitPrice": 13.89,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Tinned Tuna"
       },
       {
         "id": "277805131",
@@ -976,7 +1060,9 @@
         "unitPrice": 3.91,
         "unitPriceMeasure": "kg DR.WT",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "African & Caribbean"
       },
       {
         "id": "302276424",
@@ -989,7 +1075,9 @@
         "unitPrice": 16.82,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Tinned Tuna"
       }
     ],
     "expectNoMatch": false,
@@ -1045,7 +1133,9 @@
         "unitPrice": 20,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Olives, Antipasti & Tapas"
       },
       {
         "id": "330742591",
@@ -1058,7 +1148,9 @@
         "unitPrice": 20,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Olives, Antipasti & Tapas"
       },
       {
         "id": "330742596",
@@ -1071,7 +1163,9 @@
         "unitPrice": 20,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Olives, Antipasti & Tapas"
       },
       {
         "id": "254918424",
@@ -1084,7 +1178,9 @@
         "unitPrice": 7.25,
         "unitPriceMeasure": "litre",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "255593768",
@@ -1097,7 +1193,9 @@
         "unitPrice": 13,
         "unitPriceMeasure": "litre",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "253628953",
@@ -1110,7 +1208,9 @@
         "unitPrice": 12.75,
         "unitPriceMeasure": "litre",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "254516076",
@@ -1123,7 +1223,9 @@
         "unitPrice": 7.75,
         "unitPriceMeasure": "litre",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "258061785",
@@ -1136,7 +1238,9 @@
         "unitPrice": 12.4,
         "unitPriceMeasure": "litre",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "322347921",
@@ -1149,7 +1253,9 @@
         "unitPrice": 11.85,
         "unitPriceMeasure": "litre",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "257449231",
@@ -1162,7 +1268,9 @@
         "unitPrice": 13,
         "unitPriceMeasure": "litre",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "254918418",
@@ -1175,7 +1283,9 @@
         "unitPrice": 11.5,
         "unitPriceMeasure": "litre",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "279751582",
@@ -1188,7 +1298,9 @@
         "unitPrice": 5.5,
         "unitPriceMeasure": "litre",
         "deal": "£1.95 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "262186234",
@@ -1201,7 +1313,9 @@
         "unitPrice": 17,
         "unitPriceMeasure": "litre",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "306817499",
@@ -1214,7 +1328,9 @@
         "unitPrice": 12.5,
         "unitPriceMeasure": "litre",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "257380126",
@@ -1227,7 +1343,9 @@
         "unitPrice": 13.6,
         "unitPriceMeasure": "litre",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "255592950",
@@ -1240,7 +1358,9 @@
         "unitPrice": 13,
         "unitPriceMeasure": "litre",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "255209876",
@@ -1253,7 +1373,9 @@
         "unitPrice": 15.6,
         "unitPriceMeasure": "litre",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "274089279",
@@ -1266,7 +1388,9 @@
         "unitPrice": 9.21,
         "unitPriceMeasure": "litre",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "312853302",
@@ -1292,7 +1416,9 @@
         "unitPrice": 12.5,
         "unitPriceMeasure": "litre",
         "deal": "£4.75 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "267237363",
@@ -1305,7 +1431,9 @@
         "unitPrice": 15,
         "unitPriceMeasure": "litre",
         "deal": "£12.75 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "259045325",
@@ -1318,7 +1446,9 @@
         "unitPrice": 7.25,
         "unitPriceMeasure": "litre",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "259045417",
@@ -1331,7 +1461,9 @@
         "unitPrice": 13.5,
         "unitPriceMeasure": "litre",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "255592838",
@@ -1344,7 +1476,9 @@
         "unitPrice": 11.5,
         "unitPriceMeasure": "litre",
         "deal": "£8.00 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "260013397",
@@ -1357,7 +1491,9 @@
         "unitPrice": 16,
         "unitPriceMeasure": "litre",
         "deal": "£3.00 Save 25% Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "322650227",
@@ -1370,7 +1506,9 @@
         "unitPrice": 14,
         "unitPriceMeasure": "litre",
         "deal": "£5.00 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Oils & Cooking Fats"
       },
       {
         "id": "323009203",
@@ -1428,7 +1566,9 @@
         "unitPrice": 2.4,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Broccoli & Cauliflower"
       },
       {
         "id": "257231200",
@@ -1439,7 +1579,9 @@
         "unitPrice": 2.39,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Broccoli & Cauliflower"
       },
       {
         "id": "305255289",
@@ -1452,7 +1594,9 @@
         "unitPrice": 8,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Broccoli & Cauliflower"
       },
       {
         "id": "299389237",
@@ -1465,7 +1609,9 @@
         "unitPrice": 7.58,
         "unitPriceMeasure": "kg",
         "deal": "£2.20 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Broccoli & Cauliflower"
       },
       {
         "id": "282485161",
@@ -1478,7 +1624,9 @@
         "unitPrice": 1.29,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Frozen Food",
+        "aisleName": "Broccoli, Cauliflower, Carrots & Sprouts"
       },
       {
         "id": "320559339",
@@ -1491,7 +1639,9 @@
         "unitPrice": 3.22,
         "unitPriceMeasure": "kg DR.WT",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Broccoli & Cauliflower"
       },
       {
         "id": "300537350",
@@ -1504,7 +1654,9 @@
         "unitPrice": 16.25,
         "unitPriceMeasure": "kg",
         "deal": "Any 3 for 2 Clubcard Price - Cheapest Product Free - Selected Vegetables 80g - 800g",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Prepared Vegetables"
       },
       {
         "id": "308490402",
@@ -1517,7 +1669,9 @@
         "unitPrice": 4.63,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Broccoli & Cauliflower"
       },
       {
         "id": "272852905",
@@ -1530,7 +1684,9 @@
         "unitPrice": 2.4,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Broccoli & Cauliflower"
       },
       {
         "id": "315355720",
@@ -1543,7 +1699,9 @@
         "unitPrice": 11.25,
         "unitPriceMeasure": "kg",
         "deal": "£1.70 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Broccoli & Cauliflower"
       },
       {
         "id": "280108932",
@@ -1556,7 +1714,9 @@
         "unitPrice": 12.5,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Broccoli & Cauliflower"
       },
       {
         "id": "276775218",
@@ -1569,7 +1729,9 @@
         "unitPrice": 3.22,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Prepared Vegetables"
       },
       {
         "id": "282484692",
@@ -1582,7 +1744,9 @@
         "unitPrice": 1.5,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Frozen Food",
+        "aisleName": "Broccoli, Cauliflower, Carrots & Sprouts"
       },
       {
         "id": "277926811",
@@ -1595,7 +1759,9 @@
         "unitPrice": 13.75,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Broccoli & Cauliflower"
       },
       {
         "id": "277974816",
@@ -1608,7 +1774,9 @@
         "unitPrice": 5.14,
         "unitPriceMeasure": "kg",
         "deal": "Any 3 for 2 Clubcard Price - Cheapest Product Free - Selected Vegetables 80g - 800g",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Prepared Vegetables"
       },
       {
         "id": "303671628",
@@ -1621,7 +1789,9 @@
         "unitPrice": 12.12,
         "unitPriceMeasure": "kg",
         "deal": "Any 4 for £3.75 Clubcard Price - Selected Batchelors Super Noodles Or Pasta",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Easy Meals"
       },
       {
         "id": "254104166",
@@ -1634,7 +1804,9 @@
         "unitPrice": 5.83,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Instant & Microwave Pasta"
       },
       {
         "id": "315350092",
@@ -1647,7 +1819,9 @@
         "unitPrice": 3.98,
         "unitPriceMeasure": "kg",
         "deal": "5 for £5 or 10 for £9 Clubcard Price - Heinz Soup 400g",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Tinned & Packet Soup"
       },
       {
         "id": "322261457",
@@ -1660,7 +1834,9 @@
         "unitPrice": 7.5,
         "unitPriceMeasure": "kg",
         "deal": "Any 3 for 2 Clubcard Price - Cheapest Product Free - Selected Prepared Sides",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Prepared Vegetables"
       },
       {
         "id": "251108973",
@@ -1673,7 +1849,9 @@
         "unitPrice": 1.48,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Tinned & Packet Soup"
       },
       {
         "id": "251834698",
@@ -1699,7 +1877,9 @@
         "unitPrice": 3.5,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Tinned & Packet Soup"
       },
       {
         "id": "297132182",
@@ -1712,7 +1892,9 @@
         "unitPrice": 8.33,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Tinned & Packet Soup"
       },
       {
         "id": "297172491",
@@ -1780,7 +1962,9 @@
         "unitPrice": 0.3,
         "unitPriceMeasure": "each",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Oranges, Lemons & Citrus Fruit"
       },
       {
         "id": "253554170",
@@ -1791,7 +1975,9 @@
         "unitPrice": 0.44,
         "unitPriceMeasure": "each",
         "deal": "Any 2 for £3 Clubcard Price - Selected Fruits",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Oranges, Lemons & Citrus Fruit"
       },
       {
         "id": "322450562",
@@ -1802,7 +1988,9 @@
         "unitPrice": 0.35,
         "unitPriceMeasure": "each",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Oranges, Lemons & Citrus Fruit"
       },
       {
         "id": "311438519",
@@ -1813,7 +2001,9 @@
         "unitPrice": 0.55,
         "unitPriceMeasure": "each",
         "deal": "Any 2 for £3 Clubcard Price - Selected Fruits",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Oranges, Lemons & Citrus Fruit"
       },
       {
         "id": "292225110",
@@ -1824,7 +2014,9 @@
         "unitPrice": 0.2,
         "unitPriceMeasure": "each",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Oranges, Lemons & Citrus Fruit"
       },
       {
         "id": "322753405",
@@ -1835,7 +2027,9 @@
         "unitPrice": 0.65,
         "unitPriceMeasure": "each",
         "deal": "£1.70 Save 1/3 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Oranges, Lemons & Citrus Fruit"
       },
       {
         "id": "292216000",
@@ -1848,7 +2042,9 @@
         "unitPrice": 1.98,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Oranges, Lemons & Citrus Fruit"
       },
       {
         "id": "320983412",
@@ -1887,7 +2083,9 @@
         "unitPrice": 8.52,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Jelly"
       },
       {
         "id": "285104453",
@@ -1900,7 +2098,9 @@
         "unitPrice": 3.65,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Dessert & Snack Pots"
       },
       {
         "id": "313748633",
@@ -1926,7 +2126,9 @@
         "unitPrice": 4.68,
         "unitPriceMeasure": "kg",
         "deal": "£1.85 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Dessert & Snack Pots"
       },
       {
         "id": "252468398",
@@ -1939,7 +2141,9 @@
         "unitPrice": 6.4,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Jelly"
       },
       {
         "id": "315835757",
@@ -1978,7 +2182,9 @@
         "unitPrice": 77,
         "unitPriceMeasure": "litre",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Extracts & Essence"
       },
       {
         "id": "316174172",
@@ -2004,7 +2210,9 @@
         "unitPrice": 6,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Icing & Marzipan"
       },
       {
         "id": "304395055",
@@ -2017,7 +2225,9 @@
         "unitPrice": 5,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Cake Mixes"
       },
       {
         "id": "306943101",
@@ -2043,7 +2253,9 @@
         "unitPrice": 66.67,
         "unitPriceMeasure": "litre",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Extracts & Essence"
       },
       {
         "id": "323782945",
@@ -2125,7 +2337,9 @@
         "unitPrice": 18.06,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Frozen Food",
+        "aisleName": "Fish Fillets"
       },
       {
         "id": "292916835",
@@ -2177,7 +2391,9 @@
         "unitPrice": 16.5,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Frozen Food",
+        "aisleName": "Coated Fish"
       },
       {
         "id": "252798850",
@@ -2216,7 +2432,9 @@
         "unitPrice": 8,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Frozen Food",
+        "aisleName": "Coated Fish"
       },
       {
         "id": "321231132",
@@ -2229,7 +2447,9 @@
         "unitPrice": 16.5,
         "unitPriceMeasure": "kg",
         "deal": "£5.50 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Frozen Food",
+        "aisleName": "Coated Fish"
       },
       {
         "id": "316183823",
@@ -2255,7 +2475,9 @@
         "unitPrice": 25,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Frozen Food",
+        "aisleName": "Fish Fillets"
       },
       {
         "id": "299598237",
@@ -2268,7 +2490,9 @@
         "unitPrice": 4.42,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Frozen Food",
+        "aisleName": "Fish Fillets"
       },
       {
         "id": "255780854",
@@ -2281,7 +2505,9 @@
         "unitPrice": 12,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Frozen Food",
+        "aisleName": "Coated Fish"
       },
       {
         "id": "312227353",
@@ -2320,7 +2546,9 @@
         "unitPrice": 11.88,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Frozen Food",
+        "aisleName": "Fish Fingers & Fish Cakes"
       },
       {
         "id": "267045457",
@@ -2333,7 +2561,9 @@
         "unitPrice": 10.62,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Frozen Food",
+        "aisleName": "Coated Fish"
       },
       {
         "id": "323424828",
@@ -2346,7 +2576,9 @@
         "unitPrice": 21,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Frozen Food",
+        "aisleName": "Fish Fillets"
       },
       {
         "id": "268228424",
@@ -2359,7 +2591,9 @@
         "unitPrice": 7,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Frozen Food",
+        "aisleName": "Fish Fillets"
       },
       {
         "id": "307747205",
@@ -2372,7 +2606,9 @@
         "unitPrice": 18.06,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Frozen Food",
+        "aisleName": "Fish Fillets"
       },
       {
         "id": "266723152",
@@ -2385,7 +2621,9 @@
         "unitPrice": 14,
         "unitPriceMeasure": "kg",
         "deal": "£1.40 Half Price Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Frozen Food",
+        "aisleName": "Coated Fish"
       },
       {
         "id": "284754560",
@@ -2398,7 +2636,9 @@
         "unitPrice": 10,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Frozen Food",
+        "aisleName": "Fish Fillets"
       },
       {
         "id": "321851999",
@@ -2482,7 +2722,9 @@
         "unitPrice": 6.07,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Cheddar Cheese"
       },
       {
         "id": "277925449",
@@ -2495,7 +2737,9 @@
         "unitPrice": 9.91,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Cheddar Cheese"
       },
       {
         "id": "305977270",
@@ -2508,7 +2752,9 @@
         "unitPrice": 8.12,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Cheddar Cheese"
       },
       {
         "id": "302676607",
@@ -2521,7 +2767,9 @@
         "unitPrice": 6.12,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Cheddar Cheese"
       },
       {
         "id": "268768873",
@@ -2534,7 +2782,9 @@
         "unitPrice": 10,
         "unitPriceMeasure": "kg",
         "deal": "£3.00 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Cheddar Cheese"
       },
       {
         "id": "268903247",
@@ -2547,7 +2797,9 @@
         "unitPrice": 12.14,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Cheddar Cheese"
       },
       {
         "id": "305951277",
@@ -2560,7 +2812,9 @@
         "unitPrice": 8.12,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Cheddar Cheese"
       },
       {
         "id": "305973280",
@@ -2573,7 +2827,9 @@
         "unitPrice": 8.12,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Cheddar Cheese"
       },
       {
         "id": "288986209",
@@ -2586,7 +2842,9 @@
         "unitPrice": 9.91,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Cheddar Cheese"
       },
       {
         "id": "302676567",
@@ -2599,7 +2857,9 @@
         "unitPrice": 6.12,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Cheddar Cheese"
       },
       {
         "id": "306665741",
@@ -2612,7 +2872,9 @@
         "unitPrice": 8.12,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Cheddar Cheese"
       },
       {
         "id": "300257744",
@@ -2625,7 +2887,9 @@
         "unitPrice": 11.36,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Cheddar Cheese"
       },
       {
         "id": "253704206",
@@ -2638,7 +2902,9 @@
         "unitPrice": 11,
         "unitPriceMeasure": "kg",
         "deal": "Any 2 for £4.50 Clubcard Price - Selected Sliced And Grated Cheese",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Grated & Sliced Cheese"
       },
       {
         "id": "309197656",
@@ -2651,7 +2917,9 @@
         "unitPrice": 6.07,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Cheddar Cheese"
       },
       {
         "id": "314315568",
@@ -2664,7 +2932,9 @@
         "unitPrice": 5.39,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Cheddar Cheese"
       },
       {
         "id": "268900953",
@@ -2677,7 +2947,9 @@
         "unitPrice": 12.14,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Cheddar Cheese"
       },
       {
         "id": "317549148",
@@ -2690,7 +2962,9 @@
         "unitPrice": 11,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Cheddar Cheese"
       },
       {
         "id": "253704097",
@@ -2703,7 +2977,9 @@
         "unitPrice": 11,
         "unitPriceMeasure": "kg",
         "deal": "Any 2 for £4.50 Clubcard Price - Selected Sliced And Grated Cheese",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Grated & Sliced Cheese"
       },
       {
         "id": "302676629",
@@ -2716,7 +2992,9 @@
         "unitPrice": 6.12,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Cheddar Cheese"
       },
       {
         "id": "310681024",
@@ -2729,7 +3007,9 @@
         "unitPrice": 5.7,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Grated & Sliced Cheese"
       },
       {
         "id": "267273555",
@@ -2742,7 +3022,9 @@
         "unitPrice": 10,
         "unitPriceMeasure": "kg",
         "deal": "£3.00 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Cheddar Cheese"
       },
       {
         "id": "277759790",
@@ -2768,7 +3050,9 @@
         "unitPrice": 10,
         "unitPriceMeasure": "kg",
         "deal": "£3.00 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Fresh Food",
+        "aisleName": "Cheddar Cheese"
       },
       {
         "id": "306504063",
@@ -2841,7 +3125,9 @@
         "unitPrice": 2.5,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Rice"
       },
       {
         "id": "293236653",
@@ -2854,7 +3140,9 @@
         "unitPrice": 3.2,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "South Asian"
       },
       {
         "id": "254877477",
@@ -2867,7 +3155,9 @@
         "unitPrice": 1.79,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Rice"
       },
       {
         "id": "251680648",
@@ -2880,7 +3170,9 @@
         "unitPrice": 2.8,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Plain Microwave Rice"
       },
       {
         "id": "282265272",
@@ -2893,7 +3185,9 @@
         "unitPrice": 3.2,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "South Asian"
       },
       {
         "id": "256148174",
@@ -2906,7 +3200,9 @@
         "unitPrice": 1.8,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Rice"
       },
       {
         "id": "262311847",
@@ -2919,7 +3215,9 @@
         "unitPrice": 4,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Plain Microwave Rice"
       },
       {
         "id": "255590785",
@@ -2932,7 +3230,9 @@
         "unitPrice": 6,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Rice"
       },
       {
         "id": "293247162",
@@ -2945,7 +3245,9 @@
         "unitPrice": 3.1,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Rice"
       },
       {
         "id": "293354386",
@@ -2958,7 +3260,9 @@
         "unitPrice": 2.3,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "South Asian"
       },
       {
         "id": "258183865",
@@ -2971,7 +3275,9 @@
         "unitPrice": 1.85,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Rice"
       },
       {
         "id": "312985900",
@@ -2984,7 +3290,9 @@
         "unitPrice": 2.2,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Plain Microwave Rice"
       },
       {
         "id": "251442835",
@@ -2997,7 +3305,9 @@
         "unitPrice": 4.2,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Rice"
       },
       {
         "id": "311264586",
@@ -3010,7 +3320,9 @@
         "unitPrice": 4.6,
         "unitPriceMeasure": "kg",
         "deal": "£1.00 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Plain Microwave Rice"
       },
       {
         "id": "312855473",
@@ -3023,7 +3335,9 @@
         "unitPrice": 4.54,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Plain Microwave Rice"
       },
       {
         "id": "256502509",
@@ -3036,7 +3350,9 @@
         "unitPrice": 5,
         "unitPriceMeasure": "kg",
         "deal": "£4.40 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Rice"
       },
       {
         "id": "256171675",
@@ -3049,7 +3365,9 @@
         "unitPrice": 1.9,
         "unitPriceMeasure": "kg",
         "deal": "£12.50 Save 1/3 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "South Asian"
       },
       {
         "id": "251442449",
@@ -3062,7 +3380,9 @@
         "unitPrice": 1.79,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Rice"
       },
       {
         "id": "305978234",
@@ -3075,7 +3395,9 @@
         "unitPrice": 2.3,
         "unitPriceMeasure": "kg",
         "deal": "£13.95 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "South Asian"
       },
       {
         "id": "272490175",
@@ -3088,7 +3410,9 @@
         "unitPrice": 2.5,
         "unitPriceMeasure": "kg",
         "deal": "£3.90 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "South Asian"
       },
       {
         "id": "259758829",
@@ -3101,7 +3425,9 @@
         "unitPrice": 5,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Rice"
       },
       {
         "id": "311789247",
@@ -3114,7 +3440,9 @@
         "unitPrice": 2.1,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Rice"
       },
       {
         "id": "321207525",
@@ -3127,7 +3455,9 @@
         "unitPrice": 4.8,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Rice"
       },
       {
         "id": "293258707",
@@ -3140,7 +3470,9 @@
         "unitPrice": 2.1,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "South Asian"
       },
       {
         "id": "252380946",
@@ -3153,7 +3485,9 @@
         "unitPrice": 6,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Rice"
       },
       {
         "id": "262311980",
@@ -3166,7 +3500,9 @@
         "unitPrice": 4,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Plain Microwave Rice"
       },
       {
         "id": "284851358",
@@ -3179,7 +3515,9 @@
         "unitPrice": 5,
         "unitPriceMeasure": "kg",
         "deal": "£1.00 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Plain Microwave Rice"
       }
     ],
     "expectNoMatch": false,
@@ -3237,7 +3575,9 @@
         "unitPrice": 0.53,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Flour"
       },
       {
         "id": "299623681",
@@ -3250,7 +3590,9 @@
         "unitPrice": 0.47,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Flour"
       },
       {
         "id": "302154183",
@@ -3263,7 +3605,9 @@
         "unitPrice": 1.59,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Flour"
       },
       {
         "id": "257067302",
@@ -3276,7 +3620,9 @@
         "unitPrice": 1.75,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Flour"
       },
       {
         "id": "314096060",
@@ -3289,7 +3635,9 @@
         "unitPrice": 1.1,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Flour"
       },
       {
         "id": "321843082",
@@ -3302,7 +3650,9 @@
         "unitPrice": 2,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Flour"
       },
       {
         "id": "321839865",
@@ -3315,7 +3665,9 @@
         "unitPrice": 1.08,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Flour"
       },
       {
         "id": "250304402",
@@ -3328,7 +3680,9 @@
         "unitPrice": 1.85,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Home Baking"
       },
       {
         "id": "260713778",
@@ -3341,7 +3695,9 @@
         "unitPrice": 2.3,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Flour"
       },
       {
         "id": "258144405",
@@ -3354,7 +3710,9 @@
         "unitPrice": 2.5,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Bread Making"
       },
       {
         "id": "309479006",
@@ -3367,7 +3725,9 @@
         "unitPrice": 1.77,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Flour"
       },
       {
         "id": "264746525",
@@ -3378,7 +3738,9 @@
         "unitPrice": 1.07,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Bread Making"
       },
       {
         "id": "306822170",
@@ -3391,7 +3753,9 @@
         "unitPrice": 2.3,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Bread Making"
       },
       {
         "id": "306934089",
@@ -3404,7 +3768,9 @@
         "unitPrice": 1.77,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Bread Making"
       },
       {
         "id": "317758062",
@@ -3417,7 +3783,9 @@
         "unitPrice": 1.6,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Bread Making"
       },
       {
         "id": "264746479",
@@ -3430,7 +3798,9 @@
         "unitPrice": 1.07,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Bread Making"
       },
       {
         "id": "304789782",
@@ -3443,7 +3813,9 @@
         "unitPrice": 3.8,
         "unitPriceMeasure": "kg",
         "deal": "£3.00 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Bread Making"
       },
       {
         "id": "314304633",
@@ -3456,7 +3828,9 @@
         "unitPrice": 1.95,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Bread Making"
       },
       {
         "id": "321827378",
@@ -3469,7 +3843,9 @@
         "unitPrice": 2,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Bread Making"
       },
       {
         "id": "254917932",
@@ -3482,7 +3858,9 @@
         "unitPrice": 0.93,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Bread Making"
       },
       {
         "id": "317417322",
@@ -3495,7 +3873,9 @@
         "unitPrice": 1.6,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Bread Making"
       },
       {
         "id": "254917990",
@@ -3508,7 +3888,9 @@
         "unitPrice": 2,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Bread Making"
       },
       {
         "id": "309465817",
@@ -3521,7 +3903,9 @@
         "unitPrice": 2.13,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Flour"
       },
       {
         "id": "297133774",
@@ -3534,7 +3918,9 @@
         "unitPrice": 2.8,
         "unitPriceMeasure": "kg",
         "deal": "£2.25 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Bread Making"
       },
       {
         "id": "311804294",
@@ -3547,7 +3933,9 @@
         "unitPrice": 2,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Bread Making"
       },
       {
         "id": "252380883",
@@ -3560,7 +3948,9 @@
         "unitPrice": 1.75,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Bread Making"
       },
       {
         "id": "251183058",
@@ -3573,7 +3963,9 @@
         "unitPrice": 2.4,
         "unitPriceMeasure": "kg",
         "deal": "£1.90 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Bread Making"
       },
       {
         "id": "260713749",
@@ -3586,7 +3978,9 @@
         "unitPrice": 1.27,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Bread Making"
       },
       {
         "id": "317756907",
@@ -3599,7 +3993,9 @@
         "unitPrice": 1.83,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Bread Making"
       },
       {
         "id": "271657355",
@@ -3612,7 +4008,9 @@
         "unitPrice": 0.75,
         "unitPriceMeasure": "kg",
         "deal": "£5.00 Save 1/3 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Bulk Packs"
       },
       {
         "id": "251183035",
@@ -3625,7 +4023,9 @@
         "unitPrice": 2.8,
         "unitPriceMeasure": "kg",
         "deal": "£2.25 Clubcard Price",
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Bread Making"
       },
       {
         "id": "308827616",
@@ -3638,7 +4038,9 @@
         "unitPrice": 1.77,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Flour"
       },
       {
         "id": "272477762",
@@ -3651,7 +4053,9 @@
         "unitPrice": 0.95,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "South Asian"
       },
       {
         "id": "309163839",
@@ -3664,7 +4068,9 @@
         "unitPrice": 1.77,
         "unitPriceMeasure": "kg",
         "deal": null,
-        "source": "direct"
+        "source": "direct",
+        "superDepartmentName": "Food Cupboard",
+        "aisleName": "Flour"
       }
     ],
     "expectNoMatch": false,
