@@ -2015,6 +2015,84 @@ check(28, 'A produce request penalises a candidate filed under Food Cupboard', a
 });
 
 // ---------------------------------------------------------------------------
+// Step 29 — Make the user's preferences actually reach the matcher
+// ---------------------------------------------------------------------------
+check(29, 'Scraped products carry a brand tier', () => {
+  const fxPath = fs.existsSync(r('tests/fixtures/reality-fixtures.json'))
+    ? r('tests/fixtures/reality-fixtures.json')
+    : r('tests/fixtures/reality-sample.json');
+  const fx = JSON.parse(read(fxPath) || '{}');
+  let tot = 0;
+  let tiered = 0;
+  for (const it of fx.items || []) {
+    for (const p of it.products || []) {
+      tot++;
+      if (p.tier) tiered++;
+    }
+  }
+  if (!tot) return 'no products';
+  if (tiered === 0) {
+    fail(`not one of ${tot} scraped products carries a tier, yet penaltyRules.js:341 scores on \`prod.tier === preferences.brandTierPriority\`. That comparison has never once been true. The signal is in the titles — 36 premium ("Tesco Finest"), 24 value (Stockwell & Co., Growers Harvest, Creamfields, Hearty Food Co.) — so the setting exists, the UI offers it, and it changes nothing.`);
+  }
+  if (tiered / tot < 0.9) fail(`only ${tiered}/${tot} products carry a tier`);
+});
+
+check(29, 'Scraped products carry organic and free-range flags', () => {
+  const fxPath = fs.existsSync(r('tests/fixtures/reality-fixtures.json'))
+    ? r('tests/fixtures/reality-fixtures.json')
+    : r('tests/fixtures/reality-sample.json');
+  const fx = JSON.parse(read(fxPath) || '{}');
+  let organic = 0;
+  let flagged = 0;
+  for (const it of fx.items || []) {
+    for (const p of it.products || []) {
+      if (/\borganic\b/i.test(p.title || '')) organic++;
+      if (p.isOrganic !== undefined) flagged++;
+    }
+  }
+  if (organic && flagged === 0) {
+    fail(`${organic} products say "Organic" in the title and none carries an isOrganic flag, so preferOrganic and preferFreeRange in user settings have nothing to act on`);
+  }
+});
+
+check(29, 'brandTierPriority changes which product is chosen', async () => {
+  const { FuzzyMatcher } = await svc('fuzzyMatcher.js');
+  const item = { name: 'Beef mince', baseItem: 'Beef mince', category: 'meat', targetQuantity: 500, unit: 'g' };
+  const tax = { superDepartmentName: 'Fresh Food', departmentName: 'Fresh Meat', aisleName: 'Mince & Meatballs' };
+  const cands = [
+    { id: 'std', title: 'Tesco Beef Steak Mince 500g', price: 3.25, packageSize: 500, packageUnit: 'g', supermarket: 'tesco', source: 'direct', ...tax },
+    { id: 'fin', title: 'Tesco Finest Aberdeen Angus Steak Mince 500G', price: 6.0, packageSize: 500, packageUnit: 'g', supermarket: 'tesco', source: 'direct', ...tax }
+  ];
+  const pick = (prefs) => FuzzyMatcher.matchProduct('tesco', item, cands, prefs).product?.id;
+  const std = pick({ brandTierPriority: 'standard' });
+  const prem = pick({ brandTierPriority: 'premium' });
+  if (std === prem) {
+    fail(`asking for "standard" and asking for "premium" both return "${std}". Given a plain 500g mince at GBP 3.25 and a Finest 500g at GBP 6.00, the setting must decide between them — this is the one place a shopper's taste is supposed to govern, and it is inert.`);
+  }
+});
+
+check(29, 'preferOrganic changes which product is chosen', async () => {
+  const { FuzzyMatcher } = await svc('fuzzyMatcher.js');
+  const item = { name: 'Carrots', baseItem: 'Carrots', category: 'produce', targetQuantity: 1, unit: 'kg' };
+  const tax = { superDepartmentName: 'Fresh Food', departmentName: 'Fresh Vegetables', aisleName: 'Carrots & Parsnips' };
+  const cands = [
+    { id: 'plain', title: 'Tesco Carrots 1Kg', price: 0.69, packageSize: 1, packageUnit: 'kg', supermarket: 'tesco', source: 'direct', ...tax },
+    { id: 'org', title: 'Tesco Organic Carrots 1Kg', price: 1.35, packageSize: 1, packageUnit: 'kg', supermarket: 'tesco', source: 'direct', ...tax }
+  ];
+  const pick = (prefs) => FuzzyMatcher.matchProduct('tesco', item, cands, prefs).product?.id;
+  if (pick({ preferOrganic: true }) === pick({ preferOrganic: false })) {
+    fail(`preferOrganic true and false both return the same product, with a plain 1kg at GBP 0.69 and an organic 1kg at GBP 1.35 on the shelf`);
+  }
+});
+
+check(29, 'The evaluation exercises preferences rather than an empty object', () => {
+  const src = read(r('scripts/eval-real.js'));
+  if (/matchProduct\(\s*'tesco',\s*f\.item,\s*f\.candidates,\s*\{\s*\}\s*\)/.test(src)) {
+    fail('eval-real.js scores every fixture with `{}` for preferences, so healthierDefault, preferOrganic, preferFreeRange, brandTierPriority, packSizingPolicy, cutMatchingStrategy and includeDeals are all untested. The corpus measures one hardcoded taste — cheapest-that-fits — and calls it correctness. Run against the real default settings, and let a fixture declare preferences when the point of it is a preference.');
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 await Promise.allSettled(pending);
