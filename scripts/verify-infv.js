@@ -1999,6 +1999,19 @@ check(28, 'A produce request penalises a candidate filed under Food Cupboard', a
   if (bad.length) {
     fail(`the retailer states the category and the mismatch costs the candidate nothing:\n          - ${bad.join('\n          - ')}\n          Taxonomy is now recorded and read, but a produce request does not penalise a product the retailer files under Food Cupboard confectionery. Reading the field is not the same as acting on it — a superDepartment that contradicts the requested category must outweigh being a few pence cheaper.`);
   }
+
+  // Assert the veto absolutely, not just relatively: a comparison can pass by
+  // luck when the genuine product happens to score well.
+  const item = { name: 'Grapes', baseItem: 'Grapes', category: 'produce', targetQuantity: 500, unit: 'g' };
+  const kw = KeywordExtractor.extractKeywords(item);
+  const base = { title: 'Cadbury Twirl Grape Chocolate Bar 43g', price: 1, packageSize: 43, packageUnit: 'g', supermarket: 'tesco', source: 'direct' };
+  const sc = (p) => PenaltyRules.scoreCandidate(p, item, kw, {}).score;
+  const withDept = sc({ ...base, superDepartmentName: 'Food Cupboard', departmentName: 'Chocolate', aisleName: 'Single Chocolate Bars & Sweets' });
+  const superOnly = sc({ ...base, superDepartmentName: 'Food Cupboard', aisleName: 'Single Chocolate Bars & Sweets' });
+  const noTax = sc(base);
+  if (withDept <= -400 && superOnly > -400) {
+    fail(`the same confectionery product scores ${withDept} when departmentName is present and ${superOnly} when it is absent — identical to the ${noTax} it scores with no taxonomy at all. superDepartmentName "Food Cupboard" is being read and then ignored. Tesco does not always populate departmentName, so the guard has to act on whichever levels arrive: superDepartment, department, aisle.`);
+  }
 });
 
 // ---------------------------------------------------------------------------
