@@ -1766,6 +1766,70 @@ check(24, 'The unused list items carry enough candidates to hold out honestly', 
 });
 
 // ---------------------------------------------------------------------------
+// Step 25 — The flavour-derivative class, generalised
+// ---------------------------------------------------------------------------
+// Every example below is deliberately chosen from OUTSIDE the clean holdout, so
+// satisfying these gates cannot teach the answers to the items it measures.
+check(25, 'A named fruit is not matched by a dessert that merely names it', async () => {
+  const { isContaminated } = await svc('contaminationRules.js');
+  const cases = [
+    ['strawberries', 'Hartleys Strawberry Jelly 135G'],
+    ['pears', 'Kubus Pear & Apple Mousse 100g'],
+    ['blueberries', 'Tesco Blueberry Muffins 4 Pack'],
+    ['mango', 'Tesco Mango Flavour Ice Lollies 4x73ml'],
+    ['raspberries', 'Tesco Raspberry Flavoured Milkshake Powder 500g']
+  ];
+  const through = cases.filter(([i, p]) => !isContaminated(i, p.toLowerCase()));
+  if (through.length) {
+    fail(`these get through the contamination rules:\n          - ${through.map(([i, p]) => `"${i}" vs "${p}"`).join('\n          - ')}\n          Jellies, mousses, muffins, lollies and milkshake powders are named after fruit, not made of it. The existing produce rule enumerates a fixed list of fruits and vegetables and a fixed list of derivative forms, so anything outside either list walks straight through. Generalise the class.`);
+  }
+});
+
+check(25, 'The word "flavour" in a title is treated as the signal it is', async () => {
+  const { isContaminated } = await svc('contaminationRules.js');
+  const cases = [
+    ['peaches', 'Tesco Peach Flavour Water 500ml'],
+    ['cherries', 'Tesco Cherry Flavoured Yogurt 150g'],
+    ['limes', 'Tesco Lime Flavour Cordial 1L']
+  ];
+  const through = cases.filter(([i, p]) => !isContaminated(i, p.toLowerCase()));
+  if (through.length) {
+    fail(`"flavour"/"flavoured" in a product title is close to a guarantee the product is not the ingredient, yet these pass:\n          - ${through.map(([i, p]) => `"${i}" vs "${p}"`).join('\n          - ')}\n          A shopper asking for fruit never wants the flavouring.`);
+  }
+});
+
+check(25, 'A genuine ingredient is still not blocked by the wider rule', async () => {
+  const { isContaminated } = await svc('contaminationRules.js');
+  // The counterweight: widening the class must not start rejecting real food.
+  const cases = [
+    ['strawberries', 'Tesco Strawberries 400G'],
+    ['blueberries', 'Tesco Blueberries 200G'],
+    ['mango', 'Tesco Mango Each'],
+    ['pears', 'Tesco Conference Pears 600G'],
+    ['raspberries', 'Tesco Raspberries 150G'],
+    ['peaches', 'Tesco Peaches 4 Pack'],
+    ['yogurt', 'Tesco Greek Style Yogurt 500G'],
+    ['orange juice', 'Tesco Pure Orange Juice 1L'],
+    ['strawberry jam', 'Tesco Strawberry Jam 454G']
+  ];
+  const blocked = cases.filter(([i, p]) => isContaminated(i, p.toLowerCase()));
+  if (blocked.length) {
+    fail(`the widened rule now rejects genuine matches:\n          - ${blocked.map(([i, p]) => `"${i}" vs "${p}"`).join('\n          - ')}\n          Note the last two: when the shopper ASKS for juice or jam, the derivative IS the product. The negate pattern has to carry that.`);
+  }
+});
+
+check(25, 'Produce categories are not a hand-maintained list of fruit names', () => {
+  const src = read(r('data/contamination-rules.json'));
+  const rules = JSON.parse(src || '[]');
+  const produce = (Array.isArray(rules) ? rules : rules.rules || []).find((x) => /produce/i.test(x.category || ''));
+  if (!produce) return 'no produce rule';
+  const named = (produce.matchPattern.match(/\|/g) || []).length + 1;
+  if (named > 60) {
+    fail(`the produce matchPattern now enumerates ~${named} alternatives. Every new fruit is a code change and the next one nobody thought of walks through, which is exactly how strawberry, mango, raspberry and blueberry were missed. Drive this from the item's parsed category rather than from a list of nouns.`);
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 await Promise.allSettled(pending);
