@@ -28,7 +28,14 @@ try {
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
-const FIXTURES = path.join(ROOT, 'tests/fixtures/ai-matching-fixtures.real.json');
+const FIXTURES = (() => {
+  const i = process.argv.indexOf('--fixtures');
+  if (i > -1 && process.argv[i + 1]) {
+    const given = process.argv[i + 1];
+    return path.isAbsolute(given) ? given : path.join(ROOT, given);
+  }
+  return path.join(ROOT, 'tests/fixtures/ai-matching-fixtures.real.json');
+})();
 
 const useAi = process.argv.includes('--ai');
 const runs = (() => {
@@ -112,6 +119,12 @@ const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
 const fixtures = JSON.parse(fs.readFileSync(FIXTURES, 'utf8'));
 const tally = (rows) => `${rows.filter((r) => r.ok).length}/${rows.length}`;
+// Report whatever splits the file actually declares, rather than assuming train/holdout.
+const bySplit = (rows) => {
+  const names = [...new Set(rows.map((r) => r.split).filter(Boolean))].sort();
+  if (names.length < 2) return '';
+  return '   ' + names.map((n) => `${n} ${tally(rows.filter((r) => r.split === n))}`).join('   ');
+};
 
 console.log('='.repeat(79));
 console.log(`  REAL-CORPUS MATCHING EVAL  (${fixtures.length} fixtures, real Tesco scrape)`);
@@ -132,10 +145,9 @@ for (const row of rulesRows) {
   console.log(`   rules  : ${row.pick.title} (${row.pick.packs} packs, GBP ${row.pick.price})${row.why ? ' — ' + row.why : ''}`);
 }
 
-const rTrain = rulesRows.filter((r) => r.split === 'train');
-const rHold = rulesRows.filter((r) => r.split === 'holdout');
+
 console.log('\n' + '-'.repeat(79));
-console.log(`RULES BASELINE   overall ${tally(rulesRows)}   train ${tally(rTrain)}   holdout ${tally(rHold)}`);
+console.log(`RULES BASELINE   overall ${tally(rulesRows)}${bySplit(rulesRows)}`);
 
 if (!useAi) {
   console.log('-'.repeat(79));
@@ -247,12 +259,11 @@ for (const f of fixtures) {
   if (last.res.reasoning) console.log(`   why    : ${String(last.res.reasoning).slice(0, 160)}`);
 }
 
-const aTrain = aiRows.filter((r) => r.split === 'train');
-const aHold = aiRows.filter((r) => r.split === 'holdout');
+
 
 console.log('\n' + '-'.repeat(79));
-console.log(`RULES BASELINE   overall ${tally(rulesRows)}   train ${tally(rTrain)}   holdout ${tally(rHold)}`);
-console.log(`WITH AI          overall ${tally(aiRows)}   train ${tally(aTrain)}   holdout ${tally(aHold)}`);
+console.log(`RULES BASELINE   overall ${tally(rulesRows)}${bySplit(rulesRows)}`);
+console.log(`WITH AI          overall ${tally(aiRows)}${bySplit(aiRows)}`);
 console.log(`UPLIFT           ${uplift} fixture(s) rules got wrong that AI got right`);
 console.log(`REGRESSIONS      ${regress} fixture(s) rules got right that AI got wrong`);
 const measurable = aiRows.filter((r) => r.answeredAll);
