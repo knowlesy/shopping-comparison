@@ -23,7 +23,7 @@ let userSettings = {
   preferWholewheat: true,
   preferFreeRange: true,
   preferOrganic: false,
-  cutMatchingStrategy: 'best_value',
+  cutMatchingStrategy: 'strict_cut',
   brandTierPriority: 'standard',
   packSizingPolicy: 'closest',
   includeDeals: true,

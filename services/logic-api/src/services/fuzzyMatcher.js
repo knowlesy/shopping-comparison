@@ -56,7 +56,7 @@ export class FuzzyMatcher {
     let effectiveItem = item;
     if (effectiveItem && effectiveItem.fatPercentage === undefined) {
       const itemText = `${effectiveItem.rawText || ''} ${effectiveItem.name || ''}`;
-      if (/\b0%|\b0\s*%|\bfat\s*free\b/i.test(itemText) || (!effectiveItem.rawText && /Greek yogurt/i.test(effectiveItem.name || ''))) {
+      if (/\b0%|\b0\s*%|\bfat\s*free\b/i.test(itemText) || (preferences.healthierDefault !== false && !effectiveItem.rawText && /Greek yogurt/i.test(effectiveItem.name || ''))) {
         effectiveItem = { ...effectiveItem, fatPercentage: 0 };
       }
     }

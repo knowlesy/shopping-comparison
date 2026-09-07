@@ -116,16 +116,19 @@ class MorrisonsAdapter(BaseAdapter):
 
         # Promotions & deals
         deal: Optional[Dict[str, Any]] = None
-        promotions = raw.get("promotions")
+        promotions = raw.get("promotions") or raw.get("offers")
+        if not promotions and raw.get("offer"):
+            promotions = [raw["offer"]]
         if isinstance(promotions, list) and promotions:
-            p0 = promotions[0]
-            desc = p0.get("name") or p0.get("description") or ""
-            if desc:
-                deal = {
-                    "description": desc,
-                    "type": "multibuy",
-                    "raw": desc
-                }
+            for p0 in promotions:
+                desc = p0.get("name") or p0.get("description") or p0.get("title") or ""
+                if desc:
+                    deal = {
+                        "description": desc,
+                        "type": "multibuy" if "for" in desc.lower() else "offer",
+                        "raw": desc
+                    }
+                    break
 
         in_stock = raw.get("status") != "OUT_OF_STOCK"
         images = raw.get("images")
@@ -171,6 +174,19 @@ class MorrisonsAdapter(BaseAdapter):
                 aisle = clean_cats[2]
                 shelf = clean_cats[-1]
 
+        title_lower = title.lower()
+        brand_lower = (brand or "").lower()
+        combined_text = f"{brand_lower} {title_lower}"
+
+        is_organic = True if re.search(r"\borganic\b", title_lower) else None
+        is_free_range = True if re.search(r"\bfree[\s-]range\b", title_lower) else None
+
+        tier = "standard"
+        if "the best" in combined_text:
+            tier = "premium"
+        elif any(v in combined_text for v in ["savers", "wonky"]):
+            tier = "value"
+
         return UnifiedProduct(
             id=product_id,
             supermarket="morrisons",
@@ -190,6 +206,9 @@ class MorrisonsAdapter(BaseAdapter):
             superDepartmentName=super_dept,
             departmentName=dept,
             aisleName=aisle,
-            shelfName=shelf
+            shelfName=shelf,
+            tier=tier,
+            isOrganic=is_organic,
+            isFreeRange=is_free_range
         )
 

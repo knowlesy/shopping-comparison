@@ -280,7 +280,7 @@ export class PenaltyRules {
     // Plain / Original preference when no fragrance/flavour is specified
     const hasExplicitScentOrFlavour = /\b(?:eucalyptus|lemon|lime|pomegranate|grapefruit|orange|apple|berry|vanilla|mint|lavender|antibacterial|anti-bacterial|aloe)\b/i.test(itemText);
     if (!hasExplicitScentOrFlavour) {
-      if (/\b(?:original|plain|natural)\b/i.test(titleLower)) {
+      if (!/\beggs?\b/i.test(itemLower) && /\b(?:original|plain|natural)\b/i.test(titleLower)) {
         score += 20;
       }
       if (/\b(?:eucalyptus|pomegranate|grapefruit|lemon|anti-bacterial|antibacterial|max\s+power)\b/i.test(titleLower)) {
@@ -289,7 +289,7 @@ export class PenaltyRules {
     }
 
     // 1. Semantic Cut & Form Flexibility
-    const isStrictCut = preferences.cutMatchingStrategy === 'strict_cut';
+    const isStrictCut = preferences.cutMatchingStrategy !== 'best_value';
     let effectiveTitle = titleLower;
 
     if (!isStrictCut) {
@@ -402,16 +402,22 @@ export class PenaltyRules {
       }
     }
 
-    // Healthier default lean meat preference when not explicitly specified
-    if (preferences.healthierDefault && item.fatPercentage === undefined && /\bmince\b/i.test(itemLower)) {
-      const targetFat = preferences.fatPercentagePreference !== undefined ? preferences.fatPercentagePreference : 5;
-      let prodFat = prod.fatPercentage;
-      if (prodFat === undefined) {
-        const fatMatch = prod.title && prod.title.match(/\b(\d+)%\s*(?:fat|lean)\b/i);
-        if (fatMatch) prodFat = parseInt(fatMatch[1], 10);
-      }
-      if (prodFat !== undefined && prodFat <= targetFat) {
-        score += 25;
+    // Healthier default lean meat & lower fat dairy preference when not explicitly specified
+    if (preferences.healthierDefault && item.fatPercentage === undefined) {
+      if (/\bmince\b/i.test(itemLower)) {
+        const targetFat = preferences.fatPercentagePreference !== undefined ? preferences.fatPercentagePreference : 5;
+        let prodFat = prod.fatPercentage;
+        if (prodFat === undefined) {
+          const fatMatch = prod.title && prod.title.match(/\b(\d+)%\s*(?:fat|lean)\b/i);
+          if (fatMatch) prodFat = parseInt(fatMatch[1], 10);
+        }
+        if (prodFat !== undefined && prodFat <= targetFat) {
+          score += 25;
+        }
+      } else if (/\byog[hu]rt\b/i.test(itemLower)) {
+        if (/\b(?:0%|fat\s*free|low\s*fat|lighter|light)\b/i.test(titleLower)) {
+          score += 25;
+        }
       }
     }
 

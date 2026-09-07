@@ -135,6 +135,27 @@ class SainsburysAdapter(BaseAdapter):
                 aisle_name = cat_names[0]
                 department_name = cat_names[-1] if len(cat_names) > 1 else cat_names[0]
 
+        # Structured retailer labels (e.g. ORGANIC, BRITISH)
+        labels = raw.get("labels") or []
+        label_uids = [
+            str(l.get("label_uid") or l.get("text") or "").upper()
+            for l in labels
+            if isinstance(l, dict)
+        ]
+
+        title_lower = title.lower()
+        brand_lower = (brand or "").lower()
+        combined_text = f"{brand_lower} {title_lower}"
+
+        is_organic = True if "ORGANIC" in label_uids or re.search(r"\borganic\b", title_lower) else None
+        is_free_range = True if any("FREE_RANGE" in uid or "FREE RANGE" in uid for uid in label_uids) or re.search(r"\bfree[\s-]range\b", title_lower) else None
+
+        tier = "standard"
+        if "taste the difference" in combined_text:
+            tier = "premium"
+        elif any(v in combined_text for v in ["stamford street", "j. james", "hubbard's", "daily's", "mary ann's"]):
+            tier = "value"
+
         return UnifiedProduct(
             id=product_id,
             supermarket="sainsburys",
@@ -153,6 +174,9 @@ class SainsburysAdapter(BaseAdapter):
             imageUrl=image_url,
             source="direct",
             departmentName=department_name,
-            aisleName=aisle_name
+            aisleName=aisle_name,
+            tier=tier,
+            isOrganic=is_organic,
+            isFreeRange=is_free_range
         )
 

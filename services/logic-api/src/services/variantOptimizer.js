@@ -166,10 +166,19 @@ export class VariantOptimizer {
       if (validRoutes.length === 0) {
         validRoutes = candidateRoutes; // Fallback to all if none fully covers
       }
-      // Sort by: 1) totalPrice ascending, 2) totalQuantity ascending
+      // Sort by: 1) totalPrice ascending (with tie-breaking for fewer packs on negligible price diff), 2) totalQuantity ascending
       validRoutes.sort((a, b) => {
-        if (Math.abs(a.totalPrice - b.totalPrice) > 0.001) {
-          return a.totalPrice - b.totalPrice;
+        const packsA = a.lines.reduce((s, l) => s + l.packs, 0);
+        const packsB = b.lines.reduce((s, l) => s + l.packs, 0);
+        const priceDiff = a.totalPrice - b.totalPrice;
+        if (Math.abs(priceDiff) > Math.max(0.05, Math.min(a.totalPrice, b.totalPrice) * 0.03)) {
+          return priceDiff;
+        }
+        if (packsA !== packsB) {
+          return packsA - packsB;
+        }
+        if (Math.abs(priceDiff) > 0.001) {
+          return priceDiff;
         }
         return a.totalQuantity - b.totalQuantity;
       });

@@ -16,16 +16,38 @@
     "breast",
     "breasts",
     "diced",
-    "chops"
+    "chops",
+    "fillet",
+    "fillets"
   ],
   "speciesRules": [
-    { "trigger": "cod", "mustContain": "cod", "penalty": 80 },
-    { "trigger": "beef", "mustContain": "beef|angus", "penalty": 80 },
-    { "trigger": "sweet potato", "mustContain": "sweet potato", "penalty": 150 }
+    {
+      "trigger": "cod",
+      "mustContain": "cod",
+      "penalty": 80
+    },
+    {
+      "trigger": "beef",
+      "mustContain": "beef|angus",
+      "penalty": 80
+    },
+    {
+      "trigger": "sweet potato",
+      "mustContain": "sweet potato",
+      "penalty": 150
+    }
   ],
   "pulseRules": [
-    { "trigger": "beans", "mustContain": "bean", "penalty": 80 },
-    { "trigger": "lentils", "mustContain": "lentil", "penalty": 80 }
+    {
+      "trigger": "beans",
+      "mustContain": "bean",
+      "penalty": 80
+    },
+    {
+      "trigger": "lentils",
+      "mustContain": "lentil",
+      "penalty": 80
+    }
   ],
   "supplementTerms": [
     "liver oil",
@@ -74,16 +96,29 @@
     "bulb": 1
   },
   "nameVariants": {
-    "houmous": ["hummus"],
-    "yoghurt": ["yogurt"],
-    "beef": ["angus", "aberdeen angus"]
+    "houmous": [
+      "hummus"
+    ],
+    "yoghurt": [
+      "yogurt"
+    ],
+    "beef": [
+      "angus",
+      "aberdeen angus"
+    ]
   },
   "storePhrasing": {
     "sainsburys": [
-      { "trigger": "lettuce", "phrase": "little gem" }
+      {
+        "trigger": "lettuce",
+        "phrase": "little gem"
+      }
     ],
     "morrisons": [
-      { "trigger": "milk", "phrase": "british semi skimmed milk" }
+      {
+        "trigger": "milk",
+        "phrase": "british semi skimmed milk"
+      }
     ]
   },
   "brandTiers": {
