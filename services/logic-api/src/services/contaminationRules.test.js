@@ -176,4 +176,35 @@ describe('contaminationRules', () => {
       assert.equal(isContaminated('Sultanas 500 g', 'Tesco Sultana & Oat Cookies 200G'), true);
     });
   });
+
+  describe('Step 25: Generalized produce derivatives and flavour signals', () => {
+    it('should prohibit desserts and derivatives for produce requests', () => {
+      assert.equal(isContaminated('strawberries', 'Hartleys Strawberry Jelly 135G'), true);
+      assert.equal(isContaminated('pears', 'Kubus Pear & Apple Mousse 100g'), true);
+      assert.equal(isContaminated('blueberries', 'Tesco Blueberry Muffins 4 Pack'), true);
+      assert.equal(isContaminated('mango', 'Tesco Mango Flavour Ice Lollies 4x73ml'), true);
+      assert.equal(isContaminated('raspberries', 'Tesco Raspberry Flavoured Milkshake Powder 500g'), true);
+    });
+
+    it('should treat flavour and flavoured in product titles as contamination signal for produce', () => {
+      assert.equal(isContaminated('peaches', 'Tesco Peach Flavour Water 500ml'), true);
+      assert.equal(isContaminated('cherries', 'Tesco Cherry Flavoured Yogurt 150g'), true);
+      assert.equal(isContaminated('limes', 'Tesco Lime Flavour Cordial 1L'), true);
+    });
+
+    it('should allow genuine fresh produce', () => {
+      assert.equal(isContaminated('strawberries', 'Tesco Strawberries 400G'), false);
+      assert.equal(isContaminated('blueberries', 'Tesco Blueberries 200G'), false);
+      assert.equal(isContaminated('mango', 'Tesco Mango Each'), false);
+      assert.equal(isContaminated('pears', 'Tesco Conference Pears 600G'), false);
+      assert.equal(isContaminated('raspberries', 'Tesco Raspberries 150G'), false);
+      assert.equal(isContaminated('peaches', 'Tesco Peaches 4 Pack'), false);
+      assert.equal(isContaminated('yogurt', 'Tesco Greek Style Yogurt 500G'), false);
+    });
+
+    it('should allow requested derivative products when explicitly asked for', () => {
+      assert.equal(isContaminated('orange juice', 'Tesco Pure Orange Juice 1L'), false);
+      assert.equal(isContaminated('strawberry jam', 'Tesco Strawberry Jam 454G'), false);
+    });
+  });
 });

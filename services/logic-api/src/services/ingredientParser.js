@@ -41,7 +41,7 @@ export function detectItemCategory(text) {
     return 'dairy-eggs';
 
   if (
-    /\b(?:potato|potatoes|carrot|carrots|onion|onions|garlic|courgette|courgettes|pepper|peppers|mushroom|mushrooms|tomato|tomatoes|spinach|apple|apples|banana|bananas|orange|oranges|berry|berries|lettuce|cucumber|salad|parsnip|parsnips|cabbage|peas|broccoli|celery|avocado|avocados|lemon|lemons|lime|limes|plum|plums|pear|pears|grape|grapes|fruit|fruits|vegetable|vegetables|leek|leeks|shallot|shallots|ginger|chili|chillies|chilli|squash)\b/i.test(
+    /\b(?:potato|potatoes|carrot|carrots|onion|onions|garlic|courgette|courgettes|pepper|peppers|mushroom|mushrooms|tomato|tomatoes|spinach|apple|apples|banana|bananas|orange|oranges|[a-z]*berr(?:y|ies)|lettuce|cucumber|salad|parsnip|parsnips|cabbage|peas|broccoli|celery|avocado|avocados|lemon|lemons|lime|limes|plum|plums|pear|pears|grape|grapes|fruit|fruits|vegetable|vegetables|leek|leeks|shallot|shallots|ginger|chili|chillies|chilli|squash|mango|mangoes|mangos|peach|peaches|cherr(?:y|ies)|melon|melons|watermelon|watermelons|kiwi|kiwis|pineapple|pineapples|grapefruit|grapefruits|pomegranate|pomegranates|apricot|apricots|nectarine|nectarines|fig|figs|beetroot|beetroots|asparagus|kale|cauliflower|aubergine|aubergines|sweetcorn|sweet\s*potato(?:es)?|turnip|turnips|swede|swedes|radish|radishes|sprout|sprouts)\b/i.test(
       lower
     )
   )

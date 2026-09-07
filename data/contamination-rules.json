@@ -60,9 +60,10 @@
   },
   {
     "category": "produce-derivatives",
+    "matchCategory": "produce",
     "matchPattern": "\\b(?:banana|bananas|carrot|carrots|cucumber|cucumbers|apple|apples|orange|oranges|lemon|lemons|pear|pears|plum|plums|berry|berries|grape|grapes|fruit|fruits|vegetable|vegetables|celery|broccoli|cabbage|onion|onions|courgette|courgettes|lettuce|pepper|peppers)\\b",
-    "matchNegatePattern": "\\b(?:drink|drinks|juice|juices|smoothie|smoothies|shake|shakes|cordial|squash|milkshake|cake|cakes|muffin|muffins|dessert|desserts|bake|relish|chutney|pickle|pickles|dip|dips|sauce)\\b",
-    "prohibitedPattern": "\\b(?:drink|drinks|juice|juices|smoothie|smoothies|oat\\s+drink|cordial|squash|milkshake|cake|cakes|muffin|muffins|dessert|desserts|relish|chutneys?|pickles?|dip|dips|snack\\s*pack|snacks?|crisps?|chips?|dried|flavoured\\s+water)\\b"
+    "matchNegatePattern": "\\b(?:drink|drinks|juice|juices|smoothie|smoothies|shake|shakes|cordial|squash|milkshake|cake|cakes|muffin|muffins|dessert|desserts|bake|bakes|relish|chutney|pickle|pickles|dip|dips|sauce|jam|jams|marmalade|preserve|preserves|jelly|jellies|mousse|mousses|loll(?:y|ies)|sweet|sweets|candy|gumm(?:y|ies)|extract|powder|yogurt|yoghurt|water|pie|tart|crumble|pudding|syrup|puree|paste|flavour|flavoured|flavor|flavored|chips?|crisps?|dried|snack|snacks)\\b",
+    "prohibitedPattern": "\\b(?:drink|drinks|juice|juices|smoothie|smoothies|oat\\s+drink|cordial|squash|syrup|milkshake(?:\\s+powder)?|shake|shakes|cake|cakes|muffin|muffins|dessert|desserts|bake|bakes|pie|pies|tart|tarts|crumble|crumbles|pudding|puddings|relish|chutneys?|pickles?|dip|dips|snack\\s*pack|snacks?|crisps?|chips?|dried|flavoured\\s+water|water\\b(?!cress)|jell(?:y|ies)|mousse|mousses|loll(?:y|ies)|ice\\s+loll(?:y|ies)|popsicles?|extract|extracts|gumm(?:y|ies)|spray|sprays|yogurt|yoghurt|jam|jams|marmalade|preserves?|compote|sweets?|candy|candies|powder|powdered|flavou?red?|flavou?r\\b)\\b"
   },
   {
     "category": "dried-fruit",

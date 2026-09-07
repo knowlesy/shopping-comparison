@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+import { detectItemCategory } from './ingredientParser.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -28,30 +30,53 @@ if (!rawRules) {
  * Data-driven food form contamination rules table loaded from data/contamination-rules.json.
  */
 export const CONTAMINATION_RULES = rawRules.map((rule) => {
-  const matchRegex = new RegExp(rule.matchPattern, 'i');
+  const matchRegex = rule.matchPattern ? new RegExp(rule.matchPattern, 'i') : null;
   const matchNegateRegex = rule.matchNegatePattern ? new RegExp(rule.matchNegatePattern, 'i') : null;
   const prohibitedRegex = new RegExp(rule.prohibitedPattern, 'i');
 
   return {
     category: rule.category,
-    matchQuery: (q) => matchRegex.test(q) && (!matchNegateRegex || !matchNegateRegex.test(q)),
+    matchCategory: rule.matchCategory,
+    matchQuery: (q, category) => {
+      // 1. If query explicitly requests a derivative form (e.g. "orange juice", "strawberry jam"), negate
+      if (matchNegateRegex && matchNegateRegex.test(q)) {
+        return false;
+      }
+      // 2. Drive produce rule from parsed category
+      const cat = category || detectItemCategory(q);
+      if (rule.matchCategory && cat === rule.matchCategory) {
+        return true;
+      }
+      if (rule.category === 'produce-derivatives' && cat === 'produce') {
+        return true;
+      }
+      // 3. Fallback to noun matchPattern
+      if (matchRegex && matchRegex.test(q)) {
+        return true;
+      }
+      return false;
+    },
     prohibited: prohibitedRegex
   };
 });
 
 /**
  * Checks if a product title is contaminated for a given user query.
- * @param {string} query - The search query / item name
+ * @param {string|object} query - The search query / item name or parsed item object
  * @param {string} productTitle - The title of the product candidate
  * @returns {boolean} true if contaminated/prohibited, false otherwise
  */
 export function isContaminated(query, productTitle) {
   if (!query || !productTitle) return false;
-  const qLower = String(query).toLowerCase();
+  const qStr = typeof query === 'string'
+    ? query
+    : `${query.baseItem || ''} ${query.name || ''} ${query.rawText || ''}`.trim();
+  const qLower = qStr.toLowerCase();
   const tLower = String(productTitle).toLowerCase();
+  const itemCategory = typeof query === 'object' && query.category ? query.category : detectItemCategory(qLower);
 
   for (const rule of CONTAMINATION_RULES) {
-    if (rule.matchQuery(qLower)) {
+    if (rule.matchQuery(qLower, itemCategory)) {
       if (rule.prohibited.test(tLower)) {
         return true;
       }
