@@ -70,40 +70,49 @@ export const CONTAMINATION_RULES = rawRules.map((rule) => {
 function isTaxonomyContaminated(queryText, itemCategory, product) {
   if (!product || typeof product !== 'object') return false;
 
-  const taxonomy = [
-    product.superDepartmentName,
-    product.departmentName,
-    product.aisleName,
-    product.shelfName
-  ].filter(Boolean).join(' ').toLowerCase();
+  const superDept = (product.superDepartmentName || '').toLowerCase();
+  const dept = (product.departmentName || '').toLowerCase();
+  const aisle = (product.aisleName || '').toLowerCase();
 
-  if (!taxonomy) return false;
+  // If retailer taxonomy explicitly confirms fresh produce or fresh food,
+  // use it as positive evidence: it is NOT contaminated.
+  const isFreshFood = /\bfresh\s*(?:food|produce|fruit|veg|meat|fish)\b/i.test(`${superDept} ${dept}`);
 
-  // 1. Produce requests: reject confectionery, desserts, chocolate, biscuits, sweets, cakes, soft drinks, pet food
   if (itemCategory === 'produce') {
+    // Fresh produce / fresh food taxonomy is positive evidence that the candidate belongs to the category
+    if (isFreshFood) {
+      return false;
+    }
+
     const isSweetQuery = /\b(?:dessert|cake|chocolate|sweet|biscuit|candy|pudding|ice\s*cream|drink|juice|smoothie|jam|marmalade)\b/i.test(queryText);
     if (!isSweetQuery) {
-      if (/\b(?:confectionery|desserts?|chocolates?|sweets?|biscuits?|cakes?|ice\s*cream|puddings?)\b/i.test(taxonomy)) {
+      // Reject candidates whose taxonomy affirmatively places them in confectionery, dessert, chocolate, drinks, or pet aisles
+      if (
+        superDept === 'confectionery' ||
+        /\b(?:confectionery|desserts?)\b/i.test(superDept) ||
+        /\b(?:desserts?|chocolates?|sweets\s*&|biscuits\s*&)\b/i.test(dept) ||
+        /\b(?:desserts?|chocolate\s+blocks|sweets\s*&|confectionery)\b/i.test(aisle)
+      ) {
         return true;
       }
-      if (/\b(?:fizzy\s*drinks?|soft\s*drinks?|beer|wine|spirits|pet\s*(?:food|care)|dog\s*food|cat\s*food)\b/i.test(taxonomy)) {
+      if (/\b(?:drinks|pet\s*care|household)\b/i.test(superDept)) {
         return true;
       }
     }
   }
 
-  // 2. Eggs / dairy requests: reject confectionery / novelty / pet
   if (itemCategory === 'dairy-eggs' && /\beggs?\b/i.test(queryText)) {
+    if (isFreshFood) return false;
     const isSweetQuery = /\b(?:chocolate|easter|creme)\b/i.test(queryText);
-    if (!isSweetQuery && /\b(?:confectionery|chocolates?|sweets?|toys?)\b/i.test(taxonomy)) {
+    if (!isSweetQuery && (superDept === 'confectionery' || /\b(?:confectionery|chocolates?|toys?)\b/i.test(aisle))) {
       return true;
     }
   }
 
-  // 3. Raw meat / fish requests: reject pet food / animal feed
   if (itemCategory === 'meat' || itemCategory === 'fish') {
+    if (isFreshFood) return false;
     const isPetQuery = /\b(?:pet|dog|cat)\b/i.test(queryText);
-    if (!isPetQuery && /\b(?:pet\s*(?:food|care)|dog\s*food|cat\s*food)\b/i.test(taxonomy)) {
+    if (!isPetQuery && (superDept === 'pet care' || /\b(?:pet\s*food|dog\s*food|cat\s*food)\b/i.test(aisle))) {
       return true;
     }
   }
