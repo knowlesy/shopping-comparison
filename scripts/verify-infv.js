@@ -1962,6 +1962,46 @@ check(27, 'Recorded fixtures carry taxonomy for nearly every product', () => {
 });
 
 // ---------------------------------------------------------------------------
+// Step 28 — A visible category mismatch must actually cost the candidate
+// ---------------------------------------------------------------------------
+check(28, 'A produce request penalises a candidate filed under Food Cupboard', async () => {
+  const { PenaltyRules } = await svc('penaltyRules.js');
+  const { KeywordExtractor } = await svc('keywordExtractor.js');
+  // Grapes and melon appear in neither the tuned corpus nor the unseen set.
+  const fresh = { superDepartmentName: 'Fresh Food', departmentName: 'Fresh Fruit' };
+  const sweets = { superDepartmentName: 'Food Cupboard', departmentName: 'Chocolate', aisleName: 'Single Chocolate Bars & Sweets' };
+  const trials = [
+    {
+      item: { name: 'Grapes', baseItem: 'Grapes', category: 'produce', targetQuantity: 500, unit: 'g' },
+      real: { id: 'a', title: 'Tesco Red Seedless Grapes 500G', price: 2.5, packageSize: 500, packageUnit: 'g', supermarket: 'tesco', source: 'direct', aisleName: 'Grapes', ...fresh },
+      decoy: { id: 'b', title: 'Cadbury Grape Flavour Chocolate Bar 43g', price: 1, packageSize: 43, packageUnit: 'g', supermarket: 'tesco', source: 'direct', ...sweets }
+    },
+    {
+      item: { name: 'Melon', baseItem: 'Melon', category: 'produce', targetQuantity: 1, unit: 'item' },
+      real: { id: 'c', title: 'Tesco Galia Melon Each', price: 1.75, supermarket: 'tesco', source: 'direct', aisleName: 'Melon & Pineapple', ...fresh },
+      decoy: { id: 'd', title: 'Melon Flavour Sweets 100g', price: 0.9, packageSize: 100, packageUnit: 'g', supermarket: 'tesco', source: 'direct', ...sweets }
+    },
+    {
+      // Tesco does not always populate departmentName. A guard that reads only
+      // that field ignores an unambiguous superDepartment sitting right beside it.
+      item: { name: 'Grapes', baseItem: 'Grapes', category: 'produce', targetQuantity: 500, unit: 'g' },
+      real: { id: 'e', title: 'Tesco Red Seedless Grapes 500G', price: 2.5, packageSize: 500, packageUnit: 'g', supermarket: 'tesco', source: 'direct', superDepartmentName: 'Fresh Food', aisleName: 'Grapes' },
+      decoy: { id: 'f', title: 'Cadbury Twirl Grape Chocolate Bar 43g', price: 1, packageSize: 43, packageUnit: 'g', supermarket: 'tesco', source: 'direct', superDepartmentName: 'Food Cupboard', aisleName: 'Single Chocolate Bars & Sweets' }
+    }
+  ];
+  const bad = [];
+  for (const t of trials) {
+    const kw = KeywordExtractor.extractKeywords(t.item);
+    const sr = PenaltyRules.scoreCandidate(t.real, t.item, kw, {}).score;
+    const sd = PenaltyRules.scoreCandidate(t.decoy, t.item, kw, {}).score;
+    if (sd >= sr) bad.push(`"${t.item.name}": "${t.decoy.title}" [${t.decoy.superDepartmentName}] scores ${sd}, against ${sr} for "${t.real.title}" [Fresh Food]`);
+  }
+  if (bad.length) {
+    fail(`the retailer states the category and the mismatch costs the candidate nothing:\n          - ${bad.join('\n          - ')}\n          Taxonomy is now recorded and read, but a produce request does not penalise a product the retailer files under Food Cupboard confectionery. Reading the field is not the same as acting on it — a superDepartment that contradicts the requested category must outweigh being a few pence cheaper.`);
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 await Promise.allSettled(pending);
