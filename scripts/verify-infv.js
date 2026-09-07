@@ -823,11 +823,35 @@ check(15, 'Baseline measures match CORRECTNESS, not just match rate', () => {
   }
 });
 
-check(15, 'Raw scraped corpora are not published in the public repo', () => {
+check(15, 'Raw scraped corpora are not published in the public repo', async () => {
+  const { execSync } = await import('node:child_process');
   const gi = read(r('.gitignore'));
   const covered = (p) => new RegExp(p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\\*/g, '.*')).test(gi);
   if (!/reality-fixtures|store-payloads/.test(gi)) {
     fail('.gitignore does not exclude the raw scraped corpora (tests/fixtures/reality-fixtures.json, tests/fixtures/store-payloads/) — this repo is public and those are ~2.7MB of retailer product data');
+  }
+  // The substring check above is satisfied by an unrelated line such as
+  // "reality-fixtures.raw.json", so verify the deep corpus is genuinely
+  // untracked rather than merely resembling something that is.
+  const deep = 'tests/fixtures/reality-fixtures.json';
+  if (fs.existsSync(r(deep))) {
+    let tracked = '';
+    try {
+      tracked = execSync(`git ls-files ${deep}`, { cwd: ROOT, encoding: 'utf8' }).trim();
+    } catch {
+      tracked = '';
+    }
+    if (tracked) {
+      fail(`${deep} is the deep scraped corpus and it is TRACKED. .gitignore mentions only "reality-fixtures.raw.json", which satisfies the pattern check above while leaving the real file published. Untrack it with \`git rm --cached\` and keep it on disk; reality-sample.json is the trimmed file CI is meant to read.`);
+    }
+  }
+  // A sample that is byte-identical to the corpus is not a sample, and it
+  // forces the deep data to live inside the 256KB publishing budget.
+  const sample = r('tests/fixtures/reality-sample.json');
+  if (fs.existsSync(r(deep)) && fs.existsSync(sample)) {
+    if (read(r(deep)) === read(sample)) {
+      fail('reality-fixtures.json and reality-sample.json are byte-identical, so there is no separation between the working corpus and the trimmed sample. That is why three stores cannot be recorded at depth: the corpus is being squeezed into the sample budget.');
+    }
   }
   // Whatever stays tracked for CI must be a trimmed sample, not the full corpus.
   const dir = r('tests/fixtures');
