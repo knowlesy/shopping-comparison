@@ -61,12 +61,64 @@ export const CONTAMINATION_RULES = rawRules.map((rule) => {
 });
 
 /**
+ * Checks if a candidate product's retailer taxonomy indicates contamination.
+ * @param {string} queryText - Normalized query string
+ * @param {string} itemCategory - Detected or parsed category of the query item
+ * @param {object} product - Product candidate with optional retailer taxonomy
+ * @returns {boolean} true if taxonomy indicates contamination, false otherwise
+ */
+function isTaxonomyContaminated(queryText, itemCategory, product) {
+  if (!product || typeof product !== 'object') return false;
+
+  const taxonomy = [
+    product.superDepartmentName,
+    product.departmentName,
+    product.aisleName,
+    product.shelfName
+  ].filter(Boolean).join(' ').toLowerCase();
+
+  if (!taxonomy) return false;
+
+  // 1. Produce requests: reject confectionery, desserts, chocolate, biscuits, sweets, cakes, soft drinks, pet food
+  if (itemCategory === 'produce') {
+    const isSweetQuery = /\b(?:dessert|cake|chocolate|sweet|biscuit|candy|pudding|ice\s*cream|drink|juice|smoothie|jam|marmalade)\b/i.test(queryText);
+    if (!isSweetQuery) {
+      if (/\b(?:confectionery|desserts?|chocolates?|sweets?|biscuits?|cakes?|ice\s*cream|puddings?)\b/i.test(taxonomy)) {
+        return true;
+      }
+      if (/\b(?:fizzy\s*drinks?|soft\s*drinks?|beer|wine|spirits|pet\s*(?:food|care)|dog\s*food|cat\s*food)\b/i.test(taxonomy)) {
+        return true;
+      }
+    }
+  }
+
+  // 2. Eggs / dairy requests: reject confectionery / novelty / pet
+  if (itemCategory === 'dairy-eggs' && /\beggs?\b/i.test(queryText)) {
+    const isSweetQuery = /\b(?:chocolate|easter|creme)\b/i.test(queryText);
+    if (!isSweetQuery && /\b(?:confectionery|chocolates?|sweets?|toys?)\b/i.test(taxonomy)) {
+      return true;
+    }
+  }
+
+  // 3. Raw meat / fish requests: reject pet food / animal feed
+  if (itemCategory === 'meat' || itemCategory === 'fish') {
+    const isPetQuery = /\b(?:pet|dog|cat)\b/i.test(queryText);
+    if (!isPetQuery && /\b(?:pet\s*(?:food|care)|dog\s*food|cat\s*food)\b/i.test(taxonomy)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+/**
  * Checks if a product title is contaminated for a given user query.
  * @param {string|object} query - The search query / item name or parsed item object
  * @param {string} productTitle - The title of the product candidate
+ * @param {object} product - Optional candidate product metadata with retailer taxonomy
  * @returns {boolean} true if contaminated/prohibited, false otherwise
  */
-export function isContaminated(query, productTitle) {
+export function isContaminated(query, productTitle, product) {
   if (!query || !productTitle) return false;
   const qStr = typeof query === 'string'
     ? query
@@ -75,6 +127,12 @@ export function isContaminated(query, productTitle) {
   const tLower = String(productTitle).toLowerCase();
   const itemCategory = typeof query === 'object' && query.category ? query.category : detectItemCategory(qLower);
 
+  // 1. Retailer taxonomy check
+  if (isTaxonomyContaminated(qLower, itemCategory, product)) {
+    return true;
+  }
+
+  // 2. Data-driven rule check against title
   for (const rule of CONTAMINATION_RULES) {
     if (rule.matchQuery(qLower, itemCategory)) {
       if (rule.prohibited.test(tLower)) {
@@ -84,3 +142,4 @@ export function isContaminated(query, productTitle) {
   }
   return false;
 }
+

@@ -125,6 +125,16 @@ class SainsburysAdapter(BaseAdapter):
         full_url = raw.get("full_url")
         product_url = f"https{full_url}" if full_url and full_url.startswith("://") else full_url
 
+        # Retailer taxonomy / categorisation
+        categories = raw.get("categories") or []
+        department_name = None
+        aisle_name = None
+        if categories and isinstance(categories, list):
+            cat_names = [c.get("name") for c in categories if isinstance(c, dict) and c.get("name")]
+            if cat_names:
+                aisle_name = cat_names[0]
+                department_name = cat_names[-1] if len(cat_names) > 1 else cat_names[0]
+
         return UnifiedProduct(
             id=product_id,
             supermarket="sainsburys",
@@ -141,5 +151,8 @@ class SainsburysAdapter(BaseAdapter):
             inStock=in_stock,
             productUrl=product_url,
             imageUrl=image_url,
-            source="direct"
+            source="direct",
+            departmentName=department_name,
+            aisleName=aisle_name
         )
+

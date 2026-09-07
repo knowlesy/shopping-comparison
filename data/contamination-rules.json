@@ -74,8 +74,8 @@
   {
     "category": "cooking-oil",
     "matchPattern": "\\b(?:(?:olive|vegetable|sunflower|sesame|rapeseed|coconut|cooking)\\s+oil|oil)\\b",
-    "matchNegatePattern": "\\b(?:in\\s+oil|olives\\b|seeds?\\b)\\b",
-    "prohibitedPattern": "\\b(?:olives?\\b(?!.*\\boil\\b)|garlic\\s+&\\s+basil|halkidiki|kalamata)\\b"
+    "matchNegatePattern": "\\b(?:in\\s+oil|olives\\b|seeds?\\b|sprays?\\b)\\b",
+    "prohibitedPattern": "\\b(?:olives?\\b(?!.*\\boil\\b)|garlic\\s+&\\s+basil|halkidiki|kalamata|sprays?\\b)\\b"
   },
   {
     "category": "vinegar",

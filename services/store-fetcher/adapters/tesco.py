@@ -150,6 +150,12 @@ class TescoAdapter(BaseAdapter):
 
         product_url = f"https://www.tesco.com/groceries/en-GB/products/{product_id}" if product_id else None
 
+        # Retailer taxonomy / categorisation
+        super_department = raw.get("superDepartmentName")
+        department = raw.get("departmentName")
+        aisle = raw.get("aisleName")
+        shelf = raw.get("shelfName")
+
         return UnifiedProduct(
             id=product_id,
             supermarket="tesco",
@@ -166,5 +172,10 @@ class TescoAdapter(BaseAdapter):
             inStock=in_stock,
             productUrl=product_url,
             imageUrl=image_url,
-            source="direct"
+            source="direct",
+            superDepartmentName=super_department,
+            departmentName=department,
+            aisleName=aisle,
+            shelfName=shelf
         )
+

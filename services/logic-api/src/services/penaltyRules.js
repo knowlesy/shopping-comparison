@@ -77,12 +77,39 @@ export class PenaltyRules {
    */
   static scoreCandidate(prod, item, keywords, preferences = {}) {
     // 0. Hard Category Guard: Prevent Cross-Category Contamination
+    // Consult candidate category, falling back to retailer taxonomy (aisle, department, shelf)
+    let prodCategory = prod.category;
+    if (!prodCategory) {
+      const taxonomyStr = [
+        prod.superDepartmentName,
+        prod.departmentName,
+        prod.aisleName,
+        prod.shelfName
+      ].filter(Boolean).join(' ').toLowerCase();
+
+      if (taxonomyStr) {
+        if (/\b(?:peanut|nut|almond|cashew|seed)\s*(?:&|and)?\s*(?:nut\s*)?butter\b/i.test(taxonomyStr) || /\bbutter\s*beans?\b/i.test(taxonomyStr)) {
+          prodCategory = 'pantry';
+        } else if (/\b(?:fresh\s+fruit|fresh\s+vegetables?|salad\s*&\s*herbs?|fresh\s*produce|fruit\s*&\s*veg)\b/i.test(taxonomyStr)) {
+          prodCategory = 'produce';
+        } else if (/\b(?:meat|poultry|beef|chicken|pork|lamb)\b/i.test(taxonomyStr) && !/\bpet\b/i.test(taxonomyStr)) {
+          prodCategory = 'meat';
+        } else if (/\b(?:fish|seafood)\b/i.test(taxonomyStr) && !/\bpet\b/i.test(taxonomyStr)) {
+          prodCategory = 'fish';
+        } else if (/\b(?:milk|cheese|eggs?|yogurts?|dairy)\b/i.test(taxonomyStr) || (/\bbutter\b/i.test(taxonomyStr) && !/\b(?:peanut|nut|almond|cashew|cocoa|apple|beans?)\b/i.test(taxonomyStr))) {
+          prodCategory = 'dairy-eggs';
+        } else if (/\b(?:bakery|bread|cakes?)\b/i.test(taxonomyStr)) {
+          prodCategory = 'bakery';
+        }
+      }
+    }
+
     if (
       item.category &&
-      prod.category &&
+      prodCategory &&
       item.category !== 'general' &&
-      prod.category !== 'general' &&
-      item.category !== prod.category
+      prodCategory !== 'general' &&
+      item.category !== prodCategory
     ) {
       return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
     }
@@ -90,8 +117,8 @@ export class PenaltyRules {
     const titleLower = prod.title.toLowerCase();
     const itemText = `${item.baseItem || ''} ${item.name || ''}`.toLowerCase();
 
-    // Contamination guard check
-    if (isContaminated(itemText, titleLower)) {
+    // Contamination guard check: consults title and retailer taxonomy (aisle, department, shelf)
+    if (isContaminated(item, titleLower, prod)) {
       return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
     }
 

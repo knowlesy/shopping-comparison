@@ -37,7 +37,11 @@ export function trimProduct(p) {
     nectarPrice: p.nectarPrice,
     inStock: p.inStock !== false,
     source: p.source || 'direct',
-    confidenceSource: p.confidenceSource || 'direct'
+    confidenceSource: p.confidenceSource || 'direct',
+    superDepartmentName: p.superDepartmentName || undefined,
+    departmentName: p.departmentName || undefined,
+    aisleName: p.aisleName || undefined,
+    shelfName: p.shelfName || undefined
   };
 }
 

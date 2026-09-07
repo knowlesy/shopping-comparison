@@ -32,3 +32,9 @@ class UnifiedProduct(BaseModel):
     productUrl: Optional[str] = Field(None, description="Direct URL to product on retailer website")
     imageUrl: Optional[str] = Field(None, description="Product image URL")
     source: str = Field(default="direct", description="Data source tier indicator ('direct')")
+    # Retailer taxonomy and categorisation
+    superDepartmentName: Optional[str] = Field(None, description="Retailer top-level department (e.g. 'Fresh Food')")
+    departmentName: Optional[str] = Field(None, description="Retailer department (e.g. 'Fresh Fruit')")
+    aisleName: Optional[str] = Field(None, description="Retailer aisle (e.g. 'Bananas')")
+    shelfName: Optional[str] = Field(None, description="Retailer shelf (e.g. 'Loose Bananas')")
+

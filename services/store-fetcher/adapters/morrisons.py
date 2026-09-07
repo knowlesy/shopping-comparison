@@ -148,6 +148,29 @@ class MorrisonsAdapter(BaseAdapter):
 
         product_url = f"https://groceries.morrisons.com/products/{product_id}" if product_id else None
 
+        # Retailer taxonomy / categorisation
+        cat_path = raw.get("categoryPath") or []
+        super_dept = None
+        dept = None
+        aisle = None
+        shelf = None
+        if isinstance(cat_path, list) and cat_path:
+            clean_cats = [c for c in cat_path if isinstance(c, str)]
+            if len(clean_cats) == 1:
+                super_dept = clean_cats[0]
+            elif len(clean_cats) == 2:
+                super_dept = clean_cats[0]
+                dept = clean_cats[1]
+            elif len(clean_cats) == 3:
+                super_dept = clean_cats[0]
+                dept = clean_cats[1]
+                aisle = clean_cats[2]
+            elif len(clean_cats) >= 4:
+                super_dept = clean_cats[0]
+                dept = clean_cats[1]
+                aisle = clean_cats[2]
+                shelf = clean_cats[-1]
+
         return UnifiedProduct(
             id=product_id,
             supermarket="morrisons",
@@ -163,5 +186,10 @@ class MorrisonsAdapter(BaseAdapter):
             inStock=in_stock,
             productUrl=product_url,
             imageUrl=image_url,
-            source="direct"
+            source="direct",
+            superDepartmentName=super_dept,
+            departmentName=dept,
+            aisleName=aisle,
+            shelfName=shelf
         )
+
