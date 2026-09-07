@@ -76,7 +76,8 @@ function isTaxonomyContaminated(queryText, itemCategory, product) {
 
   // If retailer taxonomy explicitly confirms fresh produce or fresh food,
   // use it as positive evidence: it is NOT contaminated.
-  const isFreshFood = /\bfresh\s*(?:food|produce|fruit|veg|meat|fish)\b/i.test(`${superDept} ${dept}`);
+  const isFreshFood = /\bfresh\b/i.test(superDept) ||
+                      /\bfresh\s*(?:food|produce|fruit|veg|meat|fish|salad|poultry)\b/i.test(`${superDept} ${dept} ${aisle}`);
 
   if (itemCategory === 'produce') {
     // Fresh produce / fresh food taxonomy is positive evidence that the candidate belongs to the category
@@ -86,17 +87,37 @@ function isTaxonomyContaminated(queryText, itemCategory, product) {
 
     const isSweetQuery = /\b(?:dessert|cake|chocolate|sweet|biscuit|candy|pudding|ice\s*cream|drink|juice|smoothie|jam|marmalade)\b/i.test(queryText);
     if (!isSweetQuery) {
-      // Reject candidates whose taxonomy affirmatively places them in confectionery, dessert, chocolate, drinks, or pet aisles
+      // Act on whichever taxonomy levels arrive as a hierarchy:
+      // Level 3: Aisle level (specific)
       if (
-        superDept === 'confectionery' ||
-        /\b(?:confectionery|desserts?)\b/i.test(superDept) ||
-        /\b(?:desserts?|chocolates?|sweets\s*&|biscuits\s*&)\b/i.test(dept) ||
-        /\b(?:desserts?|chocolate\s+blocks|sweets\s*&|confectionery)\b/i.test(aisle)
+        aisle &&
+        /\b(?:chocolate|chocolates|sweets|confectionery|desserts?|biscuits?|candy|crisps?|cakes?|jelly|jellies|ice\s*cream|ice\s*loll(?:y|ies)|snack\s*pots?|meringues?)\b/i.test(aisle)
       ) {
         return true;
       }
-      if (/\b(?:drinks|pet\s*care|household)\b/i.test(superDept)) {
+
+      // Level 2: Department level (intermediate)
+      if (
+        dept &&
+        /\b(?:confectionery|chocolates?|sweets?|biscuits?|desserts?|crisps?|snacks?|cakes?)\b/i.test(dept)
+      ) {
         return true;
+      }
+
+      // Level 1: SuperDepartment level (broadest)
+      if (superDept) {
+        if (/\b(?:drinks?|beverages?|pet\s*care|household|health\s*&\s*beauty|baby(?:\s*&\s*toddler)?)\b/i.test(superDept)) {
+          return true;
+        }
+        if (/\b(?:confectionery|treats(?:\s*&\s*snacks)?|desserts?)\b/i.test(superDept)) {
+          return true;
+        }
+        // An ambient Food Cupboard candidate cannot satisfy a fresh produce request
+        // unless preserved/canned produce was explicitly requested (e.g. puree, paste, tinned)
+        const isPreservedProduce = /\b(?:puree|paste|passata|tinned|canned|dried)\b/i.test(queryText);
+        if (!isPreservedProduce && superDept === 'food cupboard') {
+          return true;
+        }
       }
     }
   }
@@ -104,16 +125,20 @@ function isTaxonomyContaminated(queryText, itemCategory, product) {
   if (itemCategory === 'dairy-eggs' && /\beggs?\b/i.test(queryText)) {
     if (isFreshFood) return false;
     const isSweetQuery = /\b(?:chocolate|easter|creme)\b/i.test(queryText);
-    if (!isSweetQuery && (superDept === 'confectionery' || /\b(?:confectionery|chocolates?|toys?)\b/i.test(aisle))) {
-      return true;
+    if (!isSweetQuery) {
+      if (aisle && /\b(?:chocolate|chocolates|sweets|confectionery|toys?)\b/i.test(aisle)) return true;
+      if (dept && /\b(?:chocolate|confectionery|sweets?|toys?)\b/i.test(dept)) return true;
+      if (superDept && /\b(?:confectionery|treats(?:\s*&\s*snacks)?|toys?|household|pet\s*care)\b/i.test(superDept)) return true;
     }
   }
 
   if (itemCategory === 'meat' || itemCategory === 'fish') {
     if (isFreshFood) return false;
     const isPetQuery = /\b(?:pet|dog|cat)\b/i.test(queryText);
-    if (!isPetQuery && (superDept === 'pet care' || /\b(?:pet\s*food|dog\s*food|cat\s*food)\b/i.test(aisle))) {
-      return true;
+    if (!isPetQuery) {
+      if (aisle && /\b(?:pet\s*food|dog\s*food|cat\s*food|pet\s*treats?)\b/i.test(aisle)) return true;
+      if (dept && /\b(?:pet\s*food|pet\s*care|pet\s*treats?)\b/i.test(dept)) return true;
+      if (superDept && /\b(?:pet\s*care|household)\b/i.test(superDept)) return true;
     }
   }
 
