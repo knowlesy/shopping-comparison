@@ -1882,6 +1882,86 @@ check(26, 'Recorded fixtures carry the taxonomy so matching can be tested offlin
 });
 
 // ---------------------------------------------------------------------------
+// Step 27 — Missing taxonomy must not be an advantage
+// ---------------------------------------------------------------------------
+check(27, 'A product with no taxonomy does not outrank one the taxonomy confirms', async () => {
+  const { PenaltyRules } = await svc('penaltyRules.js');
+  const { KeywordExtractor } = await svc('keywordExtractor.js');
+  const item = { name: 'Strawberries', baseItem: 'Strawberries', category: 'produce', targetQuantity: 400, unit: 'g' };
+  const kw = KeywordExtractor.extractKeywords(item);
+  // Same request, two candidates: one confirmed produce, one carrying no
+  // taxonomy at all and a little cheaper. Deliberately not a holdout item.
+  const confirmed = {
+    id: 'a', title: 'Tesco Strawberries 400G', price: 2.5, packageSize: 400, packageUnit: 'g',
+    supermarket: 'tesco', source: 'direct',
+    superDepartmentName: 'Fresh Food', departmentName: 'Fresh Fruit', aisleName: 'Berries & Cherries'
+  };
+  const unknown = {
+    id: 'b', title: 'Strawberry Mousse Dessert 400G', price: 1.2, packageSize: 400, packageUnit: 'g',
+    supermarket: 'tesco', source: 'direct'
+  };
+  const sc = (p) => PenaltyRules.scoreCandidate(p, item, kw, {}).score;
+  if (sc(unknown) >= sc(confirmed)) {
+    fail(`"Strawberry Mousse Dessert" carries no taxonomy and scores ${sc(unknown)}, against ${sc(confirmed)} for a product the retailer files under Fresh Fruit. A candidate that supplies no category dodges the guard entirely, so incomplete data becomes an advantage and the cheapest unlabelled item wins. Absent taxonomy is unknown, not innocent — it must not outrank a confirmed category match.`);
+  }
+});
+
+check(27, 'Exclusion patterns are not run against aisle names', async () => {
+  const { isContaminated } = await svc('contaminationRules.js');
+  // Retailer aisles routinely enumerate siblings: "Potatoes & Sweet Potatoes",
+  // "Oranges, Lemons & Citrus Fruit", "Mince & Meatballs", "Berries & Cherries".
+  // Feeding those into exclusion patterns condemns the correct product.
+  const cases = [
+    [{ name: 'Maris Piper potatoes', baseItem: 'Maris Piper potatoes', category: 'produce' },
+      { title: 'Tesco Maris Piper Potatoes 2Kg', superDepartmentName: 'Fresh Food', aisleName: 'Potatoes & Sweet Potatoes' },
+      'the aisle lists sweet potatoes as a neighbour, so the sweet-potato exclusion condemns a genuine Maris Piper'],
+    [{ name: 'beef mince', baseItem: 'beef mince', category: 'meat' },
+      { title: 'Tesco Beef Steak Mince 500g', superDepartmentName: 'Fresh Food', aisleName: 'Mince & Meatballs' },
+      'the aisle names meatballs']
+  ];
+  const bad = cases.filter(([i, p]) => isContaminated(i, p.title.toLowerCase(), p));
+  if (bad.length) {
+    fail(`taxonomy text is being fed into exclusion patterns and vetoing correct products:\n          - ${bad.map(([i, p, why]) => `"${i.name}" vs "${p.title}" [${p.aisleName}] — ${why}`).join('\n          - ')}\n          An aisle name describes a shelf, not one product. Use taxonomy as positive evidence that a candidate IS the right category; never as text to run prohibition regexes over.`);
+  }
+});
+
+check(27, 'Taxonomy confirms the category without settling the variety', async () => {
+  const { PenaltyRules } = await svc('penaltyRules.js');
+  const { KeywordExtractor } = await svc('keywordExtractor.js');
+  const item = { name: 'Maris Piper potatoes', baseItem: 'Maris Piper potatoes', category: 'produce', targetQuantity: 1.8, unit: 'kg' };
+  const kw = KeywordExtractor.extractKeywords(item);
+  const aisle = { superDepartmentName: 'Fresh Food', departmentName: 'Fresh Vegetables', aisleName: 'Potatoes & Sweet Potatoes' };
+  const named = { id: 'a', title: 'Tesco Maris Piper Potatoes 2Kg', price: 1.8, packageSize: 2, packageUnit: 'kg', supermarket: 'tesco', source: 'direct', ...aisle };
+  const other = { id: 'b', title: 'Tesco King Edward Potatoes 2kg', price: 1.75, packageSize: 2, packageUnit: 'kg', supermarket: 'tesco', source: 'direct', ...aisle };
+  const sc = (p) => PenaltyRules.scoreCandidate(p, item, kw, {}).score;
+  if (sc(named) <= -400) {
+    fail(`the correct product scores ${sc(named)} — it is being hard-vetoed outright. See the aisle-name gate above.`);
+  }
+  if (sc(other) >= sc(named)) {
+    fail(`King Edward scores ${sc(other)} against ${sc(named)} for Maris Piper, on a request that names the variety. Both sit in the same aisle, so an agreeing taxonomy must not wash out the variety term — it confirms the category, it does not settle which product within it.`);
+  }
+});
+
+check(27, 'Recorded fixtures carry taxonomy for nearly every product', () => {
+  const p = r('tests/fixtures/reality-fixtures.json');
+  if (!fs.existsSync(p)) return 'no reality fixtures';
+  const fx = JSON.parse(read(p) || '{}');
+  let tot = 0;
+  let wit = 0;
+  for (const it of fx.items || []) {
+    for (const prod of it.products || []) {
+      tot++;
+      if (prod.aisleName || prod.superDepartmentName || prod.departmentName) wit++;
+    }
+  }
+  if (!tot) return 'no products';
+  const pct = (wit / tot) * 100;
+  if (pct < 95) {
+    fail(`only ${wit} of ${tot} recorded products (${pct.toFixed(1)}%) carry taxonomy. The gaps are not harmless: an unlabelled candidate currently escapes the category guard, so the products missing data are exactly the ones that win. Re-record the stragglers.`);
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 await Promise.allSettled(pending);
