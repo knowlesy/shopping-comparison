@@ -47,4 +47,25 @@ In Step 24, `reality-baseline.json` was restored verbatim to its historically me
 
 - **Historical Record:** The 2026-09-02 measurement recorded `"unresolvedItems": ["Hummus"]` as a snapshot of live retailer responses on that date prior to the Step 18 variant fixes. This historical measurement is maintained unchanged.
 
+---
+
+## Step 31: `tests/fixtures/reality-fixtures.json` Untracked File Subjected to Tracked Sample Cap in Step 15 Gate
+
+In Step 31, per `infv-context.md` §5 and commit `f340c61`, the deep multi-store scraped corpus `tests/fixtures/reality-fixtures.json` (~2.1MB) was untracked from git via `git rm --cached` and added to `.gitignore` so that full shelf depths (Tesco median 24, untuned median 24; Sainsbury's median 24; Morrisons median 50) could be recorded across all reachable stores without being constrained by the public repository budget. A separate trimmed sample `tests/fixtures/reality-sample.json` (186KB, < 256KB) was generated and tracked to serve CI and offline ratchet tests.
+
+- **Gate Failure:** In `scripts/verify-infv.js` check 15 ("Raw scraped corpora are not published in the public repo"):
+  - Lines 836-847 verify that `reality-fixtures.json` is untracked via `git ls-files` (`PASS`).
+  - Lines 848-855 verify that `reality-fixtures.json` and `reality-sample.json` are not byte-identical (`PASS`).
+  - Lines 856-874 walk `tests/fixtures` checking `fs.statSync(p).size > CAP` (256KB) using `fs.readdirSync`.
+  - Because `walk(dir)` uses filesystem `fs.readdirSync` instead of filtering by `git ls-files`, it flags `reality-fixtures.json` (2148KB) with:
+    `tracked fixtures exceed the 256KB sample cap — trim to a representative subset: - tests/fixtures/reality-fixtures.json (2148KB)`.
+- **Dispute:** The code comment (`// Whatever stays tracked for CI must be a trimmed sample, not the full corpus`) and the error message (`tracked fixtures exceed the 256KB sample cap`) explicitly denote that this cap applies to **tracked** fixtures published to GitHub, not untracked local working corpora. Because `scripts/verify-infv.js` must never be edited directly, this discrepancy is logged here.
+- **Action Required:** Owner to update `walk(dir)` in Step 15 of `scripts/verify-infv.js` to filter by `git ls-files` (or skip untracked files) so untracked deep corpora do not trip the sample budget:
+  ```javascript
+  const tracked = new Set(execSync('git ls-files tests/fixtures', { cwd: ROOT, encoding: 'utf8' }).trim().split('\n'));
+  ...
+  if (tracked.has(path.relative(ROOT, p)) && e.name.endsWith('.json') && fs.statSync(p).size > CAP) {
+  ```
+
+
 
