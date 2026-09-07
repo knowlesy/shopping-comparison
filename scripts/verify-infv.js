@@ -2093,6 +2093,94 @@ check(29, 'The evaluation exercises preferences rather than an empty object', ()
 });
 
 // ---------------------------------------------------------------------------
+// Step 30 — Every preference bites, on every reachable store
+// ---------------------------------------------------------------------------
+const REACHABLE = ['tesco', 'sainsburys', 'morrisons'];
+
+check(30, 'All seven user preferences change at least one outcome', async () => {
+  const { FuzzyMatcher } = await svc('fuzzyMatcher.js');
+  const A = JSON.parse(read(r('tests/fixtures/ai-matching-fixtures.real.json')) || '[]');
+  if (!A.length) return 'no fixtures';
+  const probe = (a, b) => {
+    for (const f of A) {
+      const pa = FuzzyMatcher.matchProduct('tesco', f.item, f.candidates, a).product?.id;
+      const pb = FuzzyMatcher.matchProduct('tesco', f.item, f.candidates, b).product?.id;
+      if (pa !== pb) return true;
+    }
+    return false;
+  };
+  const inert = [];
+  if (!probe({ healthierDefault: true }, { healthierDefault: false })) inert.push('healthierDefault');
+  if (!probe({ preferFreeRange: true }, { preferFreeRange: false })) inert.push('preferFreeRange');
+  if (!probe({ preferOrganic: true }, { preferOrganic: false })) inert.push('preferOrganic');
+  if (!probe({ packSizingPolicy: 'closest' }, { packSizingPolicy: 'cover' })) inert.push('packSizingPolicy');
+  if (!probe({ cutMatchingStrategy: 'strict_cut' }, { cutMatchingStrategy: 'best_value' })) inert.push('cutMatchingStrategy');
+  if (!probe({ includeDeals: true }, { includeDeals: false })) inert.push('includeDeals');
+  if (!probe({ brandTierPriority: 'value' }, { brandTierPriority: 'premium' })) inert.push('brandTierPriority');
+  if (inert.length) {
+    fail(`these settings do not change a single pick anywhere in the corpus:\n          - ${inert.join('\n          - ')}\n          Each is offered in the Settings UI. A shopper can toggle any of them and the basket comes back identical — the same dead-flag pattern as brandTierPriority before Step 29, where the code read a field nothing ever set.`);
+  }
+});
+
+check(30, 'Every reachable adapter normalises its own taxonomy shape', () => {
+  const shapes = {
+    tesco: /superDepartmentName|aisleName/,
+    // categoryPath is an ordered hierarchy array, e.g.
+    // ["Market Street","Fresh Fruit & Veg","Salads","Cucumber"]
+    morrisons: /categoryPath/,
+    // Sainsbury's search returns zone/department null and breadcrumbs empty,
+    // but carries structured labels such as ORGANIC.
+    sainsburys: /breadcrumbs|labels|zone|department/
+  };
+  const missing = [];
+  for (const store of REACHABLE) {
+    const src = read(r(`services/store-fetcher/adapters/${store}.py`));
+    if (!src) {
+      missing.push(`${store}: adapter missing`);
+      continue;
+    }
+    if (!shapes[store].test(src)) missing.push(`${store}: never reads ${String(shapes[store])}`);
+  }
+  if (missing.length) {
+    fail(`taxonomy is only wired for some retailers:\n          - ${missing.join('\n          - ')}\n          Every scoring rule built in Steps 26-29 keys off Tesco's field names. Each retailer names its categories differently, so the adapter is where that difference belongs — normalise into the shared UnifiedProduct fields and let matching stay retailer-agnostic.`);
+  }
+});
+
+check(30, 'Matching does not hardcode one retailer\'s field names', () => {
+  const src = readAll('services/logic-api/src/services', '.js');
+  const leaked = ['superDepartmentName', 'categoryPath', 'breadcrumbs'].filter((f) => src.includes(f));
+  if (leaked.length > 1) {
+    fail(`matching code references retailer-specific fields directly: ${leaked.join(', ')}. Normalise in the adapters so the Node side sees one shape, otherwise every new retailer means editing the matcher.`);
+  }
+});
+
+check(30, 'The recorded corpus covers more than one store', () => {
+  const fxPath = fs.existsSync(r('tests/fixtures/reality-fixtures.json'))
+    ? r('tests/fixtures/reality-fixtures.json')
+    : r('tests/fixtures/reality-sample.json');
+  const fx = JSON.parse(read(fxPath) || '{}');
+  const counts = {};
+  for (const it of fx.items || []) {
+    for (const p of it.products || []) {
+      const s = p.supermarket || p.store || '?';
+      counts[s] = (counts[s] || 0) + 1;
+    }
+  }
+  const thin = REACHABLE.filter((s) => (counts[s] || 0) < 100);
+  if (thin.length) {
+    fail(`recorded products by store: ${JSON.stringify(counts)}. ${thin.join(' and ')} ${thin.length > 1 ? 'are' : 'is'} reachable and effectively unmeasured, so every score so far describes Tesco alone. Record the real list against all three.`);
+  }
+});
+
+check(30, 'Structured retailer labels are preferred over guessing from the title', () => {
+  const src = read(r('services/store-fetcher/adapters/sainsburys.py'));
+  if (!src) return 'no sainsburys adapter';
+  if (!/labels/i.test(src)) {
+    fail("Sainsbury's returns a structured labels array carrying values such as ORGANIC. Deriving isOrganic from a title regex when the retailer states it outright is guessing where an answer was supplied.");
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 await Promise.allSettled(pending);
