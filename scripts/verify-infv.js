@@ -2212,6 +2212,35 @@ check(30, 'Each store is recorded at a usable depth, not a token presence', () =
   }
 });
 
+check(30, 'Recorded candidates are per-item search results, not one shared list', () => {
+  const fxPath = fs.existsSync(r('tests/fixtures/reality-fixtures.json'))
+    ? r('tests/fixtures/reality-fixtures.json')
+    : r('tests/fixtures/reality-sample.json');
+  const fx = JSON.parse(read(fxPath) || '{}');
+  const bad = [];
+  for (const s of REACHABLE) {
+    const sigs = new Map();
+    for (const it of fx.items || []) {
+      const ids = (it.products || [])
+        .filter((p) => (p.supermarket || p.store) === s)
+        .map((p) => p.id)
+        .sort()
+        .join(',');
+      if (!ids) continue;
+      sigs.set(ids, (sigs.get(ids) || 0) + 1);
+    }
+    const items = [...sigs.values()].reduce((a, b) => a + b, 0);
+    if (items < 5) continue;
+    const largest = Math.max(...sigs.values());
+    if (sigs.size / items < 0.8) {
+      bad.push(`${s}: ${items} items share only ${sigs.size} distinct candidate set(s); ${largest} items were given byte-identical candidates`);
+    }
+  }
+  if (bad.length) {
+    fail(`candidates are not per-item search results:\n          - ${bad.join('\n          - ')}\n          A generic product list copied across every item is not a recording of that shop. It inflates depth — the worst offender here had the highest median candidate count and the lowest match rate — while telling you nothing about whether search finds the right product. Every item must carry the results of a search for THAT item.`);
+  }
+});
+
 check(30, 'The recorded corpus covers more than one store', () => {
   const fxPath = fs.existsSync(r('tests/fixtures/reality-fixtures.json'))
     ? r('tests/fixtures/reality-fixtures.json')
