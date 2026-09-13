@@ -2193,8 +2193,13 @@ check(30, 'Each store is recorded at a usable depth, not a token presence', () =
       if (n) counts.push(n);
     }
     const m = med(counts);
-    report.push(`${s}: ${counts.length} items, median ${m}`);
+    const totalItems = (fx.items || []).length;
+    const coverage = totalItems ? counts.length / totalItems : 0;
+    report.push(`${s}: ${counts.length}/${totalItems} items, median ${m}`);
+    // Depth and coverage together. Measuring only depth is satisfiable by
+    // recording a handful of items well and ignoring the rest.
     if (m < 12) thin.push(`${s} (median ${m})`);
+    else if (coverage < 0.8) thin.push(`${s} (only ${counts.length}/${totalItems} items recorded, median ${m})`);
   }
   if (thin.length) {
     fail(`recorded depth per store — ${report.join('; ')}.\n          ${thin.join(' and ')} carr${thin.length > 1 ? 'y' : 'ies'} a median of barely a couple of candidates, which is a token presence rather than a shelf. A previous version of this gate asked only for 100 products per store and was satisfied by adding two per item while Tesco's own median fell from 24 to 9. Matching a request against 2 candidates proves nothing, and a shallow shelf is what produced three wrong labels earlier in this work.\n          The tracked sample cannot hold three stores at depth under the 256KB public-repo limit — roughly 1.2MB would be needed. Keep the deep corpus untracked and gitignored, per infv-context.md section 5, and let the tracked file be an honestly small sample. Note that reality-fixtures.json and reality-sample.json are currently byte-identical, so no such separation exists today.`);
