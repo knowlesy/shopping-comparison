@@ -857,19 +857,25 @@ check(15, 'Raw scraped corpora are not published in the public repo', async () =
   const dir = r('tests/fixtures');
   if (!fs.existsSync(dir)) fail('tests/fixtures missing');
   const CAP = 256 * 1024;
-  const oversized = [];
-  const walk = (d) => {
-    for (const e of fs.readdirSync(d, { withFileTypes: true })) {
-      const p = path.join(d, e.name);
-      if (e.isDirectory()) walk(p);
-      else if (e.name.endsWith('.json') && fs.statSync(p).size > CAP) {
-        oversized.push(`${path.relative(ROOT, p)} (${Math.round(fs.statSync(p).size / 1024)}KB)`);
-      }
-    }
-  };
-  walk(dir);
+  // The cap exists to stop retailer data being PUBLISHED, so it applies to what
+  // git tracks — not to what sits on disk. An earlier version walked the
+  // directory and flagged the deep corpus even once it was correctly untracked,
+  // which would have pushed the fix towards deleting the very data Step 31
+  // separated out.
+  let trackedList = [];
+  try {
+    trackedList = execSync('git ls-files tests/fixtures/', { cwd: ROOT, encoding: 'utf8' })
+      .split('\n')
+      .map((s) => s.trim())
+      .filter((s) => s.endsWith('.json'));
+  } catch {
+    trackedList = [];
+  }
+  const oversized = trackedList
+    .filter((rel) => fs.existsSync(r(rel)) && fs.statSync(r(rel)).size > CAP)
+    .map((rel) => `${rel} (${Math.round(fs.statSync(r(rel)).size / 1024)}KB)`);
   if (oversized.length) {
-    fail(`tracked fixtures exceed the 256KB sample cap — trim to a representative subset:\n          - ${oversized.join('\n          - ')}`);
+    fail(`these fixtures are TRACKED and exceed the 256KB sample cap, so they would be published:\n          - ${oversized.join('\n          - ')}\n          Trim to a representative subset, or untrack the file and keep it on disk.`);
   }
 });
 
