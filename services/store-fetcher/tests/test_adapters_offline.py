@@ -153,6 +153,34 @@ def test_morrisons_normalization_offline():
     assert len(products) > 0
 
 
+def test_morrisons_taxonomy_normalization():
+    adapter = MorrisonsAdapter()
+    raw = {
+        "productId": "123",
+        "name": "Morrisons Whole Cucumber",
+        "brand": "Morrisons",
+        "price": {"current": {"amount": 0.89}},
+        "status": "AVAILABLE",
+        "categoryPath": [
+            "Events, Inspiration & Ways To Save",
+            "Market Street",
+            "Fresh Fruit & Veg",
+            "Salads",
+            "Cucumber"
+        ]
+    }
+    p = adapter.normalize(raw)
+    assert p.superDepartmentName == "Fresh Fruit & Veg"
+    assert p.departmentName == "Salads"
+    assert p.aisleName == "Cucumber"
+    assert p.shelfName is None
+
+    # Test with 4-level categoryPath
+    raw["categoryPath"].append("Whole Cucumber")
+    p4 = adapter.normalize(raw)
+    assert p4.shelfName == "Whole Cucumber"
+
+
 def test_circuit_breaker_offline():
     cb = StoreCircuitBreaker(failure_threshold=3, recovery_timeout_sec=60.0)
     assert cb.is_available("tesco") is True

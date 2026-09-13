@@ -162,5 +162,21 @@
       "free range",
       "free-range"
     ]
+  },
+  "morrisonsTaxonomy": {
+    "promotionalBuckets": [
+      "Events, Inspiration & Ways To Save",
+      "More Ways To Save",
+      "Market Street",
+      "The Best",
+      "Organic Shop",
+      "Offers",
+      "Seasonal",
+      "Featured",
+      "Promotions",
+      "Ways to Save",
+      "Ways To Save",
+      "Special Offers"
+    ]
   }
 }

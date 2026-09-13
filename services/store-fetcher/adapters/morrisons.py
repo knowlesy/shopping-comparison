@@ -4,8 +4,10 @@ Implements direct extraction against Morrisons web search
 extracting structured productEntities from server-rendered window.__INITIAL_STATE__.
 """
 
+import os
 import re
 import json
+import urllib.parse
 from typing import List, Dict, Any, Optional
 try:
     from .base import BaseAdapter, AdapterCapabilities
@@ -25,6 +27,28 @@ class MorrisonsAdapter(BaseAdapter):
     store_name: str = "morrisons"
 
     SEARCH_URL = "https://groceries.morrisons.com/search"
+    _rules_cache: Optional[Dict[str, Any]] = None
+
+    @classmethod
+    def _get_rules(cls) -> Dict[str, Any]:
+        if cls._rules_cache is not None:
+            return cls._rules_cache
+        candidates = [
+            os.path.join(os.path.dirname(__file__), "..", "..", "..", "data", "matching-rules.json"),
+            os.path.join(os.path.dirname(__file__), "..", "..", "data", "matching-rules.json"),
+            os.path.join(os.getcwd(), "data", "matching-rules.json"),
+        ]
+        for c in candidates:
+            p = os.path.abspath(c)
+            if os.path.exists(p):
+                try:
+                    with open(p, "r", encoding="utf-8") as f:
+                        cls._rules_cache = json.load(f)
+                        return cls._rules_cache
+                except Exception:
+                    pass
+        cls._rules_cache = {}
+        return cls._rules_cache
 
     @property
     def capabilities(self) -> Dict[str, Any]:
@@ -37,10 +61,19 @@ class MorrisonsAdapter(BaseAdapter):
             direct_http=True
         ).to_dict()
 
+    def __init__(self):
+        super().__init__()
+        self._session = None
+
     def _get_session(self):
         if not cffi_requests:
             raise RuntimeError("curl_cffi is required for MorrisonsAdapter")
-        return cffi_requests.Session(impersonate="chrome124")
+        if self._session is None:
+            self._session = cffi_requests.Session(impersonate="chrome124")
+        return self._session
+
+    def reset_session(self):
+        self._session = None
 
     def search(
         self,
@@ -55,7 +88,7 @@ class MorrisonsAdapter(BaseAdapter):
             "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
             "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
         }
-        url = f"{self.SEARCH_URL}?entry={query.replace(' ', '+')}"
+        url = f"{self.SEARCH_URL}?q={urllib.parse.quote_plus(query)}"
 
         res = session.get(url, headers=headers, timeout=12)
         if res.status_code != 200:
@@ -158,7 +191,19 @@ class MorrisonsAdapter(BaseAdapter):
         aisle = None
         shelf = None
         if isinstance(cat_path, list) and cat_path:
-            clean_cats = [c for c in cat_path if isinstance(c, str)]
+            rules = self._get_rules()
+            promo_buckets = set(
+                b.strip().lower()
+                for b in rules.get("morrisonsTaxonomy", {}).get("promotionalBuckets", [])
+            )
+            # Filter out promotional buckets that do not carry product category meaning
+            clean_cats = [
+                c for c in cat_path
+                if isinstance(c, str) and c.strip() and c.strip().lower() not in promo_buckets
+            ]
+            if not clean_cats:
+                clean_cats = [c for c in cat_path if isinstance(c, str) and c.strip()]
+
             if len(clean_cats) == 1:
                 super_dept = clean_cats[0]
             elif len(clean_cats) == 2:
