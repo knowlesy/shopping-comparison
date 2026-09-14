@@ -2473,6 +2473,91 @@ check(35, 'Every reachable store is scored for correctness, not just match rate'
 });
 
 // ---------------------------------------------------------------------------
+// Step 38 — Findings from the independent repo review
+// ---------------------------------------------------------------------------
+check(38, 'The adapter registry agrees with the reachability artifact', () => {
+  const reg = read(r('services/store-fetcher/registry.py'));
+  const j = JSON.parse(read(r('tests/fixtures/store-payloads/_reachability.json')) || '{}');
+  const bad = [];
+  for (const [store, e] of Object.entries(j.stores || {})) {
+    if (e.status !== 'reachable') continue;
+    const block = reg.split(new RegExp(`["']${store}["']\\s*:\\s*\\{`))[1];
+    if (!block) continue;
+    const decl = block.split('}')[0];
+    if (/supported["']?\s*:\s*False/.test(decl)) {
+      bad.push(`${store}: _reachability.json says reachable (${e.productsFound} products, checked ${String(e.checkedAt).slice(0, 10)}) while registry.py marks it supported: False`);
+    }
+  }
+  if (bad.length) {
+    fail(`the registry and the reachability record disagree:\n          - ${bad.join('\n          - ')}\n          server.py gates /search on the registry flag and returns zero products, so Node falls through to the catalog — FABRICATED benchmark data — for these stores. The offline corpus hides it: recording called the adapters directly and bypassed the gate, so eval:stores reports these stores as correct while the live app would quote invented prices.`);
+  }
+});
+
+check(38, 'Term lists match whole words, not substrings', async () => {
+  const { PenaltyRules } = await svc('penaltyRules.js');
+  const { KeywordExtractor } = await svc('keywordExtractor.js');
+  const item = { name: 'Chicken breast', baseItem: 'Chicken breast', category: 'meat', targetQuantity: 500, unit: 'g' };
+  const kw = KeywordExtractor.extractKeywords(item);
+  const tax = { superDepartmentName: 'Fresh Food', aisleName: 'Chicken' };
+  const base = { price: 4.5, packageSize: 500, packageUnit: 'g', supermarket: 'tesco', source: 'direct', ...tax };
+  const pieces = PenaltyRules.scoreCandidate({ ...base, title: 'Tesco Chicken Breast Pieces 500g' }, item, kw, {}).score;
+  const fillets = PenaltyRules.scoreCandidate({ ...base, title: 'Tesco Chicken Breast Fillets 500g' }, item, kw, {}).score;
+  if (pieces < fillets - 50) {
+    fail(`"Chicken Breast Pieces" scores ${pieces} against ${fillets} for "Fillets". hasAny() at penaltyRules.js:63 uses indexOf with no word boundary, unlike every other rule in the file, so readyMealTerms "pie" matches inside "Pieces" and "stew" matches inside "Stewed". A -250 penalty exceeds the entire positive range, making it a silent veto on correct products at every store.`);
+  }
+});
+
+check(38, 'Dietary qualifiers are consumed, not left in the keywords', async () => {
+  const { IngredientParser } = await svc('ingredientParser.js');
+  const { KeywordExtractor } = await svc('keywordExtractor.js');
+  const item = IngredientParser.parseList(['6 free range eggs'])[0];
+  const kw = KeywordExtractor.extractKeywords(item);
+  if (KeywordExtractor.hasNounEvidence(kw, 'Warburtons Gluten Free Bread 400g')) {
+    fail(`"6 free range eggs" yields keywords ${JSON.stringify(kw)} and "Warburtons Gluten Free Bread 400g" passes the noun-evidence guard — bread satisfies an egg request. ingredientParser sets isFreeRange/isOrganic/isFrozen but never strips those words from the text, unlike the lean branch which does. "free" and "range" are not stopwords, so they dilute every score and let unrelated products through the -500 guard.`);
+  }
+});
+
+check(38, 'The browser is reused across queries, not relaunched per page', () => {
+  const src = read(r('services/store-fetcher/browser.py'));
+  if (!src) return 'no browser module';
+  const m = src.match(/def\s+render_page[\s\S]*?(?=\n\s*def\s|\Z)/);
+  if (m && /with\s+Camoufox\(/.test(m[0])) {
+    fail('browser.py constructs `with Camoufox(...)` inside render_page, so a full Firefox launches and is destroyed for every query — roughly 116 launches and ~400MB of churn per weekly run, which is the bulk of the runtime. Hold one browser for the life of the request batch and open a page per query.');
+  }
+});
+
+check(38, 'A store priced from estimated data cannot be ranked cheapest', async () => {
+  const src = read(r('services/logic-api/src/services/basketCalculator.js'));
+  if (!/estimated|catalog/i.test(src.split(/cheapest/i)[1] || '')) {
+    fail('basketCalculator ranks stores on items found then total price with no exclusion for estimated data. data/catalog.json is FABRICATED benchmark data carrying 90 Aldi and 92 Lidl rows, both stores are enabled by default, and not one of its 635 products carries a confidence field. So Aldi or Lidl can be presented as "cheapest overall" on invented prices, and that verdict is then written into priceHistory win-rate statistics.');
+  }
+});
+
+check(38, 'Runtime data files cannot be committed to a public repo', async () => {
+  const { execSync } = await import('node:child_process');
+  const runtime = ['data/recent_searches.json', 'data/price_history.json', 'data/item_price_history.json'];
+  const exposed = runtime.filter((p) => {
+    try {
+      execSync(`git check-ignore -q ${p}`, { cwd: ROOT, stdio: 'ignore' });
+      return false;
+    } catch {
+      return true;
+    }
+  });
+  if (exposed.length) {
+    fail(`these runtime files are not gitignored while their siblings price_cache.json and settings.json are:\n          - ${exposed.join('\n          - ')}\n          DATA_DIR defaults to "data", the tracked repo root, and recent_searches.json holds the verbatim weekly shopping list. This repo is public, so one \`git add .\` after a real run publishes it.`);
+  }
+});
+
+check(38, 'Every sidecar endpoint enforces the token and the politeness limits', () => {
+  const src = read(r('services/store-fetcher/server.py'));
+  const probe = src.match(/@app\.(?:get|post)\(["']\/probe["'][\s\S]*?(?=@app\.|\Z)/);
+  if (probe && !/verify_token/.test(probe[0])) {
+    fail('/probe declares an x_fetcher_token parameter and never calls verify_token(), and skips the rate limiter, circuit breaker and daily cap that /search honours. It issues real retailer requests from the home IP, unauthenticated and unthrottled.');
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 await Promise.allSettled(pending);
