@@ -360,9 +360,15 @@ export class PenaltyRules {
       score -= 150;
     }
 
-    // Processed / Breaded / Fish Fingers penalties
-    const isProcessedOrBreaded = hasAny(titleLower, rules.processedBreadedTerms);
-    const isExplicitlyBreaded = hasAny(itemLower, ['finger', 'breaded', 'battered']);
+    // Processed / Breaded / Fish Fingers penalties (consults title and retailer taxonomy)
+    const taxonomyBreaded = Boolean(
+      (prod.shelfName && /\b(?:battered|breaded)\b/i.test(prod.shelfName)) ||
+      (prod.aisleName && /\b(?:battered|breaded|coated)\b/i.test(prod.aisleName))
+    );
+    const isProcessedOrBreaded = hasAny(titleLower, rules.processedBreadedTerms) ||
+      /\bchip\s*shop\b/i.test(titleLower) ||
+      taxonomyBreaded;
+    const isExplicitlyBreaded = hasAny(itemLower, ['finger', 'breaded', 'battered', 'chip shop']);
     if (isProcessedOrBreaded && !isExplicitlyBreaded) {
       score -= 80;
     }
@@ -375,11 +381,21 @@ export class PenaltyRules {
     }
 
     // Specific breaded & butter exclusions
-    if (!/\bbreaded\b/i.test(itemLower) && /\b(?:breaded|battered|crumbed)\b/i.test(titleLower)) {
+    if (!/\bbreaded\b/i.test(itemLower) && (/\b(?:breaded|battered|crumbed|chip\s*shop)\b/i.test(titleLower) || taxonomyBreaded)) {
       score -= 35;
     }
     if (!/\bbutter\b/i.test(itemLower) && /\b(?:butter|seasoned|marinade)\b/i.test(titleLower)) {
       score -= 30;
+    }
+
+    // Mushy peas penalty (processed soaked marrowfat peas vs whole green garden peas)
+    if (!/\bmushy\b/i.test(itemLower) && /\bmushy\b/i.test(titleLower)) {
+      score -= 100;
+    }
+
+    // Mixed produce penalty when single ingredient requested (e.g. carrots & broccoli & peas mix vs plain garden peas)
+    if (!/\b(?:mix|mixed|medley|blend)\b/i.test(itemLower) && /\b(?:mix|mixed|medley)\b/i.test(titleLower)) {
+      score -= 40;
     }
 
     // 3. Health & Dietary Preferences

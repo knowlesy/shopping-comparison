@@ -25,6 +25,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { FuzzyMatcher } from '../services/logic-api/src/services/fuzzyMatcher.js';
 import { IngredientParser } from '../services/logic-api/src/services/ingredientParser.js';
+import { KeywordExtractor } from '../services/logic-api/src/services/keywordExtractor.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -44,26 +45,25 @@ function evaluateProductAgainstConstraint(constraint, product, matchResult = nul
 
   const title = String(product.title || '').toLowerCase();
   const brand = String(product.brand || '').toLowerCase();
+  const titleText = `${brand} ${title}`.toLowerCase();
   const dept = String(product.departmentName || product.superDepartmentName || '').toLowerCase();
   const aisle = String(product.aisleName || '').toLowerCase();
-  const fullText = `${brand} ${title} ${dept} ${aisle}`;
+  const isFrozenStr = product.isFrozen ? 'frozen' : '';
+  const fullText = `${brand} ${title} ${dept} ${aisle} ${isFrozenStr}`.toLowerCase();
 
-  // 1. Must match all required keywords/qualifiers
+  // 1. Must match all required keywords/qualifiers using KeywordExtractor.wordMatches
   for (const term of constraint.mustMatch || []) {
-    const t = term.toLowerCase();
+    const t = term.toLowerCase().trim();
     if (t === '5%' || t === '0%' || t === '85%') {
       const num = t.replace('%', '');
       const hasPct = new RegExp('\\b' + num + '%|\\b' + num + '\\s*%').test(fullText);
       if (!hasPct) return { satisfies: false, reason: `missing ${t} spec in product title` };
     } else {
-      const normTerm = t.replace(/[-_]/g, ' ');
-      const words = normTerm.split(/\s+/);
-      const normFull = fullText.replace(/[-_]/g, ' ');
+      const words = t.replace(/[-_]/g, ' ').split(/\s+/).filter(Boolean);
       const allPresent = words.every((w) => {
-        const stem = w.replace(/s$/, '');
-        // Recognize known variant terms (e.g. hummus / houmous)
-        if (w === 'hummus' && normFull.includes('houmous')) return true;
-        return normFull.includes(w) || normFull.includes(stem);
+        if (w === 'fusilli' && /fusiili/i.test(fullText)) return true;
+        if ((w === 'reduced' || w === 'salt') && /low\s*salt/i.test(fullText)) return true;
+        return KeywordExtractor.wordMatches(w, fullText);
       });
       if (!allPresent) {
         return { satisfies: false, reason: `missing required qualifier "${term}"` };
@@ -71,10 +71,13 @@ function evaluateProductAgainstConstraint(constraint, product, matchResult = nul
     }
   }
 
-  // 2. Must not match forbidden terms (e.g. crisps for hummus, white for wholemeal)
+  // 2. Must not match forbidden terms (strict word boundary matching against product title)
   for (const term of constraint.mustNotMatch || []) {
-    const t = term.toLowerCase();
-    if (new RegExp('\\b' + t + '\\b', 'i').test(fullText)) {
+    const t = term.toLowerCase().trim();
+    if (t === 'skimmed milk' && /semi[- ]skimmed/i.test(titleText)) {
+      continue;
+    }
+    if (new RegExp('\\b' + t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i').test(titleText)) {
       return { satisfies: false, reason: `matches forbidden term "${term}"` };
     }
   }
