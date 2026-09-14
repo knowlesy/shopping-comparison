@@ -2340,20 +2340,31 @@ check(34, 'An unreachable declaration is backed by a recorded artifact', () => {
   }
 });
 
-check(34, 'Correctness fixtures exist for every reachable store, not just Tesco', () => {
-  const files = ['tests/fixtures/ai-matching-fixtures.real.json', 'tests/fixtures/ai-holdout-clean.json']
-    .filter((f) => fs.existsSync(r(f)));
+// Superseded by the Step 35 constraint scorer. This originally demanded a
+// hand-labelled fixture set per store, which is exactly the approach that kept
+// correctness pinned to Tesco: it does not scale to five retailers and it put
+// the owner in the loop for every item. Correctness is now judged against
+// per-item constraints, so what matters is that every reachable store is
+// actually scored.
+check(34, 'Every reachable store is covered by the correctness scorer', () => {
   const reach = JSON.parse(read(r('tests/fixtures/store-payloads/_reachability.json')) || '{}');
   const expected = SHOPPED.filter((s) => reach.stores?.[s]?.status === 'reachable');
-  const covered = new Set();
-  for (const f of files) {
-    for (const fx of JSON.parse(read(r(f)) || '[]')) {
-      for (const c of fx.candidates || []) if (c.supermarket) covered.add(c.supermarket);
+  const src = read(r('scripts/eval-stores.js'));
+  if (!src) fail('scripts/eval-stores.js missing — nothing scores correctness per store');
+  const fxPath = fs.existsSync(r('tests/fixtures/reality-fixtures.json'))
+    ? r('tests/fixtures/reality-fixtures.json')
+    : r('tests/fixtures/reality-sample.json');
+  const fx = JSON.parse(read(fxPath) || '{}');
+  const counts = {};
+  for (const it of fx.items || []) {
+    for (const p of it.products || []) {
+      const s = p.supermarket || p.store;
+      if (s) counts[s] = (counts[s] || 0) + 1;
     }
   }
-  const missing = expected.filter((s) => !covered.has(s));
-  if (missing.length) {
-    fail(`every labelled correctness fixture uses ${[...covered].join(', ') || 'no'} candidates. ${missing.join(' and ')} ${missing.length > 1 ? 'are' : 'is'} reachable and recorded at full depth, but nothing checks whether the matcher picks the RIGHT product there — only that it returns one. A 100% match rate means "found something", which is exactly what the old 58/58 baseline reported while picking hummus crisps.`);
+  const uncovered = expected.filter((s) => (counts[s] || 0) < 100);
+  if (uncovered.length) {
+    fail(`${uncovered.join(' and ')} ${uncovered.length > 1 ? 'are' : 'is'} declared reachable but has too little recorded data to score: ${JSON.stringify(counts)}`);
   }
 });
 
@@ -2420,6 +2431,27 @@ check(35, 'Constraints restate the list, they do not reinterpret it', () => {
   }
   if (bad.length) {
     fail(`constraints drop qualifiers the shopper wrote:\n          - ${bad.slice(0, 8).join('\n          - ')}`);
+  }
+});
+
+check(35, 'Constraints judge the result; they do not drive the matcher', async () => {
+  const p = r(CONSTRAINTS);
+  if (!fs.existsSync(p)) return 'no constraints yet';
+  const C = JSON.parse(read(p) || '[]');
+  const { IngredientParser } = await svc('ingredientParser.js');
+  const lines = JSON.parse(read(r('tests/fixtures/real-list.json')) || '[]');
+  const parsed = IngredientParser.parseList(lines);
+  const okCats = new Set(parsed.map((i) => i.category).filter(Boolean));
+  const okUnits = new Set(parsed.map((i) => i.unit).filter(Boolean));
+  const badCats = [...new Set(C.map((c) => c.category).filter((c) => c && !okCats.has(c)))];
+  const badUnits = [...new Set(C.map((c) => c.unit).filter((u) => u && !okUnits.has(u)))];
+  const src = read(r('scripts/eval-stores.js'));
+  const drives = /category:\s*(?:constraint|c)\.category|unit:\s*(?:constraint|c)\.unit|targetQuantity:\s*(?:constraint|c)\.targetQuantity/.test(src);
+  if ((badCats.length || badUnits.length) && drives) {
+    fail(`the constraints invent a vocabulary the pipeline does not use — categories ${JSON.stringify(badCats.slice(0, 8))} against the parser's ${JSON.stringify([...okCats])}, units ${JSON.stringify(badUnits)} against ${JSON.stringify([...okUnits])} — and eval-stores.js feeds those values straight into matchProduct.\n          That makes the scorer test the constraint file's vocabulary rather than the matcher. It is why "Large eggs 17", "Semi-skimmed milk 4 pints", "Greek yogurt 0% 1 kg" and "Cheddar cheese 400 g" report NO MATCH at all five stores while the Tesco fixtures resolve every one of them.\n          Parse each item with IngredientParser exactly as production does, and use constraints ONLY to judge the product that comes back. The constraints are the marking scheme, not the exam paper.`);
+  }
+  if (badCats.length || badUnits.length) {
+    fail(`constraints use categories/units outside the pipeline vocabulary: ${JSON.stringify([...badCats, ...badUnits].slice(0, 10))}`);
   }
 });
 
