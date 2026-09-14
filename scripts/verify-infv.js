@@ -2378,6 +2378,63 @@ check(34, 'The corpus is recorded for every reachable store', () => {
 });
 
 // ---------------------------------------------------------------------------
+// Step 35 — Correctness expressed as constraints, checkable at every store
+// ---------------------------------------------------------------------------
+const CONSTRAINTS = 'tests/fixtures/item-constraints.json';
+
+check(35, 'Each list item declares what a correct answer must satisfy', () => {
+  const p = r(CONSTRAINTS);
+  if (!fs.existsSync(p)) {
+    fail(`${CONSTRAINTS} does not exist. Verifying correctness by hand-picking a winning product per item per store does not scale past one retailer — it is why 36 labelled fixtures cover Tesco alone while Sainsbury's and Morrisons report a 100% match rate that only means "something came back".\n          The criteria are already in the shopping list: "Wholemeal bread" must be wholemeal, "Beef mince 5% 1.9 kg" must be 5% fat and reach 1.9kg, "Butter beans in water 2 x 400 g" must be butter beans totalling 800g. Those hold at every store. Express them once, per item, and check any store's pick against them.`);
+  }
+  const C = JSON.parse(read(p) || '[]');
+  const lines = JSON.parse(read(r('tests/fixtures/real-list.json')) || '[]');
+  if (!Array.isArray(C) || C.length === 0) fail('constraints file is empty');
+  const missing = [];
+  for (const line of lines) {
+    if (!C.some((c) => (c.rawText || '').trim() === String(line).trim())) missing.push(line);
+  }
+  if (missing.length) {
+    fail(`${missing.length} of ${lines.length} list lines have no constraints:\n          - ${missing.slice(0, 6).join('\n          - ')}${missing.length > 6 ? `\n          - ...and ${missing.length - 6} more` : ''}`);
+  }
+});
+
+check(35, 'Constraints restate the list, they do not reinterpret it', () => {
+  const p = r(CONSTRAINTS);
+  if (!fs.existsSync(p)) return 'no constraints yet';
+  const C = JSON.parse(read(p) || '[]');
+  const bad = [];
+  for (const c of C) {
+    const raw = String(c.rawText || '').toLowerCase();
+    // Anything the shopper wrote must be represented. A constraint set that
+    // drops the qualifier is the same failure as paraphrasing the list into an
+    // easier one, which happened earlier in this project.
+    for (const [word, key] of [['wholemeal', 'mustMatch'], ['wholewheat', 'mustMatch'], ['organic', 'mustMatch'], ['frozen', 'mustMatch'], ['free range', 'mustMatch'], ['reduced-salt', 'mustMatch'], ['smooth', 'mustMatch']]) {
+      if (raw.includes(word)) {
+        const declared = JSON.stringify(c[key] || c.requires || c.must || '').toLowerCase();
+        if (!declared.includes(word.split(' ')[0])) bad.push(`"${c.rawText}" says "${word}" and the constraints never mention it`);
+      }
+    }
+    const pct = raw.match(/(\d+)\s*%/);
+    if (pct && !JSON.stringify(c).includes(pct[1])) bad.push(`"${c.rawText}" states ${pct[1]}% and no constraint carries it`);
+  }
+  if (bad.length) {
+    fail(`constraints drop qualifiers the shopper wrote:\n          - ${bad.slice(0, 8).join('\n          - ')}`);
+  }
+});
+
+check(35, 'Every reachable store is scored for correctness, not just match rate', async () => {
+  const p = r(CONSTRAINTS);
+  if (!fs.existsSync(p)) return 'no constraints yet';
+  const scorer = r('scripts/eval-stores.js');
+  if (!fs.existsSync(scorer)) {
+    fail('scripts/eval-stores.js does not exist. Constraints are only worth writing if something checks every store against them and reports a correctness figure per store, separate from the match rate.');
+  }
+  const pkg = JSON.parse(read(r('package.json')) || '{}');
+  if (!pkg.scripts || !pkg.scripts['eval:stores']) fail('no npm script "eval:stores" to run the per-store correctness check');
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 await Promise.allSettled(pending);
