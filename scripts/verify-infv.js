@@ -2520,15 +2520,22 @@ check(38, 'Dietary qualifiers are consumed, not left in the keywords', async () 
 check(38, 'The browser is reused across queries, not relaunched per page', () => {
   const src = read(r('services/store-fetcher/browser.py'));
   if (!src) return 'no browser module';
-  const m = src.match(/def\s+render_page[\s\S]*?(?=\n\s*def\s|\Z)/);
-  if (m && /with\s+Camoufox\(/.test(m[0])) {
+  // A persistent handle (self._browser / self.browser) is what reuse looks like.
+  const constructsPerCall = /with\s+Camoufox\(/.test(src);
+  const keepsHandle = /self\._?browser\s*=\s*.*Camoufox|self\._?browser\s*=\s*[A-Za-z_]+\.start\(/.test(src);
+  if (constructsPerCall && !keepsHandle) {
     fail('browser.py constructs `with Camoufox(...)` inside render_page, so a full Firefox launches and is destroyed for every query — roughly 116 launches and ~400MB of churn per weekly run, which is the bulk of the runtime. Hold one browser for the life of the request batch and open a page per query.');
   }
 });
 
 check(38, 'A store priced from estimated data cannot be ranked cheapest', async () => {
   const src = read(r('services/logic-api/src/services/basketCalculator.js'));
-  if (!/estimated|catalog/i.test(src.split(/cheapest/i)[1] || '')) {
+  // Scope to the ranking itself: isEstimated appears elsewhere in per-item
+  // accounting, which made an earlier whole-file check pass while the sort
+  // still ignored it.
+  const sortExpr = (src.match(/\.sort\(\s*\([^)]*\)\s*=>[\s\S]{0,240}?\)/g) || []).join(' ');
+  const rankedOnEstimated = /estimated|catalog|confidenceSource/i.test(sortExpr);
+  if (sortExpr && !rankedOnEstimated) {
     fail('basketCalculator ranks stores on items found then total price with no exclusion for estimated data. data/catalog.json is FABRICATED benchmark data carrying 90 Aldi and 92 Lidl rows, both stores are enabled by default, and not one of its 635 products carries a confidence field. So Aldi or Lidl can be presented as "cheapest overall" on invented prices, and that verdict is then written into priceHistory win-rate statistics.');
   }
 });
@@ -2551,8 +2558,12 @@ check(38, 'Runtime data files cannot be committed to a public repo', async () =>
 
 check(38, 'Every sidecar endpoint enforces the token and the politeness limits', () => {
   const src = read(r('services/store-fetcher/server.py'));
-  const probe = src.match(/@app\.(?:get|post)\(["']\/probe["'][\s\S]*?(?=@app\.|\Z)/);
-  if (probe && !/verify_token/.test(probe[0])) {
+  const i = src.search(/@app\.(?:get|post)\(["']\/probe["']/);
+  if (i === -1) return 'no /probe endpoint';
+  const rest = src.slice(i + 1);
+  const next = rest.search(/@app\.(?:get|post|put)\(/);
+  const probeBody = next === -1 ? rest : rest.slice(0, next);
+  if (!/verify_token/.test(probeBody)) {
     fail('/probe declares an x_fetcher_token parameter and never calls verify_token(), and skips the rate limiter, circuit breaker and daily cap that /search honours. It issues real retailer requests from the home IP, unauthenticated and unthrottled.');
   }
 });
