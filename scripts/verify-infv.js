@@ -2268,6 +2268,84 @@ check(30, 'Structured retailer labels are preferred over guessing from the title
 });
 
 // ---------------------------------------------------------------------------
+// Step 34 — Every store the owner shops, verified for CORRECTNESS
+// ---------------------------------------------------------------------------
+// Owner's instruction: every store except Aldi and Lidl, which have no UK
+// online grocery platform. That means Tesco, Sainsbury's, Morrisons, Asda and
+// Iceland — and it means verified as picking the RIGHT product, not merely
+// returning one.
+const SHOPPED = ['tesco', 'sainsburys', 'morrisons', 'asda', 'iceland'];
+
+check(34, 'Tier 2 browser rendering is implemented, not just declared', () => {
+  const reqs = read(r('services/store-fetcher/requirements.txt'));
+  if (!/camoufox/i.test(reqs)) return 'camoufox is not a dependency';
+  const src = readAll('services/store-fetcher', '.py') + readAll('services/store-fetcher/adapters', '.py');
+  if (!/camoufox/i.test(src)) {
+    fail('camoufox is pinned in requirements.txt and referenced nowhere in the code, so the Tier 2 browser path that research.md specifies was never built. Asda and Iceland are declared unreachable on that basis, yet _reachability.json records that Camoufox rendering DID return 12 product links for Asda. The capability is paid for and unused.');
+  }
+});
+
+check(34, 'Asda and Iceland are retried, and any negative is freshly evidenced', () => {
+  const p = r('tests/fixtures/store-payloads/_reachability.json');
+  if (!fs.existsSync(p)) fail('_reachability.json missing');
+  const j = JSON.parse(read(p) || '{}');
+  const stale = [];
+  for (const s of ['asda', 'iceland']) {
+    const e = j.stores?.[s];
+    if (!e) {
+      stale.push(`${s}: no entry`);
+      continue;
+    }
+    if (e.status === 'reachable') continue;
+    const when = Date.parse(e.checkedAt || e.generatedAt || j.generatedAt || 0);
+    const ageDays = (Date.now() - when) / 86400000;
+    if (!/camoufox|tier 2|browser/i.test(e.client || '') || ageDays > 10) {
+      stale.push(`${s}: last checked ${Number.isFinite(ageDays) ? Math.round(ageDays) : '?'} days ago via "${e.client || 'unknown'}"`);
+    }
+  }
+  if (stale.length) {
+    fail(`Asda and Iceland must be retried through Tier 2 before staying declared unreachable:\n          - ${stale.join('\n          - ')}\n          An honest negative is a PASSING outcome — if a store genuinely cannot be reached politely, record that with fresh evidence and move on. What is not acceptable is a stale declaration standing in for a test that was never run.`);
+  }
+});
+
+check(34, 'Correctness fixtures exist for every reachable store, not just Tesco', () => {
+  const files = ['tests/fixtures/ai-matching-fixtures.real.json', 'tests/fixtures/ai-holdout-clean.json']
+    .filter((f) => fs.existsSync(r(f)));
+  const reach = JSON.parse(read(r('tests/fixtures/store-payloads/_reachability.json')) || '{}');
+  const expected = SHOPPED.filter((s) => reach.stores?.[s]?.status === 'reachable');
+  const covered = new Set();
+  for (const f of files) {
+    for (const fx of JSON.parse(read(r(f)) || '[]')) {
+      for (const c of fx.candidates || []) if (c.supermarket) covered.add(c.supermarket);
+    }
+  }
+  const missing = expected.filter((s) => !covered.has(s));
+  if (missing.length) {
+    fail(`every labelled correctness fixture uses ${[...covered].join(', ') || 'no'} candidates. ${missing.join(' and ')} ${missing.length > 1 ? 'are' : 'is'} reachable and recorded at full depth, but nothing checks whether the matcher picks the RIGHT product there — only that it returns one. A 100% match rate means "found something", which is exactly what the old 58/58 baseline reported while picking hummus crisps.`);
+  }
+});
+
+check(34, 'The corpus is recorded for every reachable store', () => {
+  const fxPath = fs.existsSync(r('tests/fixtures/reality-fixtures.json'))
+    ? r('tests/fixtures/reality-fixtures.json')
+    : r('tests/fixtures/reality-sample.json');
+  const fx = JSON.parse(read(fxPath) || '{}');
+  const reach = JSON.parse(read(r('tests/fixtures/store-payloads/_reachability.json')) || '{}');
+  const expected = SHOPPED.filter((s) => reach.stores?.[s]?.status === 'reachable');
+  const counts = {};
+  for (const it of fx.items || []) {
+    for (const p of it.products || []) {
+      const s = p.supermarket || p.store;
+      if (s) counts[s] = (counts[s] || 0) + 1;
+    }
+  }
+  const missing = expected.filter((s) => (counts[s] || 0) < 100);
+  if (missing.length) {
+    fail(`${missing.join(' and ')} ${missing.length > 1 ? 'are' : 'is'} declared reachable but barely recorded: ${JSON.stringify(counts)}. A store counts as covered only once the real list has been searched against it per item.`);
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 await Promise.allSettled(pending);
