@@ -71,6 +71,9 @@ Thumbs.db
 data/*_cache.json
 data/shop_history.json
 data/settings.json
+data/recent_searches.json
+data/price_history.json
+data/item_price_history.json
 services/logic-api/data/*
 *.log
 npm-debug.log*

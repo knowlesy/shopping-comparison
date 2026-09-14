@@ -168,16 +168,19 @@ export class IngredientParser {
     if (/\b(?:free\s*range)\b/i.test(text)) {
       parsed.isFreeRange = true;
       parsed.dietaryNotes.push('Free Range');
+      text = text.replace(/\b(?:free\s*range)\b/gi, ' ').replace(/\s+/g, ' ').trim();
     }
 
     if (/\b(?:organic)\b/i.test(text)) {
       parsed.isOrganic = true;
       parsed.dietaryNotes.push('Organic');
+      text = text.replace(/\b(?:organic)\b/gi, ' ').replace(/\s+/g, ' ').trim();
     }
 
     if (/\b(?:frozen)\b/i.test(text)) {
       parsed.isFrozen = true;
       parsed.dietaryNotes.push('Frozen');
+      text = text.replace(/\b(?:frozen)\b/gi, ' ').replace(/\s+/g, ' ').trim();
     }
 
     // 5. Quantity & Unit Extraction

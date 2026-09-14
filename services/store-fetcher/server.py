@@ -193,12 +193,25 @@ def search(
 
 @app.get("/probe")
 def probe_stores(
-    x_fetcher_token: Optional[str] = Header(None, alias="x-fetcher-token")
+    x_fetcher_token: Optional[str] = Header(None, alias="x-fetcher-token"),
+    x_scrape_token: Optional[str] = Header(None, alias="x-scrape-token"),
+    authorization: Optional[str] = Header(None, alias="authorization"),
 ):
     """
     Live canary reachability probe across supermarket backends
     using curl_cffi browser impersonation (chrome124).
+    Enforces authentication, rate limits, circuit breaker, and daily caps.
     """
+    token = x_fetcher_token or x_scrape_token
+    if not token and authorization and authorization.lower().startswith("bearer "):
+        token = authorization[7:].strip()
+
+    if not verify_token(token):
+        raise HTTPException(
+            status_code=401,
+            detail="Unauthorized: invalid or missing x-fetcher-token / x-scrape-token header.",
+        )
+
     from datetime import datetime, timezone
     try:
         from curl_cffi import requests as cffi_requests
@@ -246,6 +259,22 @@ def probe_stores(
     session = cffi_requests.Session(impersonate="chrome124") if cffi_requests else None
 
     for store_name, cfg in probes.items():
+        if not circuit_breaker.is_available(store_name):
+            report["stores"][store_name] = {
+                "status": "circuit_open",
+                "reason": f"Circuit breaker open for {store_name}",
+            }
+            continue
+
+        if not daily_request_cap.check_and_increment(store_name):
+            report["stores"][store_name] = {
+                "status": "rate_limited",
+                "reason": f"Daily request cap reached for {store_name}",
+            }
+            continue
+
+        rate_limiter.wait(store_name)
+
         if not session:
             report["stores"][store_name] = {
                 "status": "unreachable",
@@ -260,6 +289,7 @@ def probe_stores(
             res = session.request(cfg["method"], cfg["url"], headers=cfg.get("headers", {}), timeout=12)
             elapsed_ms = round((time.time() - start) * 1000)
             if res.status_code == 200:
+                circuit_breaker.record_success(store_name)
                 report["stores"][store_name] = {
                     "status": "reachable",
                     "client": client_name,
@@ -269,6 +299,7 @@ def probe_stores(
                     "requestUrl": cfg["url"]
                 }
             else:
+                circuit_breaker.record_failure(store_name)
                 report["stores"][store_name] = {
                     "status": "unreachable",
                     "client": client_name,
@@ -278,6 +309,7 @@ def probe_stores(
                     "reason": "Retailer edge challenge or block" if res.status_code == 403 else f"HTTP {res.status_code}"
                 }
         except Exception as e:
+            circuit_breaker.record_failure(store_name)
             elapsed_ms = round((time.time() - start) * 1000)
             report["stores"][store_name] = {
                 "status": "unreachable",

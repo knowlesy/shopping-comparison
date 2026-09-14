@@ -44,17 +44,17 @@ STORE_REGISTRY: Dict[str, Dict[str, Any]] = {
     },
     "asda": {
         "name": "Asda",
-        "supported": False,
+        "supported": True,
         "adapter_class": AsdaAdapter,
-        "status": "unreachable",
-        "reason": "unsupported: Server returns client-side SPA shell without embedded product data"
+        "status": "reachable",
+        "notes": "Tier 2 browser rendering via Algolia search client"
     },
     "iceland": {
         "name": "Iceland",
-        "supported": False,
+        "supported": True,
         "adapter_class": IcelandAdapter,
-        "status": "unreachable",
-        "reason": "unsupported: Server returns client-side PWA shell with unpopulated productsById"
+        "status": "reachable",
+        "notes": "Tier 2 browser rendering via Camoufox headless browser"
     },
     "aldi": {
         "name": "Aldi",

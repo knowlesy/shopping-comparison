@@ -60,7 +60,12 @@ export const rules = rawRules || {
   }
 };
 
-const hasAny = (text, terms) => Array.isArray(terms) && terms.some((t) => text.indexOf(t) !== -1);
+const hasAny = (text, terms) =>
+  Array.isArray(terms) &&
+  terms.some((t) => {
+    const escaped = t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return new RegExp(`\\b${escaped}\\b`, 'i').test(text);
+  });
 
 export class PenaltyRules {
   static getProductTier(prod) {
@@ -451,7 +456,7 @@ export class PenaltyRules {
     }
 
     // Fresh vs Frozen matching
-    const isFrozenRequested = /\bfrozen\b/i.test(itemLower);
+    const isFrozenRequested = Boolean(item.isFrozen || /\bfrozen\b/i.test(itemLower));
     const isProdFrozen = prod.isFrozen || /\bfrozen\b/i.test(titleLower);
     if (!isFrozenRequested && isProdFrozen) {
       score -= 5;

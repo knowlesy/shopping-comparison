@@ -193,12 +193,16 @@ export class BasketCalculator {
       };
     }
 
-    // Rank stores by item coverage first, then lowest total price (stores with 0 items cannot be cheapest)
+    // Rank stores: stores without materially estimated data rank ahead of estimated ones,
+    // then by item coverage, then lowest total price (stores with 0 items cannot be cheapest)
     const storesWithItems = Object.values(storeResults).filter((s) => s.itemsFound > 0);
     const ranked =
       storesWithItems.length > 0
         ? [...storesWithItems].sort(
-            (a, b) => b.itemsFound - a.itemsFound || a.totalPrice - b.totalPrice
+            (a, b) =>
+              (a.estimatedShare >= 0.5 ? 1 : 0) - (b.estimatedShare >= 0.5 ? 1 : 0) ||
+              b.itemsFound - a.itemsFound ||
+              a.totalPrice - b.totalPrice
           )
         : Object.values(storeResults);
 
