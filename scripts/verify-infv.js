@@ -2434,6 +2434,14 @@ check(35, 'Constraints restate the list, they do not reinterpret it', () => {
   }
 });
 
+check(35, 'The constraint checker knows what the matcher knows', async () => {
+  const src = read(r('scripts/eval-stores.js'));
+  if (!src) return 'no scorer';
+  if (!/KeywordExtractor|wordMatches|nameVariants/.test(src)) {
+    fail(`eval-stores.js compares constraints to titles with plain substring tests, so it fails on the variants the matcher was specifically taught to handle:\n          - "Hummus 200 g" -> Tesco Houmous 200g, Morrisons Classic Houmous 200g, Asda Classic Houmous 200g. All correct; scored wrong because the title says houmous. Step 18 added nameVariants for exactly this.\n          - "Dark chocolate (adults only, 85%) 200 g" -> Lindt Excellence Dark 85% Cocoa. Correct; scored wrong on word order.\n          - "Semi-skimmed milk 4 pints" -> the right milk at all five stores; scored wrong because the titles drop the hyphen.\n          A marking scheme stricter than the thing it marks reports false failures and hides the real ones. Use KeywordExtractor.wordMatches, which already carries nameVariants, stemming and hyphen handling.`);
+  }
+});
+
 check(35, 'Constraints judge the result; they do not drive the matcher', async () => {
   const p = r(CONSTRAINTS);
   if (!fs.existsSync(p)) return 'no constraints yet';
