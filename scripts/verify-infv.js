@@ -2424,8 +2424,6 @@ check(35, 'Constraints restate the list, they do not reinterpret it', () => {
 });
 
 check(35, 'Every reachable store is scored for correctness, not just match rate', async () => {
-  const p = r(CONSTRAINTS);
-  if (!fs.existsSync(p)) return 'no constraints yet';
   const scorer = r('scripts/eval-stores.js');
   if (!fs.existsSync(scorer)) {
     fail('scripts/eval-stores.js does not exist. Constraints are only worth writing if something checks every store against them and reports a correctness figure per store, separate from the match rate.');
