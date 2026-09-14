@@ -33,7 +33,8 @@
     "lab:probe": "node scripts/scraper-lab/index.js probe",
     "lab:replay": "node scripts/scraper-lab/index.js replay",
     "lab:reality": "node scripts/scraper-lab/index.js reality",
-    "eval:real": "node scripts/eval-real.js"
+    "eval:real": "node scripts/eval-real.js",
+    "eval:stores": "node scripts/eval-stores.js"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

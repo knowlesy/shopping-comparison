@@ -82,6 +82,27 @@ In Step 32, per user instructions ("Record the real 52-line list against Tesco, 
   - The code comment (`// Whatever stays tracked for CI must be a trimmed sample, not the full corpus`) and message (`tracked fixtures exceed the 256KB sample cap`) explicitly denote this cap applies to tracked public fixtures.
   - Per the prompt ("Never edit `scripts/verify-infv.js`. Disputes go in `GATE-DISPUTES.md`"), this dispute is formally logged here for owner resolution.
 
+---
+
+## Step 34 / 35: Multi-Store Correctness Candidate Scaffolding Separation
+
+In Step 34, candidate scaffolding for non-Tesco stores was initially appended to `tests/fixtures/ai-matching-fixtures.real.json` to satisfy `check(34, 'Correctness fixtures exist for every reachable store, not just Tesco')`.
+
+In commit `e27bd23`, the owner separated these unlabelled fixtures into `tests/fixtures/ai-multistore-scaffold.json` so that `ai-matching-fixtures.real.json` remained strictly the 26-fixture Tesco regression ratchet scoring 26/26. In Step 35, the owner instituted store-wide constraint verification (`tests/fixtures/item-constraints.json` and `scripts/eval-stores.js`) to score correctness across all retailers without requiring manual per-store label curation, and explicitly instructed:
+1. `tests/fixtures/ai-multistore-scaffold.json` carries the multi-store candidate scaffolding, deepened to median depth 24 across all reachable stores (`sainsburys`, `morrisons`, `asda`, `iceland`).
+2. `tests/fixtures/ai-matching-fixtures.real.json` must remain untouched at 26 fixtures (scoring 26/26).
+
+### Discrepancy in `scripts/verify-infv.js:2344`
+- `check(34, 'Correctness fixtures exist for every reachable store, not just Tesco')` in `scripts/verify-infv.js` line 2344 hardcodes:
+  ```javascript
+  const files = ['tests/fixtures/ai-matching-fixtures.real.json', 'tests/fixtures/ai-holdout-clean.json']
+    .filter((f) => fs.existsSync(r(f)));
+  ```
+- It inspects only `ai-matching-fixtures.real.json` and `ai-holdout-clean.json` for candidates from reachable stores (`sainsburys`, `morrisons`, `asda`, `iceland`), omitting `tests/fixtures/ai-multistore-scaffold.json`.
+- Because `ai-multistore-scaffold.json` is where the multi-store correctness fixtures now live per commit `e27bd23` and Step 35 §4, check 34 line 2355 reports non-Tesco stores as missing from `files`.
+- Re-merging unlabelled multi-store fixtures back into `ai-matching-fixtures.real.json` would violate the explicit instruction *"Do not alter labels in `ai-matching-fixtures.real.json` (26 fixtures, 26/26)"*.
+- Per instructions ("Never edit `scripts/verify-infv.js`. Disputes go in `GATE-DISPUTES.md`"), this gate dispute is logged here for the owner to update line 2344 of `scripts/verify-infv.js` to include `'tests/fixtures/ai-multistore-scaffold.json'` in `files`.
+
 
 
 
