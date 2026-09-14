@@ -2308,6 +2308,38 @@ check(34, 'Asda and Iceland are retried, and any negative is freshly evidenced',
   }
 });
 
+check(34, 'A store that returns products is not filed as unreachable', () => {
+  const j = JSON.parse(read(r('tests/fixtures/store-payloads/_reachability.json')) || '{}');
+  const wrong = [];
+  for (const s of SHOPPED) {
+    const e = j.stores?.[s];
+    if (!e || e.status !== 'unreachable') continue;
+    const n = Number(e.productsFound) || 0;
+    if (n > 0) wrong.push(`${s}: status "unreachable" while recording ${n} products found`);
+  }
+  if (wrong.length) {
+    fail(`${wrong.join('; ')}.\n          Tesco and Sainsbury's were declared reachable off 21 and 24 products in this same probe, so a store returning 12 or 18 is reachable by the same standard. Cost, latency and memory are real considerations, but they make a store EXPENSIVE, not unreachable — and whether that cost is acceptable is the owner's call, not an adapter's. Record what the probe actually found and describe the cost separately.`);
+  }
+});
+
+check(34, 'An unreachable declaration is backed by a recorded artifact', () => {
+  const dir = r('tests/fixtures/store-payloads');
+  if (!fs.existsSync(dir)) return 'no payload directory';
+  const files = fs.readdirSync(dir);
+  const j = JSON.parse(read(r('tests/fixtures/store-payloads/_reachability.json')) || '{}');
+  const unevidenced = [];
+  for (const s of SHOPPED) {
+    const e = j.stores?.[s];
+    if (!e || e.status === 'unsupported') continue;
+    if (!files.some((f) => f.toLowerCase().startsWith(s))) {
+      unevidenced.push(`${s} (status "${e.status}", claims ${e.productsFound ?? '?'} products, no payload kept)`);
+    }
+  }
+  if (unevidenced.length) {
+    fail(`these store probes left no artifact:\n          - ${unevidenced.join('\n          - ')}\n          Tesco, Sainsbury's and Morrisons each retained a payload, which is how their taxonomy was cross-checked against the fixtures. A prose description of what a browser saw is not evidence — infv-context.md section 6 says discover, RECORD, then implement, and report an unsupported store with evidence. Keep the payload, trimmed and gitignored like the others.`);
+  }
+});
+
 check(34, 'Correctness fixtures exist for every reachable store, not just Tesco', () => {
   const files = ['tests/fixtures/ai-matching-fixtures.real.json', 'tests/fixtures/ai-holdout-clean.json']
     .filter((f) => fs.existsSync(r(f)));
