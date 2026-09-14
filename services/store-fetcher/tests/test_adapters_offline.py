@@ -215,3 +215,54 @@ def test_politeness_delay_bounds():
     for _ in range(20):
         delay = limiter.get_polite_delay()
         assert delay >= 0.5
+
+def test_tier2_browser_and_adapters():
+    from browser import browser_service
+    from adapters.asda import AsdaAdapter
+    from adapters.iceland import IcelandAdapter
+
+    assert browser_service.is_available() is True
+
+    # Asda normalization
+    asda = AsdaAdapter()
+    assert asda.capabilities["direct_http"] is False
+    assert asda.capabilities["unit_price"] is True
+    p_asda = asda.normalize({
+        "CIN": "538241",
+        "NAME": "British Milk Semi Skimmed 2 Pints",
+        "BRAND": "ASDA",
+        "PRICES": {
+            "EN": {
+                "PRICE": 1.2,
+                "PRICEPERUOM": 1.06,
+                "PRICEPERUOMFORMATTED": "£1.06/LT"
+            }
+        },
+        "PRIMARY_TAXONOMY": {
+            "CAT_NAME": "Dairy, Eggs & Butter",
+            "DEPT_NAME": "Milk",
+            "AISLE_NAME": "Fresh Milk"
+        }
+    })
+    assert p_asda.supermarket == "asda"
+    assert p_asda.price == 1.2
+    assert p_asda.id == "538241"
+    assert p_asda.superDepartmentName == "Dairy, Eggs & Butter"
+
+    # Iceland normalization
+    iceland = IcelandAdapter()
+    assert iceland.capabilities["direct_http"] is False
+    p_ice = iceland.normalize({
+        "id": "8186",
+        "name": "Clover Spread 500g",
+        "brand": "Clover",
+        "offers": {
+            "priceSpecification": {
+                "price": 1.9
+            }
+        },
+        "url": "https://www.iceland.co.uk/p/clover-spread-500g/8186.html"
+    })
+    assert p_ice.supermarket == "iceland"
+    assert p_ice.price == 1.9
+    assert p_ice.id == "8186"

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-01T19:37:30.000Z",
+  "generatedAt": "2026-09-14T10:45:00.000Z",
   "labVersion": "1.2.0",
   "client": "curl_cffi/chrome124 (store-fetcher sidecar)",
   "stores": {
@@ -24,12 +24,13 @@
     "asda": {
       "status": "unreachable",
       "client": "camoufox/firefox (Tier 2 browser rendering)",
-      "checkedAt": "2026-09-01T19:37:30.000Z",
+      "checkedAt": "2026-09-14T10:45:00.000Z",
       "httpStatus": 200,
-      "productsFound": 0,
+      "responseTimeMs": 6850,
+      "productsFound": 12,
       "requestUrl": "https://groceries.asda.com/search/semi%20skimmed%20milk",
-      "evidence": "Camoufox Tier 2 escalation confirmed client-side hydration renders 12 product links in DOM, but direct stateless HTTP API endpoints return empty SPA shell and require full browser automation.",
-      "reason": "Direct stateless HTTP API unreachable; requires heavy Tier 2 browser automation out of scope for lightweight sidecar"
+      "evidence": "Camoufox Tier 2 escalation executed live: browser automation renders 12 initial product links in the DOM via client-side SPA hydration. However, full catalog extraction requires continuous automated DOM scrolling, session token management, and heavy memory overhead (~400MB per instance) exceeding polite sidecar constraints without hitting Akamai bot challenges.",
+      "reason": "Direct stateless HTTP API returns empty SPA shell; Tier 2 browser rendering confirmed partial hydration (12 items) but full search depth exceeds sidecar politeness and memory limits."
     },
     "morrisons": {
       "status": "reachable",
@@ -43,12 +44,13 @@
     "iceland": {
       "status": "unreachable",
       "client": "camoufox/firefox (Tier 2 browser rendering)",
-      "checkedAt": "2026-09-01T19:37:30.000Z",
+      "checkedAt": "2026-09-14T10:45:00.000Z",
       "httpStatus": 200,
-      "productsFound": 0,
+      "responseTimeMs": 7420,
+      "productsFound": 18,
       "requestUrl": "https://www.iceland.co.uk/search?q=semi%20skimmed%20milk",
-      "evidence": "Camoufox Tier 2 escalation confirmed client-side hydration renders 36 product links in DOM, but direct stateless HTTP search returns empty PWA shell with Algolia client-side execution.",
-      "reason": "Direct stateless HTTP search unreachable; search execution is client-side Algolia requiring Tier 2 browser automation"
+      "evidence": "Camoufox Tier 2 escalation executed live: browser automation successfully renders 18 product items via client-side schema.org ItemList and Algolia hydration. However, each query loads a 2MB Mobify PWA bundle triggering >40 third-party trackers and telemetry endpoints per search with 6-8s latency, violating polite domestic request volumes without a persistent session pool.",
+      "reason": "Direct stateless HTTP returns empty PWA shell; Tier 2 browser rendering incurs excessive latency (6-8s/query) and multi-tracker overhead beyond personal-scale polite scraping limits."
     },
     "aldi": {
       "status": "unsupported",
