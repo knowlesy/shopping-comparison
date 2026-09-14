@@ -2,9 +2,6 @@
   {
     "rawText": "Beef mince 5% 1.9 kg",
     "baseItem": "Beef mince",
-    "category": "meat",
-    "targetQuantity": 1.9,
-    "unit": "kg",
     "minQuantity": 1.9,
     "fatPercentage": 5,
     "mustMatch": [
@@ -23,9 +20,6 @@
   {
     "rawText": "Walnuts 200 g",
     "baseItem": "Walnuts",
-    "category": "nuts",
-    "targetQuantity": 200,
-    "unit": "g",
     "minQuantity": 200,
     "mustMatch": [
       "walnut"
@@ -41,9 +35,6 @@
   {
     "rawText": "Large eggs 17",
     "baseItem": "Large eggs",
-    "category": "eggs",
-    "targetQuantity": 17,
-    "unit": "count",
     "minQuantity": 17,
     "mustMatch": [
       "egg",
@@ -60,9 +51,6 @@
   {
     "rawText": "Semi-skimmed milk 4 pints",
     "baseItem": "Semi-skimmed milk",
-    "category": "dairy",
-    "targetQuantity": 4,
-    "unit": "pints",
     "minQuantity": 2.27,
     "mustMatch": [
       "semi-skimmed",
@@ -80,9 +68,6 @@
   {
     "rawText": "Tinned sardines in olive oil 2 x 120 g",
     "baseItem": "Tinned sardines in olive oil",
-    "category": "fish",
-    "targetQuantity": 240,
-    "unit": "g",
     "minQuantity": 240,
     "mustMatch": [
       "sardine",
@@ -98,9 +83,6 @@
   {
     "rawText": "Little gem lettuce 2-pack",
     "baseItem": "Little gem lettuce",
-    "category": "produce",
-    "targetQuantity": 2,
-    "unit": "pack",
     "minQuantity": 2,
     "mustMatch": [
       "little gem",
@@ -114,9 +96,6 @@
   {
     "rawText": "Celery 1 head",
     "baseItem": "Celery",
-    "category": "produce",
-    "targetQuantity": 1,
-    "unit": "head",
     "minQuantity": 1,
     "mustMatch": [
       "celery"
@@ -129,9 +108,6 @@
   {
     "rawText": "Garlic 1 bulb",
     "baseItem": "Garlic",
-    "category": "produce",
-    "targetQuantity": 1,
-    "unit": "bulb",
     "minQuantity": 1,
     "mustMatch": [
       "garlic"
@@ -147,9 +123,6 @@
   {
     "rawText": "Tomato puree 1 tube",
     "baseItem": "Tomato puree",
-    "category": "cupboard",
-    "targetQuantity": 1,
-    "unit": "tube",
     "minQuantity": 1,
     "mustMatch": [
       "tomato puree"
@@ -163,9 +136,6 @@
   {
     "rawText": "Maris Piper potatoes 1.8 kg",
     "baseItem": "Maris Piper potatoes",
-    "category": "produce",
-    "targetQuantity": 1.8,
-    "unit": "kg",
     "minQuantity": 1.8,
     "mustMatch": [
       "maris piper",
@@ -180,9 +150,6 @@
   {
     "rawText": "Bananas 10",
     "baseItem": "Bananas",
-    "category": "produce",
-    "targetQuantity": 10,
-    "unit": "count",
     "minQuantity": 10,
     "mustMatch": [
       "banana"
@@ -197,9 +164,6 @@
   {
     "rawText": "Apples 250 g",
     "baseItem": "Apples",
-    "category": "produce",
-    "targetQuantity": 250,
-    "unit": "g",
     "minQuantity": 250,
     "mustMatch": [
       "apple"
@@ -216,9 +180,6 @@
   {
     "rawText": "Hummus 200 g",
     "baseItem": "Hummus",
-    "category": "dips",
-    "targetQuantity": 200,
-    "unit": "g",
     "minQuantity": 200,
     "mustMatch": [
       "hummus"
@@ -231,9 +192,6 @@
   {
     "rawText": "Sultanas 500 g",
     "baseItem": "Sultanas",
-    "category": "baking",
-    "targetQuantity": 500,
-    "unit": "g",
     "minQuantity": 500,
     "mustMatch": [
       "sultana"
@@ -248,9 +206,6 @@
   {
     "rawText": "Lasagne sheets 500 g",
     "baseItem": "Lasagne sheets",
-    "category": "pasta",
-    "targetQuantity": 500,
-    "unit": "g",
     "minQuantity": 500,
     "mustMatch": [
       "lasagne"
@@ -263,9 +218,6 @@
   {
     "rawText": "Red peppers 4",
     "baseItem": "Red peppers",
-    "category": "produce",
-    "targetQuantity": 4,
-    "unit": "count",
     "minQuantity": 4,
     "mustMatch": [
       "red pepper"
@@ -281,9 +233,6 @@
   {
     "rawText": "Red wine vinegar",
     "baseItem": "Red wine vinegar",
-    "category": "condiments",
-    "targetQuantity": 1,
-    "unit": "bottle",
     "minQuantity": 1,
     "mustMatch": [
       "red wine vinegar"
@@ -298,9 +247,6 @@
   {
     "rawText": "Frozen peas 1 kg",
     "baseItem": "Frozen peas",
-    "category": "frozen",
-    "targetQuantity": 1,
-    "unit": "kg",
     "minQuantity": 1,
     "mustMatch": [
       "frozen",
@@ -315,9 +261,6 @@
   {
     "rawText": "Butter beans in water 2 x 400 g",
     "baseItem": "Butter beans in water",
-    "category": "cupboard",
-    "targetQuantity": 800,
-    "unit": "g",
     "minQuantity": 800,
     "mustMatch": [
       "butter bean"
@@ -331,9 +274,6 @@
   {
     "rawText": "Smooth peanut butter 300 g",
     "baseItem": "Smooth peanut butter",
-    "category": "spreads",
-    "targetQuantity": 300,
-    "unit": "g",
     "minQuantity": 300,
     "mustMatch": [
       "smooth",
@@ -346,9 +286,6 @@
   {
     "rawText": "Plums or pears 600 g",
     "baseItem": "Plums or pears",
-    "category": "produce",
-    "targetQuantity": 600,
-    "unit": "g",
     "minQuantity": 600,
     "mustMatch": [
       "plum"
@@ -361,9 +298,6 @@
   {
     "rawText": "Oregano, thyme, rosemary, basil, parsley, sage, mint",
     "baseItem": "Herbs",
-    "category": "herbs",
-    "targetQuantity": 1,
-    "unit": "pack",
     "minQuantity": 1,
     "mustMatch": [
       "herb"
@@ -373,9 +307,6 @@
   {
     "rawText": "Olive oil",
     "baseItem": "Olive oil",
-    "category": "oils",
-    "targetQuantity": 1,
-    "unit": "bottle",
     "minQuantity": 1,
     "mustMatch": [
       "olive oil"
@@ -389,9 +320,6 @@
   {
     "rawText": "Carrots 1 kg",
     "baseItem": "Carrots",
-    "category": "produce",
-    "targetQuantity": 1,
-    "unit": "kg",
     "minQuantity": 1,
     "mustMatch": [
       "carrot"
@@ -404,9 +332,6 @@
   {
     "rawText": "Onions 1 kg",
     "baseItem": "Onions",
-    "category": "produce",
-    "targetQuantity": 1,
-    "unit": "kg",
     "minQuantity": 1,
     "mustMatch": [
       "onion"
@@ -420,9 +345,6 @@
   {
     "rawText": "Broccoli 500 g",
     "baseItem": "Broccoli",
-    "category": "produce",
-    "targetQuantity": 500,
-    "unit": "g",
     "minQuantity": 500,
     "mustMatch": [
       "broccoli"
@@ -434,9 +356,6 @@
   {
     "rawText": "Cucumber 1",
     "baseItem": "Cucumber",
-    "category": "produce",
-    "targetQuantity": 1,
-    "unit": "each",
     "minQuantity": 1,
     "mustMatch": [
       "cucumber"
@@ -449,9 +368,6 @@
   {
     "rawText": "Oranges 6",
     "baseItem": "Oranges",
-    "category": "produce",
-    "targetQuantity": 6,
-    "unit": "count",
     "minQuantity": 6,
     "mustMatch": [
       "orange"
@@ -466,9 +382,6 @@
   {
     "rawText": "Chicken breast fillets 1 kg",
     "baseItem": "Chicken breast fillets",
-    "category": "meat",
-    "targetQuantity": 1,
-    "unit": "kg",
     "minQuantity": 1,
     "mustMatch": [
       "chicken breast"
@@ -484,9 +397,6 @@
   {
     "rawText": "Salmon fillets 4",
     "baseItem": "Salmon fillets",
-    "category": "fish",
-    "targetQuantity": 4,
-    "unit": "count",
     "minQuantity": 4,
     "mustMatch": [
       "salmon fillet"
@@ -501,9 +411,6 @@
   {
     "rawText": "Frozen cod fillets 1.5 kg",
     "baseItem": "Frozen cod fillets",
-    "category": "frozen",
-    "targetQuantity": 1.5,
-    "unit": "kg",
     "minQuantity": 1.5,
     "mustMatch": [
       "frozen",
@@ -518,9 +425,6 @@
   {
     "rawText": "Greek yogurt 0% 1 kg",
     "baseItem": "Greek yogurt 0%",
-    "category": "dairy",
-    "targetQuantity": 1,
-    "unit": "kg",
     "minQuantity": 1,
     "fatPercentage": 0,
     "mustMatch": [
@@ -537,9 +441,6 @@
   {
     "rawText": "Cheddar cheese 400 g",
     "baseItem": "Cheddar cheese",
-    "category": "dairy",
-    "targetQuantity": 400,
-    "unit": "g",
     "minQuantity": 400,
     "mustMatch": [
       "cheddar"
@@ -555,9 +456,6 @@
   {
     "rawText": "Wholewheat fusilli 1 kg",
     "baseItem": "Wholewheat fusilli",
-    "category": "pasta",
-    "targetQuantity": 1,
-    "unit": "kg",
     "minQuantity": 1,
     "mustMatch": [
       "wholewheat",
@@ -572,9 +470,6 @@
   {
     "rawText": "Basmati rice 1 kg",
     "baseItem": "Basmati rice",
-    "category": "grains",
-    "targetQuantity": 1,
-    "unit": "kg",
     "minQuantity": 1,
     "mustMatch": [
       "basmati",
@@ -589,9 +484,6 @@
   {
     "rawText": "Porridge oats 1 kg",
     "baseItem": "Porridge oats",
-    "category": "cereal",
-    "targetQuantity": 1,
-    "unit": "kg",
     "minQuantity": 1,
     "mustMatch": [
       "oats",
@@ -606,9 +498,6 @@
   {
     "rawText": "Red lentils 500 g",
     "baseItem": "Red lentils",
-    "category": "pulses",
-    "targetQuantity": 500,
-    "unit": "g",
     "minQuantity": 500,
     "mustMatch": [
       "lentil"
@@ -620,9 +509,6 @@
   {
     "rawText": "Chia seeds 200 g",
     "baseItem": "Chia seeds",
-    "category": "seeds",
-    "targetQuantity": 200,
-    "unit": "g",
     "minQuantity": 200,
     "mustMatch": [
       "chia"
@@ -636,9 +522,6 @@
   {
     "rawText": "Wholemeal bread 1 loaf",
     "baseItem": "Wholemeal bread",
-    "category": "bakery",
-    "targetQuantity": 1,
-    "unit": "loaf",
     "minQuantity": 1,
     "mustMatch": [
       "wholemeal",
@@ -653,9 +536,6 @@
   {
     "rawText": "Plain flour 1.5 kg",
     "baseItem": "Plain flour",
-    "category": "baking",
-    "targetQuantity": 1.5,
-    "unit": "kg",
     "minQuantity": 1.5,
     "mustMatch": [
       "plain flour"
@@ -669,9 +549,6 @@
   {
     "rawText": "Dark chocolate (adults only, 85%) 200 g",
     "baseItem": "Dark chocolate 85%",
-    "category": "treats",
-    "targetQuantity": 200,
-    "unit": "g",
     "minQuantity": 200,
     "fatPercentage": 85,
     "mustMatch": [
@@ -687,9 +564,6 @@
   {
     "rawText": "Baby food pouches (infant) 4",
     "baseItem": "Baby food pouches",
-    "category": "baby",
-    "targetQuantity": 4,
-    "unit": "count",
     "minQuantity": 4,
     "mustMatch": [
       "baby food",
@@ -703,9 +577,6 @@
   {
     "rawText": "Cherry/salad tomatoes 900 g",
     "baseItem": "Cherry/salad tomatoes",
-    "category": "produce",
-    "targetQuantity": 900,
-    "unit": "g",
     "minQuantity": 900,
     "mustMatch": [
       "tomato"
@@ -721,9 +592,6 @@
   {
     "rawText": "Kidney beans 400 g",
     "baseItem": "Kidney beans",
-    "category": "cupboard",
-    "targetQuantity": 400,
-    "unit": "g",
     "minQuantity": 400,
     "mustMatch": [
       "kidney bean"
@@ -736,9 +604,6 @@
   {
     "rawText": "Chickpeas 400 g",
     "baseItem": "Chickpeas",
-    "category": "cupboard",
-    "targetQuantity": 400,
-    "unit": "g",
     "minQuantity": 400,
     "mustMatch": [
       "chickpea"
@@ -751,9 +616,6 @@
   {
     "rawText": "Spinach 250 g",
     "baseItem": "Spinach",
-    "category": "produce",
-    "targetQuantity": 250,
-    "unit": "g",
     "minQuantity": 250,
     "mustMatch": [
       "spinach"
@@ -766,9 +628,6 @@
   {
     "rawText": "Mushrooms 300 g",
     "baseItem": "Mushrooms",
-    "category": "produce",
-    "targetQuantity": 300,
-    "unit": "g",
     "minQuantity": 300,
     "mustMatch": [
       "mushroom"
@@ -781,9 +640,6 @@
   {
     "rawText": "Courgettes 500 g",
     "baseItem": "Courgettes",
-    "category": "produce",
-    "targetQuantity": 500,
-    "unit": "g",
     "minQuantity": 500,
     "mustMatch": [
       "courgette"
@@ -795,9 +651,6 @@
   {
     "rawText": "Lemons 4",
     "baseItem": "Lemons",
-    "category": "produce",
-    "targetQuantity": 4,
-    "unit": "count",
     "minQuantity": 4,
     "mustMatch": [
       "lemon"
@@ -811,9 +664,6 @@
   {
     "rawText": "Reduced-salt stock cubes 3 (adults only, never for infant)",
     "baseItem": "Reduced-salt stock cubes",
-    "category": "cupboard",
-    "targetQuantity": 3,
-    "unit": "count",
     "minQuantity": 3,
     "mustMatch": [
       "reduced-salt",
@@ -826,9 +676,6 @@
   {
     "rawText": "Fairy washing up liquid 433 ml",
     "baseItem": "Fairy washing up liquid",
-    "category": "household",
-    "targetQuantity": 433,
-    "unit": "ml",
     "minQuantity": 433,
     "mustMatch": [
       "fairy",
@@ -842,9 +689,6 @@
   {
     "rawText": "Kitchen roll 2 pack",
     "baseItem": "Kitchen roll",
-    "category": "household",
-    "targetQuantity": 2,
-    "unit": "pack",
     "minQuantity": 2,
     "mustMatch": [
       "kitchen roll"
@@ -852,5 +696,68 @@
     "mustNotMatch": [
       "toilet roll"
     ]
+  },
+  {
+    "rawText": "Oregano",
+    "baseItem": "Oregano",
+    "minQuantity": 1,
+    "mustMatch": [
+      "oregano"
+    ],
+    "mustNotMatch": []
+  },
+  {
+    "rawText": "thyme",
+    "baseItem": "thyme",
+    "minQuantity": 1,
+    "mustMatch": [
+      "thyme"
+    ],
+    "mustNotMatch": []
+  },
+  {
+    "rawText": "rosemary",
+    "baseItem": "rosemary",
+    "minQuantity": 1,
+    "mustMatch": [
+      "rosemary"
+    ],
+    "mustNotMatch": []
+  },
+  {
+    "rawText": "basil",
+    "baseItem": "basil",
+    "minQuantity": 1,
+    "mustMatch": [
+      "basil"
+    ],
+    "mustNotMatch": []
+  },
+  {
+    "rawText": "parsley",
+    "baseItem": "parsley",
+    "minQuantity": 1,
+    "mustMatch": [
+      "parsley"
+    ],
+    "mustNotMatch": []
+  },
+  {
+    "rawText": "sage",
+    "baseItem": "sage",
+    "minQuantity": 1,
+    "mustMatch": [
+      "sage"
+    ],
+    "mustNotMatch": []
+  },
+  {
+    "rawText": "mint",
+    "baseItem": "mint",
+    "minQuantity": 1,
+    "mustMatch": [
+      "mint"
+    ],
+    "mustNotMatch": []
   }
 ]

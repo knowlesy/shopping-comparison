@@ -1,13 +1,19 @@
 /**
- * Per-Store Matching and Correctness Evaluator (Step 35)
+ * Per-Store Matching and Correctness Evaluator (Step 35 & 36)
  *
  * Evaluates candidate picks for every reachable supermarket (Tesco, Sainsbury's,
  * Morrisons, Asda, Iceland) against tests/fixtures/item-constraints.json.
+ *
+ * Constraints serve strictly as the marking scheme (grading the exam).
+ * Input items passed to matchProduct are parsed directly via
+ * IngredientParser.parseList exactly as production does.
  *
  * Reports per store:
  *  - Correctness: % of picks satisfying item constraints (validity, not preference)
  *  - Match Rate: % of items where a product was returned
  *  - Honest No-Match: items where the retailer shelf genuinely lacked a satisfying product
+ *  - False Matches: items where an invalid product was picked when shelf lacked valid options
+ *  - Bad Picks: items where an invalid product was picked despite valid options on shelf
  *
  * Usage:
  *   node scripts/eval-stores.js
@@ -18,6 +24,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { FuzzyMatcher } from '../services/logic-api/src/services/fuzzyMatcher.js';
+import { IngredientParser } from '../services/logic-api/src/services/ingredientParser.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,34 +38,43 @@ function readJson(relPath) {
   return JSON.parse(fs.readFileSync(full, 'utf8'));
 }
 
-/** Check if product satisfies the item constraints */
-function evaluateProductAgainstConstraint(constraint, product, totalQuantity) {
+/** Check if product satisfies the item constraints (the marking scheme) */
+function evaluateProductAgainstConstraint(constraint, product, matchResult = null) {
   if (!product) return { satisfies: false, reason: 'No product returned' };
 
   const title = String(product.title || '').toLowerCase();
   const brand = String(product.brand || '').toLowerCase();
-  const fullText = `${brand} ${title}`;
+  const dept = String(product.departmentName || product.superDepartmentName || '').toLowerCase();
+  const aisle = String(product.aisleName || '').toLowerCase();
+  const fullText = `${brand} ${title} ${dept} ${aisle}`;
 
   // 1. Must match all required keywords/qualifiers
   for (const term of constraint.mustMatch || []) {
     const t = term.toLowerCase();
     if (t === '5%' || t === '0%' || t === '85%') {
       const num = t.replace('%', '');
-      const hasPct = new RegExp(`\\b${num}%|\\b${num}\\s*%`).test(fullText);
-      if (!hasPct) return { satisfies: false, reason: `missing ${t} spec in title` };
+      const hasPct = new RegExp('\\b' + num + '%|\\b' + num + '\\s*%').test(fullText);
+      if (!hasPct) return { satisfies: false, reason: `missing ${t} spec in product title` };
     } else {
-      // Check word stem or substring
-      const stem = t.replace(/s$/, '');
-      if (!fullText.includes(t) && !fullText.includes(stem)) {
+      const normTerm = t.replace(/[-_]/g, ' ');
+      const words = normTerm.split(/\s+/);
+      const normFull = fullText.replace(/[-_]/g, ' ');
+      const allPresent = words.every((w) => {
+        const stem = w.replace(/s$/, '');
+        // Recognize known variant terms (e.g. hummus / houmous)
+        if (w === 'hummus' && normFull.includes('houmous')) return true;
+        return normFull.includes(w) || normFull.includes(stem);
+      });
+      if (!allPresent) {
         return { satisfies: false, reason: `missing required qualifier "${term}"` };
       }
     }
   }
 
-  // 2. Must not match forbidden terms
+  // 2. Must not match forbidden terms (e.g. crisps for hummus, white for wholemeal)
   for (const term of constraint.mustNotMatch || []) {
     const t = term.toLowerCase();
-    if (new RegExp(`\\b${t}\\b`, 'i').test(fullText)) {
+    if (new RegExp('\\b' + t + '\\b', 'i').test(fullText)) {
       return { satisfies: false, reason: `matches forbidden term "${term}"` };
     }
   }
@@ -66,7 +82,7 @@ function evaluateProductAgainstConstraint(constraint, product, totalQuantity) {
   // 3. Fat percentage explicit validation
   if (constraint.fatPercentage !== undefined) {
     const targetPct = String(constraint.fatPercentage);
-    const hasTarget = new RegExp(`\\b${targetPct}%|\\b${targetPct}\\s*%`).test(fullText);
+    const hasTarget = new RegExp('\\b' + targetPct + '%|\\b' + targetPct + '\\s*%').test(fullText);
     if (!hasTarget) {
       const otherMatch = fullText.match(/(\d+)\s*%/);
       if (otherMatch && otherMatch[1] !== targetPct) {
@@ -104,16 +120,19 @@ async function runStoreEvaluation() {
     readJson('tests/fixtures/reality-sample.json') ||
     {};
 
-  const items = corpus.items || [];
-  if (items.length === 0) {
-    console.error('No items found in reality fixtures.');
+  // Parse items with production IngredientParser — exactly as the live app does
+  const listLines = readJson('tests/fixtures/real-list.json') || [];
+  const parsedItems = IngredientParser.parseList(listLines);
+
+  if (parsedItems.length === 0) {
+    console.error('No items parsed from real-list.json');
     process.exit(1);
   }
 
-  console.log('='.repeat(80));
-  console.log('  PER-STORE MATCHING & CORRECTNESS EVALUATION');
-  console.log(`  Evaluating ${reachableStores.length} reachable stores across ${items.length} items`);
-  console.log('='.repeat(80));
+  console.log('='.repeat(88));
+  console.log('  PER-STORE MATCHING & CORRECTNESS EVALUATION (Step 36)');
+  console.log(`  Evaluating ${reachableStores.length} reachable stores across ${parsedItems.length} parsed items`);
+  console.log('='.repeat(88));
 
   const storeStats = {};
 
@@ -122,37 +141,43 @@ async function runStoreEvaluation() {
     let matchedItems = 0;
     let correctItems = 0;
     let honestNoMatches = 0;
-    let falseMatches = 0; // Picked something when shelf had nothing valid
+    let falseMatches = 0; // Picked invalid product when shelf had nothing valid
     let badPicks = 0;     // Picked invalid product when valid product existed on shelf
 
     const itemDetails = [];
 
-    for (const it of items) {
-      const rawText = String(it.rawText || '').trim();
-      const constraint = constraintsList.find(
-        (c) => String(c.rawText || '').trim() === rawText
+    for (const parsedItem of parsedItems) {
+      const rawText = String(parsedItem.rawText || '').trim().toLowerCase();
+      let constraint = constraintsList.find(
+        (c) => String(c.rawText || '').trim().toLowerCase() === rawText
       );
 
-      if (!constraint) continue;
+      if (!constraint) {
+        // Fallback for individual split items (e.g. single herbs)
+        constraint = {
+          rawText: parsedItem.rawText,
+          baseItem: parsedItem.name,
+          mustMatch: [parsedItem.name.toLowerCase()],
+          mustNotMatch: []
+        };
+      }
+
       totalItems++;
 
-      const candidates = (it.products || []).filter(
+      const corpusItem = (corpus.items || []).find(
+        (it) => String(it.rawText || it.query || it.name).trim().toLowerCase() === rawText
+      );
+
+      const candidates = (corpusItem?.products || []).filter(
         (p) => (p.supermarket || p.store) === store
       );
 
       const shelfCanSatisfy = shelfHasValidOption(constraint, candidates);
 
-      // Replay matcher offline with default empty preferences
+      // Pass the real parsed item directly into matchProduct — no constraint driving
       const matchResult = FuzzyMatcher.matchProduct(
         store,
-        {
-          name: it.name || it.query || constraint.baseItem,
-          baseItem: constraint.baseItem || it.name,
-          category: constraint.category || it.category,
-          targetQuantity: constraint.targetQuantity || it.targetQuantity,
-          unit: constraint.unit || it.unit,
-          rawText
-        },
+        parsedItem,
         candidates,
         {}
       );
@@ -165,17 +190,17 @@ async function runStoreEvaluation() {
         const evalRes = evaluateProductAgainstConstraint(
           constraint,
           pickedProduct,
-          matchResult.totalQuantity
+          matchResult
         );
 
         if (evalRes.satisfies) {
           correctItems++;
-          itemDetails.push({ rawText, status: 'PASS', pick: pickedProduct.title });
+          itemDetails.push({ rawText: parsedItem.rawText, status: 'PASS', pick: pickedProduct.title });
         } else {
           if (!shelfCanSatisfy) {
             falseMatches++;
             itemDetails.push({
-              rawText,
+              rawText: parsedItem.rawText,
               status: 'FALSE_MATCH',
               pick: pickedProduct.title,
               why: evalRes.reason,
@@ -184,7 +209,7 @@ async function runStoreEvaluation() {
           } else {
             badPicks++;
             itemDetails.push({
-              rawText,
+              rawText: parsedItem.rawText,
               status: 'BAD_PICK',
               pick: pickedProduct.title,
               why: evalRes.reason
@@ -196,14 +221,14 @@ async function runStoreEvaluation() {
           honestNoMatches++;
           correctItems++; // An honest decline when shelf lacks valid item is correct behaviour!
           itemDetails.push({
-            rawText,
+            rawText: parsedItem.rawText,
             status: 'HONEST_DECLINE',
             pick: 'NO MATCH',
             shelf: 'Shelf lacks valid option'
           });
         } else {
           itemDetails.push({
-            rawText,
+            rawText: parsedItem.rawText,
             status: 'MISSED_OPPORTUNITY',
             pick: 'NO MATCH',
             why: 'Valid option existed on shelf but matcher declined'
