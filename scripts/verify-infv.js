@@ -2569,6 +2569,57 @@ check(38, 'Every sidecar endpoint enforces the token and the politeness limits',
 });
 
 // ---------------------------------------------------------------------------
+// Step 39 — Prove the APP works, not just the matcher
+// ---------------------------------------------------------------------------
+check(39, 'The HTTP API is tested, not only the services behind it', () => {
+  const pkg = JSON.parse(read(r('package.json')) || '{}');
+  const cmd = pkg.scripts?.test || '';
+  const routeTests = fs.existsSync(r('services/logic-api/src/routes'))
+    ? fs.readdirSync(r('services/logic-api/src/routes')).filter((f) => f.endsWith('.test.js'))
+    : [];
+  if (!routeTests.length) {
+    fail('there is not one test against services/logic-api/src/routes. Twenty-four suites cover the matching services and nothing exercises the API a client actually calls — no request validation, no response shape, no error path. Every score in this project comes from calling matcher functions directly, which is how the Asda registry drift survived: the offline corpus reported 100% correctness while the live route would have returned catalog data.');
+  }
+  if (!/routes/.test(cmd)) {
+    fail(`npm test runs "${cmd}", which globs only the services directory, so route tests would never execute even once written`);
+  }
+});
+
+check(39, 'A request through the real route returns a sane basket', async () => {
+  const dir = r('services/logic-api/src/routes');
+  if (!fs.existsSync(dir)) return 'no routes directory';
+  const src = fs.readdirSync(dir).filter((f) => f.endsWith('.test.js')).map((f) => read(path.join(dir, f))).join('\n');
+  if (!src) return 'covered by the previous gate';
+  const needs = [
+    [/compare/i, 'the compare route, which is the app'],
+    [/supermarkets|stores/i, 'a per-store result set'],
+    [/totalPrice|basket|total/i, 'a basket total'],
+    [/confidence|source|estimated/i, 'the confidence or data-source stamp']
+  ];
+  const missing = needs.filter(([re]) => !re.test(src)).map(([, why]) => why);
+  if (missing.length) {
+    fail(`the route tests never assert on: ${missing.join('; ')}. A compare request should be driven end to end and checked for a per-store basket with real totals and an honest data-source stamp — including that a store with no live data is labelled estimated rather than presented as a real price.`);
+  }
+});
+
+check(39, 'The browser suite is wired to something that runs it', () => {
+  const pkg = JSON.parse(read(r('package.json')) || '{}');
+  const scripts = JSON.stringify(pkg.scripts || {});
+  const specs = fs.existsSync(r('tests')) ? fs.readdirSync(r('tests')).filter((f) => f.endsWith('.spec.ts')) : [];
+  if (!specs.length) return 'no browser specs';
+  if (!/playwright|test:e2e/.test(scripts)) {
+    fail(`${specs.length} Playwright specs exist (${specs.join(', ')}) and no npm script runs any of them. playwright.config.ts is configured with a webServer and a baseURL, so the suite was built and then left dead — it has never guarded anything.`);
+  }
+});
+
+check(39, 'Something checks the live path against the recorded corpus', () => {
+  const hay = readAll('tests', '.js') + readAll('scripts', '.js') + readAll('services/logic-api/src/routes', '.test.js');
+  if (!/registry|supported|reachab/i.test(hay) || !/catalog|estimated/i.test(hay)) {
+    fail('nothing verifies that the stores the app will actually fetch from match the stores the offline corpus claims to cover. That exact gap let registry.py mark Asda and Iceland unsupported while eval:stores reported them at 100% correctness — the corpus was recorded by calling adapters directly, so it could not see that the live route returns catalog data. A store enabled by default must either be genuinely fetchable or be visibly labelled estimated.');
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 await Promise.allSettled(pending);
