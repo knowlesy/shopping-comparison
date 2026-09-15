@@ -2589,7 +2589,7 @@ check(39, 'A request through the real route returns a sane basket', async () => 
   const dir = r('services/logic-api/src/routes');
   if (!fs.existsSync(dir)) return 'no routes directory';
   const src = fs.readdirSync(dir).filter((f) => f.endsWith('.test.js')).map((f) => read(path.join(dir, f))).join('\n');
-  if (!src) return 'covered by the previous gate';
+  if (!src) fail('no route tests exist yet, so nothing drives a compare request end to end');
   const needs = [
     [/compare/i, 'the compare route, which is the app'],
     [/supermarkets|stores/i, 'a per-store result set'],
@@ -2613,8 +2613,12 @@ check(39, 'The browser suite is wired to something that runs it', () => {
 });
 
 check(39, 'Something checks the live path against the recorded corpus', () => {
-  const hay = readAll('tests', '.js') + readAll('scripts', '.js') + readAll('services/logic-api/src/routes', '.test.js');
-  if (!/registry|supported|reachab/i.test(hay) || !/catalog|estimated/i.test(hay)) {
+  // Must be a dedicated test, not a keyword appearing somewhere in scripts/ —
+  // an earlier version of this gate matched verify-infv.js itself and passed.
+  const candidates = ['services/logic-api/src/routes/liveCoherence.test.js', 'tests/live-coherence.test.js', 'services/logic-api/src/services/liveCoherence.test.js'];
+  const found = candidates.filter((c) => fs.existsSync(r(c)));
+  const body = found.map((c) => read(r(c))).join('\n');
+  if (!found.length || !/registry|supported/i.test(body) || !/catalog|estimated/i.test(body)) {
     fail('nothing verifies that the stores the app will actually fetch from match the stores the offline corpus claims to cover. That exact gap let registry.py mark Asda and Iceland unsupported while eval:stores reported them at 100% correctness — the corpus was recorded by calling adapters directly, so it could not see that the live route returns catalog data. A store enabled by default must either be genuinely fetchable or be visibly labelled estimated.');
   }
 });
