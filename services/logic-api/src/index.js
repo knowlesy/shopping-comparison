@@ -56,6 +56,7 @@ app.get('/health', (_req, res) => {
 app.use('/api/parse-list', parseRouter);
 app.use('/api/compare', compareRouter);
 app.use('/api/products/alternatives', alternativesRouter);
+app.use('/api/alternatives', alternativesRouter);
 app.use('/api/settings', settingsRouter);
 app.use('/api/history', historyRouter);
 app.use('/api/favorites', favoritesRouter);

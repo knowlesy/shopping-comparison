@@ -73,7 +73,13 @@ alternativesRouter.get('/', async (req, res) => {
       const normTitle = p.title.toLowerCase().trim();
       if (!seenTitles.has(normTitle)) {
         seenTitles.add(normTitle);
-        combined.push(p);
+        const isCatalog = p.source === 'catalog';
+        combined.push({
+          ...p,
+          confidence: p.confidence || (isCatalog ? 'estimated' : 'verified'),
+          confidenceSource: p.confidenceSource || (isCatalog ? 'catalog' : (p.source === 'direct' ? 'direct' : 'aggregator')),
+          isEstimated: Boolean(isCatalog || p.confidence === 'estimated')
+        });
       }
     }
 

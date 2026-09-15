@@ -11,15 +11,43 @@ import { PriceHistory } from '../services/priceHistory.js';
 
 export const compareRouter = express.Router();
 
+const KNOWN_SUPERMARKETS = new Set([
+  'asda',
+  'sainsburys',
+  'tesco',
+  'morrisons',
+  'iceland',
+  'aldi',
+  'lidl',
+  'waitrose',
+  'ocado',
+  'coop'
+]);
+
 /**
  * POST /api/compare
  * Compare shopping basket across all UK supermarkets using real live data + 72h persistent cache
  */
 compareRouter.post('/', async (req, res) => {
-  const { items = [], preferences = getUserSettings(), forceRefresh = false } = req.body;
+  const { items = [], preferences = getUserSettings(), forceRefresh = false } = req.body || {};
 
   if (!Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: 'No shopping items provided for comparison' });
+  }
+
+  if (items.length > 500) {
+    return res.status(400).json({ error: 'Shopping list exceeds maximum allowed length of 500 items' });
+  }
+
+  if (preferences && preferences.enabledSupermarkets && Array.isArray(preferences.enabledSupermarkets)) {
+    const unknown = preferences.enabledSupermarkets.filter(
+      (s) => !KNOWN_SUPERMARKETS.has(String(s).toLowerCase().trim())
+    );
+    if (unknown.length > 0) {
+      return res.status(400).json({
+        error: `Unknown supermarket(s) specified: ${unknown.join(', ')}`
+      });
+    }
   }
 
   if (preferences.enablePastSearches !== false && items.length > 0) {
@@ -120,10 +148,25 @@ compareRouter.post('/', async (req, res) => {
  * Server-Sent Events (SSE) streaming comparison for real-time progress updates + 72h caching
  */
 compareRouter.post('/stream', async (req, res) => {
-  const { items = [], preferences = getUserSettings(), forceRefresh = false } = req.body;
+  const { items = [], preferences = getUserSettings(), forceRefresh = false } = req.body || {};
 
   if (!Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: 'No shopping items provided for comparison' });
+  }
+
+  if (items.length > 500) {
+    return res.status(400).json({ error: 'Shopping list exceeds maximum allowed length of 500 items' });
+  }
+
+  if (preferences && preferences.enabledSupermarkets && Array.isArray(preferences.enabledSupermarkets)) {
+    const unknown = preferences.enabledSupermarkets.filter(
+      (s) => !KNOWN_SUPERMARKETS.has(String(s).toLowerCase().trim())
+    );
+    if (unknown.length > 0) {
+      return res.status(400).json({
+        error: `Unknown supermarket(s) specified: ${unknown.join(', ')}`
+      });
+    }
   }
 
   if (preferences.enablePastSearches !== false && items.length > 0) {

@@ -99,6 +99,12 @@ jobs:
       - name: Build client production bundle
         run: npm run build
 
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run E2E browser tests
+        run: npm run test:e2e
+
   version:
     name: Compute & Derive Version
     needs: test
