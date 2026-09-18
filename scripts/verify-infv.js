@@ -2804,7 +2804,7 @@ check(42, 'The diagnostic log is a complete dump, not a truncated sample', () =>
 
 check(42, 'The direct-tier timeout is not shorter than the work it waits for', () => {
   const node = read(r('services/logic-api/src/services/candidatePipeline.js'));
-  const py = read(r('services/store-fetcher/server.py'));
+  const py = read(r('services/store-fetcher/server.py')) + readAll('services/store-fetcher/adapters', '.py');
   const cap = node.match(/Math\.min\(\s*timeoutMs\s*,\s*(\d+)\s*\)/);
   if (!cap) return 'no fixed cap';
   const budget = Number(cap[1]);
@@ -2823,7 +2823,11 @@ check(42, 'The swap picker reuses the cache the compare run just filled', () => 
 
 check(42, 'A user preference that is offered is actually honoured', () => {
   const s = read(r('services/logic-api/src/routes/settings.js'));
-  const services = readAll('services/logic-api/src/services', '.js');
+  // Exclude *.test.js: a preference named only in a test fixture is still dead.
+  const dir = r('services/logic-api/src/services');
+  const services = fs.existsSync(dir)
+    ? fs.readdirSync(dir).filter((f) => f.endsWith('.js') && !f.endsWith('.test.js')).map((f) => read(path.join(dir, f))).join('\n')
+    : '';
   const offered = ['preferWholewheat', 'preferFreeRange', 'includeDeals', 'packSizingPolicy', 'cutMatchingStrategy'];
   const dead = offered.filter((k) => new RegExp(k).test(s) && !new RegExp(k).test(services));
   if (dead.length) {
