@@ -2779,6 +2779,59 @@ check(41, 'AI runs as a fallback behind the rules, never ahead of them', async (
 });
 
 // ---------------------------------------------------------------------------
+// Step 42 — Logging owned by Settings, dumped in full, plus review residue
+// ---------------------------------------------------------------------------
+check(42, 'Diagnostic logging is a Settings toggle, not an env-only flag', () => {
+  const s = read(r('services/logic-api/src/routes/settings.js'));
+  if (!/enableMatchLog|matchLogging/.test(s)) {
+    fail('matchLog.js honours preferences.enableMatchLog, but settings.js neither defaults it nor lists it in allowedKeys, so the API silently drops it and the UI cannot turn it on. The owner wants this switched on from Settings while the app runs in k3s — an env var means editing a ConfigMap and restarting the pod, which loses the very cache the PVC was added to keep.');
+  }
+  const client = readAll('client/src/components', '.tsx') + readAll('client/src/pages', '.tsx') + readAll('client/src', '.tsx');
+  if (!/enableMatchLog|matchLogging/.test(client)) {
+    fail('no Settings control exposes the toggle in the UI');
+  }
+});
+
+check(42, 'The diagnostic log is a complete dump, not a truncated sample', () => {
+  const p = r('services/logic-api/src/services/matchLog.js');
+  if (!fs.existsSync(p)) return 'no log module';
+  const src = read(p);
+  const m = src.match(/candidates[\s\S]{0,80}?\.slice\(\s*0\s*,\s*(\d+)\s*\)/);
+  if (m) {
+    fail(`the log keeps only the first ${m[1]} candidates (matchLog.js, \`.slice(0, ${m[1]})\`). Stores return up to 50, and the whole point of the log is to work out why the RIGHT product lost — which is precisely the record that gets cut when the winner is scored first and the missed product sits at position 30. Dump every candidate that was scored.`);
+  }
+});
+
+check(42, 'The direct-tier timeout is not shorter than the work it waits for', () => {
+  const node = read(r('services/logic-api/src/services/candidatePipeline.js'));
+  const py = read(r('services/store-fetcher/server.py'));
+  const cap = node.match(/Math\.min\(\s*timeoutMs\s*,\s*(\d+)\s*\)/);
+  if (!cap) return 'no fixed cap';
+  const budget = Number(cap[1]);
+  const pyTimeout = Number((py.match(/timeout_ms\s*[:=]\s*(\d{4,})/) || [])[1] || 0);
+  if (pyTimeout && budget < pyTimeout) {
+    fail(`candidatePipeline aborts the direct tier at ${budget}ms while the sidecar allows ${pyTimeout}ms per store and works through them serially. With Asda and Iceland enabled by default — both on the ~7s Camoufox path — the budget can essentially never be met: the request gives up, the browser work keeps running, and nothing reaches the cache (candidatePipeline.js:161 only caches on success). The result is a long wait that produces neither products nor a cached result.`);
+  }
+});
+
+check(42, 'The swap picker reuses the cache the compare run just filled', () => {
+  const src = read(r('services/logic-api/src/routes/alternatives.js'));
+  if (/enabledStores:\s*\[\s*store\s*\]/.test(src) && /`\$\{store\}\s/.test(src)) {
+    fail('alternatives.js builds its cache key from a single store and prefixes the store name onto the search term, so the key can never match the one the compare run wrote. Every swap therefore re-fetches from the retailer, and the store name is sent as part of the literal query text.');
+  }
+});
+
+check(42, 'A user preference that is offered is actually honoured', () => {
+  const s = read(r('services/logic-api/src/routes/settings.js'));
+  const services = readAll('services/logic-api/src/services', '.js');
+  const offered = ['preferWholewheat', 'preferFreeRange', 'includeDeals', 'packSizingPolicy', 'cutMatchingStrategy'];
+  const dead = offered.filter((k) => new RegExp(k).test(s) && !new RegExp(k).test(services));
+  if (dead.length) {
+    fail(`these settings are persisted and offered to the user but no scorer reads them: ${dead.join(', ')}. That is the dead-flag pattern from brandTierPriority before Step 29 — a switch that changes nothing, which is worse than no switch because it looks like control.`);
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 await Promise.allSettled(pending);
