@@ -2707,6 +2707,78 @@ check(40, 'The AI is either wired into the request path or removed', async () =>
 });
 
 // ---------------------------------------------------------------------------
+// Step 41 — AI as a fallback, and diagnosable runs in k3s
+// ---------------------------------------------------------------------------
+check(41, 'The logic-api has somewhere persistent to write', () => {
+  const dir = r('deploy/k3s');
+  if (!fs.existsSync(dir)) return 'no k3s manifests';
+  const all = fs.readdirSync(dir).filter((f) => /\.ya?ml$/.test(f)).map((f) => read(path.join(dir, f))).join('\n---\n');
+  const api = read(r('deploy/k3s/04-logic-api.yaml'));
+  const hasPvc = /kind:\s*PersistentVolumeClaim/.test(all);
+  const apiMounts = /volumeMounts:/.test(api) && /persistentVolumeClaim:/.test(api);
+  if (!hasPvc || !apiMounts) {
+    fail(`the logic-api deployment declares no volumes, and the only volume in deploy/k3s is an emptyDir on the scraper pod backed by memory. priceCache.js writes the 72h cache, and priceHistory.js writes price_history.json and recent_searches.json, under DATA_DIR — so in k3s every one of those is written to the container filesystem and lost on each restart or redeploy. The cache that makes a weekly shop cheap is rebuilt from scratch every time, and there is nowhere for diagnostic logs to land.`);
+  }
+});
+
+check(41, 'Diagnostic logging exists, is opt-in, and writes where it can be collected', () => {
+  const services = readAll('services/logic-api/src/services', '.js');
+  const routes = readAll('services/logic-api/src/routes', '.js');
+  const src = services + routes;
+  const hasFlag = /MATCH_LOG|DIAGNOSTIC_LOG|ENABLE_MATCH_LOG|matchLogging/.test(src + read(r('.env.example')));
+  if (!hasFlag) {
+    fail('there is no opt-in diagnostic log. Running in k3s there is no way to find out WHY a basket picked what it did — the only signals are a total and a confidence badge. A flag-gated log of each decision, written under DATA_DIR as JSONL so it can be copied off the volume, closes the loop between a live shop and the fixture corpus: a bad pick in the log becomes a fixture, and the fixture becomes a gate.');
+  }
+});
+
+check(41, 'The diagnostic log records enough to diagnose a bad pick', () => {
+  const p = ['services/logic-api/src/services/matchLog.js', 'services/logic-api/src/services/diagnosticLog.js']
+    .find((f) => fs.existsSync(r(f)));
+  if (!p) fail('no matchLog.js / diagnosticLog.js module — the previous gate describes what it is for');
+  const src = read(r(p));
+  const needs = [
+    [/rawText|query|item/, 'the list line as written'],
+    [/store|supermarket/, 'which store'],
+    [/candidate/i, 'the candidates considered'],
+    [/score/i, 'the score that decided it'],
+    [/reason|why|rejected|veto/i, 'why the runner-up lost']
+  ];
+  const missing = needs.filter(([re]) => !re.test(src)).map(([, w]) => w);
+  if (missing.length) {
+    fail(`the log omits: ${missing.join('; ')}. "Tesco picked X for £Y" is not diagnosable — the useful record is what else was on the shelf and what score or veto ruled it out. That is the difference between a log you can act on and one you scroll past.`);
+  }
+});
+
+check(41, 'The diagnostic log cannot leak the API key or fill the volume', () => {
+  const p = ['services/logic-api/src/services/matchLog.js', 'services/logic-api/src/services/diagnosticLog.js']
+    .find((f) => fs.existsSync(r(f)));
+  if (!p) return 'no log module yet';
+  const src = read(r(p));
+  if (/JSON\.stringify\(\s*(?:prefs|preferences|settings)\b/.test(src)) {
+    fail('the log serialises a preferences or settings object wholesale, and that object carries geminiApiKey. Redact explicitly rather than relying on what happens to be in scope.');
+  }
+  if (!/maxBytes|rotate|maxSize|truncat|limit/i.test(src)) {
+    fail('the log has no size bound. It writes to the same volume as the price cache, on a long-lived k3s deployment, with no operator watching it.');
+  }
+  const gi = read(r('.gitignore'));
+  if (!/\.jsonl|logs?\//.test(gi)) {
+    fail('.gitignore does not cover the log output, and this repo is public. The log contains the verbatim shopping list.');
+  }
+});
+
+check(41, 'AI runs as a fallback behind the rules, never ahead of them', async () => {
+  const pipeline = read(r('services/logic-api/src/services/candidatePipeline.js'));
+  const matcher = read(r('services/logic-api/src/services/fuzzyMatcher.js'));
+  const compare = read(r('services/logic-api/src/routes/compare.js'));
+  const wired = /AiDecisionReviewer|AiEscalation/.test(pipeline + matcher + compare);
+  if (!wired) return 'covered by the Step 40 decision gate';
+  const guarded = /AiPolicy|shouldFire/.test(pipeline + matcher + compare);
+  if (!guarded) {
+    fail('the AI is called without consulting AiPolicy. The owner wants it as a BACKUP: it should fire only where the rules are genuinely uncertain — a near-tie, a low score, or no match at all — and never on items the rules already resolve confidently. aiPolicy.js exists to own exactly that decision.');
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 await Promise.allSettled(pending);
