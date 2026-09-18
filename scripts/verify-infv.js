@@ -2624,6 +2624,89 @@ check(39, 'Something checks the live path against the recorded corpus', () => {
 });
 
 // ---------------------------------------------------------------------------
+// Step 40 — The last real defects, and a decision on the AI
+// ---------------------------------------------------------------------------
+const pickAt = async (store, startsWith) => {
+  const { FuzzyMatcher } = await svc('fuzzyMatcher.js');
+  const { IngredientParser } = await svc('ingredientParser.js');
+  const fxPath = fs.existsSync(r('tests/fixtures/reality-fixtures.json'))
+    ? r('tests/fixtures/reality-fixtures.json')
+    : r('tests/fixtures/reality-sample.json');
+  const fx = JSON.parse(read(fxPath) || '{}');
+  const items = IngredientParser.parseList(JSON.parse(read(r('tests/fixtures/real-list.json')) || '[]'));
+  const i = items.findIndex((x) => (x.rawText || x.name || '').startsWith(startsWith));
+  if (i === -1) return null;
+  const cands = (fx.items?.[i]?.products || []).filter((p) => (p.supermarket || p.store) === store);
+  if (!cands.length) return null;
+  const m = FuzzyMatcher.matchProduct(store, items[i], cands, {});
+  return { title: (m.product?.title || '').trim(), product: m.product, cands };
+};
+
+check(40, 'A flavoured yogurt does not satisfy a plain yogurt request', async () => {
+  const bad = [];
+  for (const s of ['tesco', 'sainsburys', 'morrisons', 'asda', 'iceland']) {
+    const p = await pickAt(s, 'Greek yogurt');
+    if (p?.product && /raspberry|strawberry|mango|peach|vanilla|honey|pomegranate|blueberry/i.test(p.title)) {
+      bad.push(`${s}: "${p.title}"`);
+    }
+  }
+  if (bad.length) fail(`"Greek yogurt 0% 1 kg" asks for plain yogurt and resolves to a flavoured tub:\n          - ${bad.join('\n          - ')}\n          A fruit in the title is not a variety of plain.`);
+});
+
+check(40, 'Garlic bread does not satisfy a bulb of garlic', async () => {
+  const bad = [];
+  for (const s of ['tesco', 'sainsburys', 'morrisons', 'asda', 'iceland']) {
+    const p = await pickAt(s, 'Garlic 1 bulb');
+    if (p?.product && /baguette|bread|ciabatta|dough balls|flatbread|pizza/i.test(p.title)) {
+      bad.push(`${s}: "${p.title}"`);
+    }
+  }
+  if (bad.length) fail(`"Garlic 1 bulb" resolves to a bakery product:\n          - ${bad.join('\n          - ')}\n          Fresh garlic and garlic bread share a word and nothing else. The retailer taxonomy separates them cleanly — a bakery aisle is not fresh produce.`);
+});
+
+check(40, 'A named pulse does not resolve to a different pulse', async () => {
+  const bad = [];
+  for (const s of ['tesco', 'sainsburys', 'morrisons', 'asda', 'iceland']) {
+    const p = await pickAt(s, 'Butter beans');
+    if (p?.product && !/butter bean/i.test(p.title)) bad.push(`${s}: "${p.title}"`);
+  }
+  if (bad.length) {
+    fail(`"Butter beans in water 2 x 400 g" resolves to a different bean:\n          - ${bad.join('\n          - ')}\n          data/matching-rules.json already carries pulseRules and this is gated at Tesco, so the rule is not holding across every store.`);
+  }
+});
+
+check(40, 'A stated dietary qualifier is honoured, not dropped', async () => {
+  const bad = [];
+  for (const s of ['tesco', 'sainsburys', 'morrisons', 'asda', 'iceland']) {
+    const p = await pickAt(s, 'Reduced-salt stock cubes');
+    if (!p?.product) continue;
+    const stocksReduced = p.cands.some((c) => /reduced salt|low salt|zero salt|no added salt/i.test(c.title || ''));
+    if (stocksReduced && !/reduced salt|low salt|zero salt|no added salt/i.test(p.title)) {
+      bad.push(`${s}: "${p.title}" while the shelf stocks a reduced-salt option`);
+    }
+  }
+  if (bad.length) {
+    fail(`"Reduced-salt stock cubes" resolves to a standard-salt product where a reduced-salt one is available:\n          - ${bad.join('\n          - ')}\n          The line also reads "never for infant", so salt content is the whole point of the request. Wholemeal and fat percentage are already hard constraints; this belongs with them.`);
+  }
+});
+
+check(40, 'The AI is either wired into the request path or removed', async () => {
+  const routes = readAll('services/logic-api/src/routes', '.js');
+  const services = readAll('services/logic-api/src/services', '.js');
+  const reviewerExists = fs.existsSync(r('services/logic-api/src/services/aiDecisionReviewer.js'));
+  if (!reviewerExists) return 'AI removed';
+  // Reachable from compare, or from the matcher compare calls — not only from
+  // /ai-test and the eval scripts.
+  const inCompare = /AiDecisionReviewer|AiEscalation/.test(read(r('services/logic-api/src/routes/compare.js')) || '');
+  const inMatcher = /AiDecisionReviewer|AiEscalation/.test(read(r('services/logic-api/src/services/fuzzyMatcher.js')) || '');
+  const inPipeline = /AiDecisionReviewer|AiEscalation/.test(read(r('services/logic-api/src/services/candidatePipeline.js')) || '');
+  if (!inCompare && !inMatcher && !inPipeline) {
+    const testOnly = /ai-test/.test(routes) || /ai-test/.test(services);
+    fail(`aiDecisionReviewer and aiEscalation are reachable only from ${testOnly ? '/settings/ai-test and the eval scripts' : 'test harnesses'} — never from compare.js, fuzzyMatcher.js or candidatePipeline.js. comparison.aiCallsUsed therefore always reports 0 because nothing increments it, and every AI measurement taken in this project describes code the app never runs.\n          Two honest options: wire it into the compare path so the policy, budget and two-axis confidence actually apply, or delete it. A subsystem that is configured, documented, surfaced in Settings and connected to nothing is how the Asda registry drifted.`);
+  }
+});
+
+// ---------------------------------------------------------------------------
 // Report
 // ---------------------------------------------------------------------------
 await Promise.allSettled(pending);
