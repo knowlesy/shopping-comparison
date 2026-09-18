@@ -12,3 +12,5 @@ data:
   SCRAPER_SERVICE_URL: "http://shoppingwise-scraper-pod:3002/scrape"
   STORE_FETCHER_URL: "http://shoppingwise-store-fetcher:3003"
   CLIENT_ORIGIN: "http://localhost:8080"
+  DATA_DIR: "/data"
+  ENABLE_MATCH_LOG: "false"

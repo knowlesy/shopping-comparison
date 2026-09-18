@@ -226,6 +226,8 @@ function getTitleCore(title = '') {
       weightShortfall,
       isEstimated,
       matchScore: best.score,
+      runnerUp: scored[1] || null,
+      scoredCandidates: scored.slice(0, 10),
       lines,
       variantRoute: lines,
       explanation,

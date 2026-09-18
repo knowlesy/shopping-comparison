@@ -53,6 +53,19 @@ spec:
                 secretKeyRef:
                   name: shoppingwise-secret
                   key: GEMINI_API_KEY
+            - name: DATA_DIR
+              valueFrom:
+                configMapKeyRef:
+                  name: shoppingwise-config
+                  key: DATA_DIR
+            - name: ENABLE_MATCH_LOG
+              valueFrom:
+                configMapKeyRef:
+                  name: shoppingwise-config
+                  key: ENABLE_MATCH_LOG
+          volumeMounts:
+            - name: logic-api-data
+              mountPath: /data
           resources:
             requests:
               memory: "256Mi"
@@ -72,6 +85,10 @@ spec:
               port: 3001
             initialDelaySeconds: 5
             periodSeconds: 10
+      volumes:
+        - name: logic-api-data
+          persistentVolumeClaim:
+            claimName: shoppingwise-logic-api-data
 ---
 apiVersion: v1
 kind: Service
@@ -86,3 +103,15 @@ spec:
       port: 3001
       targetPort: 3001
       name: http
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: shoppingwise-logic-api-data
+  namespace: shoppingwise
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

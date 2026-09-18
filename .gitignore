@@ -76,6 +76,9 @@ data/price_history.json
 data/item_price_history.json
 services/logic-api/data/*
 *.log
+*.jsonl
+data/*.jsonl
+logs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

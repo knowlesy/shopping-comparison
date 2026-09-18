@@ -8,8 +8,132 @@ import {
 } from '../services/candidatePipeline.js';
 import { getUserSettings } from './settings.js';
 import { PriceHistory } from '../services/priceHistory.js';
+import { AiPolicy } from '../services/aiPolicy.js';
+import { AiDecisionReviewer } from '../services/aiDecisionReviewer.js';
+import { AiEscalation } from '../services/aiEscalation.js';
+import { MatchLog } from '../services/matchLog.js';
 
 export const compareRouter = express.Router();
+
+async function evaluateStoreMatch(store, item, candidateProducts, enrichedPreferences, aiCallsContext) {
+  const match = FuzzyMatcher.matchProduct(store, item, candidateProducts, enrichedPreferences);
+
+  const topScore = match.matchScore ?? (match.product ? 80 : 0);
+  const runnerUp = match.runnerUp || (match.alternatives?.[0] ? { product: match.alternatives[0], score: Math.max(0, topScore - 10) } : null);
+  const secondScore = runnerUp?.score ?? 0;
+  const hasNoResult = !match.product || topScore === 0;
+
+  let aiDecision = { fired: false, reason: 'confident_unambiguous_match', changed: false };
+
+  // Fallback guard: AI fires only where rules are genuinely uncertain or missing results
+  const policyDecision = AiPolicy.shouldFire({
+    stage: 'select',
+    aiAssistLevel: enrichedPreferences.aiAssistLevel || (AiDecisionReviewer.isEnabled(enrichedPreferences) ? 'balanced' : 'off'),
+    aiStages: enrichedPreferences.aiStages,
+    callsUsed: aiCallsContext.callsUsed,
+    maxCalls: aiCallsContext.maxCalls,
+    aiMaxCallsPerBasket: aiCallsContext.maxCalls,
+    topScore,
+    secondScore,
+    hasNoResult
+  });
+
+  if (policyDecision.fire && AiDecisionReviewer.isEnabled(enrichedPreferences)) {
+    const candidatesForReview = match.scoredCandidates && match.scoredCandidates.length > 0
+      ? match.scoredCandidates
+      : [
+          ...(match.product ? [{ product: match.product, score: topScore, packs: match.packsNeeded || 1, totalPrice: match.totalPrice }] : []),
+          ...(match.alternatives || []).map((p) => ({ product: p, score: secondScore || 40, packs: 1, totalPrice: p.price }))
+        ];
+
+    if (candidatesForReview.length > 0) {
+      const query = item.rawText || item.name || '';
+      const reviewed = await AiDecisionReviewer.reviewCandidates(
+        query,
+        item,
+        candidatesForReview,
+        enrichedPreferences
+      );
+
+      if (reviewed) {
+        const aiProduct = reviewed.product || (reviewed.id ? reviewed : null);
+        const isChanged = Boolean(aiProduct && aiProduct.id !== match.product?.id);
+        aiDecision = {
+          fired: true,
+          reason: policyDecision.reason,
+          changed: isChanged,
+          aiReasoning: reviewed.aiReasoning || null
+        };
+
+        if (isChanged && aiProduct) {
+          match.product = aiProduct;
+          match.totalPrice = reviewed.totalPrice || aiProduct.price;
+          match.matchConfidence = reviewed.matchConfidence || 0.85;
+          match.matchSource = 'ai';
+          match.matchBadge = reviewed.matchBadge || 'AI Reviewed';
+          if (reviewed.aiReasoning) {
+            match.aiReasoning = reviewed.aiReasoning;
+          }
+        }
+      }
+    }
+  } else {
+    aiDecision.reason = policyDecision.reason;
+  }
+
+  MatchLog.recordDecision({
+    item,
+    store,
+    candidates: match.scoredCandidates || match.alternatives || [],
+    winner: match,
+    runnerUp,
+    aiDecision,
+    preferences: enrichedPreferences
+  });
+
+  return match;
+}
+
+async function maybeEscalateUnresolvedItems(items, storeMatchesMap, enabledStores, enrichedPreferences, aiCallsContext) {
+  if (!AiDecisionReviewer.isEnabled(enrichedPreferences) || enrichedPreferences.aiEscalationEnabled === false) {
+    return;
+  }
+  const remainingBudget = Math.max(0, aiCallsContext.maxCalls - aiCallsContext.callsUsed);
+  if (remainingBudget <= 0) {
+    return;
+  }
+
+  const problemItems = [];
+  for (const item of items) {
+    for (const store of enabledStores) {
+      const storeMatches = storeMatchesMap[store] || [];
+      const m = storeMatches.find((match) => (match.parsedItem?.name === item.name) || match.parsedItem === item);
+      if (!m || !m.product || (m.matchScore && m.matchScore < 40)) {
+        problemItems.push({
+          query: item.rawText || item.name,
+          item,
+          candidates: m?.scoredCandidates || m?.alternatives || [],
+          supermarket: store
+        });
+        break;
+      }
+    }
+  }
+
+  if (problemItems.length > 0) {
+    try {
+      const escalationResult = await AiEscalation.escalateBatch(problemItems, {
+        ...enrichedPreferences,
+        maxItems: Math.min(10, remainingBudget)
+      });
+      if (escalationResult && escalationResult.calls > 0) {
+        aiCallsContext.callsUsed += escalationResult.calls;
+      }
+    } catch (err) {
+      console.warn(`[Logic-API] Escalation batch failed: ${err.message}`);
+    }
+  }
+}
 
 const KNOWN_SUPERMARKETS = new Set([
   'asda',
@@ -104,10 +228,12 @@ compareRouter.post('/', async (req, res) => {
       }
 
       for (const store of enabledStores) {
-        const match = FuzzyMatcher.matchProduct(store, item, candidateProducts, enrichedPreferences);
+        const match = await evaluateStoreMatch(store, item, candidateProducts, enrichedPreferences, aiCallsContext);
         storeMatchesMap[store].push(match);
       }
     }
+
+    await maybeEscalateUnresolvedItems(items, storeMatchesMap, enabledStores, enrichedPreferences, aiCallsContext);
 
     const comparison = BasketCalculator.computeComparison(items, storeMatchesMap, enabledStores);
     const aiCallsUsed = aiCallsContext.callsUsed;
@@ -272,7 +398,7 @@ compareRouter.post('/stream', async (req, res) => {
       if (isClosed) break;
 
       for (const store of enabledStores) {
-        const match = FuzzyMatcher.matchProduct(store, item, candidateProducts, enrichedPreferences);
+        const match = await evaluateStoreMatch(store, item, candidateProducts, enrichedPreferences, aiCallsContext);
         storeMatchesMap[store].push(match);
       }
 
@@ -293,6 +419,7 @@ compareRouter.post('/stream', async (req, res) => {
     }
 
     if (!isClosed) {
+      await maybeEscalateUnresolvedItems(items, storeMatchesMap, enabledStores, enrichedPreferences, aiCallsContext);
       const comparison = BasketCalculator.computeComparison(items, storeMatchesMap, enabledStores);
       const aiCallsUsed = aiCallsContext.callsUsed;
       comparison.aiCallsUsed = aiCallsUsed;
