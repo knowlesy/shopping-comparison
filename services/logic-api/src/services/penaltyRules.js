@@ -39,7 +39,18 @@ export const rules = rawRules || {
     { trigger: 'sweet potato', mustContain: 'sweet potato', penalty: 150 }
   ],
   pulseRules: [
+    { trigger: 'butter bean', mustContain: 'butter\\s*bean|butter', penalty: 80 },
+    { trigger: 'kidney bean', mustContain: 'kidney\\s*bean|kidney', penalty: 80 },
+    { trigger: 'black bean', mustContain: 'black\\s*bean', penalty: 80 },
+    { trigger: 'cannellini bean', mustContain: 'cannellini', penalty: 80 },
+    { trigger: 'pinto bean', mustContain: 'pinto', penalty: 80 },
+    { trigger: 'haricot bean', mustContain: 'haricot', penalty: 80 },
+    { trigger: 'borlotti bean', mustContain: 'borlotti', penalty: 80 },
+    { trigger: 'broad bean', mustContain: 'broad\\s*bean', penalty: 80 },
+    { trigger: 'edamame', mustContain: 'edamame', penalty: 80 },
+    { trigger: 'baked bean', mustContain: 'baked\\s*bean', penalty: 80 },
     { trigger: 'beans', mustContain: 'bean', penalty: 80 },
+    { trigger: 'red lentil', mustContain: 'red\\s*lentil|lentil', penalty: 80 },
     { trigger: 'lentils', mustContain: 'lentil', penalty: 80 }
   ],
   supplementTerms: [
@@ -140,6 +151,8 @@ export class PenaltyRules {
       if (taxonomyStr) {
         if (/\b(?:peanut|nut|almond|cashew|seed)\s*(?:&|and)?\s*(?:nut\s*)?butter\b/i.test(taxonomyStr) || /\bbutter\s*beans?\b/i.test(taxonomyStr)) {
           prodCategory = 'pantry';
+        } else if (/\b(?:bakery|bread|garlic\s*bread|cakes?|croutons?|baguettes?|dough\s*balls?|flatbread|pizza|naan)\b/i.test(taxonomyStr)) {
+          prodCategory = 'bakery';
         } else if (/\b(?:fresh\s+fruit|fresh\s+vegetables?|salad\s*&\s*herbs?|fresh\s*produce|fruit\s*&\s*veg)\b/i.test(taxonomyStr)) {
           prodCategory = 'produce';
         } else if (/\b(?:meat|poultry|beef|chicken|pork|lamb)\b/i.test(taxonomyStr) && !/\bpet\b/i.test(taxonomyStr)) {
@@ -148,8 +161,6 @@ export class PenaltyRules {
           prodCategory = 'fish';
         } else if (/\b(?:milk|cheese|eggs?|yogurts?|dairy)\b/i.test(taxonomyStr) || (/\bbutter\b/i.test(taxonomyStr) && !/\b(?:peanut|nut|almond|cashew|cocoa|apple|beans?)\b/i.test(taxonomyStr))) {
           prodCategory = 'dairy-eggs';
-        } else if (/\b(?:bakery|bread|cakes?)\b/i.test(taxonomyStr)) {
-          prodCategory = 'bakery';
         }
       }
     }
@@ -223,6 +234,16 @@ export class PenaltyRules {
       const isWhite = /\bwhite\b/i.test(titleLower);
       const hasWholemealMarker = prod.isWholewheat || /\b(?:wholemeal|wholegrain|wholewheat|whole\s+wheat|brown|granary)\b/i.test(titleLower);
       if (isWhite || !hasWholemealMarker) {
+        return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
+      }
+    }
+
+    // Hard Dietary / Attribute Constraint: Plain vs Flavoured yogurt / dairy
+    const isYogurtRequested = /\b(?:yogurt|yoghurt)\b/i.test(itemLower);
+    if (isYogurtRequested) {
+      const FLAVOUR_PATTERN = /\b(?:raspberry|raspberries|strawberry|strawberries|mango|mangoes|peach|peaches|vanilla|honey|pomegranate|blueberry|blueberries|cherry|cherries|lemon|lemons|coconut|toffee|caramel|chocolate|banana|bananas|passionfruit|apple|apples|blackberry|blackberries|rhubarb|blackcurrant|blackcurrants|hazelnut|hazelnuts|coffee|cinnamon|citrus|pineapple|pineapples|plum|plums|apricot|apricots|fruits?|flavou?red?|flavou?r)\b/i;
+      const isFlavourRequested = FLAVOUR_PATTERN.test(itemLower) || FLAVOUR_PATTERN.test(itemText);
+      if (!isFlavourRequested && FLAVOUR_PATTERN.test(titleLower)) {
         return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
       }
     }

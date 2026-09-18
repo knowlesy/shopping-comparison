@@ -74,12 +74,22 @@ function isTaxonomyContaminated(queryText, itemCategory, product) {
   const dept = (product.departmentName || '').toLowerCase();
   const aisle = (product.aisleName || '').toLowerCase();
 
+  const shelf = (product.shelfName || '').toLowerCase();
+  const taxonomyFull = `${superDept} ${dept} ${aisle} ${shelf}`;
+
+  const isBakeryCandidate = /\b(?:bakery|bread|garlic\s*bread|baguettes?|croutons?|pizza|dough\s*balls?|flatbread|naan)\b/i.test(taxonomyFull);
+
   // If retailer taxonomy explicitly confirms fresh produce or fresh food,
-  // use it as positive evidence: it is NOT contaminated.
-  const isFreshFood = /\bfresh\b/i.test(superDept) ||
-                      /\bfresh\s*(?:food|produce|fruit|veg|meat|fish|salad|poultry)\b/i.test(`${superDept} ${dept} ${aisle}`);
+  // use it as positive evidence: it is NOT contaminated, unless it is a bakery/crouton candidate
+  const isFreshFood = !isBakeryCandidate && (
+    /\bfresh\b/i.test(superDept) ||
+    /\bfresh\s*(?:food|produce|fruit|veg|meat|fish|salad|poultry)\b/i.test(`${superDept} ${dept} ${aisle}`)
+  );
 
   if (itemCategory === 'produce') {
+    if (isBakeryCandidate) {
+      return true;
+    }
     // Fresh produce / fresh food taxonomy is positive evidence that the candidate belongs to the category
     if (isFreshFood) {
       return false;
@@ -91,7 +101,7 @@ function isTaxonomyContaminated(queryText, itemCategory, product) {
       // Level 3: Aisle level (specific)
       if (
         aisle &&
-        /\b(?:chocolate|chocolates|sweets|confectionery|desserts?|biscuits?|candy|crisps?|cakes?|jelly|jellies|ice\s*cream|ice\s*loll(?:y|ies)|snack\s*pots?|meringues?)\b/i.test(aisle)
+        /\b(?:chocolate|chocolates|sweets|confectionery|desserts?|biscuits?|candy|crisps?|cakes?|jelly|jellies|ice\s*cream|ice\s*loll(?:y|ies)|snack\s*pots?|meringues?|bakery|bread|garlic\s*bread|baguettes?|croutons?)\b/i.test(aisle)
       ) {
         return true;
       }
@@ -99,14 +109,14 @@ function isTaxonomyContaminated(queryText, itemCategory, product) {
       // Level 2: Department level (intermediate)
       if (
         dept &&
-        /\b(?:confectionery|chocolates?|sweets?|biscuits?|desserts?|crisps?|snacks?|cakes?)\b/i.test(dept)
+        /\b(?:confectionery|chocolates?|sweets?|biscuits?|desserts?|crisps?|snacks?|cakes?|bakery|bread|garlic\s*bread)\b/i.test(dept)
       ) {
         return true;
       }
 
       // Level 1: SuperDepartment level (broadest)
       if (superDept) {
-        if (/\b(?:drinks?|beverages?|pet\s*care|household|health\s*&\s*beauty|baby(?:\s*&\s*toddler)?)\b/i.test(superDept)) {
+        if (/\b(?:drinks?|beverages?|pet\s*care|household|health\s*&\s*beauty|baby(?:\s*&\s*toddler)?|bakery)\b/i.test(superDept)) {
           return true;
         }
         if (/\b(?:confectionery|treats(?:\s*&\s*snacks)?|desserts?)\b/i.test(superDept)) {

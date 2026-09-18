@@ -39,8 +39,63 @@
   ],
   "pulseRules": [
     {
+      "trigger": "butter bean",
+      "mustContain": "butter\\s*bean|butter",
+      "penalty": 80
+    },
+    {
+      "trigger": "kidney bean",
+      "mustContain": "kidney\\s*bean|kidney",
+      "penalty": 80
+    },
+    {
+      "trigger": "black bean",
+      "mustContain": "black\\s*bean",
+      "penalty": 80
+    },
+    {
+      "trigger": "cannellini bean",
+      "mustContain": "cannellini",
+      "penalty": 80
+    },
+    {
+      "trigger": "pinto bean",
+      "mustContain": "pinto",
+      "penalty": 80
+    },
+    {
+      "trigger": "haricot bean",
+      "mustContain": "haricot",
+      "penalty": 80
+    },
+    {
+      "trigger": "borlotti bean",
+      "mustContain": "borlotti",
+      "penalty": 80
+    },
+    {
+      "trigger": "broad bean",
+      "mustContain": "broad\\s*bean",
+      "penalty": 80
+    },
+    {
+      "trigger": "edamame",
+      "mustContain": "edamame",
+      "penalty": 80
+    },
+    {
+      "trigger": "baked bean",
+      "mustContain": "baked\\s*bean",
+      "penalty": 80
+    },
+    {
       "trigger": "beans",
       "mustContain": "bean",
+      "penalty": 80
+    },
+    {
+      "trigger": "red lentil",
+      "mustContain": "red\\s*lentil|lentil",
       "penalty": 80
     },
     {

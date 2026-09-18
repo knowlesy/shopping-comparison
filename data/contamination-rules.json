@@ -38,7 +38,7 @@
     "category": "garlic",
     "matchPattern": "\\b(?:garlic|garlic bulb|cloves of garlic)\\b",
     "matchNegatePattern": "\\b(?:bread|baguette|butter|sauce|dip)\\b",
-    "prohibitedPattern": "\\b(?:garlic bread|baguette|garlic doughballs?|garlic mayonnaise|garlic sauce|garlic dip|garlic butter|crisps)\\b"
+    "prohibitedPattern": "\\b(?:garlic\\s+bread|baguettes?|garlic\\s+doughballs?|garlic\\s+dough\\s*balls?|garlic\\s+mayonnaise|garlic\\s+sauce|garlic\\s+dip|garlic\\s+butter|crisps|ciabatta|flatbread|pizza|croutons?|garlic\\s+slices?|naan\\s+breads?|breads?)\\b"
   },
   {
     "category": "spinach",
