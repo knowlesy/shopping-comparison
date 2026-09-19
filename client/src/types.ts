@@ -205,6 +205,7 @@ export interface UserPreferences {
     query: boolean;
     select: boolean;
   };
+  enableMatchLog?: boolean;
 }
 
 export interface FavoriteItem {

@@ -227,7 +227,7 @@ function getTitleCore(title = '') {
       isEstimated,
       matchScore: best.score,
       runnerUp: scored[1] || null,
-      scoredCandidates: scored.slice(0, 10),
+      scoredCandidates: scored,
       lines,
       variantRoute: lines,
       explanation,

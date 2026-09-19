@@ -49,10 +49,9 @@ alternativesRouter.get('/', async (req, res) => {
     let scrapedForStore = [];
     if (forceRefresh === 'true' || catalogForStore.length < 3) {
       try {
-        const candidates = await getOrFetchCandidates(`${store} ${coreQuery}`, {
+        const candidates = await getOrFetchCandidates(coreQuery, {
           forceRefresh: forceRefresh === 'true',
-          timeoutMs: 2500,
-          enabledStores: [store]
+          timeoutMs: 5000
         });
 
         scrapedForStore = candidates.filter((p) => {

@@ -444,6 +444,16 @@ export class PenaltyRules {
       }
     }
 
+    const isWholewheatGrain = /\b(?:bread|toastie|bloomer|cob|loaf|loaves|pitta|pitas?|bagels?|rolls?|buns?|baps?|wraps?|pasta|spaghetti|penne|fusilli|noodles?|flour|rice|couscous|cereal)\b/i.test(itemLower);
+    if (preferences.preferWholewheat && !isWholemealRequested && isWholewheatGrain) {
+      const prodIsWholewheat = Boolean(prod.isWholewheat || /\b(?:wholemeal|wholegrain|wholewheat|whole\s+wheat|brown|granary)\b/i.test(titleLower));
+      if (prodIsWholewheat) {
+        score += 35;
+      } else {
+        score -= 20;
+      }
+    }
+
     // Healthier default lean meat & lower fat dairy preference when not explicitly specified
     if (preferences.healthierDefault && item.fatPercentage === undefined) {
       if (/\bmince\b/i.test(itemLower)) {

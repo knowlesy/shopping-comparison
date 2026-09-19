@@ -47,7 +47,8 @@ let userSettings = {
     interpret: true,
     query: false,
     select: true
-  }
+  },
+  enableMatchLog: process.env.ENABLE_MATCH_LOG === 'true'
 };
 
 export function getUserSettings() {
@@ -89,8 +90,15 @@ settingsRouter.put('/', (req, res) => {
     'geminiApiKey',
     'aiAssistLevel',
     'aiMaxCallsPerBasket',
-    'aiStages'
+    'aiStages',
+    'enableMatchLog'
   ];
+
+  if (req.body && req.body.enableMatchLog !== undefined) {
+    if (typeof req.body.enableMatchLog !== 'boolean') {
+      return res.status(400).json({ error: 'enableMatchLog must be a boolean' });
+    }
+  }
 
   if (req.body && req.body.directScrapersEnabled !== undefined) {
     if (typeof req.body.directScrapersEnabled !== 'boolean') {

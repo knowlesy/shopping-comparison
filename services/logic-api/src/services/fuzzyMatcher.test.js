@@ -368,4 +368,36 @@ describe('FuzzyMatcher', () => {
       assert.equal(withoutDeals.dealApplied, undefined);
     });
   });
+
+  it('should prefer wholewheat bread when preferWholewheat is enabled', () => {
+    const item = IngredientParser.parseItem('Bread 1 loaf');
+    const candidates = [
+      {
+        id: 'white-loaf',
+        supermarket: 'tesco',
+        title: 'Tesco White Thick Toastie Bread 800g',
+        price: 1.10,
+        packageSize: 800,
+        packageUnit: 'g',
+        category: 'bakery',
+        inStock: true
+      },
+      {
+        id: 'wholemeal-loaf',
+        supermarket: 'tesco',
+        title: 'Tesco Wholemeal Medium Bread 800g',
+        price: 1.10,
+        packageSize: 800,
+        packageUnit: 'g',
+        category: 'bakery',
+        inStock: true
+      }
+    ];
+
+    const matchWhole = FuzzyMatcher.matchProduct('tesco', item, candidates, { preferWholewheat: true });
+    assert.equal(matchWhole.product.id, 'wholemeal-loaf');
+
+    const matchWhite = FuzzyMatcher.matchProduct('tesco', item, candidates, { preferWholewheat: false });
+    assert.equal(matchWhite.product.id, 'white-loaf');
+  });
 });

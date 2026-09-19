@@ -768,6 +768,30 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 </div>
               )}
             </div>
+
+            {/* Diagnostic Match Logging */}
+            <div className={`p-3.5 rounded-xl border transition-all ${
+              localPrefs.enableMatchLog
+                ? 'border-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20'
+                : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40'
+            }`}>
+              <label className="flex items-center justify-between cursor-pointer">
+                <div>
+                  <span className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center space-x-1.5">
+                    <span>📋 Diagnostic Match Logging</span>
+                  </span>
+                  <span className="text-[11px] text-slate-500 block mt-0.5">
+                    Records full candidate scores and runner-up veto reasons to <code>match_decisions.jsonl</code>. Opt-in only.
+                  </span>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={localPrefs.enableMatchLog || false}
+                  onChange={e => setLocalPrefs({ ...localPrefs, enableMatchLog: e.target.checked })}
+                  className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
+                />
+              </label>
+            </div>
           </div>
 
           {/* Section 8: Dev Mode */}

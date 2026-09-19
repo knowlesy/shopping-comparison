@@ -138,8 +138,11 @@ export class MatchLog {
       const runnerUpScore = runnerUp?.matchScore ?? runnerUp?.score ?? 0;
       const whyRunnerUpLost = this.explainRunnerUpLoss(winner, runnerUp);
 
-      const candidateSummaries = (candidates || []).slice(0, 10).map((c) => {
+      const candidateSummaries = (candidates || []).map((c) => {
         const prod = c.product || c;
+        const score = c.score ?? c.matchScore ?? 0;
+        const winScore = winner?.matchScore ?? winner?.score ?? 0;
+        const scoreDeficit = winScore - score;
         return {
           id: prod.id,
           title: prod.title,
@@ -147,8 +150,12 @@ export class MatchLog {
           unitPrice: prod.unitPrice,
           packageSize: prod.packageSize,
           packageUnit: prod.packageUnit,
-          score: c.score ?? c.matchScore ?? 0,
-          source: prod.source || "catalog"
+          score,
+          scoreDeficit: scoreDeficit > 0 ? scoreDeficit : 0,
+          reason: c.reason || (scoreDeficit > 0 ? `Scored ${scoreDeficit} pts below winner` : 'Winner or tied'),
+          penalties: c.penalties || c.penaltyReasons || (score < 25 ? 'Low score / non-qualifying' : null),
+          veto: c.veto || (score <= -500 ? 'Contamination or attribute veto' : null),
+          source: prod.source || 'catalog'
         };
       });
 

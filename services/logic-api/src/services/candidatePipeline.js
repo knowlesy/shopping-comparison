@@ -57,7 +57,7 @@ export function buildScrapeCacheKey(coreQuery, enabledStores = []) {
 export async function getOrFetchCandidatesWithSource(coreQuery, options = {}) {
   const {
     forceRefresh = false,
-    timeoutMs = 15000,
+    timeoutMs = 35000,
     enabledStores = [],
     preferences = {}
   } = options;
@@ -107,7 +107,7 @@ export async function getOrFetchCandidatesWithSource(coreQuery, options = {}) {
       );
       const searchTerms = queryPlan.queries && queryPlan.queries.length > 0 ? queryPlan.queries[0] : coreQuery;
 
-      const directTimeout = Math.min(timeoutMs, 8000);
+      const directTimeout = Math.min(timeoutMs, 35000);
       const directRes = await StoreFetcherClient.search(searchTerms, directTargetStores, {
         timeoutMs: directTimeout,
         wantVariants: true,

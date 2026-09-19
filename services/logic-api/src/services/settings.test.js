@@ -155,4 +155,37 @@ describe("Direct Scraper Settings (Step 2)", () => {
     settings.directScrapersEnabled = true;
     assert.equal(getUserSettings().directScrapersEnabled, true);
   });
+
+  it("should survive round-trip through PUT to update enableMatchLog", async () => {
+    const res = await fetch(baseUrl, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ enableMatchLog: true })
+    });
+    assert.equal(res.status, 200);
+    const body = await res.json();
+    assert.equal(body.enableMatchLog, true);
+
+    const getRes = await fetch(baseUrl);
+    const getBody = await getRes.json();
+    assert.equal(getBody.enableMatchLog, true);
+
+    // Reset back
+    await fetch(baseUrl, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ enableMatchLog: false })
+    });
+  });
+
+  it("should reject non-boolean enableMatchLog with 400", async () => {
+    const res = await fetch(baseUrl, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ enableMatchLog: "true" })
+    });
+    assert.equal(res.status, 400);
+    const body = await res.json();
+    assert.ok(body.error.includes("boolean"));
+  });
 });
