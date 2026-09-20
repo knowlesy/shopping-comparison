@@ -197,6 +197,10 @@ Respond with JSON only in this exact format:
 
       if (!dec || dec.selectedIndex === null || dec.selectedIndex === undefined) {
         return {
+          itemIndex: p.itemIndex,
+          itemId: p.itemId,
+          supermarket: p.supermarket,
+          item: p.item,
           query: p.query,
           product: null,
           packsNeeded: 1,
@@ -212,6 +216,10 @@ Respond with JSON only in this exact format:
       const idx = Number(dec.selectedIndex);
       if (isNaN(idx) || idx < 0 || idx >= cands.length) {
         return {
+          itemIndex: p.itemIndex,
+          itemId: p.itemId,
+          supermarket: p.supermarket,
+          item: p.item,
           query: p.query,
           product: null,
           packsNeeded: 1,
@@ -231,6 +239,10 @@ Respond with JSON only in this exact format:
       const eligibility = PenaltyRules.checkEligibility(prod, p.item, undefined, options.preferences || options);
       if (!eligibility.eligible || (chosen.score !== undefined && (chosen.score < 25 || chosen.eligible === false))) {
         return {
+          itemIndex: p.itemIndex,
+          itemId: p.itemId,
+          supermarket: p.supermarket,
+          item: p.item,
           query: p.query,
           product: null,
           packsNeeded: 1,
@@ -255,6 +267,10 @@ Respond with JSON only in this exact format:
       return {
         ...chosen,
         ...conf,
+        itemIndex: p.itemIndex,
+        itemId: p.itemId,
+        supermarket: p.supermarket,
+        item: p.item,
         product: prod,
         packsNeeded: chosen.packs || 1,
         totalQuantity: chosen.totalQty || chosen.packageSize || 1,

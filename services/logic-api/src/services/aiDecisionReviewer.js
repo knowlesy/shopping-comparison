@@ -97,7 +97,11 @@ export class AiDecisionReviewer {
     });
 
     // If AI matching is not enabled or AiPolicy decides not to fire, use top fuzzy candidate
-    if (!this.isEnabled(preferences) || (!preferences.forceReview && !policyDecision.fire)) {
+    const shouldFire =
+      this.isEnabled(preferences) &&
+      (policyDecision.fire || (preferences.forceReview && policyDecision.reason !== 'budget_exhausted' && policyDecision.reason !== 'stage_disabled' && policyDecision.reason !== 'ai_assist_off'));
+
+    if (!shouldFire) {
       return scoredCandidates[0];
     }
 

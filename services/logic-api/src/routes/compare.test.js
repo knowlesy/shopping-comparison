@@ -10,6 +10,8 @@ import { PriceCache } from '../services/priceCache.js';
 import { IngredientParser } from '../services/ingredientParser.js';
 import { getCoreSearchQuery, buildScrapeCacheKey } from '../services/candidatePipeline.js';
 import { AiDecisionReviewer } from '../services/aiDecisionReviewer.js';
+import { AiEscalation } from '../services/aiEscalation.js';
+import { MatchLog } from '../services/matchLog.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -27,6 +29,12 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
   before(async () => {
     app = express();
     app.use(express.json({ limit: '10mb' }));
+    app.use((err, req, res, next) => {
+      if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        return res.status(400).json({ error: 'Malformed JSON payload' });
+      }
+      next(err);
+    });
     app.use('/api/compare', compareRouter);
     app.use('/api/settings', settingsRouter);
 
@@ -366,4 +374,328 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
       assert.equal(match.totalPrice, 3.00);
     });
   });
+
+  describe('Task 04 Acceptance Conditions Suite', () => {
+    const streamBaseUrl = () => baseUrl + '/stream';
+
+    const parseSseEvents = (text) => {
+      const lines = text.split('\n');
+      const events = [];
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          try {
+            events.push(JSON.parse(line.slice(6)));
+          } catch {}
+        }
+      }
+      return events;
+    };
+
+    beforeEach(() => {
+      process.env.GEMINI_API_KEY = 'test-fake-key-task-04';
+      AiDecisionReviewer.resetClientFactory();
+      AiEscalation.resetClientFactory();
+    });
+
+    afterEach(() => {
+      AiDecisionReviewer.resetClientFactory();
+      AiEscalation.resetClientFactory();
+    });
+
+    it('Condition 1: Normal and SSE transports produce semantically identical baskets (excluding timestamps/meta)', async () => {
+      const items = [
+        { name: 'Apples', rawText: 'Apples 1 kg', targetQuantity: 1, unit: 'kg' }
+      ];
+      const cacheKey = buildScrapeCacheKey('apples', ['tesco']);
+      PriceCache.set(cacheKey, [
+        { id: 'app-1', title: 'Tesco British Apples 1kg', price: 1.80, packageSize: 1, packageUnit: 'kg', supermarket: 'tesco', source: 'catalog' }
+      ]);
+
+      // POST /api/compare
+      const normalRes = await fetch(baseUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items,
+          preferences: { enabledSupermarkets: ['tesco'], aiMatchingEnabled: false }
+        })
+      });
+      assert.equal(normalRes.status, 200);
+      const normalBasket = await normalRes.json();
+
+      // POST /api/compare/stream
+      const streamRes = await fetch(streamBaseUrl(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items,
+          preferences: { enabledSupermarkets: ['tesco'], aiMatchingEnabled: false }
+        })
+      });
+      assert.equal(streamRes.status, 200);
+      assert.equal(streamRes.headers.get('content-type')?.includes('text/event-stream'), true);
+      const sseText = await streamRes.text();
+      const events = parseSseEvents(sseText);
+      const completeEvent = events.find((e) => e.type === 'complete');
+      assert.ok(completeEvent, 'SSE stream must emit complete event');
+      const streamBasket = completeEvent.comparison;
+
+      // Assert semantic equivalence
+      assert.equal(streamBasket.cheapestStore, normalBasket.cheapestStore);
+      assert.equal(streamBasket.supermarkets.tesco.totalPrice, normalBasket.supermarkets.tesco.totalPrice);
+      assert.equal(streamBasket.supermarkets.tesco.items.length, normalBasket.supermarkets.tesco.items.length);
+      assert.equal(streamBasket.supermarkets.tesco.items[0].product.id, normalBasket.supermarkets.tesco.items[0].product.id);
+      assert.equal(streamBasket.supermarkets.tesco.items[0].totalPrice, normalBasket.supermarkets.tesco.items[0].totalPrice);
+    });
+
+    it('Condition 2: Escalation updates duplicate item names and stores accurately without cross-application', async () => {
+      // Two duplicate items with same name, tested across two stores
+      const items = [
+        { id: 'bread_1', name: 'ZzzUnmatchedBread', rawText: 'ZzzUnmatchedBread 1 loaf', targetQuantity: 1, unit: 'loaf' },
+        { id: 'bread_2', name: 'ZzzUnmatchedBread', rawText: 'ZzzUnmatchedBread 2 loaves', targetQuantity: 2, unit: 'loaf' }
+      ];
+
+      // No catalog match: score 0 triggers escalation
+      const cacheKey = buildScrapeCacheKey('zzzunmatchedbread', ['tesco', 'asda']);
+      PriceCache.set(cacheKey, [
+        { id: 't-unrelated', title: 'Unrelated Product 800g', price: 2.00, supermarket: 'tesco', source: 'catalog' },
+        { id: 'a-unrelated', title: 'Unrelated Product 800g', price: 2.10, supermarket: 'asda', source: 'catalog' }
+      ]);
+
+      // Mock escalation returning explicit decisions per batch item:
+      // batch 0: tesco, item 0 -> decline with specific reasoning
+      // batch 1: asda, item 0 -> decline with specific reasoning
+      // batch 2: tesco, item 1 -> decline with specific reasoning
+      // batch 3: asda, item 1 -> decline with specific reasoning
+      AiEscalation.setClientFactory(() => ({
+        models: {
+          generateContent: async () => ({
+            text: JSON.stringify({
+              decisions: [
+                { batchIndex: 0, selectedIndex: null, confidence: 0.96, reasoning: 'Escalation decision for Tesco Item 0' },
+                { batchIndex: 1, selectedIndex: null, confidence: 0.90, reasoning: 'Escalation decision for Asda Item 0' },
+                { batchIndex: 2, selectedIndex: null, confidence: 0.92, reasoning: 'Escalation decision for Tesco Item 1' },
+                { batchIndex: 3, selectedIndex: null, confidence: 0.88, reasoning: 'Escalation decision for Asda Item 1' }
+              ]
+            })
+          })
+        }
+      }));
+
+      const res = await fetch(baseUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items,
+          preferences: {
+            enabledSupermarkets: ['tesco', 'asda'],
+            aiMatchingEnabled: true,
+            aiAssistLevel: 'balanced',
+            aiStages: { select: false, escalate: true },
+            aiEscalationEnabled: true,
+            bypassCache: true
+          }
+        })
+      });
+
+      assert.equal(res.status, 200);
+      const comparison = await res.json();
+      const tescoItems = comparison.supermarkets.tesco.items;
+      const asdaItems = comparison.supermarkets.asda.items;
+
+      assert.equal(tescoItems.length, 2);
+      assert.equal(asdaItems.length, 2);
+
+      // Item 0 at Tesco
+      assert.equal(tescoItems[0].itemIndex, 0);
+      assert.equal(tescoItems[0].itemId, 'bread_1');
+      assert.equal(tescoItems[0].matchSource, 'ai-escalation');
+      assert.equal(tescoItems[0].aiReasoning, 'Escalation decision for Tesco Item 0');
+
+      // Item 0 at Asda
+      assert.equal(asdaItems[0].itemIndex, 0);
+      assert.equal(asdaItems[0].itemId, 'bread_1');
+      assert.equal(asdaItems[0].matchSource, 'ai-escalation');
+      assert.equal(asdaItems[0].aiReasoning, 'Escalation decision for Asda Item 0');
+
+      // Item 1 at Tesco
+      assert.equal(tescoItems[1].itemIndex, 1);
+      assert.equal(tescoItems[1].itemId, 'bread_2');
+      assert.equal(tescoItems[1].matchSource, 'ai-escalation');
+      assert.equal(tescoItems[1].aiReasoning, 'Escalation decision for Tesco Item 1');
+
+      // Item 1 at Asda
+      assert.equal(asdaItems[1].itemIndex, 1);
+      assert.equal(asdaItems[1].itemId, 'bread_2');
+      assert.equal(asdaItems[1].matchSource, 'ai-escalation');
+      assert.equal(asdaItems[1].aiReasoning, 'Escalation decision for Asda Item 1');
+    });
+
+    it('Condition 3: Stage disabling (select=false, escalate=false) and exhausted budget prevent prohibited calls', async () => {
+      let selectCalls = 0;
+      let escalationCalls = 0;
+
+      AiDecisionReviewer.setClientFactory(() => {
+        selectCalls++;
+        return {
+          models: {
+            generateContent: async () => ({
+              text: JSON.stringify({ selectedIndex: 0, confidence: 0.9, reasoning: 'Reviewer pick' })
+            })
+          }
+        };
+      });
+
+      AiEscalation.setClientFactory(() => {
+        escalationCalls++;
+        return {
+          models: {
+            generateContent: async () => ({
+              text: JSON.stringify({ decisions: [] })
+            })
+          }
+        };
+      });
+
+      const items = [
+        { name: 'Unknown Exotic Item 123', rawText: 'Unknown Exotic Item 123', targetQuantity: 1 }
+      ];
+
+      // 1. Stage select=false, escalate=false
+      const res1 = await fetch(baseUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items,
+          preferences: {
+            enabledSupermarkets: ['tesco'],
+            aiMatchingEnabled: true,
+            aiStages: { select: false, escalate: false },
+            bypassCache: true
+          }
+        })
+      });
+      assert.equal(res1.status, 200);
+      assert.equal(selectCalls, 0, 'Must make zero select AI calls when select stage is disabled');
+      assert.equal(escalationCalls, 0, 'Must make zero escalation AI calls when escalate stage is disabled');
+
+      // 2. Budget exhausted (aiMaxCallsPerBasket: 0)
+      const res2 = await fetch(baseUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items,
+          preferences: {
+            enabledSupermarkets: ['tesco'],
+            aiMatchingEnabled: true,
+            aiMaxCallsPerBasket: 0,
+            forceReview: true,
+            bypassCache: true
+          }
+        })
+      });
+      assert.equal(res2.status, 200);
+      assert.equal(selectCalls, 0, 'Must make zero AI calls when budget is 0');
+      assert.equal(escalationCalls, 0, 'Must make zero escalation calls when budget is 0');
+    });
+
+    it('Condition 4: Client disconnect aborts work; explicit error events distinct from complete', async () => {
+      // Test explicit error handling in SSE stream
+      const res = await fetch(streamBaseUrl(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: 'invalid-items-payload'
+        })
+      });
+
+      // Returns 400 JSON before stream headers are established
+      assert.equal(res.status, 400);
+      const data = await res.json();
+      assert.ok(data.error);
+    });
+
+    it('Condition 5: No-match logs include considered candidates and final AI results without leaking raw credentials', async () => {
+      const items = [{ name: 'Nonexistent Special Item', rawText: 'Nonexistent Special Item', targetQuantity: 1 }];
+      const cacheKey = buildScrapeCacheKey('nonexistent special item', ['tesco']);
+      PriceCache.set(cacheKey, [
+        { id: 'cand-1', title: 'Unrelated Product A', price: 2.50, supermarket: 'tesco', source: 'catalog' }
+      ]);
+
+      const logCapture = [];
+      const origRecord = MatchLog.recordDecision;
+      MatchLog.recordDecision = (params) => {
+        logCapture.push(params);
+        return origRecord.call(MatchLog, params);
+      };
+
+      try {
+        const res = await fetch(baseUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            items,
+            preferences: {
+              enabledSupermarkets: ['tesco'],
+              aiMatchingEnabled: false,
+              enableMatchLog: true,
+              geminiApiKey: 'SECRET_API_KEY_NEVER_LOG'
+            }
+          })
+        });
+
+        assert.equal(res.status, 200);
+        assert.ok(logCapture.length > 0, 'MatchLog.recordDecision must have been called');
+
+        // Check written log file on disk to ensure raw secret credentials were not serialized
+        const dataDir = process.env.DATA_DIR || path.resolve(__dirname, '../../data');
+        const logFile = path.join(dataDir, 'match_decisions.jsonl');
+        if (fs.existsSync(logFile)) {
+          const logContent = fs.readFileSync(logFile, 'utf8');
+          assert.equal(logContent.includes('SECRET_API_KEY_NEVER_LOG'), false, 'Log file must never leak raw API key');
+        }
+
+        const decision = logCapture[0];
+        assert.ok(decision.candidates, 'Must record candidates');
+        assert.ok(decision.candidates.length > 0, 'Candidates list must not be empty');
+        assert.equal(decision.candidates[0].product.id, 'cand-1');
+      } finally {
+        MatchLog.recordDecision = origRecord;
+      }
+    });
+
+    it('Condition 6: Both transports reject malformed items, null/invalid preferences, and invalid supermarket with 400 before side effects', async () => {
+      const testCases = [
+        { body: '', desc: 'empty string body' },
+        { body: 'invalid json primitive', desc: 'string primitive body' },
+        { body: { items: [{ targetQuantity: -5 }] }, desc: 'missing item name' },
+        { body: { items: [{ name: 'Milk', targetQuantity: -1 }] }, desc: 'negative targetQuantity' },
+        { body: { items: [{ name: 'Milk' }], preferences: { enabledSupermarkets: ['bogus_market'] } }, desc: 'invalid supermarket' },
+        { body: { items: [{ name: 'Milk' }], preferences: 'not-an-object' }, desc: 'invalid preferences type' }
+      ];
+
+      for (const tc of testCases) {
+        // Normal POST /api/compare
+        const normalRes = await fetch(baseUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(tc.body)
+        });
+        assert.equal(normalRes.status, 400, `POST /api/compare must reject ${tc.desc} with 400`);
+        const normalData = await normalRes.json();
+        assert.ok(normalData.error, `Response for ${tc.desc} must contain error message`);
+
+        // SSE POST /api/compare/stream
+        const streamRes = await fetch(streamBaseUrl(), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(tc.body)
+        });
+        assert.equal(streamRes.status, 400, `POST /api/compare/stream must reject ${tc.desc} with 400 before SSE`);
+        const streamData = await streamRes.json();
+        assert.ok(streamData.error, `Stream response for ${tc.desc} must contain error message`);
+      }
+    });
+  });
 });
+

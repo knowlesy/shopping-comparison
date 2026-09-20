@@ -48,6 +48,12 @@ export function createApp() {
     })
   );
   app.use(express.json({ limit: '5mb' }));
+  app.use((err, _req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+      return res.status(400).json({ error: 'Malformed JSON payload' });
+    }
+    next(err);
+  });
 
   // State-changing requests must come from an origin this deployment recognises, and
   // must not be a form post. Registered before the routers so every mutation is

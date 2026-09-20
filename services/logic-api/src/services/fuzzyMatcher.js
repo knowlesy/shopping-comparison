@@ -37,21 +37,13 @@ export class FuzzyMatcher {
     const storeProducts = mergedCandidates;
 
     if (!storeProducts || storeProducts.length === 0) {
-      return {
-        parsedItem: item,
+      return MatchResultBuilder.buildNoMatch({
+        item,
         supermarket,
-        product: null,
-        packsNeeded: 1,
-        totalQuantity: item.targetQuantity || 1,
-        totalPrice: 0,
-        effectiveUnitPrice: 0,
-        weightDifferencePercent: 0,
-        isClosestPack: false,
-        matchScore: 0,
-        ...formatConfidence(0.4, 'catalog', undefined),
-        reason: 'Item not currently listed in live search results.',
-        alternatives: []
-      };
+        scoredCandidates: [],
+        preferences,
+        reason: 'Item not currently listed in live search results.'
+      });
     }
 
     let effectiveItem = item;
