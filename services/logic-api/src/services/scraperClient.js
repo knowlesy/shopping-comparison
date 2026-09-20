@@ -1,7 +1,16 @@
 import dotenv from 'dotenv';
+import { DEV_SCRAPE_TOKEN, resolveSharedSecret } from './sharedSecret.js';
 dotenv.config();
 
 const SCRAPER_URL = process.env.SCRAPER_SERVICE_URL || 'http://127.0.0.1:3002/scrape';
+
+// Resolved at start-up so a production deployment missing its shared secret fails
+// immediately and visibly, rather than on the first scrape.
+const SCRAPE_TOKEN = resolveSharedSecret({
+  name: 'SCRAPE_TOKEN',
+  value: process.env.SCRAPE_TOKEN,
+  devDefault: DEV_SCRAPE_TOKEN
+});
 
 export class ScraperClient {
   /**
@@ -15,13 +24,11 @@ export class ScraperClient {
     const startTime = Date.now();
 
     try {
-      const scrapeToken = process.env.SCRAPE_TOKEN || 'local-dev-scrape-token-shopping-app';
-
       const response = await fetch(SCRAPER_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-scrape-token': scrapeToken
+          'x-scrape-token': SCRAPE_TOKEN
         },
         body: JSON.stringify({
           url,

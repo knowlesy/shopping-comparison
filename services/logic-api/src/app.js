@@ -12,6 +12,7 @@ import { cacheRouter } from './routes/cache.js';
 import { authRouter } from './routes/auth.js';
 import { systemRouter } from './routes/system.js';
 import { statsRouter } from './routes/stats.js';
+import { corsOriginDelegate, originGuard } from './middleware/originGuard.js';
 
 /**
  * Build the Logic-API express application.
@@ -24,7 +25,6 @@ import { statsRouter } from './routes/stats.js';
  */
 export function createApp() {
   const app = express();
-  const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
 
   // OWASP Security: Conceal express engine footprint
   app.disable('x-powered-by');
@@ -39,14 +39,20 @@ export function createApp() {
     next();
   });
 
+  // CORS and the Origin guard share one decision function so they cannot disagree
+  // about which origins this deployment recognises.
   app.use(
     cors({
-      origin: CLIENT_ORIGIN,
+      origin: corsOriginDelegate,
       credentials: true
     })
   );
   app.use(express.json({ limit: '5mb' }));
-  app.use(express.urlencoded({ extended: true, limit: '5mb' }));
+
+  // State-changing requests must come from an origin this deployment recognises, and
+  // must not be a form post. Registered before the routers so every mutation is
+  // covered, including the bodiless POST /api/cache/clear.
+  app.use(originGuard);
 
   // Health check endpoint
   app.get('/health', (_req, res) => {

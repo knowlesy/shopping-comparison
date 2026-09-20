@@ -48,6 +48,16 @@ spec:
                 configMapKeyRef:
                   name: shoppingwise-config
                   key: CLIENT_ORIGIN
+            - name: ALLOWED_ORIGINS
+              valueFrom:
+                configMapKeyRef:
+                  name: shoppingwise-config
+                  key: ALLOWED_ORIGINS
+            - name: ALLOW_PRIVATE_NETWORK_ORIGINS
+              valueFrom:
+                configMapKeyRef:
+                  name: shoppingwise-config
+                  key: ALLOW_PRIVATE_NETWORK_ORIGINS
             - name: SCRAPE_TOKEN
               valueFrom:
                 secretKeyRef:

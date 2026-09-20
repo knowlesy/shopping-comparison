@@ -1,13 +1,44 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import crypto from 'node:crypto';
 import { connect } from 'puppeteer-real-browser';
+import { isAllowedUrl, verifySharedToken } from './security.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3002;
-const SCRAPE_TOKEN = process.env.SCRAPE_TOKEN || 'local-dev-scrape-token-shopping-app';
+// Production refuses to start on a missing or published-default token. Development
+// keeps the convenient fallback. See services/logic-api/src/services/sharedSecret.js.
+const DEV_SCRAPE_TOKEN = 'local-dev-scrape-token-shopping-app';
+
+function resolveScrapeToken(env = process.env) {
+  const configured = (env.SCRAPE_TOKEN || '').trim();
+  if (env.NODE_ENV !== 'production') {
+    return configured || DEV_SCRAPE_TOKEN;
+  }
+  if (!configured) {
+    throw new Error(
+      'SCRAPE_TOKEN is not set. Production requires a real shared secret; set it from a ' +
+        'k3s Secret or the compose environment. To use the published development token, ' +
+        'run with NODE_ENV other than "production".'
+    );
+  }
+  if (configured === DEV_SCRAPE_TOKEN) {
+    throw new Error(
+      'SCRAPE_TOKEN is set to the published development token, which is in the public ' +
+        'repository and must not be used in production. Generate one with: openssl rand -hex 24'
+    );
+  }
+  return configured;
+}
+
+let SCRAPE_TOKEN;
+try {
+  SCRAPE_TOKEN = resolveScrapeToken();
+} catch (err) {
+  console.error(`[Scraper-Pod] Refusing to start: ${err.message}`);
+  process.exit(1);
+}
 
 // OWASP Security: Conceal express engine footprint
 app.disable('x-powered-by');
@@ -45,12 +76,7 @@ function authenticateScrapeToken(req, res, next) {
     });
   }
 
-  const tokenBuffer = Buffer.from(token);
-  const expectedBuffer = Buffer.from(SCRAPE_TOKEN);
-  if (
-    tokenBuffer.length !== expectedBuffer.length ||
-    !crypto.timingSafeEqual(tokenBuffer, expectedBuffer)
-  ) {
+  if (!verifySharedToken(token, SCRAPE_TOKEN)) {
     return res.status(401).json({
       success: false,
       error: 'Unauthorized: invalid or missing x-scrape-token header.'
@@ -59,52 +85,8 @@ function authenticateScrapeToken(req, res, next) {
   next();
 }
 
-// SSRF / Host validation
-const ALLOWED_HOSTS = [
-  'trolley.co.uk',
-  'www.trolley.co.uk',
-  'groceries.asda.com',
-  'asda.com',
-  'sainsburys.co.uk',
-  'tesco.com',
-  'morrisons.com',
-  'groceries.morrisons.com',
-  'iceland.co.uk',
-  'groceries.aldi.co.uk',
-  'aldi.co.uk',
-  'lidl.co.uk',
-  'waitrose.com',
-  'ocado.com',
-  'coop.co.uk'
-];
-
-function isAllowedUrl(urlString) {
-  try {
-    const parsed = new URL(urlString);
-    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false;
-    const hostname = parsed.hostname.toLowerCase();
-
-    // Prevent SSRF against private networks / localhost / link-local / metadata
-    if (
-      hostname === 'localhost' ||
-      hostname === '127.0.0.1' ||
-      hostname === '0.0.0.0' ||
-      hostname === '::1' ||
-      hostname.startsWith('10.') ||
-      hostname.startsWith('192.168.') ||
-      hostname.startsWith('169.254.') ||
-      /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname)
-    ) {
-      return false;
-    }
-
-    return ALLOWED_HOSTS.some(
-      (allowed) => hostname === allowed || hostname.endsWith(`.${allowed}`)
-    );
-  } catch {
-    return false;
-  }
-}
+// SSRF / host validation lives in ./security.js so the OWASP audit can exercise
+// the real guard rather than a copy of it.
 
 // Managed browser instance pool
 let sharedBrowser = null;

@@ -1,8 +1,16 @@
 import dotenv from 'dotenv';
+import { DEV_FETCHER_TOKEN, resolveSharedSecret } from './sharedSecret.js';
 dotenv.config();
 
 const STORE_FETCHER_URL = process.env.STORE_FETCHER_URL || 'http://127.0.0.1:3003';
-const FETCHER_TOKEN = process.env.FETCHER_TOKEN || 'local-dev-fetcher-token-shopping-app';
+
+// Resolved at start-up so a production deployment missing its shared secret fails
+// immediately and visibly, rather than on the first comparison.
+const FETCHER_TOKEN = resolveSharedSecret({
+  name: 'FETCHER_TOKEN',
+  value: process.env.FETCHER_TOKEN,
+  devDefault: DEV_FETCHER_TOKEN
+});
 
 export class StoreFetcherClient {
   /**

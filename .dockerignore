@@ -1,13 +1,43 @@
+# Dependencies and build output
 node_modules
 client/node_modules
 client/dist
+
+# Secrets and local environment. Never in a build context: anything in the context is
+# uploaded to the daemon and one careless COPY away from being baked into a layer.
+.env
+.env.*
+!.env.example
+
+# Service runtime data: the household's cache, price history, match logs, settings.
+services/logic-api/data
+services/*/data
+data/runtime
+
+# Private research, evidence and notes
 docs
+GATE-DISPUTES.md
+TODO.md
+
+# Tests, tooling and local state
 test-results
 tests
 scripts
+playwright-report
 .git
+.github
+.claude
+.vscode
+.idea
+
+# Python sidecar local state
+services/store-fetcher/.venv
+**/__pycache__
+**/*.pyc
+
+# Logs
+*.log
+
+# Markdown, except the changelog the logic-api image serves
 *.md
 !CHANGELOG.md
-
-
-

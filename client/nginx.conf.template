@@ -6,13 +6,10 @@ server {
     root /usr/share/nginx/html;
     index index.html;
 
-    # OWASP Defensive Security Headers
-    add_header X-Frame-Options "SAMEORIGIN" always;
-    add_header X-Content-Type-Options "nosniff" always;
-    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
-    add_header Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()" always;
-    add_header X-Permitted-Cross-Domain-Policies "none" always;
-    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' http://localhost:* http://127.0.0.1:* https://api.github.com; font-src 'self' data:;" always;
+    # OWASP defensive headers. Declared here for locations that add no header of
+    # their own, and re-included in the ones that do — see security-headers.conf for
+    # why that repetition is required rather than redundant.
+    include /etc/nginx/security-headers.conf;
 
     # Gzip Compression
     gzip on;
@@ -30,6 +27,7 @@ server {
     # NGINX_ENVSUBST_FILTER restricts substitution to LOGIC_API_* so nginx's own
     # runtime variables ($host, $scheme, $remote_addr, ...) are left untouched.
     location /api/ {
+        include /etc/nginx/security-headers.conf;
         proxy_pass http://${LOGIC_API_UPSTREAM}/api/;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
@@ -49,6 +47,7 @@ server {
 
     # Static assets with immutable caching
     location /assets/ {
+        include /etc/nginx/security-headers.conf;
         expires 1y;
         add_header Cache-Control "public, immutable";
         try_files $uri =404;
@@ -56,12 +55,14 @@ server {
 
     # SPA route fallback for client-side routing
     location / {
+        include /etc/nginx/security-headers.conf;
         try_files $uri $uri/ /index.html;
         add_header Cache-Control "no-cache, no-store, must-revalidate";
     }
 
     # Healthcheck endpoint
     location /health {
+        include /etc/nginx/security-headers.conf;
         access_log off;
         return 200 "healthy\n";
     }

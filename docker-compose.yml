@@ -42,8 +42,12 @@ services:
       context: .
       dockerfile: ./services/logic-api/Dockerfile
     container_name: uk-grocery-logic-api
+    # Bound to loopback, not every interface. The browser reaches the API through the
+    # client's nginx proxy on 8080; publishing 3001 to the LAN exposed an
+    # unauthenticated API directly, bypassing nginx and its headers. Keeping a loopback
+    # binding leaves host-side debugging (curl 127.0.0.1:3001) working.
     ports:
-      - "3001:3001"
+      - "127.0.0.1:3001:3001"
     environment:
       - PORT=3001
       - NODE_ENV=production
@@ -52,6 +56,12 @@ services:
       - STORE_FETCHER_URL=http://store-fetcher:3003
       - FETCHER_TOKEN=${FETCHER_TOKEN:-local-dev-fetcher-token-shopping-app}
       - CLIENT_ORIGIN=${CLIENT_ORIGIN:-http://localhost:8080}
+      # Extra browser origins this deployment should accept, comma separated, for
+      # household members opening the app by LAN address or hostname. Loopback and
+      # private-network origins are accepted by default; set
+      # ALLOW_PRIVATE_NETWORK_ORIGINS=false to require this list to be exhaustive.
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-}
+      - ALLOW_PRIVATE_NETWORK_ORIGINS=${ALLOW_PRIVATE_NETWORK_ORIGINS:-true}
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
       - DATA_DIR=/usr/src/app/data/runtime
     volumes:

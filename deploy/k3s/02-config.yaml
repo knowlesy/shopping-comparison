@@ -14,6 +14,11 @@ data:
   # Upstream the client's nginx proxies /api/ to. Must match the logic-api Service
   # name in this namespace; the container default (logic-api:3001) is the Compose name.
   LOGIC_API_UPSTREAM: "shoppingwise-logic-api:3001"
+  # The browser reaches the API same-origin through the client's nginx, so this is the
+  # address households actually type. Loopback and private-network origins are accepted
+  # by default; list any others here, comma separated.
   CLIENT_ORIGIN: "http://localhost:8080"
+  ALLOWED_ORIGINS: ""
+  ALLOW_PRIVATE_NETWORK_ORIGINS: "true"
   DATA_DIR: "/data"
   ENABLE_MATCH_LOG: "false"

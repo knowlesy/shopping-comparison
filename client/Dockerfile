@@ -23,6 +23,10 @@ FROM nginxinc/nginx-unprivileged:alpine
 # /etc/nginx/conf.d/default.conf at start-up, substituting LOGIC_API_UPSTREAM only.
 COPY client/nginx.conf.template /etc/nginx/templates/default.conf.template
 
+# Included by every location in the template. Not a template itself: it contains no
+# variables, and envsubst only processes files under /etc/nginx/templates.
+COPY client/security-headers.conf /etc/nginx/security-headers.conf
+
 # Default upstream matches the docker-compose service name; k3s overrides it
 # from the shoppingwise-config ConfigMap.
 ENV LOGIC_API_UPSTREAM=logic-api:3001 \

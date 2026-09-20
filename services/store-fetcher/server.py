@@ -13,8 +13,36 @@ from pydantic import BaseModel, Field
 
 app = FastAPI(title="ShoppingWise Store Fetcher", version="1.2.0")
 
-# Shared-secret token: fails closed with dev fallback pattern mirroring scraper-pod
-FETCHER_TOKEN = os.environ.get("FETCHER_TOKEN") or "local-dev-fetcher-token-shopping-app"
+# Shared-secret token.
+#
+# The development fallback below is published in this repository. Production refuses to
+# start without a real secret, rather than silently running on a token anyone can read.
+DEV_FETCHER_TOKEN = "local-dev-fetcher-token-shopping-app"
+
+
+def resolve_fetcher_token(env=os.environ):
+    """Return the shared secret, or raise in production when it is missing or default."""
+    configured = (env.get("FETCHER_TOKEN") or "").strip()
+
+    if env.get("NODE_ENV") != "production" and env.get("ENVIRONMENT") != "production":
+        return configured or DEV_FETCHER_TOKEN
+
+    if not configured:
+        raise RuntimeError(
+            "FETCHER_TOKEN is not set. Production requires a real shared secret; set it "
+            "from a k3s Secret or the compose environment. To use the published "
+            "development token, run with NODE_ENV other than 'production'."
+        )
+    if configured == DEV_FETCHER_TOKEN:
+        raise RuntimeError(
+            "FETCHER_TOKEN is set to the published development token, which is in the "
+            "public repository and must not be used in production. "
+            "Generate one with: openssl rand -hex 24"
+        )
+    return configured
+
+
+FETCHER_TOKEN = resolve_fetcher_token()
 SCRAPE_TOKEN = FETCHER_TOKEN
 
 KNOWN_STORES = ["tesco", "sainsburys", "asda", "morrisons", "iceland"]
