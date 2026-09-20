@@ -25,6 +25,7 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
   let app;
   let server;
   let baseUrl;
+  let settingsUrl;
 
   before(async () => {
     app = express();
@@ -42,6 +43,7 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
       server = app.listen(0, '127.0.0.1', () => {
         const port = server.address().port;
         baseUrl = `http://127.0.0.1:${port}/api/compare`;
+        settingsUrl = `http://127.0.0.1:${port}/api/settings`;
         resolve();
       });
     });
@@ -681,8 +683,19 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
         { body: { items: [{ targetQuantity: -5 }] }, desc: 'missing item name' },
         { body: { items: [{ name: 'Milk', targetQuantity: -1 }] }, desc: 'negative targetQuantity' },
         { body: { items: [{ name: 'Milk' }], preferences: { enabledSupermarkets: ['bogus_market'] } }, desc: 'invalid supermarket' },
-        { body: { items: [{ name: 'Milk' }], preferences: 'not-an-object' }, desc: 'invalid preferences type' }
+        { body: { items: [{ name: 'Milk' }], preferences: 'not-an-object' }, desc: 'invalid preferences type' },
+        { body: { items: [{ name: 'Milk' }], preferences: null }, desc: 'explicitly null preferences' }
       ];
+
+      // An explicit null used to pass validation (only `undefined` defaults), so both handlers
+      // read `preferences.enablePastSearches` outside their try/catch and rejected with an
+      // unhandled TypeError. Prove the rejection is a controlled 400 with no search recorded.
+      const recordedQueries = [];
+      const origRecordSearch = PriceCache.recordSearch;
+      PriceCache.recordSearch = (params) => {
+        recordedQueries.push(params);
+        return origRecordSearch.call(PriceCache, params);
+      };
 
       for (const tc of testCases) {
         // Normal POST /api/compare
@@ -704,6 +717,80 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
         assert.equal(streamRes.status, 400, `POST /api/compare/stream must reject ${tc.desc} with 400 before SSE`);
         const streamData = await streamRes.json();
         assert.ok(streamData.error, `Stream response for ${tc.desc} must contain error message`);
+      }
+
+      PriceCache.recordSearch = origRecordSearch;
+      assert.equal(
+        recordedQueries.length,
+        0,
+        'No rejected payload may record a past search before validation'
+      );
+    });
+
+    it('Condition 7: Disabling the saved selection stage stops per-item review and batched escalation', async () => {
+      let selectCalls = 0;
+      let escalationCalls = 0;
+
+      AiDecisionReviewer.setClientFactory(() => {
+        selectCalls++;
+        return {
+          models: {
+            generateContent: async () => ({
+              text: JSON.stringify({ selectedIndex: 0, confidence: 0.9, reasoning: 'Reviewer pick' })
+            })
+          }
+        };
+      });
+      AiEscalation.setClientFactory(() => {
+        escalationCalls++;
+        return {
+          models: {
+            generateContent: async () => ({ text: JSON.stringify({ decisions: [] }) })
+          }
+        };
+      });
+
+      // Drive the switch through the supported settings contract, not a request-only field.
+      // settingsStore only permits interpret/query/select, so `escalate` cannot be saved at all;
+      // escalation is the batched fallback of the selection stage and must follow `select`.
+      const rejected = await fetch(settingsUrl, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ aiStages: { escalate: false } })
+      });
+      assert.equal(rejected.status, 400, 'aiStages.escalate is not a supported saved stage');
+
+      const saved = await fetch(settingsUrl, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          aiMatchingEnabled: true,
+          enabledSupermarkets: ['tesco'],
+          aiStages: { interpret: false, query: false, select: false }
+        })
+      });
+      assert.equal(saved.status, 200);
+      const savedBody = await saved.json();
+      assert.equal(savedBody.aiStages.select, false);
+
+      try {
+        // No `preferences` in the body: the route falls back to the saved settings.
+        const res = await fetch(baseUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            items: [{ name: 'Unknown Exotic Item 123', rawText: 'Unknown Exotic Item 123', targetQuantity: 1 }]
+          })
+        });
+        assert.equal(res.status, 200);
+        assert.equal(selectCalls, 0, 'Saved select=false must make zero per-item review calls');
+        assert.equal(escalationCalls, 0, 'Saved select=false must also stop batched escalation');
+      } finally {
+        await fetch(settingsUrl, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ aiStages: { interpret: true, query: false, select: true } })
+        });
       }
     });
   });

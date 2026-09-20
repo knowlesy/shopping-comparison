@@ -47,8 +47,11 @@ export function validateComparisonInput(body) {
     }
   }
 
-  if (preferences !== undefined && preferences !== null) {
-    if (typeof preferences !== 'object' || Array.isArray(preferences)) {
+  // `undefined` means "not supplied" and falls back to saved settings in the routes.
+  // An explicit `null` is an invalid value: the handlers read preferences before their
+  // try/catch, so letting it through produces an unhandled TypeError instead of a 400.
+  if (preferences !== undefined) {
+    if (preferences === null || typeof preferences !== 'object' || Array.isArray(preferences)) {
       return { error: 'Preferences must be an object' };
     }
 
@@ -365,8 +368,18 @@ export class ComparisonEngine {
     if (!AiDecisionReviewer.isEnabled(enrichedPreferences) || enrichedPreferences.aiEscalationEnabled === false) {
       return;
     }
-    if (enrichedPreferences.aiStages && enrichedPreferences.aiStages.escalate === false) {
-      return;
+    // Escalation is the batched fallback of the selection stage, so it follows the saved
+    // `select` switch — settingsStore only permits interpret/query/select, so an `escalate`
+    // key can never be saved and the user-facing control would otherwise do nothing here.
+    // An explicit request-only `escalate` boolean still overrides, so a caller can isolate
+    // escalation from per-item review.
+    const aiStages = enrichedPreferences.aiStages;
+    if (aiStages) {
+      if (typeof aiStages.escalate === 'boolean') {
+        if (aiStages.escalate === false) return;
+      } else if (aiStages.select === false) {
+        return;
+      }
     }
 
     const remainingBudget = Math.max(0, aiCallsContext.maxCalls - aiCallsContext.callsUsed);
@@ -469,7 +482,7 @@ export class ComparisonEngine {
     const storeItems = comparison.supermarkets[store].items;
 
     // 3. Resolve target item index
-    let targetIndex = -1;
+    let targetIndex;
     if (itemIndex !== undefined && itemIndex !== null) {
       const idx = Number(itemIndex);
       if (!Number.isInteger(idx) || idx < 0 || idx >= items.length) {
@@ -513,7 +526,7 @@ export class ComparisonEngine {
     }
 
     // Product validation
-    let chosenProduct = null;
+    let chosenProduct;
     let isSwap = false;
     if (selection.product !== undefined && selection.product !== null) {
       const prod = selection.product;
