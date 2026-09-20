@@ -1,4 +1,4 @@
-import { describe, it, before, after } from 'node:test';
+import { describe, it, before, after, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
 import express from 'express';
 import fs from 'fs';
@@ -9,6 +9,7 @@ import { settingsRouter } from './settings.js';
 import { PriceCache } from '../services/priceCache.js';
 import { IngredientParser } from '../services/ingredientParser.js';
 import { getCoreSearchQuery, buildScrapeCacheKey } from '../services/candidatePipeline.js';
+import { AiDecisionReviewer } from '../services/aiDecisionReviewer.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -187,6 +188,182 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
       assert.ok(duration < 2000, 'Rejection of oversized input must be fast (<2s)');
       const data = await res.json();
       assert.ok(data.error.includes('maximum allowed length'));
+    });
+  });
+
+  describe('Task 03 Canonical AI Match Application Route Tests', () => {
+    const fakeClient = (text, opts = {}) => ({
+      models: {
+        generateContent: async () => {
+          if (opts.throw) throw new Error('simulated model failure');
+          return { text };
+        }
+      }
+    });
+
+    const mockItem = {
+      rawText: 'Greek yogurt 1 kg',
+      name: 'Greek yogurt',
+      baseItem: 'Greek yogurt',
+      category: 'dairy-eggs',
+      targetQuantity: 1000,
+      unit: 'g'
+    };
+
+    const mockCandidates = [
+      {
+        id: 'y-500',
+        title: 'Tesco Greek Style Yogurt 500g',
+        price: 1.50,
+        packageSize: 500,
+        packageUnit: 'g',
+        category: 'dairy-eggs',
+        supermarket: 'tesco',
+        source: 'direct'
+      },
+      {
+        id: 'y-250',
+        title: 'Tesco Greek Style Yogurt 250g',
+        price: 0.80,
+        packageSize: 250,
+        packageUnit: 'g',
+        category: 'dairy-eggs',
+        supermarket: 'tesco',
+        source: 'direct'
+      }
+    ];
+
+    beforeEach(() => {
+      process.env.GEMINI_API_KEY = 'test-key-task-03';
+      const coreQuery = getCoreSearchQuery(mockItem);
+      const cacheKey = buildScrapeCacheKey(coreQuery, ['tesco']);
+      PriceCache.set(cacheKey, mockCandidates);
+    });
+
+    afterEach(() => {
+      AiDecisionReviewer.resetClientFactory();
+    });
+
+    it('should rebuild dependent fields when AI changes product from 2x500g to 4x250g', async () => {
+      AiDecisionReviewer.setClientFactory(() =>
+        fakeClient(JSON.stringify({ selectedIndex: 1, confidence: 0.95, reasoning: '250g pack is cheaper' }))
+      );
+
+      const res = await fetch(baseUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: [mockItem],
+          preferences: {
+            enabledSupermarkets: ['tesco'],
+            aiMatchingEnabled: true,
+            forceReview: true,
+            bypassCache: true
+          }
+        })
+      });
+
+      assert.equal(res.status, 200);
+      const data = await res.json();
+      const match = data.supermarkets.tesco.items[0];
+
+      assert.equal(match.product.id, 'y-250');
+      assert.equal(match.packsNeeded, 4, 'Must require 4 packs for 1000g');
+      assert.equal(match.totalQuantity, 1000);
+      assert.equal(match.totalPrice, 3.20);
+      assert.equal(match.lines[0].product.id, 'y-250');
+      assert.equal(match.lines[0].packs, 4);
+      assert.equal(match.matchSource, 'ai');
+      assert.equal(match.matchConfidence, 0.95);
+    });
+
+    it('should update match-confidence metadata when AI reviews same product without changing it', async () => {
+      AiDecisionReviewer.setClientFactory(() =>
+        fakeClient(JSON.stringify({ selectedIndex: 0, confidence: 0.97, reasoning: '500g pack confirmed optimal' }))
+      );
+
+      const res = await fetch(baseUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: [mockItem],
+          preferences: {
+            enabledSupermarkets: ['tesco'],
+            aiMatchingEnabled: true,
+            forceReview: true,
+            bypassCache: true
+          }
+        })
+      });
+
+      assert.equal(res.status, 200);
+      const data = await res.json();
+      const match = data.supermarkets.tesco.items[0];
+
+      assert.equal(match.product.id, 'y-500');
+      assert.equal(match.matchSource, 'ai', 'Same product must still receive AI matchSource stamp');
+      assert.equal(match.matchConfidence, 0.97);
+      assert.equal(match.aiReasoning, '500g pack confirmed optimal');
+    });
+
+    it('should produce a coherent no-match with zero total and no product when AI declines', async () => {
+      AiDecisionReviewer.setClientFactory(() =>
+        fakeClient(JSON.stringify({ selectedIndex: null, confidence: 0.90, reasoning: 'No candidate satisfies dietary requirements' }))
+      );
+
+      const res = await fetch(baseUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: [mockItem],
+          preferences: {
+            enabledSupermarkets: ['tesco'],
+            aiMatchingEnabled: true,
+            forceReview: true,
+            bypassCache: true
+          }
+        })
+      });
+
+      assert.equal(res.status, 200);
+      const data = await res.json();
+      const match = data.supermarkets.tesco.items[0];
+
+      assert.equal(match.product, null, 'Must have product null');
+      assert.equal(match.totalPrice, 0, 'Must have totalPrice 0');
+      assert.equal(match.totalQuantity, 0, 'Must have totalQuantity 0');
+      assert.equal(match.dealApplied, undefined, 'Must not retain deal');
+      assert.equal(match.lines.length, 0);
+      assert.equal(match.matchSource, 'ai');
+      assert.equal(match.aiReasoning, 'No candidate satisfies dietary requirements');
+    });
+
+    it('should fall back safely to rules without AI stamp when model evaluation fails', async () => {
+      AiDecisionReviewer.setClientFactory(() =>
+        fakeClient('', { throw: true })
+      );
+
+      const res = await fetch(baseUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: [mockItem],
+          preferences: {
+            enabledSupermarkets: ['tesco'],
+            aiMatchingEnabled: true,
+            forceReview: true,
+            bypassCache: true
+          }
+        })
+      });
+
+      assert.equal(res.status, 200);
+      const data = await res.json();
+      const match = data.supermarkets.tesco.items[0];
+
+      assert.equal(match.product.id, 'y-500', 'Should fall back to rules match');
+      assert.notEqual(match.matchSource, 'ai', 'Must not claim AI matchSource on model failure');
+      assert.equal(match.totalPrice, 3.00);
     });
   });
 });

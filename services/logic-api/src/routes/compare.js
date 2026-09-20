@@ -1,5 +1,6 @@
 import express from 'express';
 import { FuzzyMatcher } from '../services/fuzzyMatcher.js';
+import { MatchResultBuilder } from '../services/matchResultBuilder.js';
 import { BasketCalculator } from '../services/basketCalculator.js';
 import { PriceCache } from '../services/priceCache.js';
 import {
@@ -17,7 +18,7 @@ import { isKnownSupermarket } from '../services/supermarkets.js';
 export const compareRouter = express.Router();
 
 async function evaluateStoreMatch(store, item, candidateProducts, enrichedPreferences, aiCallsContext) {
-  const match = FuzzyMatcher.matchProduct(store, item, candidateProducts, enrichedPreferences);
+  let match = FuzzyMatcher.matchProduct(store, item, candidateProducts, enrichedPreferences);
 
   const topScore = match.matchScore ?? (match.product ? 80 : 0);
   const runnerUp = match.runnerUp || (match.alternatives?.[0] ? { product: match.alternatives[0], score: Math.max(0, topScore - 10) } : null);
@@ -39,7 +40,7 @@ async function evaluateStoreMatch(store, item, candidateProducts, enrichedPrefer
     hasNoResult
   });
 
-  if (policyDecision.fire && AiDecisionReviewer.isEnabled(enrichedPreferences)) {
+  if ((policyDecision.fire || enrichedPreferences.forceReview) && AiDecisionReviewer.isEnabled(enrichedPreferences)) {
     const candidatesForReview = match.scoredCandidates && match.scoredCandidates.length > 0
       ? match.scoredCandidates
       : [
@@ -57,25 +58,23 @@ async function evaluateStoreMatch(store, item, candidateProducts, enrichedPrefer
       );
 
       if (reviewed) {
-        const aiProduct = reviewed.product || (reviewed.id ? reviewed : null);
-        const isChanged = Boolean(aiProduct && aiProduct.id !== match.product?.id);
+        const initialProductId = match.product?.id || null;
+        match = MatchResultBuilder.applySelection(match, reviewed, {
+          item,
+          supermarket: store,
+          preferences: enrichedPreferences
+        });
+
+        const isChanged = Boolean(
+          (match.product && match.product.id !== initialProductId) ||
+          (!match.product && initialProductId !== null)
+        );
         aiDecision = {
           fired: true,
           reason: policyDecision.reason,
           changed: isChanged,
-          aiReasoning: reviewed.aiReasoning || null
+          aiReasoning: match.aiReasoning || reviewed.aiReasoning || null
         };
-
-        if (isChanged && aiProduct) {
-          match.product = aiProduct;
-          match.totalPrice = reviewed.totalPrice || aiProduct.price;
-          match.matchConfidence = reviewed.matchConfidence || 0.85;
-          match.matchSource = 'ai';
-          match.matchBadge = reviewed.matchBadge || 'AI Reviewed';
-          if (reviewed.aiReasoning) {
-            match.aiReasoning = reviewed.aiReasoning;
-          }
-        }
       }
     }
   } else {
