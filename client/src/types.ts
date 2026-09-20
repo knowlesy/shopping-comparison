@@ -166,6 +166,8 @@ export interface SplitBasketOptimization {
 }
 
 export interface ComparisonResponse {
+  /** Opaque handle to the server-owned snapshot of this comparison; required to edit the basket. */
+  comparisonId?: string;
   parsedItems: ParsedItem[];
   supermarkets: Record<SupermarketName, StoreBasketResult>;
   cheapestStore: SupermarketName;

@@ -187,6 +187,8 @@ export const api = {
   },
 
   // Adjust an item in a comparison (swap alternative or update packs) via canonical API
+  // The server owns the basket: only the comparison's opaque id and the requested change are
+  // sent, and the API resolves the product, its price and its provenance from its own snapshot.
   adjustComparison: async (params: {
     comparison: ComparisonResponse;
     store: SupermarketName;
@@ -202,7 +204,7 @@ export const api = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        comparison: params.comparison,
+        comparisonId: params.comparison.comparisonId,
         store: params.store,
         itemId: params.itemId,
         itemIndex: params.itemIndex,

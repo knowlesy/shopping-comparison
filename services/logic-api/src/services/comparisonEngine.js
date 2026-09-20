@@ -9,6 +9,7 @@ import { AiPolicy } from './aiPolicy.js';
 import { AiDecisionReviewer } from './aiDecisionReviewer.js';
 import { AiEscalation } from './aiEscalation.js';
 import { MatchLog } from './matchLog.js';
+import { saveComparisonContext, loadComparisonContext, resolveTrustedProduct } from './comparisonContext.js';
 import { isKnownSupermarket, DEFAULT_ENABLED_SUPERMARKETS } from './supermarkets.js';
 
 /**
@@ -131,6 +132,9 @@ export class ComparisonEngine {
     }
 
     const sourcesCount = { live: 0, cache: 0, catalog: 0, direct: 0 };
+    // Every candidate this comparison actually considered, kept so that a later basket edit can
+    // resolve a chosen product id against server-held data instead of trusting the browser.
+    const candidatesByItem = [];
     let firstScrapeError = null;
 
     // Track per-store-per-item AI decisions for logging
@@ -177,6 +181,8 @@ export class ComparisonEngine {
       if (scrapeErr && !firstScrapeError) {
         firstScrapeError = scrapeErr;
       }
+
+      candidatesByItem[i] = Array.isArray(candidateProducts) ? candidateProducts : [];
 
       if (sourcesCount[source] !== undefined) {
         sourcesCount[source]++;
@@ -349,6 +355,21 @@ export class ComparisonEngine {
       console.warn(`[Logic-API] Live scraping fallback to catalog: ${firstScrapeError}`);
     }
 
+    comparison.comparisonId = saveComparisonContext({
+      items,
+      storeMatchesMap,
+      enabledStores,
+      candidatesByItem,
+      derived: {
+        aiCallsUsed: comparison.aiCallsUsed,
+        aiBudget: comparison.aiBudget,
+        meta: comparison.meta,
+        candidateStatus: Object.fromEntries(
+          enabledStores.map((s) => [s, comparison.supermarkets[s]?.candidateStatus])
+        )
+      }
+    });
+
     PriceHistory.recordSnapshot(comparison);
 
     return comparison;
@@ -453,19 +474,24 @@ export class ComparisonEngine {
    * and returns a completely recalculated comparison without re-scraping.
    */
   static adjustComparison({
-    comparison,
+    comparisonId,
     store,
     itemIndex,
     itemId,
     selection,
     preferences = getUserSettings()
   }) {
-    // 1. Validate comparison shape
-    if (!comparison || typeof comparison !== 'object' || !Array.isArray(comparison.parsedItems) || !comparison.supermarkets || typeof comparison.supermarkets !== 'object') {
-      throw new Error('Invalid comparison payload: parsedItems and supermarkets required');
+    // 1. Resolve the server-owned snapshot of this comparison.
+    //    The caller supplies only an opaque id and what it wants changed; every item, match,
+    //    price and provenance badge used below comes from server-held data.
+    const context = loadComparisonContext(comparisonId);
+    if (!context) {
+      throw new Error(
+        'Comparison context is unknown or has expired; re-run the comparison before editing the basket'
+      );
     }
 
-    const items = comparison.parsedItems;
+    const items = context.items;
     if (items.length === 0) {
       throw new Error('Comparison contains no parsed items');
     }
@@ -475,11 +501,10 @@ export class ComparisonEngine {
       throw new Error(`Invalid or unknown supermarket: ${store}`);
     }
 
-    if (!comparison.supermarkets[store] || !Array.isArray(comparison.supermarkets[store].items)) {
+    const storeItems = context.storeMatchesMap[store];
+    if (!Array.isArray(storeItems)) {
       throw new Error(`Supermarket "${store}" is not present in comparison`);
     }
-
-    const storeItems = comparison.supermarkets[store].items;
 
     // 3. Resolve target item index
     let targetIndex;
@@ -525,22 +550,32 @@ export class ComparisonEngine {
       }
     }
 
-    // Product validation
+    // Product resolution. Only the id is taken from the caller; price, source, title, deals and
+    // every other field come from the candidate this comparison actually considered, so a
+    // tampered price or an invented "direct" badge cannot reach the basket.
     let chosenProduct;
     let isSwap = false;
     if (selection.product !== undefined && selection.product !== null) {
       const prod = selection.product;
-      if (typeof prod !== 'object' || !prod.id || typeof prod.title !== 'string' || prod.title.trim().length === 0) {
-        throw new Error('Invalid product selection: valid id and title required');
+      const productId =
+        typeof prod === 'string' || typeof prod === 'number'
+          ? prod
+          : (prod && typeof prod === 'object' ? prod.id : null);
+      if (productId === undefined || productId === null || String(productId).trim().length === 0) {
+        throw new Error('Invalid product selection: a product id is required');
       }
-      if (typeof prod.price !== 'number' || isNaN(prod.price) || prod.price < 0) {
-        throw new Error('Invalid product selection: price must be a non-negative number');
-      }
-      if (prod.supermarket && prod.supermarket !== store) {
+      if (prod && typeof prod === 'object' && prod.supermarket && prod.supermarket !== store) {
         throw new Error(`Product supermarket (${prod.supermarket}) does not match requested store (${store})`);
       }
-      chosenProduct = prod;
-      isSwap = !currentMatch.product || currentMatch.product.id !== prod.id;
+
+      const trusted = resolveTrustedProduct(context, targetIndex, store, productId);
+      if (!trusted) {
+        throw new Error(
+          `Product "${productId}" is not a candidate of this comparison for ${store}`
+        );
+      }
+      chosenProduct = trusted;
+      isSwap = !currentMatch.product || String(currentMatch.product.id) !== String(trusted.id);
     } else {
       if (!currentMatch.product) {
         throw new Error('Cannot adjust quantity on an item with no matched product');
@@ -569,11 +604,14 @@ export class ComparisonEngine {
     updatedMatch.itemIndex = targetIndex;
     updatedMatch.itemId = item.id || `item_${targetIndex}`;
 
-    // 6. Assemble storeMatchesMap across all supermarkets
+    // 6. Assemble storeMatchesMap from the trusted snapshot. Untouched lines are the server's
+    //    own previous results, not anything the caller sent back.
     const storeMatchesMap = {};
-    const enabledSupermarkets = Object.keys(comparison.supermarkets);
+    const enabledSupermarkets = context.enabledStores?.length
+      ? [...context.enabledStores]
+      : Object.keys(context.storeMatchesMap);
     for (const s of enabledSupermarkets) {
-      const existingMatches = [...(comparison.supermarkets[s].items || [])];
+      const existingMatches = [...(context.storeMatchesMap[s] || [])];
       if (s === store) {
         existingMatches[targetIndex] = updatedMatch;
       }
@@ -587,16 +625,33 @@ export class ComparisonEngine {
       enabledSupermarkets
     );
 
-    // Preserve metadata
-    if (comparison.aiCallsUsed !== undefined) {
-      updatedComparison.aiCallsUsed = comparison.aiCallsUsed;
+    // Re-apply the metadata the snapshot recorded at acquisition time.
+    const derived = context.derived || {};
+    if (derived.aiCallsUsed !== undefined) {
+      updatedComparison.aiCallsUsed = derived.aiCallsUsed;
     }
-    if (comparison.aiBudget !== undefined) {
-      updatedComparison.aiBudget = comparison.aiBudget;
+    if (derived.aiBudget !== undefined) {
+      updatedComparison.aiBudget = derived.aiBudget;
     }
-    if (comparison.meta) {
-      updatedComparison.meta = { ...comparison.meta };
+    if (derived.meta) {
+      updatedComparison.meta = { ...derived.meta };
     }
+    for (const s of enabledSupermarkets) {
+      const status = derived.candidateStatus?.[s];
+      if (status && updatedComparison.supermarkets[s]) {
+        updatedComparison.supermarkets[s].candidateStatus = status;
+      }
+    }
+
+    // Successive edits chain onto the same context.
+    updatedComparison.comparisonId = saveComparisonContext({
+      comparisonId,
+      items,
+      storeMatchesMap,
+      enabledStores: enabledSupermarkets,
+      candidatesByItem: context.candidatesByItem,
+      derived
+    });
 
     return updatedComparison;
   }

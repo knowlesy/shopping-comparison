@@ -805,20 +805,56 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
       ];
 
       const stores = ['tesco', 'asda', 'sainsburys'];
-      const milkKey = buildScrapeCacheKey('semi skimmed milk', stores);
-      const breadKey = buildScrapeCacheKey('wholemeal bread', stores);
 
-      PriceCache.set(milkKey, [
+      // Candidates a swap may later choose must be candidates the server actually acquired:
+      // POST /api/compare/adjust resolves a product id against this pool and ignores whatever
+      // price or source the caller sends. Seed both the canonical per-store v3 keys and the
+      // legacy combined v2 key (see the task 03 suite for why v3 must be seeded explicitly).
+      const milkCandidates = [
         { id: 't-live-milk', title: 'Tesco British Semi Skimmed Milk 4 Pints', price: 1.55, supermarket: 'tesco', source: 'live', packageSize: 4, packageUnit: 'pt', isEstimated: false },
         { id: 'a-live-milk', title: 'Asda British Semi Skimmed Milk 4 Pints', price: 1.50, supermarket: 'asda', source: 'live', packageSize: 4, packageUnit: 'pt', isEstimated: false },
-        { id: 's-live-milk', title: "Sainsbury's British Semi Skimmed Milk 4 Pints", price: 1.55, supermarket: 'sainsburys', source: 'live', packageSize: 4, packageUnit: 'pt', isEstimated: false }
-      ]);
+        { id: 's-live-milk', title: "Sainsbury's British Semi Skimmed Milk 4 Pints", price: 1.55, supermarket: 'sainsburys', source: 'live', packageSize: 4, packageUnit: 'pt', isEstimated: false },
+        // Estimated catalog benchmark offered alongside the live row (Condition 1 swaps to it).
+        {
+          id: 'tesco-cat-milk-999', supermarket: 'tesco', title: 'Tesco Benchmark Milk 4 Pints',
+          brand: 'Tesco', tier: 'standard', category: 'dairy-eggs',
+          packageSize: 4, packageUnit: 'pt', packageDisplay: '4 Pints',
+          price: 3.50, unitPrice: 0.88, unitPriceMeasure: 'per pint',
+          source: 'catalog', isEstimated: true, isHealthier: false
+        },
+        // Deliberately unmatched value lines used by Condition 4 to force a store rank change.
+        { id: 'super-cheap-tesco', supermarket: 'tesco', title: 'Super Value Item', brand: 'Value', tier: 'value', category: 'dairy-eggs', packageSize: 4, packageUnit: 'pt', packageDisplay: '4 Pints', price: 0.10, unitPrice: 0.02, unitPriceMeasure: 'per pint', source: 'live', isEstimated: false, isHealthier: false },
+        { id: 'super-cheap-asda', supermarket: 'asda', title: 'Super Value Item', brand: 'Value', tier: 'value', category: 'dairy-eggs', packageSize: 4, packageUnit: 'pt', packageDisplay: '4 Pints', price: 0.10, unitPrice: 0.02, unitPriceMeasure: 'per pint', source: 'live', isEstimated: false, isHealthier: false }
+      ];
 
-      PriceCache.set(breadKey, [
+      const breadCandidates = [
         { id: 't-live-bread', title: 'Tesco Wholemeal Medium Bread 800g', price: 0.85, supermarket: 'tesco', source: 'live', packageSize: 800, packageUnit: 'g', isEstimated: false },
         { id: 'a-live-bread', title: 'Asda Wholemeal Medium Bread 800g', price: 0.80, supermarket: 'asda', source: 'live', packageSize: 800, packageUnit: 'g', isEstimated: false },
-        { id: 's-live-bread', title: "Sainsbury's Wholemeal Medium Bread 800g", price: 0.85, supermarket: 'sainsburys', source: 'live', packageSize: 800, packageUnit: 'g', isEstimated: false }
-      ]);
+        { id: 's-live-bread', title: "Sainsbury's Wholemeal Medium Bread 800g", price: 0.85, supermarket: 'sainsburys', source: 'live', packageSize: 800, packageUnit: 'g', isEstimated: false },
+        // Clubcard + multibuy line used by Condition 2.
+        {
+          id: 'tesco-deal-bread-555', supermarket: 'tesco', title: 'Tesco Toastie Bread 800g',
+          brand: 'Tesco', tier: 'standard', category: 'bakery',
+          packageSize: 800, packageUnit: 'g', packageDisplay: '800g',
+          price: 2.00, clubcardPrice: 1.20, unitPrice: 0.25, unitPriceMeasure: 'per 100g',
+          source: 'live', isEstimated: false, isHealthier: false,
+          deal: { rawText: 'Buy 2 for £2.50', type: 'multibuy_fixed', bundleQuantity: 2, bundlePrice: 2.50, badge: '2 for £2.50' }
+        }
+      ];
+
+      const seed = (query, candidates) => {
+        PriceCache.set(buildScrapeCacheKey(query, stores), candidates);
+        for (const store of stores) {
+          PriceCache.set(
+            buildStoreCandidateCacheKey(query, store),
+            candidates.filter((c) => c.supermarket === store)
+          );
+        }
+      };
+      // Derive the keys from the same helper the pipeline uses; 'Wholemeal bread' normalises
+      // to the core query 'bread', so a hand-written key silently seeds nothing.
+      seed(getCoreSearchQuery(items[0]), milkCandidates);
+      seed(getCoreSearchQuery(items[1]), breadCandidates);
 
       const res = await fetch(baseUrl, {
         method: 'POST',
@@ -839,34 +875,16 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
       const initialEstimatedShare = initialTesco.estimatedShare;
       const initialTotalPrice = initialTesco.totalPrice;
 
-      // Swap item 0 at tesco to an explicit estimated catalog product
-      const catalogProduct = {
-        id: 'tesco-cat-milk-999',
-        supermarket: 'tesco',
-        title: 'Tesco Benchmark Milk 4 Pints',
-        brand: 'Tesco',
-        tier: 'standard',
-        category: 'dairy-eggs',
-        packageSize: 4,
-        packageUnit: 'pt',
-        packageDisplay: '4 Pints',
-        price: 3.50,
-        unitPrice: 0.88,
-        unitPriceMeasure: 'per pint',
-        source: 'catalog',
-        isEstimated: true,
-        isHealthier: false
-      };
-
+      // Swap item 0 at tesco to the estimated catalog benchmark in its candidate pool
       const adjustRes = await fetch(adjustUrl(), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          comparison: initialComp,
+          comparisonId: initialComp.comparisonId,
           store: 'tesco',
           itemIndex: 0,
           selection: {
-            product: catalogProduct
+            product: { id: 'tesco-cat-milk-999' }
           }
         })
       });
@@ -894,38 +912,14 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
     it('Condition 2: Deals disabled never applies clubcard/multibuy pricing; enabled deals belong to the replacement product', async () => {
       const initialComp = await getBaseComparison();
 
-      const productWithDeals = {
-        id: 'tesco-deal-bread-555',
-        supermarket: 'tesco',
-        title: 'Tesco Toastie Bread 800g',
-        brand: 'Tesco',
-        tier: 'standard',
-        category: 'bakery',
-        packageSize: 800,
-        packageUnit: 'g',
-        packageDisplay: '800g',
-        price: 2.00,
-        clubcardPrice: 1.20,
-        unitPrice: 0.25,
-        unitPriceMeasure: 'per 100g',
-        source: 'live',
-        isEstimated: false,
-        isHealthier: false,
-        deal: {
-          rawText: 'Buy 2 for £2.50',
-          type: 'multibuy_fixed',
-          bundleQuantity: 2,
-          bundlePrice: 2.50,
-          badge: '2 for £2.50'
-        }
-      };
+      const productWithDeals = { id: 'tesco-deal-bread-555' };
 
       // Case A: includeDeals: false -> neither loyalty clubcard nor multibuy deal applied
       const noDealsRes = await fetch(adjustUrl(), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          comparison: initialComp,
+          comparisonId: initialComp.comparisonId,
           store: 'tesco',
           itemIndex: 1,
           selection: {
@@ -947,7 +941,7 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          comparison: initialComp,
+          comparisonId: initialComp.comparisonId,
           store: 'tesco',
           itemIndex: 1,
           selection: {
@@ -974,7 +968,7 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          comparison: initialComp,
+          comparisonId: initialComp.comparisonId,
           store: 'tesco',
           itemIndex: 0,
           selection: {
@@ -998,7 +992,7 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            comparison: initialComp,
+            comparisonId: initialComp.comparisonId,
             store: 'tesco',
             itemIndex: 0,
             selection: {
@@ -1021,29 +1015,13 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
       const competitorStore = initialCheapest === 'tesco' ? 'asda' : 'tesco';
 
       // Swap an item in competitorStore to a super-cheap 10p product to force store rank change
-      const cheapProduct = {
-        id: 'super-cheap-prod-1',
-        supermarket: competitorStore,
-        title: 'Super Value Item',
-        brand: 'Value',
-        tier: 'value',
-        category: 'dairy-eggs',
-        packageSize: 4,
-        packageUnit: 'pt',
-        packageDisplay: '4 Pints',
-        price: 0.10,
-        unitPrice: 0.02,
-        unitPriceMeasure: 'per pint',
-        source: 'live',
-        isEstimated: false,
-        isHealthier: false
-      };
+      const cheapProduct = { id: `super-cheap-${competitorStore}` };
 
       const res = await fetch(adjustUrl(), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          comparison: initialComp,
+          comparisonId: initialComp.comparisonId,
           store: competitorStore,
           itemIndex: 0,
           selection: {
@@ -1074,13 +1052,17 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
     });
 
     it('Condition 5: Failed adjustment leaves previous basket intact with visible failure', async () => {
+      const initialComp = await getBaseComparison();
+      const goodId = initialComp.comparisonId;
+
       const invalidRequests = [
         { body: {}, desc: 'empty request body' },
-        { body: { comparison: null, store: 'tesco' }, desc: 'missing comparison' },
-        { body: { comparison: { parsedItems: [], supermarkets: {} }, store: 'tesco' }, desc: 'empty parsedItems' },
-        { body: { comparison: { parsedItems: [{ name: 'Milk' }], supermarkets: {} }, store: 'unknown_mart' }, desc: 'unknown supermarket' },
-        { body: { comparison: { parsedItems: [{ name: 'Milk' }], supermarkets: { tesco: { items: [] } } }, store: 'tesco', itemIndex: 99 }, desc: 'out of bounds itemIndex' },
-        { body: { comparison: { parsedItems: [{ name: 'Milk' }], supermarkets: { tesco: { items: [{ product: null }] } } }, store: 'tesco', itemIndex: 0, selection: { packs: 2 } }, desc: 'adjust quantity on item with no product' }
+        { body: { store: 'tesco', itemIndex: 0, selection: { packs: 2 } }, desc: 'missing comparisonId' },
+        { body: { comparisonId: 'ffffffffffffffffffffffffffffffff', store: 'tesco', itemIndex: 0, selection: { packs: 2 } }, desc: 'unknown or expired comparisonId' },
+        { body: { comparisonId: goodId, store: 'unknown_mart', itemIndex: 0, selection: { packs: 2 } }, desc: 'unknown supermarket' },
+        { body: { comparisonId: goodId, store: 'tesco', itemIndex: 99, selection: { packs: 2 } }, desc: 'out of bounds itemIndex' },
+        { body: { comparisonId: goodId, store: 'tesco', selection: { packs: 2 } }, desc: 'neither itemIndex nor itemId' },
+        { body: { comparisonId: goodId, store: 'tesco', itemIndex: 0, selection: { product: { id: 'never-seen-product' } } }, desc: 'product outside this comparison' }
       ];
 
       for (const req of invalidRequests) {
@@ -1094,6 +1076,134 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
         const data = await res.json();
         assert.ok(data.error, `Error response expected for ${req.desc}`);
       }
+
+      // The server-owned basket must be untouched by every rejected attempt.
+      const afterRes = await fetch(adjustUrl(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          comparisonId: goodId,
+          store: 'tesco',
+          itemIndex: 0,
+          selection: { packs: initialComp.supermarkets.tesco.items[0].packsNeeded }
+        })
+      });
+      assert.equal(afterRes.status, 200);
+      const afterComp = await afterRes.json();
+      assert.equal(afterComp.supermarkets.tesco.items[0].product.id, initialComp.supermarkets.tesco.items[0].product.id);
+      assert.equal(afterComp.supermarkets.tesco.totalPrice, initialComp.supermarkets.tesco.totalPrice);
+      assert.equal(afterComp.cheapestStore, initialComp.cheapestStore);
+    });
+
+    it('Condition 6: Caller-supplied price, provenance and identity are never trusted', async () => {
+      const initialComp = await getBaseComparison();
+      const before = initialComp.supermarkets.tesco.items[0];
+      assert.equal(before.product.id, 't-live-milk', 'precondition: tesco milk matched the live row');
+
+      // A real candidate id, but with a tampered price and an invented "direct" provenance.
+      const tamperedRes = await fetch(adjustUrl(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          comparisonId: initialComp.comparisonId,
+          store: 'tesco',
+          itemIndex: 0,
+          selection: {
+            product: {
+              id: 'tesco-cat-milk-999',
+              title: 'Free Milk',
+              price: 0.01,
+              source: 'direct',
+              isEstimated: false,
+              packageSize: 400,
+              clubcardPrice: 0.01
+            },
+            packs: 1
+          }
+        })
+      });
+
+      assert.equal(tamperedRes.status, 200);
+      const tampered = await tamperedRes.json();
+      const item = tampered.supermarkets.tesco.items[0];
+
+      assert.equal(item.product.id, 'tesco-cat-milk-999');
+      assert.equal(item.product.price, 3.50, 'server-held price must win over the caller price');
+      assert.equal(item.product.title, 'Tesco Benchmark Milk 4 Pints', 'server-held title must win');
+      assert.equal(item.product.source, 'catalog', 'caller cannot invent a direct provenance');
+      assert.equal(item.product.clubcardPrice, undefined, 'caller cannot invent a loyalty price');
+      assert.equal(item.totalPrice, 3.50, '1 pack at the server-held price');
+      assert.equal(item.confidenceSource, 'catalog');
+      assert.equal(item.isEstimated, true);
+
+      // An id that was never a candidate of this comparison is refused outright.
+      const unknownRes = await fetch(adjustUrl(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          comparisonId: initialComp.comparisonId,
+          store: 'tesco',
+          itemIndex: 0,
+          selection: { product: { id: 'never-seen-product', title: 'Ghost', price: 0.01, source: 'direct' } }
+        })
+      });
+      assert.equal(unknownRes.status, 400);
+      const unknownBody = await unknownRes.json();
+      assert.match(unknownBody.error, /not a candidate of this comparison/);
+
+      // A candidate belonging to another store cannot be moved into this one.
+      const crossStoreRes = await fetch(adjustUrl(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          comparisonId: initialComp.comparisonId,
+          store: 'tesco',
+          itemIndex: 0,
+          selection: { product: { id: 'a-live-milk' } }
+        })
+      });
+      assert.equal(crossStoreRes.status, 400);
+    });
+
+    it('Condition 7: Untouched lines are recalculated from server-held context, not from the caller', async () => {
+      const initialComp = await getBaseComparison();
+      const untouchedBefore = initialComp.supermarkets.sainsburys.items[0];
+
+      // Even if a caller could describe the rest of the basket, it is never sent: only the id
+      // and the requested change are. Prove the untouched store keeps its server-side numbers.
+      const res = await fetch(adjustUrl(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          comparisonId: initialComp.comparisonId,
+          store: 'tesco',
+          itemIndex: 0,
+          selection: { packs: 2 }
+        })
+      });
+      assert.equal(res.status, 200);
+      const updated = await res.json();
+
+      const untouchedAfter = updated.supermarkets.sainsburys.items[0];
+      assert.equal(untouchedAfter.product.id, untouchedBefore.product.id);
+      assert.equal(untouchedAfter.totalPrice, untouchedBefore.totalPrice);
+      assert.equal(updated.supermarkets.sainsburys.totalPrice, initialComp.supermarkets.sainsburys.totalPrice);
+
+      // Successive edits chain onto the same server-owned context.
+      assert.equal(updated.comparisonId, initialComp.comparisonId);
+      const second = await fetch(adjustUrl(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          comparisonId: updated.comparisonId,
+          store: 'tesco',
+          itemIndex: 0,
+          selection: { packs: 3 }
+        })
+      });
+      assert.equal(second.status, 200);
+      const secondComp = await second.json();
+      assert.equal(secondComp.supermarkets.tesco.items[0].packsNeeded, 3);
     });
   });
 });

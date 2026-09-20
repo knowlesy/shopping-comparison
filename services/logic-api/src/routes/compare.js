@@ -137,14 +137,18 @@ compareRouter.post('/stream', async (req, res) => {
  * POST /api/compare/adjust
  * Recalculates basket comparison after an item swap or quantity override
  * through canonical server match builder and BasketCalculator.
+ *
+ * The caller sends `comparisonId` (returned by /api/compare) and what it wants changed.
+ * The basket itself, its candidates and their prices/provenance are read from the server-owned
+ * snapshot, so caller-supplied prices or source badges are never priced into a basket.
  */
 compareRouter.post('/adjust', (req, res) => {
   try {
-    const { comparison, store, itemIndex, itemId, selection, preferences } = req.body || {};
+    const { comparisonId, store, itemIndex, itemId, selection, preferences } = req.body || {};
     const effectivePreferences = preferences || getUserSettings();
 
     const updatedComparison = ComparisonEngine.adjustComparison({
-      comparison,
+      comparisonId,
       store,
       itemIndex,
       itemId,
