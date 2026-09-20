@@ -281,7 +281,7 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({
 
           <div className="flex items-center space-x-3 self-end sm:self-center">
             <div className="text-right">
-              <div className="text-xs text-slate-500">Combined Split Total</div>
+              <div className="text-xs text-slate-500">Combined Split Total (inc. delivery)</div>
               <div className="text-xl font-extrabold text-slate-900 dark:text-white">
                 £{splitOptimization.combinedTotal.toFixed(2)}
               </div>

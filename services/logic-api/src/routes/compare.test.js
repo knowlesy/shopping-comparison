@@ -1205,5 +1205,41 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
       const secondComp = await second.json();
       assert.equal(secondComp.supermarkets.tesco.items[0].packsNeeded, 3);
     });
+
+    // Task 09 acceptance condition 5: split savings are recomputed through the task 05 route.
+    it('Condition 8: an adjustment recomputes the split route, its delivery and its coverage', async () => {
+      const initialComp = await getBaseComparison();
+      const before = initialComp.splitOptimization;
+
+      assert.equal(before.itemsCovered, 2, 'both items are priced before the edit');
+      assert.equal(
+        before.combinedTotal,
+        Number((before.combinedSubtotal + before.combinedDeliveryFee).toFixed(2)),
+        'the advertised split total includes delivery'
+      );
+
+      // Swap the tesco milk line to the dearer catalog benchmark; the split must re-cost.
+      const res = await fetch(adjustUrl(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          comparisonId: initialComp.comparisonId,
+          store: 'tesco',
+          itemIndex: 0,
+          selection: { product: { id: 'tesco-cat-milk-999' }, packs: 1 }
+        })
+      });
+      assert.equal(res.status, 200);
+      const after = (await res.json()).splitOptimization;
+
+      assert.ok(after.stores.length >= 1 && after.stores.length <= 2, 'never more than two stores');
+      assert.equal(after.itemsCovered, 2);
+      assert.equal(
+        after.combinedTotal,
+        Number((after.combinedSubtotal + after.combinedDeliveryFee).toFixed(2))
+      );
+      assert.equal(after.savingsVsSingleBest > 0, after.savingsAreVerified);
+      assert.ok(after.singleBestTotal >= after.combinedTotal, 'the split is never dearer than its own baseline');
+    });
   });
 });

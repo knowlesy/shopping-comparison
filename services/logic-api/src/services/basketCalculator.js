@@ -207,18 +207,30 @@ export class BasketCalculator {
         : Object.values(storeResults);
 
     const cheapestStore = ranked[0]?.supermarket || 'asda';
-    const highestStore = ranked[ranked.length - 1]?.supermarket || 'tesco';
-    const highestTotal = ranked[ranked.length - 1]?.totalPrice || 0;
+
+    // "Highest" must mean the dearest comparable basket, not simply the last row of a ranking
+    // that sorts estimated stores to the bottom. A store that carries fewer items is cheaper only
+    // because goods are missing, so savings are quoted between baskets of equal coverage.
+    const bestCoverage = storesWithItems.reduce((max, s) => Math.max(max, s.itemsFound), 0);
+    const comparableStores = storesWithItems.filter((s) => s.itemsFound === bestCoverage);
+    const dearestComparable = comparableStores.reduce(
+      (worst, s) => (worst === null || s.totalPrice > worst.totalPrice ? s : worst),
+      null
+    );
+    const highestStore =
+      dearestComparable?.supermarket || ranked[ranked.length - 1]?.supermarket || 'tesco';
+    const highestTotal = dearestComparable?.totalPrice || 0;
 
     let totalMatched = 0;
     let totalEstimated = 0;
 
     for (const storeRes of Object.values(storeResults)) {
       storeRes.isCheapest = storeRes.itemsFound > 0 && storeRes.supermarket === cheapestStore;
-      storeRes.savingsVsHighest =
-        storeRes.itemsFound > 0
-          ? Math.max(0, Number((highestTotal - storeRes.totalPrice).toFixed(2)))
-          : 0;
+      storeRes.isComparable = storeRes.itemsFound === bestCoverage && storeRes.itemsFound > 0;
+      // Only a like-for-like basket may advertise a saving; a partial basket quotes none.
+      storeRes.savingsVsHighest = storeRes.isComparable
+        ? Math.max(0, Number((highestTotal - storeRes.totalPrice).toFixed(2)))
+        : 0;
       if (storeRes.isCheapest) {
         storeRes.badge = '🏆 Cheapest Overall';
       }
@@ -229,11 +241,25 @@ export class BasketCalculator {
     const overallEstimatedShare = totalMatched > 0 ? Number((totalEstimated / totalMatched).toFixed(2)) : 0;
     const splitOptimization = this.calculateSplitBasket(items, storeResults, cheapestStore);
 
+    // The recommended store is only "cheapest" when it is genuinely the lowest comparable price.
+    // When it wins on coverage or provenance instead, say so rather than implying a price win.
+    const recommended = storeResults[cheapestStore];
+    const cheapestComparablePrice = comparableStores.length > 0
+      ? Math.min(...comparableStores.map((s) => s.totalPrice))
+      : null;
+    const recommendationBasis =
+      recommended && recommended.itemsFound === bestCoverage &&
+      cheapestComparablePrice !== null && recommended.totalPrice <= cheapestComparablePrice
+        ? 'lowest_comparable_price'
+        : 'best_available_coverage';
+
     return {
       parsedItems: items,
       supermarkets: storeResults,
       cheapestStore,
       highestStore,
+      recommendationBasis,
+      comparableCoverage: bestCoverage,
       splitOptimization,
       estimatedShare: overallEstimatedShare,
       hasEstimatedPrices: overallEstimatedShare > 0,
@@ -241,69 +267,248 @@ export class BasketCalculator {
     };
   }
 
-  static calculateSplitBasket(items, storeResults, cheapestSingleStore) {
-    const storeSubtotals = {
-      tesco: { items: [], subtotal: 0 },
-      asda: { items: [], subtotal: 0 },
-      sainsburys: { items: [], subtotal: 0 },
-      morrisons: { items: [], subtotal: 0 },
-      iceland: { items: [], subtotal: 0 }
-    };
+  /**
+   * A line counts as verified when its price came from a retailer, not from a catalog benchmark.
+   * This is the single provenance policy used for ranking, single-store baselines and split routes.
+   */
+  static isVerifiedLine(match) {
+    if (!match || !match.product) return false;
+    if (match.isEstimated === true) return false;
+    if (match.confidenceSource === 'catalog') return false;
+    if (match.product.source === 'catalog' || match.product.isEstimated === true) return false;
+    return true;
+  }
+
+  static deliveryFeeFor(store, subtotal) {
+    const info = SUPERMARKETS_INFO[store];
+    const minOrder = info?.deliveryMinOrder ?? 40;
+    const fee = info?.deliveryFee ?? 0;
+    return subtotal >= minOrder ? 0 : fee;
+  }
+
+  /**
+   * Costs one shopping route (one or two stores) over the whole basket.
+   *
+   * Each item is bought at whichever store in the route offers it most cheaply. Delivery is added
+   * per store actually used, against that store's own subtotal and minimum-order threshold — a
+   * route is not comparable to a single-store checkout without it. Items no store in the route can
+   * supply stay missing; they are never treated as a saving.
+   *
+   * @returns {{stores: Array, coveredIndices: Set<number>, subtotal: number, deliveryFee: number,
+   *            total: number, verified: boolean, estimatedLines: number}}
+   */
+  static costRoute(items, storeResults, routeStores) {
+    const perStore = new Map(routeStores.map((store) => [store, { items: [], subtotal: 0 }]));
+    const coveredIndices = new Set();
+    let estimatedLines = 0;
 
     for (let i = 0; i < items.length; i++) {
-      let lowestItemPrice = Infinity;
-      let bestStoreForThisItem = null;
+      let bestStore = null;
       let bestMatch = null;
 
-      for (const [storeKey, storeResult] of Object.entries(storeResults)) {
-        const match = storeResult.items[i];
-        if (match && match.product && match.totalPrice < lowestItemPrice) {
-          lowestItemPrice = match.totalPrice;
-          bestStoreForThisItem = storeKey;
+      for (const store of routeStores) {
+        const match = storeResults[store]?.items?.[i];
+        if (!match || !match.product) continue;
+        if (bestMatch === null || match.totalPrice < bestMatch.totalPrice) {
           bestMatch = match;
+          bestStore = store;
         }
       }
 
-      if (bestStoreForThisItem && bestMatch) {
-        if (!storeSubtotals[bestStoreForThisItem]) {
-          storeSubtotals[bestStoreForThisItem] = { items: [], subtotal: 0 };
+      if (!bestStore) continue;
+      const bucket = perStore.get(bestStore);
+      bucket.items.push(bestMatch);
+      bucket.subtotal += bestMatch.totalPrice;
+      coveredIndices.add(i);
+      if (!this.isVerifiedLine(bestMatch)) estimatedLines += 1;
+    }
+
+    const stores = [];
+    let subtotal = 0;
+    let deliveryFee = 0;
+    for (const [store, data] of perStore) {
+      if (data.items.length === 0) continue; // a store that supplies nothing is not part of the route
+      const storeSubtotal = Number(data.subtotal.toFixed(2));
+      const storeDelivery = this.deliveryFeeFor(store, storeSubtotal);
+      stores.push({
+        supermarket: store,
+        info: SUPERMARKETS_INFO[store],
+        items: data.items,
+        storeSubtotal,
+        deliveryFee: storeDelivery,
+        storeTotal: Number((storeSubtotal + storeDelivery).toFixed(2))
+      });
+      subtotal += storeSubtotal;
+      deliveryFee += storeDelivery;
+    }
+
+    stores.sort((a, b) => b.items.length - a.items.length || a.supermarket.localeCompare(b.supermarket));
+
+    return {
+      stores,
+      coveredIndices,
+      subtotal: Number(subtotal.toFixed(2)),
+      deliveryFee: Number(deliveryFee.toFixed(2)),
+      total: Number((subtotal + deliveryFee).toFixed(2)),
+      verified: estimatedLines === 0 && coveredIndices.size > 0,
+      estimatedLines
+    };
+  }
+
+  /** Costs `route` over exactly `indices`, or null when the route cannot supply all of them. */
+  static costRouteOverIndices(storeResults, routeStores, indices) {
+    const perStore = new Map(routeStores.map((store) => [store, 0]));
+
+    for (const i of indices) {
+      let bestStore = null;
+      let bestPrice = Infinity;
+      for (const store of routeStores) {
+        const match = storeResults[store]?.items?.[i];
+        if (!match || !match.product) continue;
+        if (match.totalPrice < bestPrice) {
+          bestPrice = match.totalPrice;
+          bestStore = store;
         }
-        storeSubtotals[bestStoreForThisItem].items.push(bestMatch);
-        storeSubtotals[bestStoreForThisItem].subtotal += bestMatch.totalPrice;
+      }
+      if (!bestStore) return null; // incomparable: this route cannot cover the same basket
+      perStore.set(bestStore, perStore.get(bestStore) + bestPrice);
+    }
+
+    let total = 0;
+    for (const [store, raw] of perStore) {
+      if (raw <= 0) continue;
+      const storeSubtotal = Number(raw.toFixed(2));
+      total += storeSubtotal + this.deliveryFeeFor(store, storeSubtotal);
+    }
+    return Number(total.toFixed(2));
+  }
+
+  /**
+   * Enumerates every single-store and two-store route over the stores that matched anything,
+   * and recommends the one with the best coverage, then the lowest delivered total.
+   *
+   * A saving is only advertised when it is like-for-like: the same items, priced at a single-store
+   * route, with delivery included on both sides, and with no catalog-estimated line in the
+   * recommended route. Anything else is reported as indicative and labelled.
+   */
+  static calculateSplitBasket(items, storeResults, cheapestSingleStore) {
+    const candidateStores = Object.keys(storeResults).filter(
+      (store) => (storeResults[store]?.items || []).some((m) => m && m.product)
+    );
+
+    const routes = [];
+    for (let a = 0; a < candidateStores.length; a++) {
+      routes.push([candidateStores[a]]);
+      for (let b = a + 1; b < candidateStores.length; b++) {
+        routes.push([candidateStores[a], candidateStores[b]]); // at most two stores, by design
       }
     }
 
-    const activeStores = Object.entries(storeSubtotals)
-      .filter(([_, data]) => data.items.length > 0)
-      .map(([storeKey, data]) => ({
-        supermarket: storeKey,
-        info: SUPERMARKETS_INFO[storeKey],
-        items: data.items,
-        storeSubtotal: Number(data.subtotal.toFixed(2))
-      }))
-      .sort((a, b) => b.items.length - a.items.length);
+    const costed = routes
+      .map((route) => this.costRoute(items, storeResults, route))
+      .filter((r) => r.coveredIndices.size > 0);
 
-    const combinedTotal = Number(
-      activeStores.reduce((sum, s) => sum + s.storeSubtotal, 0).toFixed(2)
-    );
-    const singleBestTotal = storeResults[cheapestSingleStore]?.totalPrice || combinedTotal;
-    const savingsVsSingleBest = Math.max(0, Number((singleBestTotal - combinedTotal).toFixed(2)));
+    if (costed.length === 0) {
+      return {
+        stores: [],
+        combinedTotal: 0,
+        combinedSubtotal: 0,
+        combinedDeliveryFee: 0,
+        savingsVsSingleBest: 0,
+        indicativeSavingsVsSingleBest: 0,
+        singleBestTotal: 0,
+        cheapestSingleStoreName: SUPERMARKETS_INFO[cheapestSingleStore]?.name || 'Cheapest Store',
+        itemsCovered: 0,
+        itemsTotal: items.length,
+        missingItems: [...items],
+        provenance: 'none',
+        savingsAreVerified: false,
+        hasFullCoverage: items.length === 0,
+        explanation: 'No supermarket returned a usable price for this basket, so no route can be recommended.'
+      };
+    }
 
-    const topStoreNames = activeStores
-      .slice(0, 2)
-      .map((s) => s.info?.name || s.supermarket)
-      .join(' & ');
-    const explanation =
-      activeStores.length > 1
-        ? `Splitting your shop between ${topStoreNames} saves an extra £${savingsVsSingleBest.toFixed(2)} compared to single-store checkout at ${SUPERMARKETS_INFO[cheapestSingleStore]?.name || 'Cheapest Store'}.`
-        : `Single-store checkout at ${SUPERMARKETS_INFO[cheapestSingleStore]?.name || 'Cheapest Store'} already delivers the best price.`;
+    // Best coverage first — a cheaper route that simply omits goods must never win.
+    const best = costed.reduce((winner, route) => {
+      if (route.coveredIndices.size !== winner.coveredIndices.size) {
+        return route.coveredIndices.size > winner.coveredIndices.size ? route : winner;
+      }
+      if (route.total !== winner.total) return route.total < winner.total ? route : winner;
+      // Only as a tie-break: an equally covering, equally priced verified route is preferable.
+      if (route.verified !== winner.verified) return route.verified ? route : winner;
+      return route.stores.length <= winner.stores.length ? route : winner; // prefer one trip
+    });
+
+    // Like-for-like single-store baseline: the same items, at one store, delivery included.
+    let singleBestTotal = null;
+    let singleBestStore = null;
+    for (const store of candidateStores) {
+      const cost = this.costRouteOverIndices(storeResults, [store], best.coveredIndices);
+      if (cost === null) continue;
+      if (singleBestTotal === null || cost < singleBestTotal) {
+        singleBestTotal = cost;
+        singleBestStore = store;
+      }
+    }
+
+    const isSplit = best.stores.length > 1;
+    const rawSaving =
+      singleBestTotal === null ? 0 : Number((singleBestTotal - best.total).toFixed(2));
+    const realSaving = isSplit && rawSaving > 0 ? rawSaving : 0;
+
+    const provenance =
+      best.estimatedLines === 0
+        ? 'verified'
+        : (best.estimatedLines === best.coveredIndices.size ? 'estimated' : 'mixed');
+    const savingsAreVerified = provenance === 'verified' && realSaving > 0;
+
+    const missingItems = items.filter((_, i) => !best.coveredIndices.has(i));
+    const hasFullCoverage = missingItems.length === 0;
+    const baselineName =
+      SUPERMARKETS_INFO[singleBestStore || cheapestSingleStore]?.name ||
+      singleBestStore || cheapestSingleStore || 'Cheapest Store';
+    const routeNames = best.stores.map((s) => s.info?.name || s.supermarket).join(' & ');
+
+    const parts = [];
+    if (!isSplit) {
+      parts.push(`Single-store checkout at ${routeNames} is the best route for this basket, delivery included.`);
+    } else if (savingsAreVerified) {
+      parts.push(
+        `Splitting your shop between ${routeNames} saves £${realSaving.toFixed(2)} on the same ${best.coveredIndices.size} items compared with buying them all at ${baselineName}, delivery included on both routes.`
+      );
+    } else if (rawSaving > 0) {
+      parts.push(
+        `Splitting between ${routeNames} looks about £${rawSaving.toFixed(2)} cheaper than ${baselineName} on the same ${best.coveredIndices.size} items, but the route uses estimated catalog prices, so treat it as indicative rather than a confirmed saving.`
+      );
+    } else {
+      parts.push(
+        `Splitting between ${routeNames} covers the most items, but once delivery is included it is not cheaper than ${baselineName}, so no saving is claimed.`
+      );
+    }
+    if (!hasFullCoverage) {
+      parts.push(
+        `${missingItems.length} of ${items.length} item${items.length === 1 ? '' : 's'} could not be priced at any store and ${missingItems.length === 1 ? 'is' : 'are'} not included in these totals.`
+      );
+    } else if (provenance === 'estimated') {
+      parts.push('Every line in this route is an estimated catalog price, not a checked retailer price.');
+    }
 
     return {
-      stores: activeStores,
-      combinedTotal,
-      savingsVsSingleBest,
-      cheapestSingleStoreName: SUPERMARKETS_INFO[cheapestSingleStore]?.name || 'Cheapest Store',
-      explanation
+      stores: best.stores,
+      combinedTotal: best.total,
+      combinedSubtotal: best.subtotal,
+      combinedDeliveryFee: best.deliveryFee,
+      savingsVsSingleBest: savingsAreVerified ? realSaving : 0,
+      indicativeSavingsVsSingleBest: Math.max(0, rawSaving),
+      singleBestTotal: singleBestTotal ?? 0,
+      cheapestSingleStoreName: baselineName,
+      itemsCovered: best.coveredIndices.size,
+      itemsTotal: items.length,
+      missingItems,
+      provenance,
+      savingsAreVerified,
+      hasFullCoverage,
+      explanation: parts.join(' ')
     };
   }
 }

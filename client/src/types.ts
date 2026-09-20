@@ -159,9 +159,23 @@ export interface SplitBasketStore {
 
 export interface SplitBasketOptimization {
   stores: SplitBasketStore[];
+  /** Product subtotals plus delivery for every store used in the route. */
   combinedTotal: number;
+  combinedSubtotal?: number;
+  combinedDeliveryFee?: number;
+  /** Only non-zero for a like-for-like, fully verified saving. */
   savingsVsSingleBest: number;
+  /** The same figure when the route leans on estimated catalog prices; indicative only. */
+  indicativeSavingsVsSingleBest?: number;
+  /** The same items bought at one store, delivery included. */
+  singleBestTotal?: number;
   cheapestSingleStoreName: string;
+  itemsCovered?: number;
+  itemsTotal?: number;
+  missingItems?: ParsedItem[];
+  provenance?: 'verified' | 'mixed' | 'estimated' | 'none';
+  savingsAreVerified?: boolean;
+  hasFullCoverage?: boolean;
   explanation: string;
 }
 
@@ -172,6 +186,10 @@ export interface ComparisonResponse {
   supermarkets: Record<SupermarketName, StoreBasketResult>;
   cheapestStore: SupermarketName;
   highestStore: SupermarketName;
+  /** Whether the recommended store actually wins on price, or only on available coverage. */
+  recommendationBasis?: 'lowest_comparable_price' | 'best_available_coverage';
+  /** Item count of the fullest basket any store returned; the baseline savings are quoted against. */
+  comparableCoverage?: number;
   splitOptimization: SplitBasketOptimization;
   estimatedShare?: number;
   hasEstimatedPrices?: boolean;
