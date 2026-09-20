@@ -8,8 +8,10 @@ from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Optional
 try:
     from ..schema import UnifiedProduct
+    from ..deadline import RequestDeadline
 except (ImportError, ValueError):
     from schema import UnifiedProduct
+    from deadline import RequestDeadline
 
 
 class AdapterCapabilities:
@@ -63,11 +65,17 @@ class BaseAdapter(ABC):
         query: str,
         *,
         target_quantity: Optional[float] = None,
-        want_variants: bool = False
+        want_variants: bool = False,
+        deadline: Optional["RequestDeadline"] = None
     ) -> List[Any]:
         """
         Perform a search against the supermarket's backend API.
         Returns a list of raw result objects/payloads.
+
+        deadline, when given, is the whole-request budget. Adapters must clamp their
+        own network or browser timeouts to deadline.clamp(...) so no single store can
+        consume the budget the caller allowed for all of them. It is optional so that
+        callers predating the deadline contract keep working with adapter defaults.
         """
         pass
 

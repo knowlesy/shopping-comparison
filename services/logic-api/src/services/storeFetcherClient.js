@@ -67,7 +67,11 @@ export class StoreFetcherClient {
           stores,
           targetQuantity,
           unit,
-          wantVariants
+          wantVariants,
+          // Declare our budget so the sidecar adopts the same deadline. Aborting the
+          // fetch here does not stop the sidecar: without this it would keep working
+          // through the remaining retailers with nobody waiting for the answer.
+          timeoutMs
         }),
         signal
       });

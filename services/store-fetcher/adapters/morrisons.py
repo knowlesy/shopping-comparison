@@ -10,9 +10,13 @@ import json
 import urllib.parse
 from typing import List, Dict, Any, Optional
 try:
+    from ._deadline_util import clamp_timeout as _clamp_timeout
+    from ..deadline import RequestDeadline
     from .base import BaseAdapter, AdapterCapabilities
     from ..schema import UnifiedProduct
 except (ImportError, ValueError):
+    from adapters._deadline_util import clamp_timeout as _clamp_timeout
+    from deadline import RequestDeadline
     from adapters.base import BaseAdapter, AdapterCapabilities
     from schema import UnifiedProduct
 
@@ -80,7 +84,8 @@ class MorrisonsAdapter(BaseAdapter):
         query: str,
         *,
         target_quantity: Optional[float] = None,
-        want_variants: bool = False
+        want_variants: bool = False,
+        deadline: Optional["RequestDeadline"] = None
     ) -> List[Dict[str, Any]]:
         """Search products on Morrisons and extract productEntities from __INITIAL_STATE__."""
         session = self._get_session()
@@ -90,7 +95,7 @@ class MorrisonsAdapter(BaseAdapter):
         }
         url = f"{self.SEARCH_URL}?q={urllib.parse.quote_plus(query)}"
 
-        res = session.get(url, headers=headers, timeout=12)
+        res = session.get(url, headers=headers, timeout=_clamp_timeout(deadline, 12))
         if res.status_code != 200:
             return []
 

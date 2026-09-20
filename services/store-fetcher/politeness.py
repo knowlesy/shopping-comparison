@@ -59,15 +59,31 @@ class RateLimiter:
         jitter = random.uniform(0, exponential_part * 0.5)
         return exponential_part + jitter
 
-    def wait_polite(self, host: str):
-        """Throttle execution politely before making a network request."""
+    def wait_polite(self, host: str, max_wait_sec: Optional[float] = None) -> float:
+        """
+        Throttle execution politely before making a network request.
+
+        max_wait_sec bounds the sleep by the time left in the request's deadline, so a
+        politeness delay can never be the reason a request outlives its caller. The
+        host's last-request time is still recorded, so shortening one wait does not
+        licence a burst on the next call.
+
+        Returns the number of seconds actually slept.
+        """
         now = time.time()
         last = self._last_request_time.get(host, 0)
         elapsed = now - last
         delay = self.get_polite_delay()
+        slept = 0.0
         if elapsed < delay:
-            time.sleep(delay - elapsed)
+            sleep_for = delay - elapsed
+            if max_wait_sec is not None:
+                sleep_for = min(sleep_for, max(0.0, max_wait_sec))
+            if sleep_for > 0:
+                time.sleep(sleep_for)
+                slept = sleep_for
         self._last_request_time[host] = time.time()
+        return slept
 
 
 # ---------------------------------------------------------------------------

@@ -7,10 +7,14 @@ Provides a Tier 2 Camoufox stealth browser rendering path for dynamic execution.
 
 from typing import List, Dict, Any, Optional
 try:
+    from ._deadline_util import clamp_timeout_ms as _clamp_timeout_ms, clamp_wait_ms as _clamp_wait_ms
+    from ..deadline import RequestDeadline
     from .base import BaseAdapter, AdapterCapabilities
     from ..schema import UnifiedProduct
     from ..browser import browser_service
 except (ImportError, ValueError):
+    from adapters._deadline_util import clamp_timeout_ms as _clamp_timeout_ms, clamp_wait_ms as _clamp_wait_ms
+    from deadline import RequestDeadline
     from adapters.base import BaseAdapter, AdapterCapabilities
     from schema import UnifiedProduct
     from browser import browser_service
@@ -39,7 +43,8 @@ class AsdaAdapter(BaseAdapter):
         query: str,
         *,
         target_quantity: Optional[float] = None,
-        want_variants: bool = False
+        want_variants: bool = False,
+        deadline: Optional["RequestDeadline"] = None
     ) -> List[Dict[str, Any]]:
         """
         Asda search via Tier 2 Camoufox browser rendering.
@@ -53,8 +58,8 @@ class AsdaAdapter(BaseAdapter):
         res = browser_service.render_page(
             search_url,
             wait_until="domcontentloaded",
-            timeout_ms=30000,
-            wait_ms=2500,
+            timeout_ms=_clamp_timeout_ms(deadline, 30000),
+            wait_ms=_clamp_wait_ms(deadline, 2500),
             wait_for_selector='a[href*="/product/"]',
             extract_ld_json=True
         )

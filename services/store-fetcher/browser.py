@@ -6,7 +6,10 @@ JavaScript hydration, client-side SPA rendering, or edge anti-bot bypass.
 
 import json
 import logging
+import threading
 import time
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FuturesTimeoutError
 from typing import Dict, Any, List, Optional
 
 logger = logging.getLogger("store_fetcher.browser")
@@ -26,26 +29,70 @@ class Tier2Browser:
     Executes Tier 2 fallback requests with C++ level anti-detection,
     DOM hydration, and JSON data extraction.
     Reuses a persistent browser process across queries to avoid churn.
+
+    Thread ownership
+    ----------------
+    Camoufox exposes Playwright's *synchronous* API, whose handles are bound to the
+    thread that created them. FastAPI runs `def` endpoints in a worker threadpool, so
+    two overlapping /search requests land on two different threads and would otherwise
+    both reach this shared singleton — using a handle created on another thread is
+    undefined behaviour, not merely a race.
+
+    Every browser touch (start, new_page, close) is therefore submitted to one
+    dedicated single-worker executor. That thread is the only owner of the browser, and
+    because the executor has exactly one worker, calls are also serialised: overlapping
+    requests queue instead of interleaving.
+
+    Limitation: a submitted render can be waited on with a timeout, but Python cannot
+    cancel it. If a render overruns, the caller stops waiting while the owner thread
+    finishes the operation; the next caller queues behind it.
     """
 
     def __init__(self, headless: bool = True):
         self.headless = headless
         self._camoufox = None
         self._browser = None
+        self._executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="camoufox-owner")
+        self._owner_thread_id: Optional[int] = None
+        self._shutdown = False
+
+    def _assert_owner_thread(self):
+        """Record, then enforce, that only one thread ever touches the browser."""
+        current = threading.get_ident()
+        if self._owner_thread_id is None:
+            self._owner_thread_id = current
+        elif self._owner_thread_id != current:
+            raise RuntimeError(
+                "Tier2Browser accessed from thread "
+                f"{current}, but the browser is owned by thread {self._owner_thread_id}. "
+                "All browser work must go through Tier2Browser._executor."
+            )
+
+    def _run_owned(self, fn, *args, timeout: Optional[float] = None, **kwargs):
+        """Run fn on the owner thread and wait up to timeout for its result."""
+        if self._shutdown:
+            raise RuntimeError("Tier2Browser has been shut down")
+        future = self._executor.submit(self._owned_call, fn, *args, **kwargs)
+        return future.result(timeout=timeout)
+
+    def _owned_call(self, fn, *args, **kwargs):
+        self._assert_owner_thread()
+        return fn(*args, **kwargs)
 
     def is_available(self) -> bool:
         """Check if Camoufox is installed and available in the current environment."""
         return CAMOUFOX_AVAILABLE
 
     def _ensure_browser(self):
-        """Get or initialize persistent Camoufox browser instance."""
+        """Get or initialize persistent Camoufox browser instance. Owner thread only."""
+        self._assert_owner_thread()
         if self._browser is not None:
             try:
                 if self._browser.is_connected():
                     return self._browser
             except Exception:
                 pass
-            self.close()
+            self._close_owned()
 
         if not CAMOUFOX_AVAILABLE or Camoufox is None:
             return None
@@ -55,7 +102,25 @@ class Tier2Browser:
         return self._browser
 
     def close(self):
-        """Close browser handle and exit Camoufox manager."""
+        """Close the browser. Safe to call from any thread; runs on the owner thread."""
+        if self._shutdown:
+            return
+        if threading.get_ident() == self._owner_thread_id or self._owner_thread_id is None:
+            self._close_owned()
+        else:
+            try:
+                self._run_owned(self._close_owned, timeout=30)
+            except Exception:
+                pass
+
+    def shutdown(self):
+        """Close the browser and stop the owner thread. Not reusable afterwards."""
+        self.close()
+        self._shutdown = True
+        self._executor.shutdown(wait=True)
+
+    def _close_owned(self):
+        """Close browser handle and exit Camoufox manager. Owner thread only."""
         if self._browser:
             try:
                 self._browser.close()
@@ -70,7 +135,10 @@ class Tier2Browser:
             self._camoufox = None
 
     def __del__(self):
-        self.close()
+        try:
+            self.close()
+        except Exception:
+            pass
 
     def render_page(
         self,
@@ -81,11 +149,67 @@ class Tier2Browser:
         wait_ms: int = 2000,
         wait_for_selector: Optional[str] = None,
         extract_ld_json: bool = True,
+        wait_timeout_ms: Optional[int] = None,
     ) -> Dict[str, Any]:
         """
-        Render a page using Camoufox stealth browser and extract DOM content,
-        page title, and structured JSON-LD data.
+        Render a page on the browser's owner thread and return its DOM content,
+        title and structured JSON-LD data.
+
+        Callable from any thread: the work is submitted to the single owner thread,
+        so concurrent callers queue rather than sharing a synchronous browser handle.
+
+        wait_timeout_ms bounds how long *this caller* waits. It defaults to the page
+        timeout plus a margin. Exceeding it returns a failure result; the owner thread
+        keeps finishing that render (Python cannot cancel it) and the next caller queues.
         """
+        budget_ms = wait_timeout_ms if wait_timeout_ms is not None else timeout_ms + wait_ms + 15000
+        try:
+            return self._run_owned(
+                self._render_page_owned,
+                url,
+                wait_until=wait_until,
+                timeout_ms=timeout_ms,
+                wait_ms=wait_ms,
+                wait_for_selector=wait_for_selector,
+                extract_ld_json=extract_ld_json,
+                timeout=budget_ms / 1000.0,
+            )
+        except FuturesTimeoutError:
+            logger.warning(
+                f"Tier 2 render for {url} exceeded the caller's {budget_ms}ms budget; "
+                "the owner thread is still finishing it."
+            )
+            return {
+                "success": False,
+                "status": 0,
+                "title": "",
+                "html": "",
+                "ld_json": [],
+                "error": f"browser render exceeded caller budget of {budget_ms}ms",
+                "timedOut": True,
+            }
+        except Exception as e:
+            logger.warning(f"Tier 2 render dispatch failed for {url}: {e}")
+            return {
+                "success": False,
+                "status": 0,
+                "title": "",
+                "html": "",
+                "ld_json": [],
+                "error": str(e),
+            }
+
+    def _render_page_owned(
+        self,
+        url: str,
+        *,
+        wait_until: str = "domcontentloaded",
+        timeout_ms: int = 30000,
+        wait_ms: int = 2000,
+        wait_for_selector: Optional[str] = None,
+        extract_ld_json: bool = True,
+    ) -> Dict[str, Any]:
+        """Actual render. Owner thread only — reached through render_page()."""
         browser = self._ensure_browser()
         if browser is None:
             return {

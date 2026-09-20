@@ -155,3 +155,85 @@ When migrating the sidecar from local residential execution to cloud container e
 - **Raw Payload Untracking**: In accordance with Step 15 & 17 repository sanitization policies, large raw retailer payloads (`tests/fixtures/store-payloads/*.json` and `tests/fixtures/reality-fixtures.json`) are untracked from git via `git rm --cached` and excluded via `.gitignore`.
 - **Sample Tracking for CI**: To allow offline replay testing and verification ratchets on fresh checkouts without network calls, a sanitized, trimmed subset (`tests/fixtures/reality-sample.json` < 256KB) and reachability status (`_reachability.json`) remain tracked in version control.
 - **Git History Retention Notice**: Per project policy, git history is not rewritten; earlier historical commits retain the scrubbed initial payload fixtures, but no ongoing retailer corpora are committed.
+
+---
+
+## 7. Sidecar Request Boundaries
+
+The store-fetcher works through retailers **sequentially**. Without a bound, a single
+`/search` outlives the Node caller: `StoreFetcherClient` aborts its own `fetch` after its
+timeout, but that abort is invisible to the sidecar, which keeps contacting the remaining
+retailers with nobody waiting for the answer.
+
+### Whole-request deadline
+
+`POST /search` accepts an optional `timeoutMs`. `StoreFetcherClient` sends its own budget,
+so both sides work to the same deadline.
+
+| Setting | Env var | Default |
+| --- | --- | --- |
+| Budget when the caller sends none | `SEARCH_DEFAULT_TIMEOUT_MS` | 30000 |
+| Hard cap on any caller's request | `SEARCH_MAX_TIMEOUT_MS` | 60000 |
+| Probe budget | `PROBE_DEFAULT_TIMEOUT_MS` | 45000 |
+
+The cap belongs to the sidecar: how long this service is willing to work is its decision,
+not the caller's. A caller that sends nothing gets the default, so callers written before
+this contract are unaffected.
+
+Within a request:
+
+- Stores are attempted **in request order** until the budget is spent.
+- A store is only started when at least `MIN_USEFUL_SLICE_SEC` (1s) remains — less than
+  that is consumed by the politeness delay alone.
+- A store that was never attempted gets `status: "deadline_exceeded"` with empty
+  `products`, so a caller can distinguish "no results" from "never asked".
+- Results already collected are always returned; running out of time never discards work.
+- The politeness delay is clamped to the remaining budget, so a sleep is never the reason
+  a request outlives its caller.
+- Each adapter receives the deadline and clamps its own HTTP/browser timeout to
+  `deadline.clamp(...)`, so one slow store cannot consume the whole budget.
+
+The response carries a `deadline` block:
+
+```json
+{ "budgetMs": 2500, "elapsedMs": 2013, "remainingMs": 487,
+  "minUsefulSliceMs": 1000, "exceeded": false, "acceptingNewWork": false }
+```
+
+`exceeded` and `acceptingNewWork` are different questions. A request commonly stops
+starting stores while time technically remains, because what is left is too short to be
+worth another round trip. Reporting only `exceeded` would leave the skipped stores
+unexplained.
+
+**Limitation.** The deadline bounds when work *starts* and how long each operation is
+*allowed* to take. It cannot cancel a synchronous call already running inside `curl_cffi`
+or a browser page — Python threads are not cancellable. A single operation can therefore
+overrun the budget by up to its own clamped timeout. Making that cancellable would mean
+moving retailer work to separate processes, which is a larger change than this boundary.
+
+### Browser thread ownership
+
+Camoufox exposes Playwright's **synchronous** API, whose handles are bound to the thread
+that created them. FastAPI runs `def` endpoints in a worker threadpool, so two overlapping
+`/search` requests land on two different threads and would both reach the shared
+`browser_service` singleton. Using a handle from another thread is undefined behaviour,
+not merely a race.
+
+`Tier2Browser` therefore submits every browser touch — start, `new_page`, close — to one
+dedicated single-worker executor. That thread is the browser's only owner, and because the
+executor has exactly one worker, overlapping renders queue instead of interleaving.
+`_assert_owner_thread()` raises if anything reaches the browser from another thread, so a
+future caller that bypasses the executor fails loudly rather than corrupting state.
+
+`render_page` accepts `wait_timeout_ms` to bound how long the *caller* waits. On overrun it
+returns `{"success": false, "timedOut": true}`; the owner thread keeps finishing that
+render and the next caller queues behind it. Pages are closed in a `finally` block so a
+failed render does not leak a page into the reused browser.
+
+### Verification status
+
+`services/store-fetcher/tests/test_server_contract.py` covers the probe handler, the
+deadline contract and browser ownership using deterministic delayed adapters and an
+ownership-sensitive fake browser. **No test launches a real browser or contacts a
+retailer.** Real Camoufox behaviour under concurrent requests, and adapter behaviour
+against live retailer responses, still need confirmation in the container.

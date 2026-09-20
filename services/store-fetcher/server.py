@@ -51,14 +51,44 @@ class SearchRequest(BaseModel):
     targetQuantity: Optional[float] = Field(None, description="Requested target quantity")
     unit: Optional[str] = Field(None, description="Requested unit (g, kg, ml, l)")
     wantVariants: Optional[bool] = Field(False, description="Whether to fetch all size variants")
+    timeoutMs: Optional[int] = Field(
+        None,
+        description=(
+            "Whole-request budget in milliseconds. Omitted means the server default. "
+            f"Capped at the server maximum. Once exhausted no further store is contacted "
+            "and the remaining stores are reported as deadline_exceeded."
+        ),
+    )
 
 
 try:
     from .registry import get_adapter, STORE_REGISTRY
     from .politeness import rate_limiter, circuit_breaker, daily_request_cap
+    from .deadline import RequestDeadline, MIN_USEFUL_SLICE_SEC
 except ImportError:
     from registry import get_adapter, STORE_REGISTRY
     from politeness import rate_limiter, circuit_breaker, daily_request_cap
+    from deadline import RequestDeadline, MIN_USEFUL_SLICE_SEC
+
+
+# ---------------------------------------------------------------------------
+# Whole-request deadline contract
+# ---------------------------------------------------------------------------
+# A caller may declare its own budget as timeoutMs. A caller that declares nothing gets
+# SEARCH_DEFAULT_TIMEOUT_MS, so callers written before this contract are unaffected. The
+# sidecar always caps the budget at SEARCH_MAX_TIMEOUT_MS: how long this service is
+# willing to work is the service's decision, not the caller's.
+#
+# Contract for /search:
+#   * stores are attempted in request order until the budget is exhausted;
+#   * a store that is never attempted gets status "deadline_exceeded" with empty
+#     products, so the caller can tell "no results" from "never asked";
+#   * results already collected are always returned;
+#   * the response carries a "deadline" block reporting the budget and what was used.
+SEARCH_DEFAULT_TIMEOUT_MS = int(os.environ.get("SEARCH_DEFAULT_TIMEOUT_MS") or 30000)
+SEARCH_MAX_TIMEOUT_MS = int(os.environ.get("SEARCH_MAX_TIMEOUT_MS") or 60000)
+PROBE_DEFAULT_TIMEOUT_MS = int(os.environ.get("PROBE_DEFAULT_TIMEOUT_MS") or 45000)
+PROBE_PER_STORE_TIMEOUT_SEC = 12
 
 
 @app.get("/health")
@@ -108,9 +138,29 @@ def search(
             detail="Unauthorized: invalid or missing x-fetcher-token / x-scrape-token header.",
         )
 
+    deadline = RequestDeadline.from_ms(
+        req.timeoutMs,
+        default_ms=SEARCH_DEFAULT_TIMEOUT_MS,
+        max_ms=SEARCH_MAX_TIMEOUT_MS,
+    )
+
     results: Dict[str, Any] = {}
     for store in req.stores:
         clean_store = store.lower().strip()
+
+        # Stop starting new work once the budget is spent. Reporting the store
+        # explicitly keeps "we never asked" distinguishable from "no products".
+        if not deadline.has_useful_time():
+            results[clean_store] = {
+                "status": "deadline_exceeded",
+                "reason": (
+                    f"Request budget of {round(deadline.budget_sec * 1000)}ms exhausted "
+                    f"before {clean_store} was attempted"
+                ),
+                "products": [],
+            }
+            continue
+
         if clean_store in UNSUPPORTED_STORES:
             results[clean_store] = {
                 "status": "unsupported",
@@ -154,13 +204,23 @@ def search(
             continue
 
         try:
-            # Politeness delay before hitting external retailer
-            rate_limiter.wait_polite(clean_store)
+            # Politeness delay before hitting external retailer, bounded by what is
+            # left: a politeness sleep must never be why a request outlives its caller.
+            rate_limiter.wait_polite(clean_store, max_wait_sec=deadline.remaining())
+
+            if deadline.expired():
+                results[clean_store] = {
+                    "status": "deadline_exceeded",
+                    "reason": f"Request budget exhausted while waiting to contact {clean_store}",
+                    "products": [],
+                }
+                continue
 
             raw_results = adapter.search(
                 req.query,
                 target_quantity=req.targetQuantity,
                 want_variants=bool(req.wantVariants),
+                deadline=deadline,
             )
             circuit_breaker.record_success(clean_store)
 
@@ -188,6 +248,7 @@ def search(
         "query": req.query,
         "stores": results,
         "source": "direct",
+        "deadline": deadline.snapshot(),
     }
 
 
@@ -249,6 +310,12 @@ def probe_stores(
         }
     }
 
+    deadline = RequestDeadline.from_ms(
+        None,
+        default_ms=PROBE_DEFAULT_TIMEOUT_MS,
+        max_ms=PROBE_DEFAULT_TIMEOUT_MS,
+    )
+
     report = {
         "generatedAt": now,
         "labVersion": "1.2.0",
@@ -259,6 +326,20 @@ def probe_stores(
     session = cffi_requests.Session(impersonate="chrome124") if cffi_requests else None
 
     for store_name, cfg in probes.items():
+        # Same bound as /search: five retailers at a 12s timeout each, plus politeness
+        # delays, otherwise outlives any caller waiting on the answer.
+        if not deadline.has_useful_time():
+            report["stores"][store_name] = {
+                "status": "deadline_exceeded",
+                "client": client_name,
+                "checkedAt": now,
+                "reason": (
+                    f"Probe budget of {round(deadline.budget_sec * 1000)}ms exhausted "
+                    f"before {store_name} was attempted"
+                ),
+            }
+            continue
+
         if not circuit_breaker.is_available(store_name):
             report["stores"][store_name] = {
                 "status": "circuit_open",
@@ -273,7 +354,9 @@ def probe_stores(
             }
             continue
 
-        rate_limiter.wait(store_name)
+        # RateLimiter's method is wait_polite(); calling a non-existent wait() made
+        # every authenticated probe fail with HTTP 500 before it reached a retailer.
+        rate_limiter.wait_polite(store_name, max_wait_sec=deadline.remaining())
 
         if not session:
             report["stores"][store_name] = {
@@ -286,7 +369,12 @@ def probe_stores(
 
         start = time.time()
         try:
-            res = session.request(cfg["method"], cfg["url"], headers=cfg.get("headers", {}), timeout=12)
+            res = session.request(
+                cfg["method"],
+                cfg["url"],
+                headers=cfg.get("headers", {}),
+                timeout=deadline.clamp(PROBE_PER_STORE_TIMEOUT_SEC, minimum_sec=1.0),
+            )
             elapsed_ms = round((time.time() - start) * 1000)
             if res.status_code == 200:
                 circuit_breaker.record_success(store_name)
@@ -329,5 +417,6 @@ def probe_stores(
             "reason": reason
         }
 
+    report["deadline"] = deadline.snapshot()
     return report
 

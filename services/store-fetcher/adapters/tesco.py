@@ -9,9 +9,13 @@ import re
 import json
 from typing import List, Dict, Any, Optional
 try:
+    from ._deadline_util import clamp_timeout as _clamp_timeout
+    from ..deadline import RequestDeadline
     from .base import BaseAdapter, AdapterCapabilities
     from ..schema import UnifiedProduct
 except (ImportError, ValueError):
+    from adapters._deadline_util import clamp_timeout as _clamp_timeout
+    from deadline import RequestDeadline
     from adapters.base import BaseAdapter, AdapterCapabilities
     from schema import UnifiedProduct
 
@@ -51,7 +55,8 @@ class TescoAdapter(BaseAdapter):
         query: str,
         *,
         target_quantity: Optional[float] = None,
-        want_variants: bool = False
+        want_variants: bool = False,
+        deadline: Optional["RequestDeadline"] = None
     ) -> List[Dict[str, Any]]:
         """
         Search Tesco products using curl_cffi TLS impersonation.
@@ -65,7 +70,7 @@ class TescoAdapter(BaseAdapter):
         }
 
         url = f"{self.WEB_SEARCH_URL}?query={query.replace(' ', '+')}"
-        res = session.get(url, headers=headers, timeout=12)
+        res = session.get(url, headers=headers, timeout=_clamp_timeout(deadline, 12))
         if res.status_code != 200:
             return []
 

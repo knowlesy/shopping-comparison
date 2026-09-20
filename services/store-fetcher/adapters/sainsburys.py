@@ -7,9 +7,13 @@ with Nectar price support and product normalization.
 import re
 from typing import List, Dict, Any, Optional
 try:
+    from ._deadline_util import clamp_timeout as _clamp_timeout
+    from ..deadline import RequestDeadline
     from .base import BaseAdapter, AdapterCapabilities
     from ..schema import UnifiedProduct
 except (ImportError, ValueError):
+    from adapters._deadline_util import clamp_timeout as _clamp_timeout
+    from deadline import RequestDeadline
     from adapters.base import BaseAdapter, AdapterCapabilities
     from schema import UnifiedProduct
 
@@ -46,7 +50,8 @@ class SainsburysAdapter(BaseAdapter):
         query: str,
         *,
         target_quantity: Optional[float] = None,
-        want_variants: bool = False
+        want_variants: bool = False,
+        deadline: Optional["RequestDeadline"] = None
     ) -> List[Dict[str, Any]]:
         """Search products on Sainsbury's GOL REST service."""
         session = self._get_session()
@@ -61,7 +66,7 @@ class SainsburysAdapter(BaseAdapter):
             "page_size": "24"
         }
 
-        res = session.get(self.BASE_URL, headers=headers, params=params, timeout=10)
+        res = session.get(self.BASE_URL, headers=headers, params=params, timeout=_clamp_timeout(deadline, 10))
         if res.status_code != 200:
             return []
 
