@@ -298,4 +298,70 @@ test.describe('API-backed browser comparison', () => {
     // Matrix remains visible and intact
     await expect(page.locator('h1:has-text("Supermarket Price & Sizing Matrix")')).toBeVisible();
   });
+
+  test('API outage displays clear retryable error banner and preserves entered items without browser matching', async ({ page }) => {
+    await page.goto('/');
+
+    const textarea = page.locator('textarea').first();
+    await textarea.fill(SHOPPING_LIST);
+
+    // Mock API failure on both stream and standard compare endpoints
+    await page.route('**/api/compare/**', async (route) => {
+      await route.abort('failed');
+    });
+
+    const compareBtn = page.locator('button:has-text("Compare Prices Now")').first();
+    await compareBtn.click();
+
+    // Verify comparison error banner is visible and has retry button
+    const banner = page.locator('[data-testid="comparison-error-banner"]');
+    await expect(banner).toBeVisible({ timeout: 10000 });
+    await expect(banner).toContainText('Comparison failed');
+    await expect(page.locator('button:has-text("Retry Comparison")')).toBeVisible();
+
+    // Verify the comparison matrix was NOT rendered with fake browser matches
+    await expect(page.locator('h1:has-text("Supermarket Price & Sizing Matrix")')).not.toBeVisible();
+
+    // Verify entered items are preserved
+    const listTab = page.locator('button:has-text("Shopping List")').first();
+    await listTab.click();
+    await expect(page.locator('span:has-text("wholemeal bread")').first()).toBeVisible();
+  });
+
+  test('explicit SSE error event propagates to UI and shows error banner without double comparison', async ({ page }) => {
+    let compareCallCount = 0;
+    await page.route('**/api/compare/stream', async (route) => {
+      compareCallCount++;
+      await route.fulfill({
+        status: 200,
+        headers: {
+          'Content-Type': 'text/event-stream',
+          'Cache-Control': 'no-cache',
+          Connection: 'keep-alive',
+        },
+        body: 'data: {"type":"init"}\n\ndata: {"type":"error","error":"Explicit SSE comparison error from server"}\n\n',
+      });
+    });
+
+    await page.route('**/api/compare', async (route) => {
+      compareCallCount++;
+      await route.abort('failed');
+    });
+
+    await page.goto('/');
+    const textarea = page.locator('textarea').first();
+    await textarea.fill('800g wholemeal bread');
+
+    const compareBtn = page.locator('button:has-text("Compare Prices Now")').first();
+    await compareBtn.click();
+
+    // Should display the SSE error banner directly without running standard compare
+    const banner = page.locator('[data-testid="comparison-error-banner"]');
+    await expect(banner).toBeVisible({ timeout: 10000 });
+    await expect(banner).toContainText('Explicit SSE comparison error from server');
+
+    // Verify it did not silently fall through to standard /api/compare
+    expect(compareCallCount).toBe(1);
+  });
 });
+

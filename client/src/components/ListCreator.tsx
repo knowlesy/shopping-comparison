@@ -458,6 +458,7 @@ export const ListCreator: React.FC<ListCreatorProps> = ({
                     const parsed = await onParseRawList(rawText);
                     if (parsed && parsed.length > 0) {
                       listToCompare = parsed;
+                      setInputMode('checklist');
                     }
                   }
                   if (listToCompare.length > 0) {

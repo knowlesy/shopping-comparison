@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { Sparkles, X } from 'lucide-react';
+import { Sparkles, X, AlertCircle, RefreshCw } from 'lucide-react';
 import { Header } from './components/Header';
 import { ListCreator, EXAMPLE_LIST_TEXT } from './components/ListCreator';
 import { ComparisonView } from './components/ComparisonView';
@@ -125,6 +125,7 @@ export default function App() {
   const [ingredientIdeas, setIngredientIdeas] = useState<IngredientIdea[]>([]);
   const [loading, setLoading] = useState(false);
   const [adjustmentError, setAdjustmentError] = useState<string | null>(null);
+  const [comparisonError, setComparisonError] = useState<string | null>(null);
 
   // Modals
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -297,6 +298,7 @@ export default function App() {
     if (listToCompare.length === 0) return;
     try {
       setLoading(true);
+      setComparisonError(null);
       setTimeout(() => {
         const el = document.getElementById('loading-section');
         if (el) {
@@ -344,8 +346,9 @@ export default function App() {
           origin: { y: 0.6 },
         });
       } catch {}
-    } catch (err) {
+    } catch (err: any) {
       console.error('Comparison error:', err);
+      setComparisonError(err?.message || 'Failed to compare items across supermarkets. Please try again.');
     } finally {
       setLoading(false);
       setProgress(null);
@@ -586,6 +589,34 @@ export default function App() {
               >
                 <X className="w-4 h-4" />
               </button>
+            </div>
+          </div>
+        )}
+
+        {comparisonError && (
+          <div data-testid="comparison-error-banner" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+            <div className="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-sm shadow-sm">
+              <div className="flex items-center space-x-2">
+                <AlertCircle className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0" />
+                <span className="font-bold">Comparison failed:</span>
+                <span>{comparisonError}</span>
+              </div>
+              <div className="flex items-center space-x-2 shrink-0">
+                <button
+                  onClick={() => handleCompare(items)}
+                  className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition shadow-xs"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  <span>Retry Comparison</span>
+                </button>
+                <button
+                  onClick={() => setComparisonError(null)}
+                  className="p-1.5 rounded-lg hover:bg-rose-100 dark:hover:bg-rose-900 text-rose-600 dark:text-rose-300 transition"
+                  title="Dismiss"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
         )}

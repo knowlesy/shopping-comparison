@@ -1,13 +1,11 @@
 import { test, expect } from '@playwright/test';
 
 /**
- * UI flow coverage only (Playwright project: ui-offline).
- *
- * This spec deliberately tolerates an unavailable API — the client falls back to its
- * own in-browser engine — so it must never be read as proof of server integration.
- * That proof lives in tests/comparison.api.spec.ts (project: api-integration).
+ * End-to-end UI flow test across application tabs and features.
+ * In accordance with Task 06, the browser fallback matching engine has been retired,
+ * and the application uses the authoritative Logic-API.
  */
-test.describe('ShoppingWise UK Web App UI Flow (offline-tolerant)', () => {
+test.describe('ShoppingWise UK Web App UI Flow', () => {
   test('Complete Shopping & Supermarket Comparison Flow', async ({ page }) => {
     // 1. Open the application
     await page.goto('/');

@@ -12,8 +12,6 @@ import {
   SystemVersionInfo,
 } from '../types';
 import {
-  ClientShoppingParser,
-  ClientSupermarketComparisonService,
   DEFAULT_INGREDIENT_IDEAS,
 } from './clientEngine';
 
@@ -71,24 +69,26 @@ function stripApiKey(prefs?: UserPreferences): UserPreferences | undefined {
 }
 
 export const api = {
-  // Parse raw text shopping list
+  // Parse raw text shopping list via authoritative API
   parseList: async (rawText: string): Promise<ParsedItem[]> => {
-    try {
-      const res = await fetch(`${API_BASE}/parse-list`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ rawText }),
-      });
-      if (res.ok) {
+    const res = await fetch(`${API_BASE}/parse-list`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rawText }),
+    });
+    if (!res.ok) {
+      let message = `Failed to parse list (HTTP ${res.status})`;
+      try {
         const data = await res.json();
-        if (Array.isArray(data.items) && data.items.length > 0) {
-          return data.items;
-        }
-      }
-    } catch {
-      // Fall through to client parser
+        if (data?.error) message = data.error;
+      } catch {}
+      throw new Error(message);
     }
-    return ClientShoppingParser.parse(rawText);
+    const data = await res.json();
+    if (Array.isArray(data.items)) {
+      return data.items;
+    }
+    return [];
   },
 
   // Compare items across supermarkets with live streaming progress updates
@@ -99,6 +99,7 @@ export const api = {
     forceRefresh: boolean = false
   ): Promise<ComparisonResponse> => {
     const safePrefs = stripApiKey(preferences);
+    let streamFailedBeforeReceiving = false;
     try {
       const response = await fetch(`${API_BASE}/compare/stream`, {
         method: 'POST',
@@ -106,7 +107,10 @@ export const api = {
         body: JSON.stringify({ items, preferences: safePrefs, forceRefresh }),
       });
 
-      if (response.ok && response.body) {
+      if (!response.ok) {
+        // Stream endpoint returned HTTP error status - fall back to standard compare endpoint once
+        streamFailedBeforeReceiving = true;
+      } else if (response.body) {
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let buffer = '';
@@ -126,44 +130,60 @@ export const api = {
               continue;
             }
             if (trimmed.startsWith('data:')) {
+              let data: ComparisonProgress;
               try {
-                const data: ComparisonProgress = JSON.parse(trimmed.slice(5).trim());
-                if (onProgress) onProgress(data);
-                if (data.type === 'complete' && data.comparison) {
-                  return data.comparison;
-                }
-                if (data.type === 'error') {
-                  throw new Error(data.error || 'Comparison stream error');
-                }
+                data = JSON.parse(trimmed.slice(5).trim());
               } catch (e) {
-                console.warn('Failed to parse SSE chunk:', e);
+                console.warn('Failed to parse SSE JSON chunk:', e);
+                continue;
+              }
+
+              if (onProgress) onProgress(data);
+
+              if (data.type === 'complete' && data.comparison) {
+                return data.comparison;
+              }
+
+              if (data.type === 'error') {
+                // Explicit SSE error event from comparison engine — must propagate immediately without re-running
+                throw new Error(data.error || 'Comparison stream error');
               }
             }
           }
         }
       }
-    } catch (e) {
-      console.warn('Stream failed, falling back to standard compare:', e);
+    } catch (e: any) {
+      // If the error was explicitly thrown above (e.g. SSE error event), propagate it without retrying
+      if (e.message && (e.message === 'Comparison stream error' || !streamFailedBeforeReceiving)) {
+        throw e;
+      }
+      streamFailedBeforeReceiving = true;
     }
-    return api.compare(items, safePrefs, forceRefresh);
+
+    if (streamFailedBeforeReceiving) {
+      return api.compare(items, safePrefs, forceRefresh);
+    }
+
+    throw new Error('Comparison stream closed without completing');
   },
 
-  // Compare items across supermarkets (standard fallback)
+  // Compare items across supermarkets via authoritative API
   compare: async (items: ParsedItem[], preferences?: UserPreferences, forceRefresh: boolean = false): Promise<ComparisonResponse> => {
     const safePrefs = stripApiKey(preferences);
-    try {
-      const res = await fetch(`${API_BASE}/compare`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items, preferences: safePrefs, forceRefresh }),
-      });
-      if (res.ok) {
-        return await res.json();
-      }
-    } catch {
-      // Fall through to client comparison
+    const res = await fetch(`${API_BASE}/compare`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items, preferences: safePrefs, forceRefresh }),
+    });
+    if (!res.ok) {
+      let message = `Comparison failed (HTTP ${res.status})`;
+      try {
+        const data = await res.json();
+        if (data?.error) message = data.error;
+      } catch {}
+      throw new Error(message);
     }
-    return ClientSupermarketComparisonService.compare(items, safePrefs || DEFAULT_PREFERENCES);
+    return await res.json();
   },
 
   // Adjust an item in a comparison (swap alternative or update packs) via canonical API
@@ -237,18 +257,19 @@ export const api = {
     return { success: false, clearedCount: 0 };
   },
 
-  // Get product alternatives
+  // Get product alternatives via authoritative API
   getAlternatives: async (store: SupermarketName, query: string): Promise<SupermarketProduct[]> => {
-    try {
-      const res = await fetch(`${API_BASE}/products/alternatives?store=${store}&query=${encodeURIComponent(query)}`);
-      if (res.ok) {
+    const res = await fetch(`${API_BASE}/products/alternatives?store=${store}&query=${encodeURIComponent(query)}`);
+    if (!res.ok) {
+      let message = `Failed to get alternatives (HTTP ${res.status})`;
+      try {
         const data = await res.json();
-        return data.alternatives;
-      }
-    } catch {
-      // Fall through to client alternatives
+        if (data?.error) message = data.error;
+      } catch {}
+      throw new Error(message);
     }
-    return ClientSupermarketComparisonService.getAlternatives(store, query);
+    const data = await res.json();
+    return Array.isArray(data.alternatives) ? data.alternatives : [];
   },
 
   // Settings — the server is the only owner.

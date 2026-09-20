@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, RefreshCw, Tag, X } from 'lucide-react';
+import { Search, RefreshCw, Tag, X, AlertCircle } from 'lucide-react';
 import { SupermarketName, SupermarketProduct } from '../types';
 import { api } from '../services/api';
 
@@ -36,6 +36,7 @@ interface QuickPriceCheckProps {
 export const QuickPriceCheck: React.FC<QuickPriceCheckProps> = ({ enabledSupermarkets }) => {
   const [query, setQuery] = useState('');
   const [searching, setSearching] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
   const [results, setResults] = useState<Record<string, SupermarketProduct[]> | null>(null);
   const [searchedQuery, setSearchedQuery] = useState('');
   const [recentSearches, setRecentSearches] = useState<string[]>(() => {
@@ -52,31 +53,42 @@ export const QuickPriceCheck: React.FC<QuickPriceCheckProps> = ({ enabledSuperma
     if (!q) return;
 
     setSearching(true);
+    setSearchError(null);
     setResults(null);
     setSearchedQuery(q);
 
     try {
       const storeResults: Record<string, SupermarketProduct[]> = {};
+      let anyStoreSucceeded = false;
+      let lastErrorMsg = '';
 
       const fetches = enabledSupermarkets.map(async (store) => {
         try {
           const alts = await api.getAlternatives(store, q);
+          anyStoreSucceeded = true;
           if (alts && alts.length > 0) {
             storeResults[store] = alts.slice(0, 6);
           }
-        } catch {
-          // Skip silently on error
+        } catch (err: any) {
+          lastErrorMsg = err?.message || 'API unavailable';
         }
       });
 
       await Promise.all(fetches);
+
+      if (!anyStoreSucceeded && enabledSupermarkets.length > 0) {
+        setSearchError(lastErrorMsg || 'Unable to connect to price check API. Please check your connection and retry.');
+        return;
+      }
+
       setResults(storeResults);
 
       const updated = [q, ...recentSearches.filter(s => s.toLowerCase() !== q.toLowerCase())].slice(0, 8);
       setRecentSearches(updated);
       localStorage.setItem('shoppingwise_quick_searches', JSON.stringify(updated));
-    } catch (err) {
+    } catch (err: any) {
       console.error('Quick price check failed:', err);
+      setSearchError(err?.message || 'Failed to check prices across supermarkets');
     } finally {
       setSearching(false);
     }
@@ -176,6 +188,33 @@ export const QuickPriceCheck: React.FC<QuickPriceCheckProps> = ({ enabledSuperma
           <p className="text-sm font-bold text-slate-700 dark:text-slate-300">
             Checking live prices for "{searchedQuery}" across {enabledSupermarkets.length} supermarkets...
           </p>
+        </div>
+      )}
+
+      {/* Error State */}
+      {searchError && !searching && (
+        <div data-testid="quick-check-error-banner" className="bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 rounded-2xl p-4 text-rose-800 dark:text-rose-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-sm shadow-sm">
+          <div className="flex items-center space-x-2">
+            <AlertCircle className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0" />
+            <span className="font-bold">Price lookup failed:</span>
+            <span>{searchError}</span>
+          </div>
+          <div className="flex items-center space-x-2 shrink-0">
+            <button
+              onClick={() => handleSearch(searchedQuery || query)}
+              className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition shadow-xs"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span>Retry</span>
+            </button>
+            <button
+              onClick={() => setSearchError(null)}
+              className="p-1.5 rounded-lg hover:bg-rose-100 dark:hover:bg-rose-900 text-rose-600 dark:text-rose-300 transition"
+              title="Dismiss"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       )}
 
