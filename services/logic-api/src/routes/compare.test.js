@@ -8,7 +8,7 @@ import { compareRouter } from './compare.js';
 import { settingsRouter } from './settings.js';
 import { PriceCache } from '../services/priceCache.js';
 import { IngredientParser } from '../services/ingredientParser.js';
-import { getCoreSearchQuery, buildScrapeCacheKey } from '../services/candidatePipeline.js';
+import { getCoreSearchQuery, buildScrapeCacheKey, buildStoreCandidateCacheKey } from '../services/candidatePipeline.js';
 import { AiDecisionReviewer } from '../services/aiDecisionReviewer.js';
 import { AiEscalation } from '../services/aiEscalation.js';
 import { MatchLog } from '../services/matchLog.js';
@@ -250,8 +250,12 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
     beforeEach(() => {
       process.env.GEMINI_API_KEY = 'test-key-task-03';
       const coreQuery = getCoreSearchQuery(mockItem);
-      const cacheKey = buildScrapeCacheKey(coreQuery, ['tesco']);
-      PriceCache.set(cacheKey, mockCandidates);
+      // Task 08 made the per-store v3 key authoritative and it is consulted before the
+      // legacy combined v2 entry. The 52-line list in the outer before() hook shares this
+      // core query, so it leaves a v3 tesco row behind. Seed the canonical key (and the
+      // legacy one, so the migration path stays covered) to pin these fixtures.
+      PriceCache.set(buildStoreCandidateCacheKey(coreQuery, 'tesco'), mockCandidates);
+      PriceCache.set(buildScrapeCacheKey(coreQuery, ['tesco']), mockCandidates);
     });
 
     afterEach(() => {

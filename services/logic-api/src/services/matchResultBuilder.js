@@ -119,13 +119,14 @@ export class MatchResultBuilder {
     }
 
     let chosenProduct = product;
-    let chosenPacks = 1;
-    let chosenTotalQty = 0;
-    let chosenTotalPrice = 0;
+    // Every branch of the pack/route chain below assigns these before use.
+    let chosenPacks;
+    let chosenTotalQty;
+    let chosenTotalPrice;
     let chosenWeightDiff = 0;
     let chosenDealApplied = undefined;
-    let lines = explicitLines;
-    let explanation = '';
+    let lines;
+    let explanation;
 
     // 1. Pack and Route Calculation
     if (explicitLines && explicitLines.length > 0) {
