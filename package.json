@@ -20,6 +20,8 @@
     "format": "prettier --write \"services/**/*.js\" \"tests/**/*.js\"",
     "test": "node --test \"services/logic-api/src/services/*.test.js\" \"services/logic-api/src/routes/*.test.js\"",
     "test:e2e": "playwright test",
+    "test:e2e:api": "playwright test --project=api-integration",
+    "test:e2e:no-api": "TEST_API_DISABLED=1 playwright test --project=api-integration",
     "test:owasp": "node tests/owasp-security-audit.js",
     "test:live": "node tests/test-live-scraper.js",
     "bench:matching": "node scripts/dev/compare_matching.js",

@@ -1,9 +1,16 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('ShoppingWise UK Web App End-to-End Verification', () => {
+/**
+ * UI flow coverage only (Playwright project: ui-offline).
+ *
+ * This spec deliberately tolerates an unavailable API — the client falls back to its
+ * own in-browser engine — so it must never be read as proof of server integration.
+ * That proof lives in tests/comparison.api.spec.ts (project: api-integration).
+ */
+test.describe('ShoppingWise UK Web App UI Flow (offline-tolerant)', () => {
   test('Complete Shopping & Supermarket Comparison Flow', async ({ page }) => {
     // 1. Open the application
-    await page.goto('http://localhost:5173');
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
 
     // 2. Check title and brand
@@ -22,9 +29,15 @@ test.describe('ShoppingWise UK Web App End-to-End Verification', () => {
     await loadSampleBtn.click();
     await page.waitForTimeout(500);
 
-    // 5. Verify checklist items rendered
-    const checklistCard = page.locator('span:has-text("900g 5% lean beef mince")').first();
-    await expect(checklistCard).toBeVisible();
+    // 5. Verify checklist items rendered.
+    // The previous assertion matched the exact string "900g 5% lean beef mince", which is
+    // only ever produced by the client's fallback parser (it uses the raw line as the item
+    // name). The API's parser names the same item "beef mince", so that assertion silently
+    // required the API to be down. Intent preserved and strengthened: the whole 28-item
+    // sample must render, and the beef mince row must be among them, under either parser.
+    const checklistRows = page.locator('span.text-sm.font-medium');
+    await expect(page.locator('span:has-text("beef mince")').first()).toBeVisible();
+    expect(await checklistRows.count()).toBeGreaterThanOrEqual(28);
 
     // 6. Test Ingredient Ideas Word Window: Click an idea chip to add
     const ideaChip = page.locator('button:has-text("Greek Yogurt 0%")').first();

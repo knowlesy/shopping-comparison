@@ -102,7 +102,9 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Run E2E browser tests
+      # Runs both Playwright projects: api-integration (comparison must come from a real
+      # isolated Logic-API) and ui-offline (UI flow only). See playwright.config.ts.
+      - name: Run E2E browser tests (API-backed integration + UI flow)
         run: npm run test:e2e
 
   version:
