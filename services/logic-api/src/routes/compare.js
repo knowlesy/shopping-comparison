@@ -12,6 +12,7 @@ import { AiPolicy } from '../services/aiPolicy.js';
 import { AiDecisionReviewer } from '../services/aiDecisionReviewer.js';
 import { AiEscalation } from '../services/aiEscalation.js';
 import { MatchLog } from '../services/matchLog.js';
+import { isKnownSupermarket } from '../services/supermarkets.js';
 
 export const compareRouter = express.Router();
 
@@ -135,18 +136,8 @@ async function maybeEscalateUnresolvedItems(items, storeMatchesMap, enabledStore
   }
 }
 
-const KNOWN_SUPERMARKETS = new Set([
-  'asda',
-  'sainsburys',
-  'tesco',
-  'morrisons',
-  'iceland',
-  'aldi',
-  'lidl',
-  'waitrose',
-  'ocado',
-  'coop'
-]);
+// The supermarket vocabulary lives in services/supermarkets.js so settings and
+// comparison cannot disagree about what a valid store name is.
 
 /**
  * POST /api/compare
@@ -165,7 +156,7 @@ compareRouter.post('/', async (req, res) => {
 
   if (preferences && preferences.enabledSupermarkets && Array.isArray(preferences.enabledSupermarkets)) {
     const unknown = preferences.enabledSupermarkets.filter(
-      (s) => !KNOWN_SUPERMARKETS.has(String(s).toLowerCase().trim())
+      (s) => !isKnownSupermarket(s)
     );
     if (unknown.length > 0) {
       return res.status(400).json({
@@ -286,7 +277,7 @@ compareRouter.post('/stream', async (req, res) => {
 
   if (preferences && preferences.enabledSupermarkets && Array.isArray(preferences.enabledSupermarkets)) {
     const unknown = preferences.enabledSupermarkets.filter(
-      (s) => !KNOWN_SUPERMARKETS.has(String(s).toLowerCase().trim())
+      (s) => !isKnownSupermarket(s)
     );
     if (unknown.length > 0) {
       return res.status(400).json({

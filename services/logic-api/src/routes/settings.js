@@ -3,179 +3,104 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { AiDecisionReviewer } from '../services/aiDecisionReviewer.js';
+import {
+  aiConfiguredExternally,
+  buildDefaults,
+  loadPersisted,
+  persist,
+  toSafeSettings,
+  validatePatch
+} from '../services/settingsStore.js';
+import { KNOWN_DIRECT_STORES as SHARED_DIRECT_STORES } from '../services/supermarkets.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export const settingsRouter = express.Router();
 
-const isAiConfiguredExternally = Boolean(
-  process.env.GEMINI_API_KEY ||
-  process.env.GOOGLE_GENAI_API_KEY ||
-  process.env.ENABLE_GEMINI_MATCHING === 'true'
-);
+/** Re-exported for callers that validated store names against this route. */
+export const KNOWN_DIRECT_STORES = [...SHARED_DIRECT_STORES];
 
-export const KNOWN_DIRECT_STORES = ['tesco', 'sainsburys', 'asda', 'morrisons', 'iceland'];
+const isAiConfiguredExternally = aiConfiguredExternally();
 
-let userSettings = {
-  healthierDefault: true,
-  fatPercentagePreference: 5,
-  preferWholewheat: true,
-  preferFreeRange: true,
-  preferOrganic: false,
-  cutMatchingStrategy: 'strict_cut',
-  brandTierPriority: 'standard',
-  packSizingPolicy: 'closest',
-  includeDeals: true,
-  enabledSupermarkets: ['asda', 'sainsburys', 'tesco', 'morrisons', 'iceland', 'aldi', 'lidl'],
-  enablePastSearches: true,
-  directScrapersEnabled: true,
-  directStoreAdapters: {
-    tesco: true,
-    sainsburys: true,
-    asda: true,
-    morrisons: true,
-    iceland: true
-  },
-  allowMixedPackSizes: false,
-  aiMatchingEnabled: process.env.ENABLE_GEMINI_MATCHING === 'true' || isAiConfiguredExternally,
-  aiMatchingExternallyConfigured: isAiConfiguredExternally,
-  geminiApiKey: '',
-  aiAssistLevel: 'balanced',
-  aiMaxCallsPerBasket: 25,
-  aiStages: {
-    interpret: true,
-    query: false,
-    select: true
-  },
-  enableMatchLog: process.env.ENABLE_MATCH_LOG === 'true'
-};
+/**
+ * Start from the schema defaults, then apply whatever survived validation on disk.
+ * The environment still wins for AI configuration, because a key or flag present in
+ * the container is a statement about this deployment, not a stale household choice.
+ */
+function initialSettings() {
+  const defaults = buildDefaults();
+  const loaded = loadPersisted();
+
+  if (loaded.rejected.length > 0) {
+    for (const { field, reason } of loaded.rejected) {
+      console.warn(`[Settings] Ignoring persisted ${field}: ${reason}. Using default.`);
+    }
+  }
+
+  const merged = { ...defaults, ...loaded.values };
+  if (isAiConfiguredExternally) {
+    merged.aiMatchingEnabled = true;
+  }
+
+  if (loaded.existed) {
+    console.log(`[Settings] Loaded household settings from ${loaded.file}`);
+  }
+  return merged;
+}
+
+let userSettings = initialSettings();
 
 export function getUserSettings() {
   return userSettings;
 }
 
 export function getSafeUserSettings() {
-  const { geminiApiKey, ...safe } = userSettings;
-  const hasKey = Boolean(geminiApiKey && geminiApiKey.trim().length > 0) || isAiConfiguredExternally;
-  return {
-    ...safe,
-    hasGeminiKey: hasKey,
-    aiMatchingExternallyConfigured: isAiConfiguredExternally
-  };
+  return toSafeSettings(userSettings);
+}
+
+/** Test seam: restore the in-memory state from disk without restarting the process. */
+export function reloadSettingsFromDisk() {
+  userSettings = initialSettings();
+  return userSettings;
 }
 
 settingsRouter.get('/', (req, res) => {
   res.json(getSafeUserSettings());
 });
 
+/**
+ * PUT /api/settings
+ *
+ * Merge semantics: this is a patch, not a replacement. Keys absent from the body keep
+ * their current value; `directStoreAdapters` and `aiStages` merge key-by-key so a
+ * client can flip one store without having to resend the rest. Unknown keys are
+ * ignored rather than rejected, so an older client sending an extra field still saves.
+ *
+ * Nothing is applied unless everything validates, and nothing is reported as saved
+ * unless it reached disk.
+ */
 settingsRouter.put('/', (req, res) => {
-  const allowedKeys = [
-    'healthierDefault',
-    'fatPercentagePreference',
-    'preferWholewheat',
-    'preferFreeRange',
-    'preferOrganic',
-    'cutMatchingStrategy',
-    'brandTierPriority',
-    'packSizingPolicy',
-    'includeDeals',
-    'enabledSupermarkets',
-    'devMode',
-    'enablePastSearches',
-    'directScrapersEnabled',
-    'directStoreAdapters',
-    'allowMixedPackSizes',
-    'aiMatchingEnabled',
-    'geminiApiKey',
-    'aiAssistLevel',
-    'aiMaxCallsPerBasket',
-    'aiStages',
-    'enableMatchLog'
-  ];
-
-  if (req.body && req.body.enableMatchLog !== undefined) {
-    if (typeof req.body.enableMatchLog !== 'boolean') {
-      return res.status(400).json({ error: 'enableMatchLog must be a boolean' });
-    }
+  const validation = validatePatch(req.body, userSettings);
+  if (!validation.ok) {
+    return res.status(400).json({ error: validation.error, field: validation.field });
   }
 
-  if (req.body && req.body.directScrapersEnabled !== undefined) {
-    if (typeof req.body.directScrapersEnabled !== 'boolean') {
-      return res.status(400).json({ error: 'directScrapersEnabled must be a boolean' });
-    }
+  const candidate = { ...userSettings, ...validation.patch };
+
+  try {
+    persist(candidate);
+  } catch (err) {
+    // The caller must be able to tell a refused save from a successful one, so this
+    // is an error response and the in-memory state is left untouched.
+    console.error(`[Settings] Could not persist settings: ${err.message}`);
+    return res.status(500).json({
+      error: `Settings were not saved: ${err.message}`,
+      persisted: false
+    });
   }
 
-  if (req.body && req.body.directStoreAdapters !== undefined) {
-    if (
-      typeof req.body.directStoreAdapters !== 'object' ||
-      req.body.directStoreAdapters === null ||
-      Array.isArray(req.body.directStoreAdapters)
-    ) {
-      return res.status(400).json({ error: 'directStoreAdapters must be an object' });
-    }
-    for (const [store, val] of Object.entries(req.body.directStoreAdapters)) {
-      if (!KNOWN_DIRECT_STORES.includes(store)) {
-        return res.status(400).json({ error: `Unknown store in directStoreAdapters: ${store}` });
-      }
-      if (typeof val !== 'boolean') {
-        return res.status(400).json({ error: `directStoreAdapters.${store} must be a boolean` });
-      }
-    }
-  }
-
-  if (req.body && req.body.aiAssistLevel !== undefined) {
-    if (!['off', 'economy', 'balanced', 'thorough'].includes(req.body.aiAssistLevel)) {
-      return res.status(400).json({ error: 'aiAssistLevel must be one of: off, economy, balanced, thorough' });
-    }
-  }
-
-  if (req.body && req.body.aiMaxCallsPerBasket !== undefined) {
-    if (typeof req.body.aiMaxCallsPerBasket !== 'number' || req.body.aiMaxCallsPerBasket < 0) {
-      return res.status(400).json({ error: 'aiMaxCallsPerBasket must be a non-negative number' });
-    }
-  }
-
-  if (req.body && req.body.aiStages !== undefined) {
-    if (
-      typeof req.body.aiStages !== 'object' ||
-      req.body.aiStages === null ||
-      Array.isArray(req.body.aiStages)
-    ) {
-      return res.status(400).json({ error: 'aiStages must be an object' });
-    }
-    for (const [stage, val] of Object.entries(req.body.aiStages)) {
-      if (!['interpret', 'query', 'select'].includes(stage)) {
-        return res.status(400).json({ error: `Unknown stage in aiStages: ${stage}` });
-      }
-      if (typeof val !== 'boolean') {
-        return res.status(400).json({ error: `aiStages.${stage} must be a boolean` });
-      }
-    }
-  }
-
-  const sanitized = {};
-  for (const key of allowedKeys) {
-    if (req.body && req.body[key] !== undefined) {
-      if (key === 'geminiApiKey') {
-        sanitized[key] = typeof req.body[key] === 'string' ? req.body[key].trim() : '';
-      } else if (key === 'directStoreAdapters') {
-        sanitized[key] = {
-          ...userSettings.directStoreAdapters,
-          ...req.body[key]
-        };
-      } else if (key === 'aiStages') {
-        sanitized[key] = {
-          ...userSettings.aiStages,
-          ...req.body[key]
-        };
-      } else {
-        sanitized[key] = req.body[key];
-      }
-    }
-  }
-
-  userSettings = { ...userSettings, ...sanitized };
+  userSettings = candidate;
   res.json(getSafeUserSettings());
 });
 

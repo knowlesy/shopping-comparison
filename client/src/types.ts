@@ -197,7 +197,11 @@ export interface UserPreferences {
   aiMatchingEnabled?: boolean;
   aiMatchingExternallyConfigured?: boolean;
   hasGeminiKey?: boolean;
+  // Write-only. The server never returns a key; this field only ever carries a value
+  // the user has just typed, on its way to the API.
   geminiApiKey?: string;
+  geminiKeySource?: 'environment' | 'runtime' | 'none';
+  geminiKeyLifetime?: string;
   aiAssistLevel?: 'off' | 'economy' | 'balanced' | 'thorough';
   aiMaxCallsPerBasket?: number;
   aiStages?: {

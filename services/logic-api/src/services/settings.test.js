@@ -1,8 +1,28 @@
 import { describe, it, before, after } from "node:test";
 import assert from "node:assert/strict";
 import express from "express";
-import { settingsRouter, getUserSettings, getSafeUserSettings, KNOWN_DIRECT_STORES } from "../routes/settings.js";
-import { AiDecisionReviewer } from "./aiDecisionReviewer.js";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+
+// Settings are now persisted, so these tests must own a throwaway DATA_DIR. Without
+// this the PUTs below would write a settings.json into the household's real runtime
+// directory. Set before importing the route, which resolves the path at module load.
+const TEST_DATA_DIR = fs.mkdtempSync(path.join(os.tmpdir(), "sw-settings-route-test-"));
+process.env.DATA_DIR = TEST_DATA_DIR;
+
+const { settingsRouter, getUserSettings, getSafeUserSettings, KNOWN_DIRECT_STORES } = await import(
+  "../routes/settings.js"
+);
+const { AiDecisionReviewer } = await import("./aiDecisionReviewer.js");
+
+process.on("exit", () => {
+  try {
+    fs.rmSync(TEST_DATA_DIR, { recursive: true, force: true });
+  } catch {
+    // best effort
+  }
+});
 
 describe("Settings Route Security & Key Redaction", () => {
   it("GET /api/settings should never leak geminiApiKey and should return hasGeminiKey boolean", () => {

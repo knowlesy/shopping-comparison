@@ -1,9 +1,27 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import express from 'express';
-import { settingsRouter } from './settings.js';
-import { alternativesRouter } from './alternatives.js';
-import { compareRouter } from './compare.js';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+
+// Settings are persisted now, so this suite must own a throwaway DATA_DIR or its PUTs
+// would write into the household's real runtime directory. Set before importing the
+// routes, which resolve their data paths at module load.
+const TEST_DATA_DIR = fs.mkdtempSync(path.join(os.tmpdir(), 'sw-settings-alt-test-'));
+process.env.DATA_DIR = TEST_DATA_DIR;
+
+const { settingsRouter } = await import('./settings.js');
+const { alternativesRouter } = await import('./alternatives.js');
+const { compareRouter } = await import('./compare.js');
+
+process.on('exit', () => {
+  try {
+    fs.rmSync(TEST_DATA_DIR, { recursive: true, force: true });
+  } catch {
+    // best effort
+  }
+});
 
 describe('HTTP API: Settings & Alternatives Route Tests', () => {
   let app;

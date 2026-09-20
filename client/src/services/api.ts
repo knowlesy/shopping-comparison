@@ -44,6 +44,26 @@ export interface ComparisonProgress {
   error?: string;
 }
 
+const LEGACY_SETTINGS_STORAGE_KEY = 'shoppingwise_settings';
+
+/**
+ * Remove the legacy browser settings blob.
+ *
+ * Older builds cached settings — including the Gemini API key — in localStorage and
+ * read them in preference to the server. The whole entry goes: keeping a trimmed copy
+ * would recreate the override problem it caused. Only this one key is touched; the
+ * list, history, favourites, ideas and theme entries are left alone.
+ */
+export function sanitizeLegacySettingsStorage(): void {
+  try {
+    if (localStorage.getItem(LEGACY_SETTINGS_STORAGE_KEY) !== null) {
+      localStorage.removeItem(LEGACY_SETTINGS_STORAGE_KEY);
+    }
+  } catch {
+    // Private mode or blocked storage: nothing to clean up.
+  }
+}
+
 function stripApiKey(prefs?: UserPreferences): UserPreferences | undefined {
   if (!prefs) return undefined;
   const { geminiApiKey, ...safe } = prefs;
@@ -194,29 +214,47 @@ export const api = {
     return ClientSupermarketComparisonService.getAlternatives(store, query);
   },
 
-  // Settings
+  // Settings — the server is the only owner.
+  //
+  // The browser previously kept its own copy in localStorage and preferred it over the
+  // server, so a stale or hand-edited blob silently overrode the real settings, and the
+  // copy included the Gemini key. Nothing about settings is stored in the browser now.
   getSettings: async (): Promise<UserPreferences> => {
+    sanitizeLegacySettingsStorage();
     try {
-      const local = localStorage.getItem('shoppingwise_settings');
-      if (local) return JSON.parse(local);
       const res = await fetch(`${API_BASE}/settings`);
       if (res.ok) return await res.json();
-    } catch {}
+    } catch {
+      // Fall through: with the API unreachable, defaults are the honest answer. They are
+      // not written anywhere, so the next successful load still comes from the server.
+    }
     return DEFAULT_PREFERENCES;
   },
 
+  /**
+   * Save settings. Resolves only when the server confirms the write, and rejects with
+   * the server's message otherwise — a refused save must never look like a successful
+   * one. Returns the server's safe settings, which never contain an API key.
+   */
   updateSettings: async (prefs: Partial<UserPreferences>): Promise<UserPreferences> => {
-    const current = await api.getSettings();
-    const updated = { ...current, ...prefs };
-    try {
-      localStorage.setItem('shoppingwise_settings', JSON.stringify(updated));
-      fetch(`${API_BASE}/settings`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(prefs),
-      }).catch(() => {});
-    } catch {}
-    return updated;
+    const res = await fetch(`${API_BASE}/settings`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(prefs),
+    });
+
+    if (!res.ok) {
+      let message = `Settings were not saved (HTTP ${res.status})`;
+      try {
+        const body = await res.json();
+        if (body?.error) message = body.error;
+      } catch {
+        // Non-JSON error body; the status is all we can report.
+      }
+      throw new Error(message);
+    }
+
+    return await res.json();
   },
 
   // History

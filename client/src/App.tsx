@@ -529,13 +529,21 @@ export default function App() {
     }
   };
 
-  // Update Settings
+  // Update Settings.
+  // api.updateSettings throws when the server refuses the write, and that must reach the
+  // settings modal so it can say so. The recompare afterwards is a separate concern: a
+  // comparison failure must not be reported as a failed save.
   const handleSavePreferences = async (newPrefs: Partial<UserPreferences>) => {
     const updated = await api.updateSettings(newPrefs);
     setPreferences(updated);
+
     if (items.length > 0) {
-      const comp = await api.compare(items, updated);
-      setComparison(comp);
+      try {
+        const comp = await api.compare(items, updated);
+        setComparison(comp);
+      } catch (err) {
+        console.warn('[Settings] Saved, but recomparing the current list failed:', err);
+      }
     }
   };
 

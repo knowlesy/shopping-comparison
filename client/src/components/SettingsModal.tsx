@@ -22,6 +22,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 }) => {
   const [localPrefs, setLocalPrefs] = useState<UserPreferences>(preferences);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [cacheStats, setCacheStats] = useState<CacheStats | null>(null);
   const [clearingCache, setClearingCache] = useState(false);
   const [cacheClearedSuccess, setCacheClearedSuccess] = useState(false);
@@ -32,8 +33,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [updateResult, setUpdateResult] = useState<{ updateAvailable: boolean; latestVersion: string } | null>(null);
 
   useEffect(() => {
-    setLocalPrefs(preferences);
+    // The key field is write-only: the server never sends one back, so it always starts
+    // blank rather than showing a value that is not really there.
+    setLocalPrefs({ ...preferences, geminiApiKey: '' });
     if (isOpen) {
+      setSaveError(null);
       api.getCacheStats().then(setCacheStats).catch(() => {});
       api.getSystemVersion().then(setVersionInfo).catch(() => {});
       setCacheClearedSuccess(false);
@@ -59,7 +63,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       setTestingAi(true);
       setAiTestResult(null);
       if (localPrefs.geminiApiKey) {
-        await onSavePreferences({ geminiApiKey: localPrefs.geminiApiKey, aiMatchingEnabled: true });
+        try {
+          await onSavePreferences({ geminiApiKey: localPrefs.geminiApiKey, aiMatchingEnabled: true });
+        } catch (err: any) {
+          setAiTestResult({
+            success: false,
+            passedCount: 0,
+            totalCount: 0,
+            error: err?.message || 'Could not save the key before testing',
+          });
+          return;
+        }
       }
       const res = await fetch('/api/settings/ai-test', { method: 'POST' });
       const data = await res.json();
@@ -109,10 +123,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const handleSave = async () => {
     try {
       setSaving(true);
+      setSaveError(null);
       await onSavePreferences(localPrefs);
+      // Only close once the server has confirmed the write. Closing on failure would
+      // tell the user their change was stored when it was not.
       onClose();
-    } catch (err) {
-      console.error('Error saving settings:', err);
+    } catch (err: any) {
+      setSaveError(err?.message || 'Settings were not saved. Please try again.');
     } finally {
       setSaving(false);
     }
@@ -659,6 +676,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   <span className="text-[10px] text-slate-400 block">
                     Model: <strong>gemini-2.5-flash</strong> • Write-only (never exposed to browser) • Cached for 72h to minimize API tokens.
                   </span>
+                  <span className="text-[10px] text-amber-600 dark:text-amber-400 block">
+                    {localPrefs.geminiKeySource === 'environment'
+                      ? 'Configured from the container environment — persists across restarts.'
+                      : 'A key entered here is held in server memory only and is lost when the API restarts. For a key that survives a restart, set GEMINI_API_KEY in the environment or a k3s Secret.'}
+                  </span>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
                     <div className="space-y-1">
@@ -937,6 +959,16 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         </div>
 
         {/* Footer */}
+        {saveError && (
+          <div
+            data-testid="settings-save-error"
+            role="alert"
+            className="mt-3 px-3 py-2 rounded-xl border border-rose-300 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/40 text-[11px] font-semibold text-rose-700 dark:text-rose-300"
+          >
+            Not saved: {saveError}
+          </div>
+        )}
+
         <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end space-x-2">
           <button
             onClick={onClose}
