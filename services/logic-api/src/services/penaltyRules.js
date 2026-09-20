@@ -125,20 +125,15 @@ export class PenaltyRules {
   }
 
   /**
-   * Evaluates and scores candidate products against parsed user items.
+   * Explicit eligibility decision for hard constraints, separate from ranking preferences.
+   * Returns { eligible: true } or { eligible: false, reason: string, details?: object }.
    */
-  /**
-   * SCORING SCALE SPECIFICATION:
-   * - Range: -500 (hard veto) to ~120 (perfect multi-attribute match)
-   * - Floor: 25 (minimum score required for acceptance as match/alternative)
-   * - 0 to 24: Unrelated, marginal, or heavily penalized items (rejected by floor)
-   * - 25 to 49: Acceptable fallback/partial matches
-   * - 50 to 79: Solid match on primary food noun and sensible pack size
-   * - 80+: Highly accurate match matching dietary, tier, and specific cuts
-   */
-  static scoreCandidate(prod, item, keywords, preferences = {}) {
+  static checkEligibility(prod, item, keywords = [], preferences = {}) {
+    if (!prod || !prod.title) {
+      return { eligible: false, reason: 'missing_product' };
+    }
+
     // 0. Hard Category Guard: Prevent Cross-Category Contamination
-    // Consult candidate category, falling back to retailer taxonomy (aisle, department, shelf)
     let prodCategory = prod.category;
     if (!prodCategory) {
       const taxonomyStr = [
@@ -166,37 +161,48 @@ export class PenaltyRules {
     }
 
     if (
+      item &&
       item.category &&
       prodCategory &&
       item.category !== 'general' &&
       prodCategory !== 'general' &&
       item.category !== prodCategory
     ) {
-      return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
+      return { eligible: false, reason: 'category_mismatch' };
     }
 
     const titleLower = prod.title.toLowerCase();
-    const itemText = `${item.baseItem || ''} ${item.name || ''}`.toLowerCase();
 
     // Contamination guard check: consults title and retailer taxonomy (aisle, department, shelf)
     if (isContaminated(item, titleLower, prod)) {
-      return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
+      return { eligible: false, reason: 'contamination' };
     }
 
     // Noun evidence requirement
-    if (keywords.length > 0 && !KeywordExtractor.hasNounEvidence(keywords, prod.title)) {
-      return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
+    const effectiveKeywords = Array.isArray(keywords) && keywords.length > 0
+      ? keywords
+      : (item ? KeywordExtractor.extractKeywords(item) : []);
+    if (effectiveKeywords.length > 0 && !KeywordExtractor.hasNounEvidence(effectiveKeywords, prod.title)) {
+      return { eligible: false, reason: 'missing_noun_evidence' };
     }
 
-    const itemLower = (item.name || '').toLowerCase();
+    const itemLower = (item?.name || '').toLowerCase();
+    const itemText = `${item?.baseItem || ''} ${item?.name || ''} ${item?.rawText || ''}`.toLowerCase();
 
     // Hard Dietary Constraint: Explicit Fat Percentage must veto, not lose to price
     // A stated fat requirement is not met by a product that never states its fat
-    if (item.fatPercentage !== undefined && item.fatPercentage !== null) {
+    let effectiveFat = item?.fatPercentage;
+    if (effectiveFat === undefined && item) {
+      if (/\b0%|\b0\s*%|\bfat\s*free\b/i.test(itemText) || (preferences?.healthierDefault !== false && !item.rawText && /Greek yogurt/i.test(item.name || ''))) {
+        effectiveFat = 0;
+      }
+    }
+
+    if (effectiveFat !== undefined && effectiveFat !== null) {
       let prodFat = prod.fatPercentage;
       if (prodFat === undefined || prodFat === null) {
         if (
-          item.fatPercentage === 0 &&
+          effectiveFat === 0 &&
           (/\b(?:0%|0\s*%|fat\s*free|virtually\s+fat\s*free|zero\s*fat)\b/i.test(titleLower) || prod.isFatFree)
         ) {
           prodFat = 0;
@@ -207,34 +213,34 @@ export class PenaltyRules {
           }
         }
       }
-      if (prodFat === undefined || prodFat === null || prodFat !== item.fatPercentage) {
-        return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
+      if (prodFat === undefined || prodFat === null || prodFat !== effectiveFat) {
+        return { eligible: false, reason: 'fat_percentage_mismatch' };
       }
     }
 
     // Hard Attribute Constraint: Explicit percentage (e.g. cocoa 85%, etc.) in notes/name/rawText
     const explicitPctMatch =
-      (Array.isArray(item.notes) && item.notes.join(' ').match(/\b(\d+)%/)) ||
-      (item.rawText && item.rawText.match(/\b(\d+)%/)) ||
-      (item.name && item.name.match(/\b(\d+)%/));
+      (Array.isArray(item?.notes) && item.notes.join(' ').match(/\b(\d+)%/)) ||
+      (item?.rawText && item.rawText.match(/\b(\d+)%/)) ||
+      (item?.name && item.name.match(/\b(\d+)%/));
 
-    if (explicitPctMatch && item.fatPercentage === undefined) {
+    if (explicitPctMatch && effectiveFat === undefined) {
       const targetPct = parseInt(explicitPctMatch[1], 10);
       const candPctMatch = titleLower.match(/\b(\d+)%/);
       const candPct = candPctMatch ? parseInt(candPctMatch[1], 10) : null;
 
       if (candPct === null || candPct !== targetPct) {
-        return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
+        return { eligible: false, reason: 'attribute_percentage_mismatch' };
       }
     }
 
     // Hard Dietary Constraint: Wholemeal / Wholewheat must not match white or non-wholemeal
-    const isWholemealRequested = item.isWholewheat || /\b(?:wholemeal|wholegrain|wholewheat|whole\s+wheat)\b/i.test(itemLower);
+    const isWholemealRequested = item?.isWholewheat || /\b(?:wholemeal|wholegrain|wholewheat|whole\s+wheat)\b/i.test(itemLower);
     if (isWholemealRequested) {
       const isWhite = /\bwhite\b/i.test(titleLower);
       const hasWholemealMarker = prod.isWholewheat || /\b(?:wholemeal|wholegrain|wholewheat|whole\s+wheat|brown|granary)\b/i.test(titleLower);
       if (isWhite || !hasWholemealMarker) {
-        return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
+        return { eligible: false, reason: 'wholemeal_mismatch' };
       }
     }
 
@@ -244,9 +250,52 @@ export class PenaltyRules {
       const FLAVOUR_PATTERN = /\b(?:raspberry|raspberries|strawberry|strawberries|mango|mangoes|peach|peaches|vanilla|honey|pomegranate|blueberry|blueberries|cherry|cherries|lemon|lemons|coconut|toffee|caramel|chocolate|banana|bananas|passionfruit|apple|apples|blackberry|blackberries|rhubarb|blackcurrant|blackcurrants|hazelnut|hazelnuts|coffee|cinnamon|citrus|pineapple|pineapples|plum|plums|apricot|apricots|fruits?|flavou?red?|flavou?r)\b/i;
       const isFlavourRequested = FLAVOUR_PATTERN.test(itemLower) || FLAVOUR_PATTERN.test(itemText);
       if (!isFlavourRequested && FLAVOUR_PATTERN.test(titleLower)) {
-        return { score: -500, packs: 1, totalQty: 1, totalPrice: 0, weightDiffPct: 0 };
+        return { eligible: false, reason: 'flavoured_yogurt_mismatch' };
       }
     }
+
+    // Hard Dimension Constraint: Physical measure dimension check via PackSelector
+    if (item) {
+      const { dimensionMismatch } = PackSelector.normalizeAmounts(item, prod);
+      if (dimensionMismatch) {
+        return { eligible: false, reason: 'dimension_mismatch' };
+      }
+    }
+
+    return { eligible: true };
+  }
+
+  /**
+   * Evaluates and scores candidate products against parsed user items.
+   */
+  /**
+   * SCORING SCALE SPECIFICATION:
+   * - Range: -500 (hard veto) to ~120 (perfect multi-attribute match)
+   * - Floor: 25 (minimum score required for acceptance as match/alternative)
+   * - 0 to 24: Unrelated, marginal, or heavily penalized items (rejected by floor)
+   * - 25 to 49: Acceptable fallback/partial matches
+   * - 50 to 79: Solid match on primary food noun and sensible pack size
+   * - 80+: Highly accurate match matching dietary, tier, and specific cuts
+   */
+  static scoreCandidate(prod, item, keywords, preferences = {}) {
+    // Check hard product eligibility first
+    const eligibility = PenaltyRules.checkEligibility(prod, item, keywords, preferences);
+    if (!eligibility.eligible) {
+      return {
+        score: -500,
+        packs: 1,
+        totalQty: 1,
+        totalPrice: 0,
+        weightDiffPct: 0,
+        eligible: false,
+        rejectionReason: eligibility.reason
+      };
+    }
+
+    const titleLower = (prod.title || '').toLowerCase();
+    const itemLower = (item?.name || '').toLowerCase();
+    const itemText = `${item?.baseItem || ''} ${item?.name || ''}`.toLowerCase();
+    const isWholemealRequested = item?.isWholewheat || /\b(?:wholemeal|wholegrain|wholewheat|whole\s+wheat)\b/i.test(itemLower);
 
     let score = 0;
 
@@ -523,7 +572,7 @@ export class PenaltyRules {
       score -= Math.min(25, (packs - 1) * 5);
     }
 
-    return { score, packs, totalQty, totalPrice, weightDiffPct, dealApplied };
+    return { score, packs, totalQty, totalPrice, weightDiffPct, dealApplied, eligible: true };
   }
 }
 

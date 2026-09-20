@@ -1,6 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import { composeConfidence } from "./confidence.js";
 import { isContaminated } from "./contaminationRules.js";
+import { PenaltyRules } from "./penaltyRules.js";
 import { getUserSettings } from "../routes/settings.js";
 
 try {
@@ -226,10 +227,9 @@ Respond with JSON only in this exact format:
       const chosen = cands[idx];
       const prod = chosen.product || chosen;
 
-      // Re-apply contamination guard
-      const itemText = `${p.item?.name || ""} ${p.query || ""}`.toLowerCase();
-      const prodTitle = (prod.title || "").toLowerCase();
-      if (isContaminated(itemText, prodTitle)) {
+      // Re-apply hard eligibility guard (fat, dimension, category, contamination, etc.)
+      const eligibility = PenaltyRules.checkEligibility(prod, p.item, undefined, options.preferences || options);
+      if (!eligibility.eligible || (chosen.score !== undefined && (chosen.score < 25 || chosen.eligible === false))) {
         return {
           query: p.query,
           product: null,
@@ -238,7 +238,7 @@ Respond with JSON only in this exact format:
           totalPrice: 0,
           matchConfidence: 0.95,
           matchSource: "ai-escalation",
-          reasoning: `Contamination rule vetoed selection: "${prod.title}"`,
+          reasoning: `Eligibility rule vetoed selection (${eligibility.reason || 'ineligible'}): "${prod.title}"`,
           escalated: true
         };
       }

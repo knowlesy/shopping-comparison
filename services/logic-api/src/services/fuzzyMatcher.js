@@ -64,16 +64,17 @@ export class FuzzyMatcher {
     const keywords = this.extractKeywords(effectiveItem);
 
     const scored = storeProducts.map((prod) => {
-      const { score, packs, totalQty, totalPrice, weightDiffPct, dealApplied } =
-        this.scoreCandidate(prod, effectiveItem, keywords, preferences, storeProducts);
+      const res = this.scoreCandidate(prod, effectiveItem, keywords, preferences, storeProducts);
       return {
         product: prod,
-        score,
-        packs,
-        totalQty,
-        totalPrice: Number(totalPrice.toFixed(2)),
-        weightDiffPct,
-        dealApplied
+        score: res.score,
+        eligible: res.eligible !== false && res.score >= 25,
+        rejectionReason: res.rejectionReason || (res.score < 25 ? 'below_floor_threshold' : undefined),
+        packs: res.packs,
+        totalQty: res.totalQty,
+        totalPrice: Number(res.totalPrice.toFixed(2)),
+        weightDiffPct: res.weightDiffPct,
+        dealApplied: res.dealApplied
       };
     });
 
@@ -83,8 +84,8 @@ export class FuzzyMatcher {
 
     const best = scored[0];
 
-    if (!best || best.score < 25) {
-      return {
+    if (!best || best.score < 25 || best.eligible === false) {
+      const noMatch = {
         parsedItem: item,
         supermarket,
         product: null,
@@ -99,6 +100,19 @@ export class FuzzyMatcher {
         reason: 'Item not found in catalog; clickable live search provided.',
         alternatives: []
       };
+      Object.defineProperty(noMatch, 'scoredCandidates', {
+        value: scored,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      });
+      Object.defineProperty(noMatch, 'rejectedCandidates', {
+        value: scored.filter((s) => s.eligible === false || s.score < 25),
+        enumerable: false,
+        writable: true,
+        configurable: true
+      });
+      return noMatch;
     }
 
 function getTitleCore(title = '') {
@@ -172,7 +186,7 @@ function getTitleCore(title = '') {
     // Filter and sanitize alternatives for the interactive Swap Picker modal
     const alternatives = scored
       .filter((s) => {
-        if (!s.product || s.score < 25) return false;
+        if (!s.product || s.score < 25 || s.eligible === false) return false;
         if (s.product.id === chosenProduct.id) return false;
         const prodTitle = s.product.title.toLowerCase();
 
@@ -211,7 +225,7 @@ function getTitleCore(title = '') {
       : defaultScore;
     const isEstimated = isCatalog || chosenProduct.isEstimated === true;
 
-    return {
+    const matchResult = {
       parsedItem: item,
       supermarket,
       product: chosenProduct,
@@ -227,7 +241,6 @@ function getTitleCore(title = '') {
       isEstimated,
       matchScore: best.score,
       runnerUp: scored[1] || null,
-      scoredCandidates: scored,
       lines,
       variantRoute: lines,
       explanation,
@@ -236,6 +249,23 @@ function getTitleCore(title = '') {
       dealApplied: chosenDealApplied || undefined,
       alternatives
     };
+    Object.defineProperty(matchResult, 'scoredCandidates', {
+      value: scored,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    });
+    Object.defineProperty(matchResult, 'rejectedCandidates', {
+      value: scored.filter((s) => s.eligible === false || s.score < 25),
+      enumerable: false,
+      writable: true,
+      configurable: true
+    });
+    return matchResult;
+  }
+
+  static checkEligibility(prod, item, keywords = [], preferences = {}) {
+    return PenaltyRules.checkEligibility(prod, item, keywords, preferences);
   }
 
   static scoreCandidate(prod, item, keywords, preferences = {}, _storeProducts = []) {
@@ -262,6 +292,13 @@ function getTitleCore(title = '') {
   }
 
   static compareCandidates(a, b, item = {}, _preferences = {}) {
+    // 0. Eligible candidates always precede ineligible ones
+    const aEligible = a.eligible !== false && a.score >= 25;
+    const bEligible = b.eligible !== false && b.score >= 25;
+    if (aEligible !== bEligible) {
+      return aEligible ? -1 : 1;
+    }
+
     // 1. Live/direct products take precedence over catalog fallback when score >= 25
     const aIsCat = a.product?.source === 'catalog';
     const bIsCat = b.product?.source === 'catalog';

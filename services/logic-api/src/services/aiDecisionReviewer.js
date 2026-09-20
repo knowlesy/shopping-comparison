@@ -4,6 +4,7 @@ import { getUserSettings } from '../routes/settings.js';
 import { composeConfidence } from './confidence.js';
 import { AiPolicy } from './aiPolicy.js';
 import { isContaminated } from './contaminationRules.js';
+import { PenaltyRules } from './penaltyRules.js';
 
 try {
   process.loadEnvFile();
@@ -107,20 +108,28 @@ export class AiDecisionReviewer {
     const cachedDecision = preferences.bypassCache ? null : PriceCache.get(cacheKey);
     if (cachedDecision && cachedDecision.productId) {
       const match = scoredCandidates.find((c) => c.product?.id === cachedDecision.productId);
-      if (match) {
-        const dataSource = match.product?.source || 'catalog';
-        const cachedConf = typeof cachedDecision.confidence === 'number' ? cachedDecision.confidence : 0.9;
-        const conf = composeConfidence({
-          dataSource,
-          matchConfidence: Math.min(Math.max(cachedConf, 0.5), 0.99),
-          matchSource: 'ai-cached',
-          store: supermarket
-        });
-        return {
-          ...match,
-          ...conf,
-          aiReasoning: cachedDecision.reasoning
-        };
+      if (match && match.product) {
+        const eligibility = PenaltyRules.checkEligibility(match.product, item, undefined, preferences);
+        if (eligibility.eligible && match.eligible !== false && match.score >= 25) {
+          const dataSource = match.product?.source || 'catalog';
+          const cachedConf = typeof cachedDecision.confidence === 'number' ? cachedDecision.confidence : 0.9;
+          const conf = composeConfidence({
+            dataSource,
+            matchConfidence: Math.min(Math.max(cachedConf, 0.5), 0.99),
+            matchSource: 'ai-cached',
+            store: supermarket
+          });
+          return {
+            ...match,
+            ...conf,
+            aiReasoning: cachedDecision.reasoning
+          };
+        } else {
+          console.warn(`[AI-Reviewer] Cached candidate "${match.product.title}" no longer satisfies eligibility (${eligibility.reason || 'ineligible'}). Rejecting cached decision.`);
+          try {
+            PriceCache.delete?.(cacheKey);
+          } catch {}
+        }
       }
     }
 
@@ -236,16 +245,19 @@ Respond with JSON only in this exact format:
 
       const chosenIdx = parsed.selectedIndex;
       const chosen = scoredCandidates[chosenIdx];
+      const topRules = scoredCandidates.find((c) => c.product && c.eligible !== false && c.score >= 25) || scoredCandidates[0];
+
       if (!chosen || !chosen.product) {
-        return scoredCandidates[0];
+        return topRules;
       }
 
-      // Contamination check: re-applied to AI pick to prevent AI from repealing food form guarantees
-      const itemText = `${item.baseItem || ''} ${item.name || ''} ${item.rawText || ''}`.toLowerCase();
-      const prodTitle = chosen.product.title || '';
-      if (isContaminated(itemText, prodTitle)) {
-        console.warn(`[AI-Reviewer] AI pick "${prodTitle}" is contaminated for "${itemText}". Rejecting AI pick and falling back to rules.`);
-        return scoredCandidates[0];
+      // Hard eligibility check: prevent AI from overriding hard vetoes (wrong fat, wrong dimension, wrong category, contamination, etc.)
+      const eligibility = PenaltyRules.checkEligibility(chosen.product, item, undefined, preferences);
+      if (!eligibility.eligible || chosen.score < 25 || chosen.eligible === false) {
+        const itemText = `${item.baseItem || ''} ${item.name || ''} ${item.rawText || ''}`.toLowerCase();
+        const prodTitle = chosen.product.title || '';
+        console.warn(`[AI-Reviewer] AI pick "${prodTitle}" failed eligibility check (${eligibility.reason || 'ineligible'}) for "${itemText}". Rejecting AI pick and falling back to rules.`);
+        return topRules;
       }
 
       // Model's reported confidence, clamped to sane range [0.5, 0.99]
