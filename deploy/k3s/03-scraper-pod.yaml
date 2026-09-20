@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: scraper-pod
-          image: ghcr.io/knowlesy/shopping-comparison-scraper-pod:52b0889fb76726475ee06e92dac01748b92542fa
+          image: ghcr.io/knowlesy/shopping-comparison-scraper-pod:3492bc0032a9532c8d53752c2cded006be1558ec
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3002

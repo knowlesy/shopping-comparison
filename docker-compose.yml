@@ -74,6 +74,10 @@ services:
     container_name: uk-grocery-client
     ports:
       - "8080:8080"
+    environment:
+      # Explicit so the compose and k3s wiring are stated the same way. This is the
+      # compose service name below; k3s sets shoppingwise-logic-api:3001 instead.
+      - LOGIC_API_UPSTREAM=logic-api:3001
     depends_on:
       - logic-api
     restart: unless-stopped

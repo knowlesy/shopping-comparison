@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: store-fetcher
-          image: ghcr.io/knowlesy/shopping-comparison-store-fetcher:latest
+          image: ghcr.io/knowlesy/shopping-comparison-store-fetcher:3492bc0032a9532c8d53752c2cded006be1558ec
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3003
@@ -28,12 +28,14 @@ spec:
                 configMapKeyRef:
                   name: shoppingwise-config
                   key: PORT_FETCHER
+            # Not optional on purpose: if this key is absent the sidecar would fall
+            # back to its built-in dev token while logic-api used the secret value,
+            # and every direct-adapter call would fail authentication at runtime.
             - name: FETCHER_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: shoppingwise-secret
                   key: FETCHER_TOKEN
-                  optional: true
           resources:
             requests:
               memory: "256Mi"

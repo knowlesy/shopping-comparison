@@ -280,11 +280,14 @@ export interface PriceHistoryStats {
 export interface SystemVersionInfo {
   version: string;
   releaseDate: string;
-  imageTag?: string;
-  latestImageTag?: string;
-  clientImage?: string;
-  logicApiImage?: string;
-  scraperPodImage?: string;
+  // Null unless the deployment states its image references through the environment.
+  // Never derived from the app version: the four images can come from different
+  // commits, so a version-derived tag would be an unverified claim about the cluster.
+  clientImage?: string | null;
+  logicApiImage?: string | null;
+  scraperPodImage?: string | null;
+  storeFetcherImage?: string | null;
+  imageIdentitySource?: 'environment' | 'unreported';
   imageRepo?: string;
   environment?: string;
 }

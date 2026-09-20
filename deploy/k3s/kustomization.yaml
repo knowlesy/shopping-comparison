@@ -10,3 +10,42 @@ resources:
   - 04-logic-api.yaml
   - 05-client.yaml
   - 06-ingress.yaml
+
+# ---------------------------------------------------------------------------
+# Deployable image identity
+# ---------------------------------------------------------------------------
+# All four images are selected here, in one place, by DIGEST. A digest is the only
+# reference that names an exact build; the Deployment files carry a readable tag that
+# kustomize replaces, so `kubectl kustomize` output is what actually gets applied.
+#
+# Why not a version tag: CI rebuilds only the services whose paths changed, so the same
+# semver tag resolves to DIFFERENT source commits per image. Verified against GHCR on
+# 2026-09-20 — v1.4.0 resolves to:
+#   client        <- a2fe542f790b9a1233baa7ab3fcf1dfbb461a636
+#   logic-api     <- 8cf7e36575fd43a57614448137cd36fec461e645
+#   scraper-pod   <- 3492bc0032a9532c8d53752c2cded006be1558ec
+#   store-fetcher <- 8cf7e36575fd43a57614448137cd36fec461e645
+# A semver tag is therefore NOT a release identity for this stack.
+#
+# The set below is the newest published set where all four images were built from ONE
+# commit: 3492bc0032a9532c8d53752c2cded006be1558ec (2026-09-01, an ancestor of master).
+#
+#  >> This set predates the repair work on master. It is a coherent, verifiable
+#  >> baseline, not a build of the current tree. To deploy current code, build a new
+#  >> set and apply the release overlay in ../release — see README.md section 2.
+#
+# Verify before applying (read-only, no cluster access needed):
+#   node scripts/deploy/verify-images.mjs
+images:
+  - name: ghcr.io/knowlesy/shopping-comparison-client
+    newName: ghcr.io/knowlesy/shopping-comparison-client
+    digest: sha256:7ee765c52fbfccfcf6a6597b32420aedd251930b2861f1c804857adddabfefbe
+  - name: ghcr.io/knowlesy/shopping-comparison-logic-api
+    newName: ghcr.io/knowlesy/shopping-comparison-logic-api
+    digest: sha256:8118e78ef655e83a194f4ac5134754105ac5c7468ce1f3fa2392b5d3ab0ef759
+  - name: ghcr.io/knowlesy/shopping-comparison-scraper-pod
+    newName: ghcr.io/knowlesy/shopping-comparison-scraper-pod
+    digest: sha256:cce554eb22d6be327ab3f06c6e289fcef77e49a4adfbb3a2c27bb01445fd55bb
+  - name: ghcr.io/knowlesy/shopping-comparison-store-fetcher
+    newName: ghcr.io/knowlesy/shopping-comparison-store-fetcher
+    digest: sha256:e917040e1b2eeff7635a888fd971235b8aea291356ed182603cdc336902d4e87

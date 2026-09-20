@@ -11,6 +11,9 @@ data:
   PORT_CLIENT: "8080"
   SCRAPER_SERVICE_URL: "http://shoppingwise-scraper-pod:3002/scrape"
   STORE_FETCHER_URL: "http://shoppingwise-store-fetcher:3003"
+  # Upstream the client's nginx proxies /api/ to. Must match the logic-api Service
+  # name in this namespace; the container default (logic-api:3001) is the Compose name.
+  LOGIC_API_UPSTREAM: "shoppingwise-logic-api:3001"
   CLIENT_ORIGIN: "http://localhost:8080"
   DATA_DIR: "/data"
   ENABLE_MATCH_LOG: "false"

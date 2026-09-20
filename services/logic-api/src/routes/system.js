@@ -89,19 +89,39 @@ const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
  * GET /api/system/version
  * Returns version and container metadata
  */
+/**
+ * Report the deployed image references.
+ *
+ * This deliberately does NOT derive image tags from the app version. CI rebuilds only
+ * the services whose paths changed, so the four images routinely come from different
+ * commits and a `:v<version>` string invented here would be a claim about the cluster
+ * that nothing verified. Values are reported only when the deployment states them
+ * through the environment; otherwise the fields are null and `imageIdentitySource`
+ * says so. The authoritative check is `node scripts/deploy/verify-images.mjs --cluster`.
+ *
+ * @returns {{images: object, imageIdentitySource: 'environment'|'unreported'}}
+ */
+export function getDeployedImages() {
+  const images = {
+    clientImage: process.env.CLIENT_IMAGE || null,
+    logicApiImage: process.env.LOGIC_API_IMAGE || null,
+    scraperPodImage: process.env.SCRAPER_POD_IMAGE || null,
+    storeFetcherImage: process.env.STORE_FETCHER_IMAGE || null
+  };
+  const anyReported = Object.values(images).some((v) => v !== null);
+  return { images, imageIdentitySource: anyReported ? 'environment' : 'unreported' };
+}
+
 systemRouter.get('/version', (req, res) => {
   const { version, releaseDate } = getSystemVersionInfo();
   const repoSlug = process.env.GITHUB_REPO || 'knowlesy/shopping-comparison';
-  const registryHost = process.env.IMAGE_REGISTRY || 'ghcr.io';
+  const { images, imageIdentitySource } = getDeployedImages();
 
   res.json({
     version,
     releaseDate,
-    imageTag: `${registryHost}/${repoSlug}:v${version}`,
-    latestImageTag: `${registryHost}/${repoSlug}:latest`,
-    clientImage: `${registryHost}/${repoSlug}-client:v${version}`,
-    logicApiImage: `${registryHost}/${repoSlug}-logic-api:v${version}`,
-    scraperPodImage: `${registryHost}/${repoSlug}-scraper-pod:v${version}`,
+    ...images,
+    imageIdentitySource,
     imageRepo: `https://github.com/${repoSlug}/pkgs/container/shopping-comparison-client`,
     environment: process.env.NODE_ENV || 'development'
   });

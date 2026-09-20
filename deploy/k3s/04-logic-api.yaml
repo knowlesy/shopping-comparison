@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: logic-api
-          image: ghcr.io/knowlesy/shopping-comparison-logic-api:52b0889fb76726475ee06e92dac01748b92542fa
+          image: ghcr.io/knowlesy/shopping-comparison-logic-api:3492bc0032a9532c8d53752c2cded006be1558ec
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3001
@@ -38,6 +38,11 @@ spec:
                 configMapKeyRef:
                   name: shoppingwise-config
                   key: SCRAPER_SERVICE_URL
+            - name: STORE_FETCHER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: shoppingwise-config
+                  key: STORE_FETCHER_URL
             - name: CLIENT_ORIGIN
               valueFrom:
                 configMapKeyRef:
@@ -48,6 +53,14 @@ spec:
                 secretKeyRef:
                   name: shoppingwise-secret
                   key: SCRAPE_TOKEN
+            # Must be the same value the store-fetcher Deployment reads, or the
+            # sidecar rejects every direct-adapter request. Neither side may be
+            # optional: a one-sided default silently breaks the direct tier.
+            - name: FETCHER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: shoppingwise-secret
+                  key: FETCHER_TOKEN
             - name: GEMINI_API_KEY
               valueFrom:
                 secretKeyRef:

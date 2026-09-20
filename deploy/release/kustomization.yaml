@@ -1,0 +1,42 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: shoppingwise
+
+# ---------------------------------------------------------------------------
+# Operator-supplied release overlay
+# ---------------------------------------------------------------------------
+# Use this when the code you want to run has no published coherent image set yet —
+# which is the case for anything built from current master.
+#
+#   1. Push the commit you want to deploy and let CI publish all four images.
+#      CI only rebuilds changed services, so confirm all four carry that commit SHA:
+#        node scripts/deploy/verify-images.mjs --commit <full-commit-sha>
+#      If any image is missing that tag, re-run the workflow with
+#      workflow_dispatch (publish_containers=true) rather than mixing commits.
+#   2. Replace the four digests below with the ones the command printed.
+#   3. Record the commit in RELEASE_COMMIT so the cluster can be traced back to code.
+#   4. kubectl apply -k deploy/release/
+#
+# Leaving the placeholders in place is intentional: `kubectl apply -k` on this
+# directory fails loudly rather than deploying an unspecified image set.
+resources:
+  - ../k3s
+
+configMapGenerator:
+  - name: shoppingwise-release
+    behavior: create
+    literals:
+      - RELEASE_COMMIT=REPLACE_WITH_FULL_COMMIT_SHA
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+images:
+  - name: ghcr.io/knowlesy/shopping-comparison-client
+    digest: REPLACE_WITH_CLIENT_DIGEST
+  - name: ghcr.io/knowlesy/shopping-comparison-logic-api
+    digest: REPLACE_WITH_LOGIC_API_DIGEST
+  - name: ghcr.io/knowlesy/shopping-comparison-scraper-pod
+    digest: REPLACE_WITH_SCRAPER_POD_DIGEST
+  - name: ghcr.io/knowlesy/shopping-comparison-store-fetcher
+    digest: REPLACE_WITH_STORE_FETCHER_DIGEST

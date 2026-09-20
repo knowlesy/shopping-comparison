@@ -19,8 +19,14 @@ RUN npm run build
 # Stage 2: Serve static files with unprivileged nginx (UID 101)
 FROM nginxinc/nginx-unprivileged:alpine
 
-# Copy nginx configuration
-COPY client/nginx.conf /etc/nginx/conf.d/default.conf
+# Copy nginx configuration as a template. The entrypoint renders it into
+# /etc/nginx/conf.d/default.conf at start-up, substituting LOGIC_API_UPSTREAM only.
+COPY client/nginx.conf.template /etc/nginx/templates/default.conf.template
+
+# Default upstream matches the docker-compose service name; k3s overrides it
+# from the shoppingwise-config ConfigMap.
+ENV LOGIC_API_UPSTREAM=logic-api:3001 \
+    NGINX_ENVSUBST_FILTER=^LOGIC_API_
 
 # Copy production bundle from builder stage
 COPY --from=builder /app/client/dist /usr/share/nginx/html

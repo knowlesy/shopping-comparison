@@ -3,6 +3,10 @@ import { X, Sliders, Heart, Shield, Package, Store, Check, RefreshCw, Sparkles, 
 import { UserPreferences, SupermarketName, CacheStats, SystemVersionInfo } from '../types';
 import { api } from '../services/api';
 
+// Shown instead of a version-derived guess when the deployment does not state its
+// image references. Verified identity comes from scripts/deploy/verify-images.mjs.
+const UNREPORTED_IMAGE = 'not reported by this deployment';
+
 interface SettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -866,7 +870,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 </div>
               )}
 
-              {/* Build Image Details */}
+              {/* Build Image Details.
+                  Shown only when the deployment reports them; previously these were
+                  synthesised from the app version, which claimed an image identity
+                  nothing had verified. */}
               <div className="space-y-1.5 pt-1 text-[11px]">
                 <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
                   <span className="flex items-center space-x-1">
@@ -874,7 +881,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     <span>Client Image:</span>
                   </span>
                   <code className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-900 text-[10px] font-mono text-slate-800 dark:text-slate-300">
-                    {versionInfo?.clientImage || `ghcr.io/knowlesy/shopping-comparison-client:v${versionInfo?.version || '1.1.0'}`}
+                    {versionInfo?.clientImage || UNREPORTED_IMAGE}
                   </code>
                 </div>
 
@@ -884,7 +891,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     <span>Logic API Image:</span>
                   </span>
                   <code className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-900 text-[10px] font-mono text-slate-800 dark:text-slate-300">
-                    {versionInfo?.logicApiImage || `ghcr.io/knowlesy/shopping-comparison-logic-api:v${versionInfo?.version || '1.1.0'}`}
+                    {versionInfo?.logicApiImage || UNREPORTED_IMAGE}
                   </code>
                 </div>
 
@@ -894,7 +901,17 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     <span>Scraper Pod Image:</span>
                   </span>
                   <code className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-900 text-[10px] font-mono text-slate-800 dark:text-slate-300">
-                    {versionInfo?.scraperPodImage || `ghcr.io/knowlesy/shopping-comparison-scraper-pod:v${versionInfo?.version || '1.1.0'}`}
+                    {versionInfo?.scraperPodImage || UNREPORTED_IMAGE}
+                  </code>
+                </div>
+
+                <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
+                  <span className="flex items-center space-x-1">
+                    <GitBranch className="w-3 h-3 text-slate-400" />
+                    <span>Store Fetcher Image:</span>
+                  </span>
+                  <code className="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-900 text-[10px] font-mono text-slate-800 dark:text-slate-300">
+                    {versionInfo?.storeFetcherImage || UNREPORTED_IMAGE}
                   </code>
                 </div>
               </div>

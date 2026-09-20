@@ -17,11 +17,20 @@ spec:
     spec:
       containers:
         - name: client
-          image: ghcr.io/knowlesy/shopping-comparison-client:52b0889fb76726475ee06e92dac01748b92542fa
+          image: ghcr.io/knowlesy/shopping-comparison-client:3492bc0032a9532c8d53752c2cded006be1558ec
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
               name: http
+          env:
+            # Without this the image would fall back to the Compose service name
+            # "logic-api", which does not resolve in this namespace, and every
+            # /api/ request from the browser would 502.
+            - name: LOGIC_API_UPSTREAM
+              valueFrom:
+                configMapKeyRef:
+                  name: shoppingwise-config
+                  key: LOGIC_API_UPSTREAM
           resources:
             requests:
               memory: "64Mi"
