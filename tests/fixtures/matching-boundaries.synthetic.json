@@ -1,0 +1,70 @@
+{
+  "note": "SYNTHETIC boundary cases. These products were written by hand for this repository; they are NOT scraped retailer data and must never be reported as a fresh independent holdout or as real prices. Their purpose is to pin the boundary either side of a general rule: for every rule there is a case that must be refused and a neighbouring case that must still be accepted. Titles follow real UK naming conventions so the matcher sees realistic text; ids are prefixed `syn-`.",
+  "synthetic": true,
+  "recordedAt": "2026-09-20",
+  "cases": [
+    {
+      "id": "syn-grain-blend-refuse",
+      "rule": "grain_blend_mismatch",
+      "expect": "refuse",
+      "query": "Basmati rice 1 kg",
+      "item": { "name": "Basmati rice", "baseItem": "Basmati rice", "category": "pantry", "targetQuantity": 1, "unit": "kg" },
+      "candidate": { "id": "syn-1", "supermarket": "tesco", "title": "Own Brand Basmati & Quinoa Rice 250g", "brand": "Own Brand", "price": 1.00, "packageSize": 250, "packageUnit": "g", "source": "direct" },
+      "why": "A second named grain makes this a blend, not basmati rice, however cheap it is."
+    },
+    {
+      "id": "syn-grain-blend-accept",
+      "rule": "grain_blend_mismatch",
+      "expect": "accept",
+      "query": "Basmati rice 1 kg",
+      "item": { "name": "Basmati rice", "baseItem": "Basmati rice", "category": "pantry", "targetQuantity": 1, "unit": "kg" },
+      "candidate": { "id": "syn-2", "supermarket": "tesco", "title": "Own Brand Wholegrain Basmati Rice 1Kg", "brand": "Own Brand", "price": 2.20, "packageSize": 1, "packageUnit": "kg", "source": "direct" },
+      "why": "A brown/wholegrain basmati is still basmati rice; the blend rule must not swallow it."
+    },
+    {
+      "id": "syn-grain-blend-accept-descriptive",
+      "rule": "grain_blend_mismatch",
+      "expect": "accept",
+      "query": "Chickpeas 400 g",
+      "item": { "name": "Chickpeas", "baseItem": "Chickpeas", "category": "pantry", "targetQuantity": 400, "unit": "g" },
+      "candidate": { "id": "syn-3", "supermarket": "tesco", "title": "Own Brand Chickpeas In Water 400G", "brand": "Own Brand", "price": 0.45, "packageSize": 400, "packageUnit": "g", "source": "direct" },
+      "why": "\"In water\" is a descriptive phrase, not a second ingredient."
+    },
+    {
+      "id": "syn-white-variety-refuse",
+      "rule": "white_variety_mismatch",
+      "expect": "refuse",
+      "query": "Plain flour 1.5 kg",
+      "item": { "name": "Plain flour", "baseItem": "Plain flour", "category": "pantry", "targetQuantity": 1.5, "unit": "kg" },
+      "candidate": { "id": "syn-4", "supermarket": "tesco", "title": "Own Brand Plain Wholemeal Baking Flour 1Kg", "brand": "Own Brand", "price": 1.10, "packageSize": 1, "packageUnit": "kg", "source": "direct" },
+      "why": "Plain flour is the UK name for white flour; a wholemeal flour is a different product."
+    },
+    {
+      "id": "syn-white-variety-accept",
+      "rule": "white_variety_mismatch",
+      "expect": "accept",
+      "query": "Plain flour 1.5 kg",
+      "item": { "name": "Plain flour", "baseItem": "Plain flour", "category": "pantry", "targetQuantity": 1.5, "unit": "kg" },
+      "candidate": { "id": "syn-5", "supermarket": "tesco", "title": "Own Brand Plain Flour 1.5Kg", "brand": "Own Brand", "price": 0.80, "packageSize": 1.5, "packageUnit": "kg", "source": "direct" },
+      "why": "The plain white flour itself must remain eligible."
+    },
+    {
+      "id": "syn-white-variety-accept-unspecified",
+      "rule": "white_variety_mismatch",
+      "expect": "accept",
+      "query": "Rice 1 kg",
+      "item": { "name": "Rice", "baseItem": "Rice", "category": "pantry", "targetQuantity": 1, "unit": "kg" },
+      "candidate": { "id": "syn-6", "supermarket": "tesco", "title": "Own Brand Wholegrain Brown Rice 1Kg", "brand": "Own Brand", "price": 1.50, "packageSize": 1, "packageUnit": "kg", "source": "direct" },
+      "why": "When no variety is named, a wholegrain option must stay eligible — the rule needs an explicit white/plain request."
+    },
+    {
+      "id": "syn-wholemeal-refuse",
+      "rule": "wholemeal_mismatch",
+      "expect": "refuse",
+      "query": "Wholemeal bread 1 loaf",
+      "item": { "name": "Wholemeal bread", "baseItem": "Wholemeal bread", "category": "bakery", "targetQuantity": 1, "unit": "loaf", "isWholewheat": true },
+      "candidate": { "id": "syn-7", "supermarket": "tesco", "title": "Own Brand White Medium Sliced Bread 800G", "brand": "Own Brand", "price": 0.70, "packageSize": 800, "packageUnit": "g", "source": "direct" },
+      "why": "The pre-existing opposite direction of the variety rule must keep working."
+    }
+  ]
+}

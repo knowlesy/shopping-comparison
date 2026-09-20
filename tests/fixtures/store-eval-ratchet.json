@@ -1,0 +1,13 @@
+{
+  "note": "Measured baseline for scripts/eval-stores.js, recorded 2026-09-20 on repair-v9 task 13. These are the numbers the matcher achieves today against tests/fixtures/item-constraints.json, not a target. A run that is worse on any of them exits non-zero. A run that is better prints an improvement line; update this file deliberately, in its own commit, rather than letting the ratchet drift.",
+  "recordedAt": "2026-09-20",
+  "recordedAtCommit": "6a04a2b",
+  "itemsPerStore": 58,
+  "stores": {
+    "tesco":      { "minCorrectItems": 57, "maxFalseMatches": 0, "maxBadPicks": 0, "maxMissedOpportunities": 1 },
+    "sainsburys": { "minCorrectItems": 56, "maxFalseMatches": 0, "maxBadPicks": 2, "maxMissedOpportunities": 0 },
+    "morrisons":  { "minCorrectItems": 55, "maxFalseMatches": 2, "maxBadPicks": 1, "maxMissedOpportunities": 0 },
+    "asda":       { "minCorrectItems": 58, "maxFalseMatches": 0, "maxBadPicks": 0, "maxMissedOpportunities": 0 },
+    "iceland":    { "minCorrectItems": 48, "maxFalseMatches": 1, "maxBadPicks": 0, "maxMissedOpportunities": 9 }
+  }
+}

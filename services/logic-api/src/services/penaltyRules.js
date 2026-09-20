@@ -244,6 +244,39 @@ export class PenaltyRules {
       }
     }
 
+    // Hard Variety Constraint: an explicitly white/plain grain staple is not a wholemeal one.
+    // The reverse direction is handled above. "Plain flour" is the UK name for white flour, so
+    // "Plain Wholemeal Baking Flour" is a different product, not a near neighbour.
+    const GRAIN_STAPLE_PATTERN = /\b(?:flour|bread|loaf|loaves|rolls?|baps?|bagels?|wraps?|pitta|pittas|rice|pasta|spaghetti|penne|fusilli|noodles?|couscous)\b/i;
+    if (!isWholemealRequested && GRAIN_STAPLE_PATTERN.test(itemLower)) {
+      const requestsWhiteVariety = /\b(?:white|plain)\b/i.test(itemLower);
+      const hasWholemealMarker = prod.isWholewheat || /\b(?:wholemeal|wholegrain|wholewheat|whole\s+wheat|granary)\b/i.test(titleLower);
+      if (requestsWhiteVariety && hasWholemealMarker) {
+        return { eligible: false, reason: 'white_variety_mismatch' };
+      }
+    }
+
+    // Hard Composition Constraint: a single named grain or pulse is not a blend with another one.
+    // "Basmati rice" must not resolve to "Basmati & Quinoa Rice"; the extra ingredient makes it a
+    // different product, and no amount of price advantage changes that.
+    const GRAIN_BLEND_NOUNS = [
+      'rice', 'quinoa', 'couscous', 'bulgur', 'bulghur', 'barley', 'spelt', 'buckwheat',
+      'millet', 'freekeh', 'oats', 'chia', 'lentils', 'lentil', 'chickpeas', 'beans', 'peas'
+    ];
+    const grainNounsIn = (text) =>
+      new Set(GRAIN_BLEND_NOUNS.filter((noun) => new RegExp(`\\b${noun}\\b`, 'i').test(text)));
+    const requestedGrains = grainNounsIn(itemLower);
+    if (requestedGrains.size > 0 && !/\b(?:mix|mixed|medley|blend|blends)\b/i.test(itemLower)) {
+      const titleGrains = grainNounsIn(titleLower);
+      const extraGrains = [...titleGrains].filter((noun) => !requestedGrains.has(noun));
+      // A conjunction is what turns a second grain into a combination product rather than a
+      // descriptive word ("Chickpeas In Water" is still just chickpeas).
+      const hasCombination = /(?:\s&\s|\band\b|\bwith\b)/i.test(titleLower);
+      if (extraGrains.length > 0 && hasCombination) {
+        return { eligible: false, reason: 'grain_blend_mismatch' };
+      }
+    }
+
     // Hard Dietary / Attribute Constraint: Plain vs Flavoured yogurt / dairy
     const isYogurtRequested = /\b(?:yogurt|yoghurt)\b/i.test(itemLower);
     if (isYogurtRequested) {

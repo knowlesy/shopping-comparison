@@ -37,7 +37,8 @@
     "lab:replay": "node scripts/scraper-lab/index.js replay",
     "lab:reality": "node scripts/scraper-lab/index.js reality",
     "eval:real": "node scripts/eval-real.js",
-    "eval:stores": "node scripts/eval-stores.js"
+    "eval:stores": "node scripts/eval-stores.js",
+    "eval:holdout": "node scripts/eval-holdout.js"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

@@ -242,6 +242,7 @@ async function runStoreEvaluation() {
 
     const matchRatePct = totalItems > 0 ? ((matchedItems / totalItems) * 100).toFixed(1) : '0.0';
     const correctnessPct = totalItems > 0 ? ((correctItems / totalItems) * 100).toFixed(1) : '0.0';
+    const missedOpportunities = itemDetails.filter((d) => d.status === 'MISSED_OPPORTUNITY').length;
 
     storeStats[store] = {
       totalItems,
@@ -250,6 +251,7 @@ async function runStoreEvaluation() {
       honestNoMatches,
       falseMatches,
       badPicks,
+      missedOpportunities,
       matchRatePct,
       correctnessPct,
       itemDetails
@@ -263,9 +265,11 @@ async function runStoreEvaluation() {
     'Match Rate'.padStart(16) +
     'Correctness'.padStart(16) +
     'Honest No-Match'.padStart(18) +
-    'False Matches'.padStart(16)
+    'False Matches'.padStart(16) +
+    'Bad Picks'.padStart(12) +
+    'Missed'.padStart(9)
   );
-  console.log('-'.repeat(88));
+  console.log('-'.repeat(109));
 
   for (const store of reachableStores) {
     const s = storeStats[store];
@@ -275,26 +279,87 @@ async function runStoreEvaluation() {
       `${s.matchedItems}/${s.totalItems} (${s.matchRatePct}%)`.padStart(16) +
       `${s.correctItems}/${s.totalItems} (${s.correctnessPct}%)`.padStart(16) +
       `${s.honestNoMatches}`.padStart(18) +
-      `${s.falseMatches}`.padStart(16)
+      `${s.falseMatches}`.padStart(16) +
+      `${s.badPicks}`.padStart(12) +
+      `${s.missedOpportunities}`.padStart(9)
     );
   }
 
-  console.log('-'.repeat(88));
+  console.log('-'.repeat(109));
   console.log('\nKey Takeaways:');
   for (const store of reachableStores) {
     const s = storeStats[store];
-    console.log(`- ${store.toUpperCase()}: ${s.correctnessPct}% correctness vs ${s.matchRatePct}% match rate (${s.honestNoMatches} honest no-matches, ${s.falseMatches} false matches)`);
+    console.log(`- ${store.toUpperCase()}: ${s.correctnessPct}% correctness vs ${s.matchRatePct}% match rate (${s.honestNoMatches} honest no-matches, ${s.falseMatches} false matches, ${s.badPicks} bad picks, ${s.missedOpportunities} missed)`);
   }
-  console.log('='.repeat(88));
+  console.log('='.repeat(109));
 
   return storeStats;
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  runStoreEvaluation().catch((err) => {
-    console.error(err);
-    process.exit(1);
-  });
+/**
+ * Ratchet check. This is not a demand for 100% — it is a record of where each store stands today,
+ * so a change that silently makes matching worse fails instead of printing a slightly worse table.
+ * Improving a number is expected; the baseline file is then updated deliberately, in its own commit.
+ */
+function checkRatchet(storeStats) {
+  const baseline = readJson('tests/fixtures/store-eval-ratchet.json');
+  if (!baseline) {
+    console.log('\nNo tests/fixtures/store-eval-ratchet.json: ratchet not enforced.');
+    return { failures: [], improvements: [] };
+  }
+
+  const failures = [];
+  const improvements = [];
+
+  for (const [store, limits] of Object.entries(baseline.stores || {})) {
+    const s = storeStats[store];
+    if (!s) {
+      failures.push(`${store}: expected in this evaluation but was not scored`);
+      continue;
+    }
+    const checks = [
+      ['correctItems', s.correctItems, limits.minCorrectItems, 'min'],
+      ['falseMatches', s.falseMatches, limits.maxFalseMatches, 'max'],
+      ['badPicks', s.badPicks, limits.maxBadPicks, 'max'],
+      ['missedOpportunities', s.missedOpportunities, limits.maxMissedOpportunities, 'max']
+    ];
+    for (const [name, actual, limit, direction] of checks) {
+      if (limit === undefined || limit === null) continue;
+      if (direction === 'min' && actual < limit) {
+        failures.push(`${store}.${name}: ${actual} < required ${limit}`);
+      } else if (direction === 'max' && actual > limit) {
+        failures.push(`${store}.${name}: ${actual} > allowed ${limit}`);
+      } else if (direction === 'min' && actual > limit) {
+        improvements.push(`${store}.${name}: ${actual} (baseline ${limit})`);
+      } else if (direction === 'max' && actual < limit) {
+        improvements.push(`${store}.${name}: ${actual} (baseline ${limit})`);
+      }
+    }
+  }
+
+  console.log('\nRatchet vs tests/fixtures/store-eval-ratchet.json');
+  if (improvements.length > 0) {
+    console.log(`  improved (update the baseline deliberately): ${improvements.join(', ')}`);
+  }
+  if (failures.length === 0) {
+    console.log('  OK: no store regressed.');
+  } else {
+    for (const failure of failures) console.log(`  REGRESSION ${failure}`);
+  }
+  return { failures, improvements };
 }
 
-export { runStoreEvaluation };
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  runStoreEvaluation()
+    .then((storeStats) => {
+      if (process.argv.includes('--no-ratchet')) return;
+      const { failures } = checkRatchet(storeStats);
+      if (failures.length > 0) process.exitCode = 1;
+    })
+    .catch((err) => {
+      console.error(err);
+      process.exit(1);
+    });
+}
+
+export { runStoreEvaluation, checkRatchet };
