@@ -87,6 +87,7 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
 
     // 1. Assert per-store result set for supermarkets
     assert.ok(comparison.supermarkets, 'Response must include supermarkets comparison');
+    assert.ok(comparison.meta?.candidateStatuses, 'candidate provenance must survive into comparison metadata');
     const stores = Object.keys(comparison.supermarkets);
     assert.ok(stores.includes('tesco'), 'Tesco must be in supermarkets');
     assert.ok(stores.includes('sainsburys'), 'Sainsburys must be in supermarkets');
@@ -99,6 +100,11 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
     // 2. Assert plausible basket totalPrice
     for (const store of stores) {
       const storeRes = comparison.supermarkets[store];
+      assert.ok(storeRes.candidateStatus, `${store} must expose a concise candidate fallback status`);
+      assert.ok(
+        Array.isArray(comparison.meta.candidateStatuses[store]),
+        `${store} must retain per-item candidate status metadata`
+      );
       assert.ok(storeRes.itemsFound > 0, `${store} must have matched products`);
       assert.equal(typeof storeRes.totalPrice, 'number', `${store} must have numeric totalPrice`);
       assert.ok(
@@ -1000,4 +1006,3 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
     });
   });
 });
-

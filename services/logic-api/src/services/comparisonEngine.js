@@ -121,8 +121,10 @@ export class ComparisonEngine {
     });
 
     const storeMatchesMap = {};
+    const candidateStatusesByStore = {};
     for (const s of enabledStores) {
       storeMatchesMap[s] = [];
+      candidateStatusesByStore[s] = [];
     }
 
     const sourcesCount = { live: 0, cache: 0, catalog: 0, direct: 0 };
@@ -151,13 +153,23 @@ export class ComparisonEngine {
         status: `[${i + 1}/${items.length}] Checking prices for "${item.name}"...`
       });
 
-      const { products: candidateProducts, source, error: scrapeErr } =
+      const { products: candidateProducts, source, storeStatuses = {}, error: scrapeErr } =
         await getOrFetchCandidatesWithSource(coreQuery, {
           forceRefresh,
           enabledStores,
           includeDeals: preferences.includeDeals !== false,
           preferences: enrichedPreferences
         });
+
+      for (const store of enabledStores) {
+        if (storeStatuses[store]) {
+          candidateStatusesByStore[store].push({
+            itemIndex,
+            itemId,
+            ...storeStatuses[store]
+          });
+        }
+      }
 
       if (scrapeErr && !firstScrapeError) {
         firstScrapeError = scrapeErr;
@@ -303,6 +315,17 @@ export class ComparisonEngine {
     }
 
     const comparison = BasketCalculator.computeComparison(items, storeMatchesMap, enabledStores);
+    for (const store of enabledStores) {
+      const statuses = candidateStatusesByStore[store];
+      const failed = statuses.filter((status) => status.success === false);
+      const fallbackItems = statuses.filter((status) => status.fallback).length;
+      comparison.supermarkets[store].candidateStatus = {
+        fallbackItems,
+        failedItems: failed.length,
+        sources: [...new Set(statuses.map((status) => status.source))],
+        lastError: failed.at(-1)?.error
+      };
+    }
     const aiCallsUsed = aiCallsContext.callsUsed;
     comparison.aiCallsUsed = aiCallsUsed;
     comparison.aiBudget = aiMaxCallsPerBasket;
@@ -313,6 +336,7 @@ export class ComparisonEngine {
         catalog: sourcesCount.catalog,
         direct: sourcesCount.direct
       },
+      candidateStatuses: candidateStatusesByStore,
       aiCallsUsed,
       aiBudget: aiMaxCallsPerBasket,
       scrapeError: firstScrapeError || undefined

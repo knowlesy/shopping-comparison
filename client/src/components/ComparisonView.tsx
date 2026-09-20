@@ -180,8 +180,21 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({
                         {store.info.name}
                       </span>
                     </div>
-                    <div className="text-[10px] sm:text-[11px] font-medium text-slate-500 pl-4.5 mt-0.5">
-                      {store.itemsFound}/{store.itemsTotal} items
+                    <div className="text-[10px] sm:text-[11px] font-medium text-slate-500 pl-4.5 mt-0.5 flex items-center space-x-1">
+                      <span>{store.itemsFound}/{store.itemsTotal} items</span>
+                      {store.items.some(i => i.isEstimated || i.confidenceSource === 'catalog') && (
+                        <span className="text-[9px] px-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 font-medium" title="Store includes catalog benchmark estimates">
+                          • estimated
+                        </span>
+                      )}
+                      {store.candidateStatus && store.candidateStatus.fallbackItems > 0 && (
+                        <span
+                          className="text-[9px] px-1 rounded bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 font-medium"
+                          title={store.candidateStatus.lastError || 'Some live store results were unavailable; estimates may be shown'}
+                        >
+                          • fallback
+                        </span>
+                      )}
                     </div>
                   </div>
 

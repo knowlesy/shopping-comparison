@@ -400,6 +400,22 @@ export const ItemSwapModal: React.FC<ItemSwapModalProps> = ({
                             </span>
                           </>
                         )}
+                        {prod.confidenceSource === 'direct' && (
+                          <>
+                            <span>•</span>
+                            <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold shrink-0">
+                              Direct Live
+                            </span>
+                          </>
+                        )}
+                        {(prod.isEstimated || prod.confidenceSource === 'catalog') && (
+                          <>
+                            <span>•</span>
+                            <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium shrink-0">
+                              Estimated
+                            </span>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>

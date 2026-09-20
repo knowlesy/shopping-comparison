@@ -76,6 +76,21 @@ export class PriceCache {
     return this.get(key) !== null;
   }
 
+  /**
+   * Return active cache values whose keys share a prefix. This supports targeted,
+   * versioned cache migrations without exposing expired entries or unrelated data.
+   */
+  static entriesWithPrefix(prefix) {
+    const entries = [];
+    for (const key of this.memoryCache.keys()) {
+      if (key.startsWith(prefix)) {
+        const data = this.get(key);
+        if (data !== null) entries.push([key, data]);
+      }
+    }
+    return entries;
+  }
+
   static clear() {
     const previousCount = this.memoryCache.size;
     this.memoryCache.clear();

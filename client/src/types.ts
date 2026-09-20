@@ -73,6 +73,7 @@ export interface SupermarketProduct {
   confidence?: string;
   confidenceScore?: number;
   confidenceSource?: 'direct' | 'aggregator' | 'ai' | 'ai-cached' | 'catalog';
+  isEstimated?: boolean;
   isHealthier: boolean;
   isFrozen?: boolean;
   fatPercentage?: number;
@@ -141,6 +142,12 @@ export interface StoreBasketResult {
   hasEstimatedPrices?: boolean;
   averageHealthScore: number;
   badge?: string;
+  candidateStatus?: {
+    fallbackItems: number;
+    failedItems: number;
+    sources: string[];
+    lastError?: string;
+  };
 }
 
 export interface SplitBasketStore {
@@ -174,6 +181,14 @@ export interface ComparisonResponse {
       catalog: number;
     };
     scrapeError?: string;
+    candidateStatuses?: Record<string, Array<{
+      itemIndex: number;
+      itemId: string;
+      source: string;
+      success: boolean;
+      fallback?: boolean;
+      error?: string;
+    }>>;
   };
 }
 

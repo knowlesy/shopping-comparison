@@ -2,7 +2,11 @@ import express from 'express';
 import { CATALOG_PRODUCTS } from '../services/catalogData.js';
 import { isContaminated } from '../services/contaminationRules.js';
 import { PriceCache } from '../services/priceCache.js';
-import { getCoreSearchQuery, getOrFetchCandidates } from '../services/candidatePipeline.js';
+import {
+  getCoreSearchQuery,
+  getOrFetchCandidatesWithSource
+} from '../services/candidatePipeline.js';
+import { normalizeSupermarketName } from '../services/supermarkets.js';
 
 export const alternativesRouter = express.Router();
 
@@ -17,7 +21,9 @@ alternativesRouter.get('/', async (req, res) => {
     return res.status(400).json({ error: 'Missing store or query parameter' });
   }
 
-  const cacheKey = `cache:alt:${store}:${query}`;
+  const normalizedStore = normalizeSupermarketName(store);
+  const normalizedQuery = (query || '').toLowerCase().trim();
+  const cacheKey = `cache:alt:${normalizedStore}:${normalizedQuery}`;
 
   if (forceRefresh !== 'true' && PriceCache.has(cacheKey)) {
     return res.json({ alternatives: PriceCache.get(cacheKey) });
@@ -25,12 +31,12 @@ alternativesRouter.get('/', async (req, res) => {
 
   try {
     const coreQuery = getCoreSearchQuery({ name: query });
-    const queryLower = (query || '').toLowerCase();
+    const queryLower = normalizedQuery;
     const coreLower = (coreQuery || '').toLowerCase();
 
-    // 1. Get baseline catalog products immediately for 0ms responsiveness
+    // 1. Get baseline catalog products
     const catalogForStore = (CATALOG_PRODUCTS || []).filter((p) => {
-      if (p.supermarket !== store) return false;
+      if (normalizeSupermarketName(p.supermarket) !== normalizedStore) return false;
       const titleLower = p.title.toLowerCase();
       const catLower = (p.category || '').toLowerCase();
       const subLower = (p.subCategory || '').toLowerCase();
@@ -46,38 +52,55 @@ alternativesRouter.get('/', async (req, res) => {
       );
     });
 
+    // 2. Fetch or retrieve candidate products for this specific store
+    // Reuses compare candidates from per-store cache in 0ms without redundant network calls
     let scrapedForStore = [];
-    if (forceRefresh === 'true' || catalogForStore.length < 3) {
-      try {
-        const candidates = await getOrFetchCandidates(coreQuery, {
-          forceRefresh: forceRefresh === 'true',
-          timeoutMs: 5000
-        });
+    try {
+      const { products: candidates } = await getOrFetchCandidatesWithSource(coreQuery, {
+        forceRefresh: forceRefresh === 'true',
+        enabledStores: [normalizedStore],
+        timeoutMs: 5000
+      });
 
-        scrapedForStore = candidates.filter((p) => {
-          if (p.supermarket !== store) return false;
-          if (isContaminated(queryLower, p.title)) return false;
-          return true;
-        });
-      } catch (_scrapeErr) {
-        // Fast catalog fallback
-      }
+      scrapedForStore = (candidates || []).filter((p) => {
+        if (normalizeSupermarketName(p.supermarket) !== normalizedStore) return false;
+        if (isContaminated(queryLower, p.title)) return false;
+        return true;
+      });
+    } catch (_scrapeErr) {
+      // Fast catalog fallback
     }
 
-    // Merge and deduplicate by title
+    // 3. Merge and deduplicate: Direct / live scraped candidates FIRST so they win deduplication
+    // over catalog benchmarks (Acceptance condition 4)
     const seenTitles = new Set();
     const combined = [];
 
-    for (const p of [...catalogForStore, ...scrapedForStore]) {
+    // Direct / live candidates first
+    for (const p of scrapedForStore) {
       const normTitle = p.title.toLowerCase().trim();
       if (!seenTitles.has(normTitle)) {
         seenTitles.add(normTitle);
-        const isCatalog = p.source === 'catalog';
+        const isDirect = p.source === 'direct' || p.confidenceSource === 'direct';
         combined.push({
           ...p,
-          confidence: p.confidence || (isCatalog ? 'estimated' : 'verified'),
-          confidenceSource: p.confidenceSource || (isCatalog ? 'catalog' : (p.source === 'direct' ? 'direct' : 'aggregator')),
-          isEstimated: Boolean(isCatalog || p.confidence === 'estimated')
+          confidence: p.confidence || (isDirect ? 'verified' : 'live'),
+          confidenceSource: p.confidenceSource || (isDirect ? 'direct' : 'aggregator'),
+          isEstimated: false
+        });
+      }
+    }
+
+    // Catalog baseline second for unique unlisted items; duplicates are dropped
+    for (const p of catalogForStore) {
+      const normTitle = p.title.toLowerCase().trim();
+      if (!seenTitles.has(normTitle)) {
+        seenTitles.add(normTitle);
+        combined.push({
+          ...p,
+          confidence: 'estimated',
+          confidenceSource: 'catalog',
+          isEstimated: true
         });
       }
     }
