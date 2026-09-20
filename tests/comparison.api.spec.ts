@@ -218,4 +218,84 @@ test.describe('API-backed browser comparison', () => {
     ).toBeVisible();
     await expect(page.locator(`text=${EXPECTED.asda.bread.title}`).first()).toBeVisible();
   });
+
+  test('swapping an alternative recalculates through /api/compare/adjust and updates UI', async ({ page }) => {
+    await page.addInitScript(CAPTURE_SCRIPT);
+    await page.goto('/');
+
+    const textarea = page.locator('textarea').first();
+    await textarea.fill(SHOPPING_LIST);
+
+    const compareBtn = page.locator('button:has-text("Compare Prices Now")').first();
+    await compareBtn.click();
+
+    await expect(page.locator('h1:has-text("Supermarket Price & Sizing Matrix")')).toBeVisible({ timeout: 60000 });
+
+    // Open swap modal for the first item
+    const chgBtn = page.locator('button:has-text("Chg")').first();
+    await chgBtn.click();
+    await expect(page.locator('[data-testid="item-swap-modal"]')).toBeVisible();
+
+    const chooseBtn = page.locator('[data-testid="modal-choose-btn"]').first();
+    if (await chooseBtn.isVisible()) {
+      const adjustPromise = page.waitForResponse(
+        (res) => res.url().includes('/api/compare/adjust') && res.request().method() === 'POST',
+        { timeout: 30000 }
+      );
+      await chooseBtn.click();
+      const adjustRes = await adjustPromise;
+      expect(adjustRes.status()).toBe(200);
+
+      // Modal closed and matrix visible
+      await expect(page.locator('[data-testid="item-swap-modal"]')).not.toBeVisible();
+      await expect(page.locator('h1:has-text("Supermarket Price & Sizing Matrix")')).toBeVisible();
+    } else {
+      const adjustPromise = page.waitForResponse(
+        (res) => res.url().includes('/api/compare/adjust') && res.request().method() === 'POST',
+        { timeout: 30000 }
+      );
+      const saveBtn = page.locator('button:has-text("Save")').first();
+      await saveBtn.click();
+      const adjustRes = await adjustPromise;
+      expect(adjustRes.status()).toBe(200);
+      await expect(page.locator('[data-testid="item-swap-modal"]')).not.toBeVisible();
+    }
+  });
+
+  test('failed adjustment displays error banner without crashing or corrupting basket', async ({ page }) => {
+    await page.addInitScript(CAPTURE_SCRIPT);
+    await page.goto('/');
+
+    const textarea = page.locator('textarea').first();
+    await textarea.fill(SHOPPING_LIST);
+
+    const compareBtn = page.locator('button:has-text("Compare Prices Now")').first();
+    await compareBtn.click();
+
+    await expect(page.locator('h1:has-text("Supermarket Price & Sizing Matrix")')).toBeVisible({ timeout: 60000 });
+
+    // Mock failure on /api/compare/adjust to verify client error handling
+    await page.route('**/api/compare/adjust', async (route) => {
+      await route.fulfill({
+        status: 400,
+        contentType: 'application/json',
+        body: JSON.stringify({ error: 'Manual pack quantity must be between 1 and 99' })
+      });
+    });
+
+    const chgBtn = page.locator('button:has-text("Chg")').first();
+    await chgBtn.click();
+    await expect(page.locator('[data-testid="item-swap-modal"]')).toBeVisible();
+
+    const saveBtn = page.locator('button:has-text("Save")').first();
+    await saveBtn.click();
+
+    // Verify error banner is visibly rendered
+    const banner = page.locator('[data-testid="adjustment-error-banner"]');
+    await expect(banner).toBeVisible();
+    await expect(banner).toContainText('Manual pack quantity must be between 1 and 99');
+
+    // Matrix remains visible and intact
+    await expect(page.locator('h1:has-text("Supermarket Price & Sizing Matrix")')).toBeVisible();
+  });
 });

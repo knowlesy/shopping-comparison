@@ -218,6 +218,22 @@ export class MatchResultBuilder {
           };
         }
       }
+
+      if (includeDeals && !chosenDealApplied && basePrice < chosenProduct.price) {
+        const standardPrice = Number((chosenPacks * chosenProduct.price).toFixed(2));
+        const savings = Number((standardPrice - chosenTotalPrice).toFixed(2));
+        if (savings > 0) {
+          const scheme = chosenProduct.clubcardPrice ? 'Clubcard' : (chosenProduct.nectarPrice ? 'Nectar' : 'Loyalty');
+          chosenDealApplied = {
+            dealText: `${scheme} Price`,
+            originalPrice: standardPrice,
+            discountedPrice: chosenTotalPrice,
+            savings,
+            effectiveUnitPrice: basePrice,
+            summary: `${scheme} Price: £${basePrice.toFixed(2)}/item`
+          };
+        }
+      }
       const targetBase = PackSelector.normalizeAmounts(item, chosenProduct).targetAmount;
       chosenWeightDiff = targetBase > 0 ? Math.round(((chosenTotalQty - targetBase) / targetBase) * 100) : 0;
       lines = [{ product: chosenProduct, packs: chosenPacks, subtotal: chosenTotalPrice }];
@@ -393,6 +409,16 @@ export class MatchResultBuilder {
     const aiReasoning = selection.aiReasoning || selection.reasoning || undefined;
     const matchBadge = selection.matchBadge || (matchSource === 'ai-cached' ? 'AI Cached' : (matchSource === 'ai-escalation' ? 'AI Escalation' : 'AI Reviewed'));
 
+    let updatedAlternatives = currentMatch.alternatives || null;
+    if (selection.isUserSwap && updatedAlternatives && chosenProduct) {
+      const remaining = updatedAlternatives.filter((p) => p && p.id !== chosenProduct.id);
+      if (currentMatch.product && currentMatch.product.id !== chosenProduct.id) {
+        updatedAlternatives = [currentMatch.product, ...remaining];
+      } else {
+        updatedAlternatives = remaining;
+      }
+    }
+
     return this.buildMatchResult({
       item,
       supermarket,
@@ -410,7 +436,7 @@ export class MatchResultBuilder {
       },
       packOverrides: options.packOverrides || selection.packOverrides || null,
       optimizeVariants: false,
-      alternatives: currentMatch.alternatives || null
+      alternatives: updatedAlternatives
     });
   }
 }

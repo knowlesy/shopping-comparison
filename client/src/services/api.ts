@@ -166,6 +166,43 @@ export const api = {
     return ClientSupermarketComparisonService.compare(items, safePrefs || DEFAULT_PREFERENCES);
   },
 
+  // Adjust an item in a comparison (swap alternative or update packs) via canonical API
+  adjustComparison: async (params: {
+    comparison: ComparisonResponse;
+    store: SupermarketName;
+    itemId?: string;
+    itemIndex?: number;
+    selection: {
+      product?: SupermarketProduct | null;
+      packs?: number;
+    };
+    preferences?: UserPreferences;
+  }): Promise<ComparisonResponse> => {
+    const res = await fetch(`${API_BASE}/compare/adjust`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        comparison: params.comparison,
+        store: params.store,
+        itemId: params.itemId,
+        itemIndex: params.itemIndex,
+        selection: params.selection,
+        preferences: stripApiKey(params.preferences),
+      }),
+    });
+
+    if (!res.ok) {
+      let message = `Adjustment failed with status ${res.status}`;
+      try {
+        const data = await res.json();
+        if (data && data.error) message = data.error;
+      } catch {}
+      throw new Error(message);
+    }
+
+    return await res.json();
+  },
+
   // Cache Management
   getCacheStats: async (): Promise<CacheStats> => {
     try {

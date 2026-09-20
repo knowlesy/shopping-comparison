@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, X } from 'lucide-react';
 import { Header } from './components/Header';
 import { ListCreator, EXAMPLE_LIST_TEXT } from './components/ListCreator';
 import { ComparisonView } from './components/ComparisonView';
@@ -124,6 +124,7 @@ export default function App() {
   const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
   const [ingredientIdeas, setIngredientIdeas] = useState<IngredientIdea[]>([]);
   const [loading, setLoading] = useState(false);
+  const [adjustmentError, setAdjustmentError] = useState<string | null>(null);
 
   // Modals
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -352,7 +353,7 @@ export default function App() {
   };
 
   // Handle alternative item swap
-  const handleSelectAlternative = (
+  const handleSelectAlternative = async (
     store: SupermarketName,
     item: ParsedItem,
     newProduct: SupermarketProduct,
@@ -360,143 +361,49 @@ export default function App() {
   ) => {
     if (!comparison) return;
 
-    setComparison(prevComp => {
-      if (!prevComp) return null;
-
-      const storeBasket = { ...prevComp.supermarkets[store] };
-      const itemIndex = storeBasket.items.findIndex(i => i.parsedItem.id === item.id);
-
-      if (itemIndex >= 0) {
-        // Calculate new pack quantity & price safely
-        let targetAmount = item.targetQuantity || 1;
-        let prodAmount = newProduct.packageSize || 1;
-        if (item.unit === 'kg' || item.unit === 'l') targetAmount *= 1000;
-        if (newProduct.packageUnit === 'kg' || newProduct.packageUnit === 'l') prodAmount *= 1000;
-        if ((item.unit === 'g' || item.unit === 'kg') && prodAmount <= 1) prodAmount = 500;
-
-        const packsNeeded = customPacks && customPacks > 0
-          ? customPacks
-          : Math.min(12, Math.max(1, Math.round(targetAmount / (prodAmount || 1))));
-        const totalQty = packsNeeded * prodAmount;
-        const unitPrice = newProduct.clubcardPrice || newProduct.price;
-        const totalPrice = Number((packsNeeded * unitPrice).toFixed(2));
-        const weightDiffPct = Math.round(((totalQty - targetAmount) / (targetAmount || 1)) * 100);
-
-        const updatedMatch: ItemMatch = {
-          ...storeBasket.items[itemIndex],
+    try {
+      setAdjustmentError(null);
+      const updated = await api.adjustComparison({
+        comparison,
+        store,
+        itemId: item.id,
+        selection: {
           product: newProduct,
-          packsNeeded,
-          totalQuantity: totalQty,
-          totalPrice,
-          effectiveUnitPrice: newProduct.unitPrice,
-          weightDifferencePercent: weightDiffPct,
-          isClosestPack: Math.abs(weightDiffPct) < 25,
-        };
-
-        const newItems = [...storeBasket.items];
-        newItems[itemIndex] = updatedMatch;
-
-        // Recalculate subtotal & total
-        const newSubtotal = Number(newItems.reduce((sum, i) => sum + (i.product ? i.totalPrice : 0), 0).toFixed(2));
-        const deliveryFee = newSubtotal >= storeBasket.info.deliveryMinOrder ? 0 : storeBasket.info.deliveryFee;
-        const newTotal = Number((newSubtotal + deliveryFee).toFixed(2));
-
-        const updatedSupermarkets = {
-          ...prevComp.supermarkets,
-          [store]: {
-            ...storeBasket,
-            items: newItems,
-            subtotal: newSubtotal,
-            totalPrice: newTotal,
-          },
-        };
-
-        // Recalculate cheapest store
-        const ranked = Object.values(updatedSupermarkets).sort((a, b) => a.totalPrice - b.totalPrice);
-        const cheapest = ranked[0]?.supermarket || store;
-
-        return {
-          ...prevComp,
-          supermarkets: updatedSupermarkets,
-          cheapestStore: cheapest,
-        };
-      }
-
-      return prevComp;
-    });
+          packs: customPacks,
+        },
+        preferences,
+      });
+      setComparison(updated);
+    } catch (err: any) {
+      console.error('Error swapping item alternative:', err);
+      setAdjustmentError(err.message || 'Failed to update item alternative');
+    }
   };
 
   // Handle direct quantity update for an item at a supermarket
-  const handleUpdateQuantity = (
+  const handleUpdateQuantity = async (
     store: SupermarketName,
     itemId: string,
     newPacks: number
   ) => {
-    if (!comparison || newPacks < 1) return;
+    if (!comparison) return;
 
-    setComparison(prevComp => {
-      if (!prevComp) return null;
-
-      const storeBasket = { ...prevComp.supermarkets[store] };
-      const itemIndex = storeBasket.items.findIndex(i => i.parsedItem.id === itemId);
-
-      if (itemIndex >= 0) {
-        const currentMatch = storeBasket.items[itemIndex];
-        if (!currentMatch.product) return prevComp;
-
-        const product = currentMatch.product;
-        let prodAmount = product.packageSize || 1;
-        if (product.packageUnit === 'kg' || product.packageUnit === 'l') prodAmount *= 1000;
-        if ((currentMatch.parsedItem.unit === 'g' || currentMatch.parsedItem.unit === 'kg') && prodAmount <= 1) prodAmount = 500;
-
-        const totalQty = newPacks * prodAmount;
-        const unitPrice = product.clubcardPrice || product.price;
-        const totalPrice = Number((newPacks * unitPrice).toFixed(2));
-
-        let targetAmount = currentMatch.parsedItem.targetQuantity || 1;
-        if (currentMatch.parsedItem.unit === 'kg' || currentMatch.parsedItem.unit === 'l') targetAmount *= 1000;
-        const weightDiffPct = Math.round(((totalQty - targetAmount) / (targetAmount || 1)) * 100);
-
-        const updatedMatch: ItemMatch = {
-          ...currentMatch,
-          packsNeeded: newPacks,
-          totalQuantity: totalQty,
-          totalPrice,
-          weightDifferencePercent: weightDiffPct,
-          isClosestPack: Math.abs(weightDiffPct) < 25,
-        };
-
-        const newItems = [...storeBasket.items];
-        newItems[itemIndex] = updatedMatch;
-
-        // Recalculate subtotal & total
-        const newSubtotal = Number(newItems.reduce((sum, i) => sum + (i.product ? i.totalPrice : 0), 0).toFixed(2));
-        const deliveryFee = newSubtotal >= storeBasket.info.deliveryMinOrder ? 0 : storeBasket.info.deliveryFee;
-        const newTotal = Number((newSubtotal + deliveryFee).toFixed(2));
-
-        const updatedSupermarkets = {
-          ...prevComp.supermarkets,
-          [store]: {
-            ...storeBasket,
-            items: newItems,
-            subtotal: newSubtotal,
-            totalPrice: newTotal,
-          },
-        };
-
-        // Recalculate cheapest store
-        const ranked = Object.values(updatedSupermarkets).sort((a, b) => a.totalPrice - b.totalPrice);
-        const cheapest = ranked[0]?.supermarket || store;
-
-        return {
-          ...prevComp,
-          supermarkets: updatedSupermarkets,
-          cheapestStore: cheapest,
-        };
-      }
-
-      return prevComp;
-    });
+    try {
+      setAdjustmentError(null);
+      const updated = await api.adjustComparison({
+        comparison,
+        store,
+        itemId,
+        selection: {
+          packs: newPacks,
+        },
+        preferences,
+      });
+      setComparison(updated);
+    } catch (err: any) {
+      console.error('Error updating item quantity:', err);
+      setAdjustmentError(err.message || 'Failed to update quantity');
+    }
   };
 
   // Lock In Weekly Shop (explicit save to archive)
@@ -662,6 +569,24 @@ export default function App() {
                 </div>
               </div>
             )}
+          </div>
+        )}
+
+        {adjustmentError && (
+          <div data-testid="adjustment-error-banner" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+            <div className="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 flex items-center justify-between text-sm shadow-sm">
+              <div className="flex items-center space-x-2">
+                <span className="font-bold">Basket update failed:</span>
+                <span>{adjustmentError}</span>
+              </div>
+              <button
+                onClick={() => setAdjustmentError(null)}
+                className="p-1 rounded-lg hover:bg-rose-100 dark:hover:bg-rose-900 text-rose-600 dark:text-rose-300 transition"
+                title="Dismiss"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         )}
 

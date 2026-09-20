@@ -410,4 +410,157 @@ export class ComparisonEngine {
       }
     }
   }
+
+  /**
+   * Adjusts a single item in an existing comparison (product swap and/or quantity override)
+   * and returns a completely recalculated comparison without re-scraping.
+   */
+  static adjustComparison({
+    comparison,
+    store,
+    itemIndex,
+    itemId,
+    selection,
+    preferences = getUserSettings()
+  }) {
+    // 1. Validate comparison shape
+    if (!comparison || typeof comparison !== 'object' || !Array.isArray(comparison.parsedItems) || !comparison.supermarkets || typeof comparison.supermarkets !== 'object') {
+      throw new Error('Invalid comparison payload: parsedItems and supermarkets required');
+    }
+
+    const items = comparison.parsedItems;
+    if (items.length === 0) {
+      throw new Error('Comparison contains no parsed items');
+    }
+
+    // 2. Validate store
+    if (!store || typeof store !== 'string' || !isKnownSupermarket(store)) {
+      throw new Error(`Invalid or unknown supermarket: ${store}`);
+    }
+
+    if (!comparison.supermarkets[store] || !Array.isArray(comparison.supermarkets[store].items)) {
+      throw new Error(`Supermarket "${store}" is not present in comparison`);
+    }
+
+    const storeItems = comparison.supermarkets[store].items;
+
+    // 3. Resolve target item index
+    let targetIndex = -1;
+    if (itemIndex !== undefined && itemIndex !== null) {
+      const idx = Number(itemIndex);
+      if (!Number.isInteger(idx) || idx < 0 || idx >= items.length) {
+        throw new Error(`Invalid itemIndex: ${itemIndex}`);
+      }
+      targetIndex = idx;
+    } else if (itemId !== undefined && itemId !== null) {
+      const sid = String(itemId);
+      targetIndex = items.findIndex((it, idx) => it.id === sid || `item_${idx}` === sid);
+      if (targetIndex === -1) {
+        targetIndex = storeItems.findIndex((m, idx) => m.itemId === sid || m.parsedItem?.id === sid || `item_${idx}` === sid);
+      }
+      if (targetIndex === -1) {
+        throw new Error(`Item with id "${itemId}" not found in comparison`);
+      }
+    } else {
+      throw new Error('Either itemIndex or itemId must be provided');
+    }
+
+    const item = items[targetIndex];
+    const currentMatch = storeItems[targetIndex];
+    if (!currentMatch) {
+      throw new Error(`Match not found at index ${targetIndex} for store ${store}`);
+    }
+
+    // 4. Validate selection
+    if (!selection || typeof selection !== 'object') {
+      throw new Error('Selection must be an object');
+    }
+
+    // Packs validation
+    let packs = undefined;
+    if (selection.packs !== undefined) {
+      if (selection.packs === null) {
+        throw new Error('packs must be a positive integer between 1 and 99');
+      }
+      packs = Number(selection.packs);
+      if (!Number.isInteger(packs) || packs < 1 || packs > 99) {
+        throw new Error('packs must be a positive integer between 1 and 99');
+      }
+    }
+
+    // Product validation
+    let chosenProduct = null;
+    let isSwap = false;
+    if (selection.product !== undefined && selection.product !== null) {
+      const prod = selection.product;
+      if (typeof prod !== 'object' || !prod.id || typeof prod.title !== 'string' || prod.title.trim().length === 0) {
+        throw new Error('Invalid product selection: valid id and title required');
+      }
+      if (typeof prod.price !== 'number' || isNaN(prod.price) || prod.price < 0) {
+        throw new Error('Invalid product selection: price must be a non-negative number');
+      }
+      if (prod.supermarket && prod.supermarket !== store) {
+        throw new Error(`Product supermarket (${prod.supermarket}) does not match requested store (${store})`);
+      }
+      chosenProduct = prod;
+      isSwap = !currentMatch.product || currentMatch.product.id !== prod.id;
+    } else {
+      if (!currentMatch.product) {
+        throw new Error('Cannot adjust quantity on an item with no matched product');
+      }
+      chosenProduct = currentMatch.product;
+    }
+
+    // 5. Build updated match result
+    const packOverrides = packs !== undefined ? { packs } : (isSwap ? null : (currentMatch.packsNeeded ? { packs: currentMatch.packsNeeded } : null));
+    const selectionPayload = {
+      product: chosenProduct,
+      isUserSwap: true,
+      matchSource: isSwap ? 'user-swap' : (currentMatch.matchSource || 'user-swap'),
+      matchConfidence: isSwap ? 1.0 : (currentMatch.matchConfidence ?? 1.0),
+      matchBadge: isSwap ? 'User Selected' : currentMatch.matchBadge,
+      aiReasoning: isSwap ? undefined : currentMatch.aiReasoning
+    };
+
+    const updatedMatch = MatchResultBuilder.applySelection(currentMatch, selectionPayload, {
+      item,
+      supermarket: store,
+      preferences,
+      packOverrides
+    });
+
+    updatedMatch.itemIndex = targetIndex;
+    updatedMatch.itemId = item.id || `item_${targetIndex}`;
+
+    // 6. Assemble storeMatchesMap across all supermarkets
+    const storeMatchesMap = {};
+    const enabledSupermarkets = Object.keys(comparison.supermarkets);
+    for (const s of enabledSupermarkets) {
+      const existingMatches = [...(comparison.supermarkets[s].items || [])];
+      if (s === store) {
+        existingMatches[targetIndex] = updatedMatch;
+      }
+      storeMatchesMap[s] = existingMatches;
+    }
+
+    // 7. Compute full updated comparison
+    const updatedComparison = BasketCalculator.computeComparison(
+      items,
+      storeMatchesMap,
+      enabledSupermarkets
+    );
+
+    // Preserve metadata
+    if (comparison.aiCallsUsed !== undefined) {
+      updatedComparison.aiCallsUsed = comparison.aiCallsUsed;
+    }
+    if (comparison.aiBudget !== undefined) {
+      updatedComparison.aiBudget = comparison.aiBudget;
+    }
+    if (comparison.meta) {
+      updatedComparison.meta = { ...comparison.meta };
+    }
+
+    return updatedComparison;
+  }
 }

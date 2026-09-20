@@ -133,3 +133,28 @@ compareRouter.post('/stream', async (req, res) => {
   }
 });
 
+/**
+ * POST /api/compare/adjust
+ * Recalculates basket comparison after an item swap or quantity override
+ * through canonical server match builder and BasketCalculator.
+ */
+compareRouter.post('/adjust', (req, res) => {
+  try {
+    const { comparison, store, itemIndex, itemId, selection, preferences } = req.body || {};
+    const effectivePreferences = preferences || getUserSettings();
+
+    const updatedComparison = ComparisonEngine.adjustComparison({
+      comparison,
+      store,
+      itemIndex,
+      itemId,
+      selection,
+      preferences: effectivePreferences
+    });
+
+    res.json(updatedComparison);
+  } catch (err) {
+    res.status(400).json({ error: err.message || 'Comparison adjustment failed' });
+  }
+});
+

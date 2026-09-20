@@ -697,5 +697,307 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
       }
     });
   });
+
+  describe('Task 05 Acceptance Conditions Suite (Basket Recalculation & Swaps)', () => {
+    const adjustUrl = () => `${baseUrl}/adjust`;
+
+    const getBaseComparison = async () => {
+      const items = [
+        { id: 'milk_1', name: 'Semi-skimmed milk', rawText: 'Semi-skimmed milk 4 pints', targetQuantity: 4, unit: 'pt' },
+        { id: 'bread_1', name: 'Wholemeal bread', rawText: 'Wholemeal bread 1 loaf', targetQuantity: 1, unit: 'loaf' }
+      ];
+
+      const stores = ['tesco', 'asda', 'sainsburys'];
+      const milkKey = buildScrapeCacheKey('semi skimmed milk', stores);
+      const breadKey = buildScrapeCacheKey('wholemeal bread', stores);
+
+      PriceCache.set(milkKey, [
+        { id: 't-live-milk', title: 'Tesco British Semi Skimmed Milk 4 Pints', price: 1.55, supermarket: 'tesco', source: 'live', packageSize: 4, packageUnit: 'pt', isEstimated: false },
+        { id: 'a-live-milk', title: 'Asda British Semi Skimmed Milk 4 Pints', price: 1.50, supermarket: 'asda', source: 'live', packageSize: 4, packageUnit: 'pt', isEstimated: false },
+        { id: 's-live-milk', title: "Sainsbury's British Semi Skimmed Milk 4 Pints", price: 1.55, supermarket: 'sainsburys', source: 'live', packageSize: 4, packageUnit: 'pt', isEstimated: false }
+      ]);
+
+      PriceCache.set(breadKey, [
+        { id: 't-live-bread', title: 'Tesco Wholemeal Medium Bread 800g', price: 0.85, supermarket: 'tesco', source: 'live', packageSize: 800, packageUnit: 'g', isEstimated: false },
+        { id: 'a-live-bread', title: 'Asda Wholemeal Medium Bread 800g', price: 0.80, supermarket: 'asda', source: 'live', packageSize: 800, packageUnit: 'g', isEstimated: false },
+        { id: 's-live-bread', title: "Sainsbury's Wholemeal Medium Bread 800g", price: 0.85, supermarket: 'sainsburys', source: 'live', packageSize: 800, packageUnit: 'g', isEstimated: false }
+      ]);
+
+      const res = await fetch(baseUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items,
+          preferences: { enabledSupermarkets: stores, includeDeals: true }
+        })
+      });
+
+      assert.equal(res.status, 200);
+      return await res.json();
+    };
+
+    it('Condition 1: Live→estimated swap updates source/confidence, estimates, coverage, badges, savings and all dependent totals', async () => {
+      const initialComp = await getBaseComparison();
+      const initialTesco = initialComp.supermarkets.tesco;
+      const initialEstimatedShare = initialTesco.estimatedShare;
+      const initialTotalPrice = initialTesco.totalPrice;
+
+      // Swap item 0 at tesco to an explicit estimated catalog product
+      const catalogProduct = {
+        id: 'tesco-cat-milk-999',
+        supermarket: 'tesco',
+        title: 'Tesco Benchmark Milk 4 Pints',
+        brand: 'Tesco',
+        tier: 'standard',
+        category: 'dairy-eggs',
+        packageSize: 4,
+        packageUnit: 'pt',
+        packageDisplay: '4 Pints',
+        price: 3.50,
+        unitPrice: 0.88,
+        unitPriceMeasure: 'per pint',
+        source: 'catalog',
+        isEstimated: true,
+        isHealthier: false
+      };
+
+      const adjustRes = await fetch(adjustUrl(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          comparison: initialComp,
+          store: 'tesco',
+          itemIndex: 0,
+          selection: {
+            product: catalogProduct
+          }
+        })
+      });
+
+      assert.equal(adjustRes.status, 200);
+      const updatedComp = await adjustRes.json();
+      const updatedTesco = updatedComp.supermarkets.tesco;
+      const updatedItem = updatedTesco.items[0];
+
+      // 1. Source and confidence updated
+      assert.equal(updatedItem.product.id, 'tesco-cat-milk-999');
+      assert.equal(updatedItem.isEstimated, true);
+      assert.equal(updatedItem.confidenceSource, 'catalog');
+      assert.equal(updatedItem.matchSource, 'user-swap');
+      assert.ok(updatedItem.confidence.includes('catalog') || updatedItem.confidence.includes('Catalog'));
+
+      // 2. Dependent totals updated
+      assert.notEqual(updatedTesco.totalPrice, initialTotalPrice);
+      assert.ok(updatedTesco.estimatedShare > initialEstimatedShare, 'Estimated share should increase');
+      assert.equal(updatedTesco.hasEstimatedPrices, true);
+      assert.equal(updatedComp.hasEstimatedPrices, true);
+      assert.ok(updatedComp.splitOptimization, 'Split optimization should be recomputed');
+    });
+
+    it('Condition 2: Deals disabled never applies clubcard/multibuy pricing; enabled deals belong to the replacement product', async () => {
+      const initialComp = await getBaseComparison();
+
+      const productWithDeals = {
+        id: 'tesco-deal-bread-555',
+        supermarket: 'tesco',
+        title: 'Tesco Toastie Bread 800g',
+        brand: 'Tesco',
+        tier: 'standard',
+        category: 'bakery',
+        packageSize: 800,
+        packageUnit: 'g',
+        packageDisplay: '800g',
+        price: 2.00,
+        clubcardPrice: 1.20,
+        unitPrice: 0.25,
+        unitPriceMeasure: 'per 100g',
+        source: 'live',
+        isEstimated: false,
+        isHealthier: false,
+        deal: {
+          rawText: 'Buy 2 for £2.50',
+          type: 'multibuy_fixed',
+          bundleQuantity: 2,
+          bundlePrice: 2.50,
+          badge: '2 for £2.50'
+        }
+      };
+
+      // Case A: includeDeals: false -> neither loyalty clubcard nor multibuy deal applied
+      const noDealsRes = await fetch(adjustUrl(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          comparison: initialComp,
+          store: 'tesco',
+          itemIndex: 1,
+          selection: {
+            product: productWithDeals,
+            packs: 2
+          },
+          preferences: { includeDeals: false }
+        })
+      });
+
+      assert.equal(noDealsRes.status, 200);
+      const noDealsComp = await noDealsRes.json();
+      const noDealsMatch = noDealsComp.supermarkets.tesco.items[1];
+      assert.equal(noDealsMatch.totalPrice, 4.00, '2 packs at £2.00 standard price without deals');
+      assert.equal(noDealsMatch.dealApplied, undefined, 'dealApplied must be undefined when includeDeals is false');
+
+      // Case B: includeDeals: true -> deal applied from the replacement product
+      const dealsRes = await fetch(adjustUrl(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          comparison: initialComp,
+          store: 'tesco',
+          itemIndex: 1,
+          selection: {
+            product: productWithDeals,
+            packs: 2
+          },
+          preferences: { includeDeals: true }
+        })
+      });
+
+      assert.equal(dealsRes.status, 200);
+      const dealsComp = await dealsRes.json();
+      const dealsMatch = dealsComp.supermarkets.tesco.items[1];
+      assert.equal(dealsMatch.totalPrice, 2.50, 'Multibuy deal 2 for £2.50 applied');
+      assert.ok(dealsMatch.dealApplied, 'dealApplied must be populated');
+      assert.equal(dealsMatch.dealApplied.dealText, '2 for £2.50');
+    });
+
+    it('Condition 3: Manual quantities produce correct totals/shortfall/lines and reject invalid values without corrupting state', async () => {
+      const initialComp = await getBaseComparison();
+
+      // Adjust packs to 3
+      const validRes = await fetch(adjustUrl(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          comparison: initialComp,
+          store: 'tesco',
+          itemIndex: 0,
+          selection: {
+            packs: 3
+          }
+        })
+      });
+
+      assert.equal(validRes.status, 200);
+      const validComp = await validRes.json();
+      const match = validComp.supermarkets.tesco.items[0];
+      assert.equal(match.packsNeeded, 3);
+      assert.equal(match.lines.length, 1);
+      assert.equal(match.lines[0].packs, 3);
+      assert.ok(match.explanation.startsWith('3x'));
+
+      // Test invalid quantities rejection
+      const invalidPacks = [0, -1, 2.5, 'three', null, 100];
+      for (const badPack of invalidPacks) {
+        const invalidRes = await fetch(adjustUrl(), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            comparison: initialComp,
+            store: 'tesco',
+            itemIndex: 0,
+            selection: {
+              packs: badPack
+            }
+          })
+        });
+
+        assert.equal(invalidRes.status, 400, `Expected 400 for bad packs value: ${badPack}`);
+        const errBody = await invalidRes.json();
+        assert.ok(errBody.error);
+      }
+    });
+
+    it('Condition 4: Changing the recommended store updates cheapestStore AND per-store flags; unrelated basket selections survive', async () => {
+      const initialComp = await getBaseComparison();
+      const initialCheapest = initialComp.cheapestStore;
+
+      // Pick the competitor store to make cheapest
+      const competitorStore = initialCheapest === 'tesco' ? 'asda' : 'tesco';
+
+      // Swap an item in competitorStore to a super-cheap 10p product to force store rank change
+      const cheapProduct = {
+        id: 'super-cheap-prod-1',
+        supermarket: competitorStore,
+        title: 'Super Value Item',
+        brand: 'Value',
+        tier: 'value',
+        category: 'dairy-eggs',
+        packageSize: 4,
+        packageUnit: 'pt',
+        packageDisplay: '4 Pints',
+        price: 0.10,
+        unitPrice: 0.02,
+        unitPriceMeasure: 'per pint',
+        source: 'live',
+        isEstimated: false,
+        isHealthier: false
+      };
+
+      const res = await fetch(adjustUrl(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          comparison: initialComp,
+          store: competitorStore,
+          itemIndex: 0,
+          selection: {
+            product: cheapProduct,
+            packs: 1
+          }
+        })
+      });
+
+      assert.equal(res.status, 200);
+      const updatedComp = await res.json();
+
+      // Assert cheapest store shifted to competitorStore
+      assert.equal(updatedComp.cheapestStore, competitorStore);
+      assert.equal(updatedComp.supermarkets[competitorStore].isCheapest, true);
+      assert.equal(updatedComp.supermarkets[competitorStore].badge, '🏆 Cheapest Overall');
+
+      // Assert previous cheapest store lost cheapest flag and badge
+      assert.equal(updatedComp.supermarkets[initialCheapest].isCheapest, false);
+      assert.notEqual(updatedComp.supermarkets[initialCheapest].badge, '🏆 Cheapest Overall');
+
+      // Assert unrelated stores (e.g. sainsburys) retained all their items and selections
+      const initialSains = initialComp.supermarkets.sainsburys;
+      const updatedSains = updatedComp.supermarkets.sainsburys;
+      assert.equal(updatedSains.items.length, initialSains.items.length);
+      assert.equal(updatedSains.totalPrice, initialSains.totalPrice);
+      assert.equal(updatedSains.items[0].product.id, initialSains.items[0].product.id);
+    });
+
+    it('Condition 5: Failed adjustment leaves previous basket intact with visible failure', async () => {
+      const invalidRequests = [
+        { body: {}, desc: 'empty request body' },
+        { body: { comparison: null, store: 'tesco' }, desc: 'missing comparison' },
+        { body: { comparison: { parsedItems: [], supermarkets: {} }, store: 'tesco' }, desc: 'empty parsedItems' },
+        { body: { comparison: { parsedItems: [{ name: 'Milk' }], supermarkets: {} }, store: 'unknown_mart' }, desc: 'unknown supermarket' },
+        { body: { comparison: { parsedItems: [{ name: 'Milk' }], supermarkets: { tesco: { items: [] } } }, store: 'tesco', itemIndex: 99 }, desc: 'out of bounds itemIndex' },
+        { body: { comparison: { parsedItems: [{ name: 'Milk' }], supermarkets: { tesco: { items: [{ product: null }] } } }, store: 'tesco', itemIndex: 0, selection: { packs: 2 } }, desc: 'adjust quantity on item with no product' }
+      ];
+
+      for (const req of invalidRequests) {
+        const res = await fetch(adjustUrl(), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(req.body)
+        });
+
+        assert.equal(res.status, 400, `Expected 400 for ${req.desc}`);
+        const data = await res.json();
+        assert.ok(data.error, `Error response expected for ${req.desc}`);
+      }
+    });
+  });
 });
 
