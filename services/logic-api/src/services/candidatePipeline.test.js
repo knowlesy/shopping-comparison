@@ -105,7 +105,7 @@ describe('candidatePipeline', () => {
 
       try {
         // Mock StoreFetcherClient: Tesco succeeds, Asda fails with deadline_exceeded
-        StoreFetcherClient.search = async (_q, _stores) => {
+        StoreFetcherClient.search = async (_q, stores) => {
           const storeMap = {};
           if (stores.includes('tesco')) {
             storeMap.tesco = {
