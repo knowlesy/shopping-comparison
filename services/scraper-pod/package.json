@@ -12,15 +12,14 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^17.4.2",
-    "express": "^4.19.2",
+    "express": "^4.22.3",
     "puppeteer-real-browser": "^1.4.4"
   },
   "overrides": {
-    "extract-zip": "2.0.1",
     "rebrowser-puppeteer-core": {
-      "@puppeteer/browsers": {
-        "extract-zip": "2.0.1"
-      }
-    }
+      "@puppeteer/browsers": "^3.2.2"
+    },
+    "qs": "^6.16.0",
+    "@puppeteer/browsers": "^3.2.2"
   }
 }

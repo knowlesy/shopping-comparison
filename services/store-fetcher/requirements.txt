@@ -1,7 +1,14 @@
-fastapi==0.115.6
-uvicorn==0.34.0
-pydantic==2.10.4
-curl_cffi==0.7.4
+fastapi==0.141.1
+# Pinned explicitly, not just inherited from fastapi: starlette 0.41.3 carried eight
+# advisories (PYSEC-2026-1941, -1942, -161, -2280, -2281, -248, -249) and only a 1.3.1+
+# release clears all of them. fastapi>=0.141 permits starlette>=0.46, so this pin is the
+# thing that actually decides the installed version.
+starlette==1.6.0
+uvicorn==0.53.0
+pydantic==2.13.5
+# 0.7.4 carried PYSEC-2026-2431, fixed in 0.15.0. The adapters' impersonate="chrome124"
+# target is verified to still work on this version.
+curl_cffi==0.16.3
 camoufox==0.4.10
 httpx==0.28.1
 pytest==9.1.1

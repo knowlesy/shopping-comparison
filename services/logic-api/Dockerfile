@@ -11,7 +11,8 @@ ENV NODE_ENV=production \
 
 COPY services/logic-api/package*.json ./
 
-RUN npm install --omit=dev
+# npm ci (not npm install) so the image gets exactly the audited dependency set.
+RUN npm ci --omit=dev
 
 COPY services/logic-api/src/ ./src/
 COPY data/ ./data/

@@ -57,8 +57,10 @@ ENV NODE_ENV=production \
 # Copy dependency manifests
 COPY package*.json ./
 
-# Install production dependencies
-RUN npm install --omit=dev
+# Install production dependencies from the lockfile.
+# npm ci (not npm install) so the image gets exactly the audited dependency set:
+# npm install may silently resolve newer versions than the lockfile records.
+RUN npm ci --omit=dev
 
 # Copy application files
 COPY src/ ./src/

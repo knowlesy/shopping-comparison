@@ -66,19 +66,28 @@ jobs:
       - name: Run ESLint security checks
         run: npx eslint services/
 
-      - name: Run dependency vulnerability audit (Root, Client, Logic-API)
+      # All four npm scopes. scraper-pod was previously omitted, which is where the
+      # puppeteer/extract-zip high-severity chain lived, so the audit reported clean
+      # while the highest-severity findings in the repository went unexamined.
+      # --audit-level=moderate: the qs chain was moderate and did reach request parsing.
+      - name: Run dependency vulnerability audit (Root, Client, Logic-API, Scraper-Pod)
         run: |
-          npm audit --audit-level=high
-          npm --prefix client audit --audit-level=high
-          npm --prefix services/logic-api audit --audit-level=high
+          npm audit --audit-level=moderate
+          npm --prefix client audit --audit-level=moderate
+          npm --prefix services/logic-api audit --audit-level=moderate
+          npm --prefix services/scraper-pod audit --audit-level=moderate
 
       - name: Setup Python 3.12 for Sidecar Security Audit
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
+      # Enforced, not reported. This step previously ended in
+      #   || echo "Python dependency audit reported findings"
+      # which swallowed the exit code, so the job stayed green with 16 known
+      # vulnerabilities across curl-cffi and starlette. A failing scanner must fail CI.
       - name: Run Python dependency vulnerability audit (store-fetcher)
         run: |
           python -m pip install --upgrade pip
           pip install pip-audit
-          pip-audit -r services/store-fetcher/requirements.txt || echo "Python dependency audit reported findings"
+          pip-audit -r services/store-fetcher/requirements.txt
