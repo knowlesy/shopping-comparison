@@ -15,7 +15,7 @@ const API_URL = `http://127.0.0.1:${API_PORT}`;
 const CLIENT_URL = `http://127.0.0.1:${CLIENT_PORT}`;
 
 const apiServer = {
-  command: 'node tests/support/test-api-server.js',
+  command: 'node --import ./tests/support/isolated-env.mjs tests/support/test-api-server.js',
   url: `${API_URL}/health`,
   reuseExistingServer: false,
   timeout: 60_000,

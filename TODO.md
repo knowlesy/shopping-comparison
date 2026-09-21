@@ -1,3 +1,7 @@
+> Repair acceptance: server matching/calculation/settings consolidation is implemented.
+> See [current architecture](docs/architecture.md) and [verification](docs/verification.md).
+> The roadmap below is not evidence of live deployment or universal matching correctness.
+
 # ShoppingWise Project Roadmap 🛒
 
 ## Core Roadmap Items

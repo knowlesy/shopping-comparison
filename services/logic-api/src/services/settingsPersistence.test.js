@@ -79,7 +79,12 @@ describe('Settings persistence across a restart', () => {
       fatPercentagePreference: 20,
       preferOrganic: true,
       enabledSupermarkets: ['tesco', 'aldi'],
-      directStoreAdapters: { tesco: false }
+      directStoreAdapters: { tesco: false },
+      directScrapersEnabled: false,
+      aiAssistLevel: 'economy',
+      aiMaxCallsPerBasket: 3,
+      aiStages: { select: false },
+      enableMatchLog: true
     });
     assert.equal(saved.status, 200);
     await first.stop();
@@ -93,6 +98,11 @@ describe('Settings persistence across a restart', () => {
     assert.equal(after.preferOrganic, true);
     assert.deepEqual(after.enabledSupermarkets, ['tesco', 'aldi']);
     assert.equal(after.directStoreAdapters.tesco, false);
+    assert.equal(after.directScrapersEnabled, false);
+    assert.equal(after.aiAssistLevel, 'economy');
+    assert.equal(after.aiMaxCallsPerBasket, 3);
+    assert.equal(after.aiStages.select, false);
+    assert.equal(after.enableMatchLog, true);
     // Untouched nested keys keep their default rather than disappearing.
     assert.equal(after.directStoreAdapters.asda, true);
     // Untouched top-level settings keep their default.

@@ -464,3 +464,30 @@ describe('candidatePipeline', () => {
     });
   });
 });
+
+describe('acquisition does not use matching quality', () => {
+  it('does not acquire aggregator candidates when direct rows are irrelevant to the requested noun', async () => {
+    const { StoreFetcherClient } = await import('./storeFetcherClient.js');
+    const { ScraperClient } = await import('./scraperClient.js');
+    const oldSearch = StoreFetcherClient.search;
+    const oldFetch = ScraperClient.fetchHtml;
+    let aggregatorCalls = 0;
+    try {
+      PriceCache.clear();
+      StoreFetcherClient.search = async () => ({ success: true, stores: {
+        tesco: { success: true, products: [{ id: 'unrelated', title: 'Chocolate cake', supermarket: 'tesco', price: 2 }] }
+      } });
+      ScraperClient.fetchHtml = async () => { aggregatorCalls++; throw new Error('unexpected aggregator acquisition'); };
+      const result = await getOrFetchCandidatesWithSource('milk', {
+        enabledStores: ['tesco'], forceRefresh: true,
+        preferences: { directScrapersEnabled: true, directStoreAdapters: { tesco: true } }
+      });
+      assert.equal(result.products[0].id, 'unrelated');
+      assert.equal(result.source, 'direct');
+      assert.equal(aggregatorCalls, 0);
+    } finally {
+      StoreFetcherClient.search = oldSearch;
+      ScraperClient.fetchHtml = oldFetch;
+    }
+  });
+});

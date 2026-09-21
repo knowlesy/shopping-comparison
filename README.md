@@ -99,7 +99,7 @@ $$\text{confidenceScore} = \min(\text{dataConfidence}, \text{dataConfidence} \ti
 
 ## 🚀 Quick Start (Docker Compose — Recommended)
 
-The canonical stack consists of four isolated microservices and a client SPA:
+The canonical stack consists of four services, including the client SPA:
 1. **`client`**: React 18 + Vite + Tailwind UI (`http://localhost:5173`)
 2. **`logic-api`**: Express comparison engine, NLP parsing, and basket optimizer (`http://localhost:3001`)
 3. **`store-fetcher`**: Python 3.12 FastAPI sidecar running direct supermarket adapters (`http://127.0.0.1:3003`)
@@ -110,7 +110,7 @@ The canonical stack consists of four isolated microservices and a client SPA:
 cp .env.example .env
 docker compose up --build -d
 ```
-Open **`http://localhost:5173`** in your browser.
+Open **`http://localhost:8080`** in your browser (Compose). Set non-default `SCRAPE_TOKEN` and `FETCHER_TOKEN` before starting production containers; the development fallback secrets are rejected. See [deployment acceptance](deploy/k3s/README.md#5-post-deployment-checks--cluster-check).
 
 ---
 
@@ -126,7 +126,8 @@ npm --prefix services/scraper-pod install
 # 2. Setup Python sidecar (optional for local direct scraping)
 cd services/store-fetcher && pip install -r requirements.txt && cd ../..
 
-# 3. Run all services concurrently
+# 3. Run client, API and aggregator (Vite: http://localhost:5173).
+# Start the optional Python sidecar separately.
 npm run dev
 ```
 
@@ -135,7 +136,7 @@ npm run dev
 ## 🧪 Testing & Verification
 
 ```bash
-# Run unit test suite (139 node:test tests across 41 suites)
+# Run the isolated Node suite (temporary data; external fetch blocked)
 npm test
 
 # Run direct store adapters verification (all 17 steps)
@@ -168,3 +169,5 @@ This project is licensed under the **Business Source License 1.1 (BSL 1.1)** —
 - **Personal & Non-Commercial Use**: **100% Free** for personal home use, private shopping comparisons, educational purposes, and internal testing.
 - **Commercial & Rebranding Restrictions**: Rebranding, white-labeling, selling, or hosting as a paid commercial service is prohibited without prior written commercial licensing from the copyright holder (Peter Knowles).
 - Converts automatically to the standard open-source **Apache License, Version 2.0** on **2030-08-28**.
+
+See [current architecture](docs/architecture.md) and [offline verification](docs/verification.md) for settings ownership, adjustment lifetime, approximation limits and test commands. Repository tests do not certify deployed retailer access.

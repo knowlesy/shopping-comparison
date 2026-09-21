@@ -90,6 +90,8 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
     // 1. Assert per-store result set for supermarkets
     assert.ok(comparison.supermarkets, 'Response must include supermarkets comparison');
     assert.ok(comparison.meta?.candidateStatuses, 'candidate provenance must survive into comparison metadata');
+    assert.deepEqual(Object.keys(comparison.meta.sources).sort(), ['cache', 'catalog', 'direct', 'live']);
+    assert.equal(Object.values(comparison.meta.sources).reduce((sum, count) => sum + count, 0), parsedItems.length);
     const stores = Object.keys(comparison.supermarkets);
     assert.ok(stores.includes('tesco'), 'Tesco must be in supermarkets');
     assert.ok(stores.includes('sainsburys'), 'Sainsburys must be in supermarkets');

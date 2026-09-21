@@ -237,3 +237,11 @@ deadline contract and browser ownership using deterministic delayed adapters and
 ownership-sensitive fake browser. **No test launches a real browser or contacts a
 retailer.** Real Camoufox behaviour under concurrent requests, and adapter behaviour
 against live retailer responses, still need confirmation in the container.
+
+## Current ownership and verification
+
+The server's per-store candidate cache and shared comparison operation are documented in
+[architecture.md](architecture.md). Direct → Trolley → estimated catalog remains a source acquisition
+policy, not multiple independent matching engines. Historical reachability observations above are
+snapshots, not guarantees of current retailer availability. Use [verification.md](verification.md)
+for offline regression commands; live acceptance remains a separate operator check.
