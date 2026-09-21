@@ -270,6 +270,28 @@ describe('BasketCalculator', () => {
       }
     });
 
+    it('R8: an approximate equal-coverage pair prevents a single-store route claiming a proven best', () => {
+      const items = parsed(['A', 'B', 'C', 'D', ...Array.from({ length: 15 }, (_, i) => `extra-${i}`)]);
+      const tesco = [line('tesco', 'A', 49), line('tesco', 'B', 0.6), line('tesco', 'C', 0.6), line('tesco', 'D', 100)];
+      const asda = [line('asda', 'A', 51), line('asda', 'B', 0.5), line('asda', 'C', 0.5), line('asda', 'D', 40)];
+      for (let i = 0; i < 15; i++) {
+        tesco.push(line('tesco', `extra-${i}`, 0.01));
+        asda.push(line('asda', `extra-${i}`, 0.01));
+      }
+
+      const split = BasketCalculator.computeComparison(items, { tesco, asda }, ['tesco', 'asda']).splitOptimization;
+
+      // Asda's single-store price is exact (£92.15), but the 19-flexible-line pair uses
+      // bounded allocation. A feasible Tesco/Asda assignment is £90.35, so the response
+      // must keep the route-selection uncertainty instead of calling Asda proven best.
+      assert.equal(split.stores.length, 1);
+      assert.equal(split.stores[0].supermarket, 'asda');
+      assert.equal(split.combinedTotal, 92.15);
+      assert.equal(split.allocationIsExact, false);
+      assert.doesNotMatch(split.explanation, /best route/);
+      assert.match(split.explanation, /not presented as a proven optimum/);
+    });
+
     it('R9: provenance-preferred partial coverage is identified separately from best coverage', () => {
       const items = parsed(['A', 'B']);
       const comparison = BasketCalculator.computeComparison(items, {

@@ -552,6 +552,12 @@ export class BasketCalculator {
       if (route.verified !== winner.verified) return route.verified ? route : winner;
       return route.stores.length <= winner.stores.length ? route : winner; // prefer one trip
     });
+    // A route's displayed total may be exact while an equally covering competing pair was
+    // calculated with the bounded allocator. Keep that uncertainty at the selection level:
+    // an exact single-store total alone cannot prove it is the best route in that case.
+    const routeSelectionIsExact = costed
+      .filter((route) => route.coveredIndices.size === best.coveredIndices.size)
+      .every((route) => route.allocationIsExact !== false);
 
     // Like-for-like single-store baseline: the same items, at one store, delivery included.
     let singleBestTotal = null;
@@ -587,7 +593,11 @@ export class BasketCalculator {
 
     const parts = [];
     if (!isSplit) {
-      parts.push(`Single-store checkout at ${routeNames} is the best route for this basket, delivery included.`);
+      parts.push(
+        routeSelectionIsExact
+          ? `Single-store checkout at ${routeNames} is the best route for this basket, delivery included.`
+          : `Single-store checkout at ${routeNames} is the lowest-priced exactly evaluated route for this basket, delivery included.`
+      );
     } else if (savingsAreVerified) {
       parts.push(
         `Splitting your shop between ${routeNames} saves £${realSaving.toFixed(2)} on the same ${best.coveredIndices.size} items compared with buying them all at ${baselineName}, delivery included on both routes.`
@@ -601,8 +611,8 @@ export class BasketCalculator {
         `Splitting between ${routeNames} covers the most items, but once delivery is included it is not cheaper than ${baselineName}, so no saving is claimed.`
       );
     }
-    if (best.allocationIsExact === false) {
-      parts.push('This larger, highly flexible basket uses a bounded delivery-aware allocation, so it is not presented as a proven optimum.');
+    if (!routeSelectionIsExact) {
+      parts.push('An equally covering route uses a bounded delivery-aware allocation, so this recommendation is not presented as a proven optimum.');
     }
     if (!hasFullCoverage) {
       parts.push(
@@ -627,7 +637,7 @@ export class BasketCalculator {
       provenance,
       savingsAreVerified,
       hasFullCoverage,
-      allocationIsExact: best.allocationIsExact !== false,
+      allocationIsExact: routeSelectionIsExact,
       explanation: parts.join(' ')
     };
   }

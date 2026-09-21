@@ -179,7 +179,7 @@ export interface SplitBasketOptimization {
   provenance?: 'verified' | 'mixed' | 'estimated' | 'none';
   savingsAreVerified?: boolean;
   hasFullCoverage?: boolean;
-  /** False only when bounded delivery-aware allocation replaced exact enumeration. */
+  /** False when any equally covering candidate route used bounded delivery-aware allocation. */
   allocationIsExact?: boolean;
   explanation: string;
 }
