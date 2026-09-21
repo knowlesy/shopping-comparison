@@ -421,9 +421,12 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
         { name: 'Apples', rawText: 'Apples 1 kg', targetQuantity: 1, unit: 'kg' }
       ];
       const cacheKey = buildScrapeCacheKey('apples', ['tesco']);
-      PriceCache.set(cacheKey, [
+      const candidates = [
         { id: 'app-1', title: 'Tesco British Apples 1kg', price: 1.80, packageSize: 1, packageUnit: 'kg', supermarket: 'tesco', source: 'catalog' }
-      ]);
+      ];
+      // Seed the authoritative store key so unrelated legacy fixtures cannot win migration.
+      PriceCache.set(buildStoreCandidateCacheKey('apples', 'tesco'), candidates);
+      PriceCache.set(cacheKey, candidates);
 
       // POST /api/compare
       const normalRes = await fetch(baseUrl, {
@@ -458,7 +461,8 @@ describe('HTTP API: POST /api/compare Route Tests', () => {
       assert.equal(streamBasket.cheapestStore, normalBasket.cheapestStore);
       assert.equal(streamBasket.supermarkets.tesco.totalPrice, normalBasket.supermarkets.tesco.totalPrice);
       assert.equal(streamBasket.supermarkets.tesco.items.length, normalBasket.supermarkets.tesco.items.length);
-      assert.equal(streamBasket.supermarkets.tesco.items[0].product.id, normalBasket.supermarkets.tesco.items[0].product.id);
+      assert.equal(normalBasket.supermarkets.tesco.items[0].product?.id, 'app-1');
+      assert.equal(streamBasket.supermarkets.tesco.items[0].product?.id, 'app-1');
       assert.equal(streamBasket.supermarkets.tesco.items[0].totalPrice, normalBasket.supermarkets.tesco.items[0].totalPrice);
     });
 
