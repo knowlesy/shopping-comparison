@@ -191,6 +191,10 @@ export class BasketCalculator {
         averageHealthScore:
           items.length > 0 ? Math.round((totalHealthScore / items.length) * 100) : 0
       };
+      storeResults[store].coveredIndices = matches.reduce(
+        (indices, match, index) => (match?.product ? [...indices, index] : indices),
+        []
+      );
     }
 
     // Rank stores: stores without materially estimated data rank ahead of estimated ones,
@@ -212,13 +216,19 @@ export class BasketCalculator {
     // that sorts estimated stores to the bottom. A store that carries fewer items is cheaper only
     // because goods are missing, so savings are quoted between baskets of equal coverage.
     const bestCoverage = storesWithItems.reduce((max, s) => Math.max(max, s.itemsFound), 0);
-    const comparableStores = storesWithItems.filter((s) => s.itemsFound === bestCoverage);
+    const referenceCoverage = new Set(storeResults[cheapestStore]?.coveredIndices || []);
+    const sameCoveredItems = (store) =>
+      store.coveredIndices.length === referenceCoverage.size &&
+      store.coveredIndices.every((index) => referenceCoverage.has(index));
+    const sameCoverageStores = storesWithItems.filter(sameCoveredItems);
+    // A lone partial basket has no like-for-like peer, even when another store has the same count.
+    const comparableStores = sameCoverageStores.length > 1 ? sameCoverageStores : [];
     const dearestComparable = comparableStores.reduce(
       (worst, s) => (worst === null || s.totalPrice > worst.totalPrice ? s : worst),
       null
     );
     const highestStore =
-      dearestComparable?.supermarket || ranked[ranked.length - 1]?.supermarket || 'tesco';
+      dearestComparable?.supermarket || cheapestStore || 'tesco';
     const highestTotal = dearestComparable?.totalPrice || 0;
 
     let totalMatched = 0;
@@ -226,13 +236,15 @@ export class BasketCalculator {
 
     for (const storeRes of Object.values(storeResults)) {
       storeRes.isCheapest = storeRes.itemsFound > 0 && storeRes.supermarket === cheapestStore;
-      storeRes.isComparable = storeRes.itemsFound === bestCoverage && storeRes.itemsFound > 0;
+      storeRes.isComparable = comparableStores.includes(storeRes);
       // Only a like-for-like basket may advertise a saving; a partial basket quotes none.
       storeRes.savingsVsHighest = storeRes.isComparable
         ? Math.max(0, Number((highestTotal - storeRes.totalPrice).toFixed(2)))
         : 0;
       if (storeRes.isCheapest) {
-        storeRes.badge = '🏆 Cheapest Overall';
+        storeRes.badge = storeRes.isComparable
+          ? '🏆 Cheapest Overall'
+          : '🏆 Best Available Coverage';
       }
       totalMatched += storeRes.itemsFound;
       totalEstimated += Math.round(storeRes.itemsFound * storeRes.estimatedShare);
@@ -298,6 +310,56 @@ export class BasketCalculator {
    *            total: number, verified: boolean, estimatedLines: number}}
    */
   static costRoute(items, storeResults, routeStores) {
+    // For a pair, delivery thresholds make per-line price greediness incorrect. Exact
+    // enumeration is bounded to ordinary baskets; large baskets retain the existing
+    // deterministic fallback rather than risking an unbounded 2^n calculation.
+    if (routeStores.length === 2 && items.length <= 18) {
+      const choices = items.map((_, index) => routeStores.flatMap((store) => {
+        const match = storeResults[store]?.items?.[index];
+        return match?.product ? [{ store, match, index }] : [];
+      }));
+      let best = null;
+      const evaluate = (selected) => {
+        const buckets = new Map(routeStores.map((store) => [store, []]));
+        const coveredIndices = new Set();
+        let estimatedLines = 0;
+        for (const choice of selected) {
+          if (!choice) continue;
+          buckets.get(choice.store).push(choice.match);
+          coveredIndices.add(choice.index);
+          if (!this.isVerifiedLine(choice.match)) estimatedLines += 1;
+        }
+        const stores = [];
+        let subtotal = 0;
+        let deliveryFee = 0;
+        for (const [store, matches] of buckets) {
+          if (matches.length === 0) continue;
+          const storeSubtotal = Number(matches.reduce((sum, match) => sum + match.totalPrice, 0).toFixed(2));
+          const storeDelivery = this.deliveryFeeFor(store, storeSubtotal);
+          stores.push({ supermarket: store, info: SUPERMARKETS_INFO[store], items: matches, storeSubtotal, deliveryFee: storeDelivery, storeTotal: Number((storeSubtotal + storeDelivery).toFixed(2)) });
+          subtotal += storeSubtotal;
+          deliveryFee += storeDelivery;
+        }
+        stores.sort((a, b) => b.items.length - a.items.length || a.supermarket.localeCompare(b.supermarket));
+        return { stores, coveredIndices, subtotal: Number(subtotal.toFixed(2)), deliveryFee: Number(deliveryFee.toFixed(2)), total: Number((subtotal + deliveryFee).toFixed(2)), verified: estimatedLines === 0 && coveredIndices.size > 0, estimatedLines };
+      };
+      const selected = Array(items.length).fill(null);
+      const visit = (index) => {
+        if (index === choices.length) {
+          const candidate = evaluate(selected);
+          if (!best || candidate.total < best.total) best = candidate;
+          return;
+        }
+        if (choices[index].length === 0) return visit(index + 1);
+        for (const choice of choices[index]) {
+          selected[index] = choice;
+          visit(index + 1);
+        }
+      };
+      visit(0);
+      return best || evaluate([]);
+    }
+
     const perStore = new Map(routeStores.map((store) => [store, { items: [], subtotal: 0 }]));
     const coveredIndices = new Set();
     let estimatedLines = 0;
@@ -358,6 +420,7 @@ export class BasketCalculator {
   /** Costs `route` over exactly `indices`, or null when the route cannot supply all of them. */
   static costRouteOverIndices(storeResults, routeStores, indices) {
     const perStore = new Map(routeStores.map((store) => [store, 0]));
+    let estimatedLines = 0;
 
     for (const i of indices) {
       let bestStore = null;
@@ -372,6 +435,7 @@ export class BasketCalculator {
       }
       if (!bestStore) return null; // incomparable: this route cannot cover the same basket
       perStore.set(bestStore, perStore.get(bestStore) + bestPrice);
+      if (!this.isVerifiedLine(storeResults[bestStore]?.items?.[i])) estimatedLines += 1;
     }
 
     let total = 0;
@@ -380,7 +444,7 @@ export class BasketCalculator {
       const storeSubtotal = Number(raw.toFixed(2));
       total += storeSubtotal + this.deliveryFeeFor(store, storeSubtotal);
     }
-    return Number(total.toFixed(2));
+    return { total: Number(total.toFixed(2)), verified: estimatedLines === 0, estimatedLines };
   }
 
   /**
@@ -442,12 +506,14 @@ export class BasketCalculator {
     // Like-for-like single-store baseline: the same items, at one store, delivery included.
     let singleBestTotal = null;
     let singleBestStore = null;
+    let baselineVerified = false;
     for (const store of candidateStores) {
       const cost = this.costRouteOverIndices(storeResults, [store], best.coveredIndices);
       if (cost === null) continue;
-      if (singleBestTotal === null || cost < singleBestTotal) {
-        singleBestTotal = cost;
+      if (singleBestTotal === null || cost.total < singleBestTotal) {
+        singleBestTotal = cost.total;
         singleBestStore = store;
+        baselineVerified = cost.verified;
       }
     }
 
@@ -460,7 +526,7 @@ export class BasketCalculator {
       best.estimatedLines === 0
         ? 'verified'
         : (best.estimatedLines === best.coveredIndices.size ? 'estimated' : 'mixed');
-    const savingsAreVerified = provenance === 'verified' && realSaving > 0;
+    const savingsAreVerified = provenance === 'verified' && baselineVerified && realSaving > 0;
 
     const missingItems = items.filter((_, i) => !best.coveredIndices.has(i));
     const hasFullCoverage = missingItems.length === 0;
@@ -478,7 +544,7 @@ export class BasketCalculator {
       );
     } else if (rawSaving > 0) {
       parts.push(
-        `Splitting between ${routeNames} looks about £${rawSaving.toFixed(2)} cheaper than ${baselineName} on the same ${best.coveredIndices.size} items, but the route uses estimated catalog prices, so treat it as indicative rather than a confirmed saving.`
+        `Splitting between ${routeNames} looks about £${rawSaving.toFixed(2)} cheaper than ${baselineName} on the same ${best.coveredIndices.size} items, but ${provenance === 'verified' ? 'the comparison baseline uses estimated catalog prices' : 'the route uses estimated catalog prices'}, so treat it as indicative rather than a confirmed saving.`
       );
     } else {
       parts.push(

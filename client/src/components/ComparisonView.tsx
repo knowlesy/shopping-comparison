@@ -50,7 +50,7 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({
   const [copied, setCopied] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  const { supermarkets, cheapestStore, highestStore, splitOptimization } = comparison;
+  const { supermarkets, cheapestStore, highestStore, splitOptimization, recommendationBasis } = comparison;
   const storeKeys: SupermarketName[] = (Object.keys(supermarkets) as SupermarketName[]).filter(k => supermarkets[k]);
 
   // Toggle item check on the left checklist
@@ -164,7 +164,7 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({
                 {isCheapest && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 px-3 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-extrabold tracking-wider uppercase shadow-sm flex items-center space-x-1 whitespace-nowrap">
                     <Sparkles className="w-3 h-3 text-amber-300" />
-                    <span>Cheapest Overall</span>
+                    <span>{recommendationBasis === 'lowest_comparable_price' ? 'Cheapest Overall' : 'Best Coverage'}</span>
                   </div>
                 )}
 

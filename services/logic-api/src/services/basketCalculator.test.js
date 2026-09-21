@@ -96,16 +96,6 @@ describe('BasketCalculator', () => {
         tesco: [line('tesco', 'A', 5.00), line('tesco', 'B', 1.00)]
       };
 
-      // On product price alone the split looks cheaper: 2.00 + 1.00 = 3.00 against asda's 4.00.
-      const splitRoute = BasketCalculator.costRoute(items, {
-        asda: { items: map.asda },
-        tesco: { items: map.tesco }
-      }, ['asda', 'tesco']);
-      assert.equal(splitRoute.subtotal, 3.00, 'nominal product saving of £1.00 exists');
-      // Delivery at both stores (neither subtotal reaches its minimum) costs 3.50 + 4.50.
-      assert.equal(splitRoute.deliveryFee, 8.00);
-      assert.equal(splitRoute.total, 11.00);
-
       const split = BasketCalculator.computeComparison(items, map, stores).splitOptimization;
 
       // asda alone: 4.00 + 3.50 = 7.50, cheaper than the 11.00 split.
@@ -133,7 +123,7 @@ describe('BasketCalculator', () => {
       assert.equal(comparison.supermarkets.iceland.savingsVsHighest, 0, 'a partial basket quotes no saving');
       assert.equal(comparison.supermarkets.iceland.isComparable, false);
       assert.equal(comparison.highestStore, 'asda', 'the dearest comparable basket, not the last ranked row');
-      assert.equal(comparison.recommendationBasis, 'lowest_comparable_price');
+      assert.equal(comparison.recommendationBasis, 'best_available_coverage');
 
       const split = comparison.splitOptimization;
       // asda alone: 6.00 + 3.50 = 9.50. Split: iceland A 0.50 (free delivery) + asda B 3.00 + 3.50 = 7.00.
@@ -204,6 +194,49 @@ describe('BasketCalculator', () => {
         );
       }
       assert.equal(comparison.highestStore, 'tesco', 'all three cover the basket; tesco is dearest');
+    });
+
+    it('R6: an estimated single-store baseline makes an otherwise verified split indicative', () => {
+      const items = parsed(['A', 'B']);
+      const split = BasketCalculator.computeComparison(items, {
+        tesco: [line('tesco', 'A', 1), noMatch('B')],
+        asda: [noMatch('A'), line('asda', 'B', 1)],
+        aldi: [line('aldi', 'A', 10, { estimated: true }), line('aldi', 'B', 10, { estimated: true })]
+      }, ['tesco', 'asda', 'aldi']).splitOptimization;
+
+      assert.equal(split.combinedTotal, 10, 'Tesco delivery plus Asda delivery is included');
+      assert.equal(split.singleBestTotal, 20);
+      assert.equal(split.savingsAreVerified, false);
+      assert.equal(split.savingsVsSingleBest, 0);
+      assert.equal(split.indicativeSavingsVsSingleBest, 10);
+      assert.match(split.explanation, /baseline uses estimated catalog prices/);
+    });
+
+    it('R7: disjoint equal-count baskets are not comparable and quote no savings', () => {
+      const items = parsed(['A', 'B']);
+      const comparison = BasketCalculator.computeComparison(items, {
+        aldi: [line('aldi', 'A', 1), noMatch('B')],
+        lidl: [noMatch('A'), line('lidl', 'B', 10)]
+      }, ['aldi', 'lidl']);
+
+      assert.equal(comparison.supermarkets.aldi.isComparable, false);
+      assert.equal(comparison.supermarkets.lidl.isComparable, false);
+      assert.equal(comparison.supermarkets.aldi.savingsVsHighest, 0);
+      assert.equal(comparison.supermarkets.lidl.savingsVsHighest, 0);
+      assert.equal(comparison.recommendationBasis, 'best_available_coverage');
+    });
+
+    it('R8: a pair assignment includes delivery thresholds when selecting a line', () => {
+      const items = parsed(['A', 'B', 'C']);
+      const split = BasketCalculator.computeComparison(items, {
+        tesco: [line('tesco', 'A', 49), line('tesco', 'B', 1), noMatch('C')],
+        asda: [noMatch('A'), line('asda', 'B', 0.9), line('asda', 'C', 40)]
+      }, ['tesco', 'asda']).splitOptimization;
+
+      assert.equal(split.combinedTotal, 90);
+      assert.equal(split.combinedDeliveryFee, 0);
+      assert.equal(split.stores.find((store) => store.supermarket === 'tesco').storeSubtotal, 50);
+      assert.equal(split.stores.find((store) => store.supermarket === 'asda').storeSubtotal, 40);
     });
   });
 });
