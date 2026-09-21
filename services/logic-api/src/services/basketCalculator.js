@@ -182,6 +182,8 @@ export class BasketCalculator {
         deliveryFee,
         totalPrice,
         savingsVsHighest: 0,
+        indicativeSavingsVsHighest: 0,
+        savingsVsHighestAreVerified: false,
         itemsFound,
         itemsTotal: items.length,
         missingItems,
@@ -230,6 +232,9 @@ export class BasketCalculator {
     const highestStore =
       dearestComparable?.supermarket || cheapestStore || 'tesco';
     const highestTotal = dearestComparable?.totalPrice || 0;
+    const highestIsVerified = dearestComparable
+      ? dearestComparable.items.every((match) => this.isVerifiedLine(match))
+      : false;
 
     let totalMatched = 0;
     let totalEstimated = 0;
@@ -237,15 +242,17 @@ export class BasketCalculator {
     for (const storeRes of Object.values(storeResults)) {
       storeRes.isCheapest = storeRes.itemsFound > 0 && storeRes.supermarket === cheapestStore;
       storeRes.isComparable = comparableStores.includes(storeRes);
-      // Only a like-for-like basket may advertise a saving; a partial basket quotes none.
-      storeRes.savingsVsHighest = storeRes.isComparable
+      // Only matching item sets may compare. A catalog price on either side makes the
+      // amount indicative: it must never be rendered as a checked-price saving.
+      const rawSaving = storeRes.isComparable
         ? Math.max(0, Number((highestTotal - storeRes.totalPrice).toFixed(2)))
         : 0;
-      if (storeRes.isCheapest) {
-        storeRes.badge = storeRes.isComparable
-          ? '🏆 Cheapest Overall'
-          : '🏆 Best Available Coverage';
-      }
+      const storeIsVerified = storeRes.items.every((match) => this.isVerifiedLine(match));
+      storeRes.savingsVsHighestAreVerified = rawSaving > 0 && storeIsVerified && highestIsVerified;
+      storeRes.savingsVsHighest = storeRes.savingsVsHighestAreVerified ? rawSaving : 0;
+      storeRes.indicativeSavingsVsHighest = rawSaving > 0 && !storeRes.savingsVsHighestAreVerified
+        ? rawSaving
+        : 0;
       totalMatched += storeRes.itemsFound;
       totalEstimated += Math.round(storeRes.itemsFound * storeRes.estimatedShare);
     }
@@ -263,7 +270,16 @@ export class BasketCalculator {
       recommended && recommended.itemsFound === bestCoverage &&
       cheapestComparablePrice !== null && recommended.totalPrice <= cheapestComparablePrice
         ? 'lowest_comparable_price'
-        : 'best_available_coverage';
+        : recommended && recommended.itemsFound < bestCoverage
+          ? 'preferred_verified_prices'
+          : 'best_available_coverage';
+    if (recommended) {
+      recommended.badge = recommendationBasis === 'lowest_comparable_price'
+        ? '🏆 Cheapest Overall'
+        : recommendationBasis === 'preferred_verified_prices'
+          ? '🏆 Verified Prices Preferred'
+          : '🏆 Best Available Coverage';
+    }
 
     return {
       parsedItems: items,
@@ -310,14 +326,15 @@ export class BasketCalculator {
    *            total: number, verified: boolean, estimatedLines: number}}
    */
   static costRoute(items, storeResults, routeStores) {
-    // For a pair, delivery thresholds make per-line price greediness incorrect. Exact
-    // enumeration is bounded to ordinary baskets; large baskets retain the existing
-    // deterministic fallback rather than risking an unbounded 2^n calculation.
-    if (routeStores.length === 2 && items.length <= 18) {
+    if (routeStores.length === 2) {
       const choices = items.map((_, index) => routeStores.flatMap((store) => {
         const match = storeResults[store]?.items?.[index];
         return match?.product ? [{ store, match, index }] : [];
       }));
+      // Bound exponential work by the number of genuinely flexible lines, not total basket
+      // size. Forced-store lines are cheap to evaluate and must not disable delivery-aware
+      // allocation for ordinary 19+ item lists.
+      const flexibleChoices = choices.filter((choicesForItem) => choicesForItem.length > 1).length;
       let best = null;
       const evaluate = (selected) => {
         const buckets = new Map(routeStores.map((store) => [store, []]));
@@ -343,21 +360,53 @@ export class BasketCalculator {
         stores.sort((a, b) => b.items.length - a.items.length || a.supermarket.localeCompare(b.supermarket));
         return { stores, coveredIndices, subtotal: Number(subtotal.toFixed(2)), deliveryFee: Number(deliveryFee.toFixed(2)), total: Number((subtotal + deliveryFee).toFixed(2)), verified: estimatedLines === 0 && coveredIndices.size > 0, estimatedLines };
       };
-      const selected = Array(items.length).fill(null);
-      const visit = (index) => {
-        if (index === choices.length) {
-          const candidate = evaluate(selected);
-          if (!best || candidate.total < best.total) best = candidate;
-          return;
+      const selected = choices.map((choicesForItem) => choicesForItem.reduce(
+        (cheapest, choice) => !cheapest || choice.match.totalPrice < cheapest.match.totalPrice ? choice : cheapest,
+        null
+      ));
+      if (flexibleChoices <= 18) {
+        const visit = (index) => {
+          if (index === choices.length) {
+            const candidate = evaluate(selected);
+            if (!best || candidate.total < best.total) best = candidate;
+            return;
+          }
+          if (choices[index].length === 0) return visit(index + 1);
+          for (const choice of choices[index]) {
+            selected[index] = choice;
+            visit(index + 1);
+          }
+        };
+        visit(0);
+        return { ...(best || evaluate([])), allocationIsExact: true };
+      }
+
+      // Large, highly-flexible baskets use bounded hill-climbing from the cheapest-line
+      // allocation. Every proposed move is re-costed with delivery, so this remains
+      // delivery-aware without a synchronous 2^n search. It is explicitly marked
+      // approximate so callers do not describe it as a proven optimum.
+      let candidate = evaluate(selected);
+      for (let pass = 0; pass < 2; pass++) {
+        let improved = false;
+        for (let index = 0; index < choices.length; index++) {
+          if (choices[index].length < 2) continue;
+          const original = selected[index];
+          let bestChoice = original;
+          for (const choice of choices[index]) {
+            if (choice.store === original.store) continue;
+            selected[index] = choice;
+            const moved = evaluate(selected);
+            if (moved.total < candidate.total) {
+              candidate = moved;
+              bestChoice = choice;
+            }
+          }
+          selected[index] = bestChoice;
+          improved ||= bestChoice !== original;
         }
-        if (choices[index].length === 0) return visit(index + 1);
-        for (const choice of choices[index]) {
-          selected[index] = choice;
-          visit(index + 1);
-        }
-      };
-      visit(0);
-      return best || evaluate([]);
+        if (!improved) break;
+      }
+      return { ...candidate, allocationIsExact: false };
     }
 
     const perStore = new Map(routeStores.map((store) => [store, { items: [], subtotal: 0 }]));
@@ -413,7 +462,8 @@ export class BasketCalculator {
       deliveryFee: Number(deliveryFee.toFixed(2)),
       total: Number((subtotal + deliveryFee).toFixed(2)),
       verified: estimatedLines === 0 && coveredIndices.size > 0,
-      estimatedLines
+      estimatedLines,
+      allocationIsExact: true
     };
   }
 
@@ -551,6 +601,9 @@ export class BasketCalculator {
         `Splitting between ${routeNames} covers the most items, but once delivery is included it is not cheaper than ${baselineName}, so no saving is claimed.`
       );
     }
+    if (best.allocationIsExact === false) {
+      parts.push('This larger, highly flexible basket uses a bounded delivery-aware allocation, so it is not presented as a proven optimum.');
+    }
     if (!hasFullCoverage) {
       parts.push(
         `${missingItems.length} of ${items.length} item${items.length === 1 ? '' : 's'} could not be priced at any store and ${missingItems.length === 1 ? 'is' : 'are'} not included in these totals.`
@@ -574,6 +627,7 @@ export class BasketCalculator {
       provenance,
       savingsAreVerified,
       hasFullCoverage,
+      allocationIsExact: best.allocationIsExact !== false,
       explanation: parts.join(' ')
     };
   }

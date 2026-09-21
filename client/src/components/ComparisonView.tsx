@@ -164,7 +164,11 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({
                 {isCheapest && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 px-3 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-extrabold tracking-wider uppercase shadow-sm flex items-center space-x-1 whitespace-nowrap">
                     <Sparkles className="w-3 h-3 text-amber-300" />
-                    <span>{recommendationBasis === 'lowest_comparable_price' ? 'Cheapest Overall' : 'Best Coverage'}</span>
+                    <span>{recommendationBasis === 'lowest_comparable_price'
+                      ? 'Cheapest Overall'
+                      : recommendationBasis === 'preferred_verified_prices'
+                        ? 'Verified Prices Preferred'
+                        : 'Best Coverage'}</span>
                   </div>
                 )}
 
@@ -221,6 +225,11 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({
                       <div className="flex items-center space-x-1 text-xs text-emerald-600 dark:text-emerald-400 font-semibold">
                         <TrendingDown className="w-3.5 h-3.5 shrink-0" />
                         <span className="truncate">Saves £{store.savingsVsHighest.toFixed(2)} vs highest</span>
+                      </div>
+                    ) : (store.indicativeSavingsVsHighest ?? 0) > 0 ? (
+                      <div className="flex items-center space-x-1 text-xs text-amber-600 dark:text-amber-400 font-semibold">
+                        <TrendingDown className="w-3.5 h-3.5 shrink-0" />
+                        <span className="truncate">Indicative £{store.indicativeSavingsVsHighest?.toFixed(2)} vs estimated baseline</span>
                       </div>
                     ) : (
                       <div className="text-xs text-slate-400">Baseline price</div>

@@ -134,6 +134,9 @@ export interface StoreBasketResult {
   subtotal: number;
   deliveryFee: number;
   savingsVsHighest: number;
+  /** A like-for-like gap that includes an estimated line; never a verified saving. */
+  indicativeSavingsVsHighest?: number;
+  savingsVsHighestAreVerified?: boolean;
   itemsFound: number;
   itemsTotal: number;
   missingItems: ParsedItem[];
@@ -176,6 +179,8 @@ export interface SplitBasketOptimization {
   provenance?: 'verified' | 'mixed' | 'estimated' | 'none';
   savingsAreVerified?: boolean;
   hasFullCoverage?: boolean;
+  /** False only when bounded delivery-aware allocation replaced exact enumeration. */
+  allocationIsExact?: boolean;
   explanation: string;
 }
 
@@ -187,7 +192,7 @@ export interface ComparisonResponse {
   cheapestStore: SupermarketName;
   highestStore: SupermarketName;
   /** Whether the recommended store actually wins on price, or only on available coverage. */
-  recommendationBasis?: 'lowest_comparable_price' | 'best_available_coverage';
+  recommendationBasis?: 'lowest_comparable_price' | 'best_available_coverage' | 'preferred_verified_prices';
   /** Item count of the fullest basket any store returned; the baseline savings are quoted against. */
   comparableCoverage?: number;
   splitOptimization: SplitBasketOptimization;

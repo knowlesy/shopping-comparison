@@ -212,6 +212,19 @@ describe('BasketCalculator', () => {
       assert.match(split.explanation, /baseline uses estimated catalog prices/);
     });
 
+    it('R6: store-card savings against estimated baselines are explicitly indicative', () => {
+      const items = parsed(['A', 'B']);
+      const comparison = BasketCalculator.computeComparison(items, {
+        aldi: [line('aldi', 'A', 1), line('aldi', 'B', 1)],
+        lidl: [line('lidl', 'A', 10, { estimated: true }), line('lidl', 'B', 10, { estimated: true })]
+      }, ['aldi', 'lidl']);
+
+      assert.equal(comparison.highestStore, 'lidl');
+      assert.equal(comparison.supermarkets.aldi.savingsVsHighest, 0);
+      assert.equal(comparison.supermarkets.aldi.indicativeSavingsVsHighest, 18);
+      assert.equal(comparison.supermarkets.aldi.savingsVsHighestAreVerified, false);
+    });
+
     it('R7: disjoint equal-count baskets are not comparable and quote no savings', () => {
       const items = parsed(['A', 'B']);
       const comparison = BasketCalculator.computeComparison(items, {
@@ -237,6 +250,37 @@ describe('BasketCalculator', () => {
       assert.equal(split.combinedDeliveryFee, 0);
       assert.equal(split.stores.find((store) => store.supermarket === 'tesco').storeSubtotal, 50);
       assert.equal(split.stores.find((store) => store.supermarket === 'asda').storeSubtotal, 40);
+    });
+
+    it('R8: delivery-aware allocation keeps the hand-calculated optimum across the 18/19-item boundary', () => {
+      for (const extraLines of [15, 16]) {
+        const items = parsed(['A', 'B', 'C', ...Array.from({ length: extraLines }, (_, i) => `extra-${i}`)]);
+        const tesco = [line('tesco', 'A', 49), line('tesco', 'B', 1), noMatch('C')];
+        const asda = [noMatch('A'), line('asda', 'B', 0.9), line('asda', 'C', 40)];
+        for (let i = 0; i < extraLines; i++) {
+          tesco.push(noMatch(`extra-${i}`));
+          asda.push(line('asda', `extra-${i}`, 0.01));
+        }
+        const split = BasketCalculator.computeComparison(items, { tesco, asda }, ['tesco', 'asda']).splitOptimization;
+
+        // Tesco: £50; Asda: £40 + extra pennies; both clear their delivery thresholds.
+        assert.equal(split.combinedTotal, Number((90 + extraLines * 0.01).toFixed(2)));
+        assert.equal(split.combinedDeliveryFee, 0);
+        assert.equal(split.allocationIsExact, true);
+      }
+    });
+
+    it('R9: provenance-preferred partial coverage is identified separately from best coverage', () => {
+      const items = parsed(['A', 'B']);
+      const comparison = BasketCalculator.computeComparison(items, {
+        aldi: [line('aldi', 'A', 1), noMatch('B')],
+        lidl: [line('lidl', 'A', 2, { estimated: true }), line('lidl', 'B', 2, { estimated: true })]
+      }, ['aldi', 'lidl']);
+
+      assert.equal(comparison.cheapestStore, 'aldi');
+      assert.equal(comparison.recommendationBasis, 'preferred_verified_prices');
+      assert.equal(comparison.supermarkets.aldi.badge, '🏆 Verified Prices Preferred');
+      assert.notEqual(comparison.supermarkets.aldi.badge, '🏆 Best Available Coverage');
     });
   });
 });

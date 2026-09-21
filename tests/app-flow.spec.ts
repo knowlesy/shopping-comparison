@@ -62,9 +62,9 @@ test.describe('ShoppingWise UK Web App UI Flow', () => {
     await expect(page.locator('span:has-text("Aldi")').first()).toBeVisible();
     await expect(page.locator('span:has-text("Lidl")').first()).toBeVisible();
 
-    // Verify Cheapest store badge
-    const cheapestBadge = page.locator('text=Cheapest Overall').first();
-    await expect(cheapestBadge).toBeVisible();
+    // The server classifies this partial result by coverage, not a price claim.
+    const coverageBadge = page.locator('text=Best Coverage').first();
+    await expect(coverageBadge).toBeVisible();
 
     // Verify Split Basket Optimizer banner
     const splitBanner = page.locator('h2:has-text("Smart Split-Basket Optimization")');
@@ -119,5 +119,58 @@ test.describe('ShoppingWise UK Web App UI Flow', () => {
     await expect(page.locator('h1:has-text("Supermarket Price & Sizing Matrix")')).toBeVisible();
 
     console.log('✅ End-to-End Playwright UI tests verified successfully!');
+  });
+
+  test('renders provenance preference and a genuine price win with distinct badges', async ({ page }) => {
+    const items = [
+      { id: 'a', name: 'A', rawText: 'A', targetQuantity: 1 },
+      { id: 'b', name: 'B', rawText: 'B', targetQuantity: 1 },
+    ];
+    const info = (id: string, name: string) => ({
+      id, name, shortName: name, logo: '•', themeColor: '#000', accentColor: '#000',
+      deliveryMinOrder: 0, deliveryFee: 0, deliveryPassAvailable: false, searchBaseUrl: 'https://example.invalid',
+    });
+    const match = (store: string, item: typeof items[number], price: number, estimated = false) => ({
+      parsedItem: item, itemId: item.id, product: { id: `${store}-${item.id}`, title: `${store} ${item.name}`, price, supermarket: store, source: estimated ? 'catalog' : 'live' },
+      totalPrice: price, packsNeeded: 1, totalQuantity: 1, lines: [], isEstimated: estimated, confidenceSource: estimated ? 'catalog' : 'live',
+    });
+    const noMatch = (item: typeof items[number]) => ({ parsedItem: item, itemId: item.id, product: null, totalPrice: 0, packsNeeded: 0, totalQuantity: 0, lines: [] });
+    const store = (id: string, matches: unknown[], totalPrice: number, isCheapest: boolean, estimated = false) => ({
+      supermarket: id, info: info(id, id === 'aldi' ? 'Aldi' : 'Lidl'), items: matches, subtotal: totalPrice, deliveryFee: 0, totalPrice,
+      savingsVsHighest: 0, indicativeSavingsVsHighest: isCheapest ? 2 : 0, itemsFound: matches.filter((entry: any) => entry.product).length,
+      itemsTotal: items.length, missingItems: [], isCheapest, estimatedShare: estimated ? 1 : 0, hasEstimatedPrices: estimated, averageHealthScore: 0,
+    });
+    const comparison = (recommendationBasis: 'preferred_verified_prices' | 'lowest_comparable_price') => ({
+      parsedItems: items,
+      supermarkets: recommendationBasis === 'preferred_verified_prices'
+        ? {
+            aldi: store('aldi', [match('aldi', items[0], 1), noMatch(items[1])], 1, true),
+            lidl: store('lidl', [match('lidl', items[0], 2, true), match('lidl', items[1], 2, true)], 4, false, true),
+          }
+        : {
+            aldi: store('aldi', [match('aldi', items[0], 1), match('aldi', items[1], 1)], 2, true),
+            lidl: store('lidl', [match('lidl', items[0], 2), match('lidl', items[1], 2)], 4, false),
+          },
+      cheapestStore: 'aldi', highestStore: 'lidl', recommendationBasis, comparableCoverage: 2,
+      splitOptimization: { stores: [], combinedTotal: 2, savingsVsSingleBest: 0, cheapestSingleStoreName: 'Aldi', explanation: 'Fixture comparison.' },
+      estimatedShare: recommendationBasis === 'preferred_verified_prices' ? 0.5 : 0, hasEstimatedPrices: recommendationBasis === 'preferred_verified_prices', timestamp: new Date().toISOString(),
+    });
+
+    let response = comparison('preferred_verified_prices');
+    await page.route('**/api/parse-list', route => route.fulfill({ json: { items } }));
+    await page.route('**/api/compare/stream', route => route.fulfill({
+      contentType: 'text/event-stream', body: `data: ${JSON.stringify({ type: 'complete', comparison: response })}\n\n`,
+    }));
+
+    await page.goto('/');
+    await page.locator('textarea').first().fill('A\nB');
+    await page.locator('button:has-text("Compare Prices Now")').first().click();
+    await expect(page.locator('text=Verified Prices Preferred').first()).toBeVisible();
+    await expect(page.locator('text=Indicative £2.00 vs estimated baseline').first()).toBeVisible();
+
+    response = comparison('lowest_comparable_price');
+    await page.locator('button:has-text("Shopping List")').first().click();
+    await page.locator('button:has-text("Compare Prices Now")').first().click();
+    await expect(page.locator('text=Cheapest Overall').first()).toBeVisible();
   });
 });
