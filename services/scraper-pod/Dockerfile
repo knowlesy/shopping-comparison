@@ -1,6 +1,6 @@
 # bookworm, not bullseye: Debian 11 left LTS on 2026-08-31 and its security pool
 # started 404ing mid-install, which broke every CI build of this image.
-FROM node:22-bookworm
+FROM node:25-bookworm
 
 # Install Chromium, Xvfb, fonts, and required X11/graphics dependencies for headless execution
 RUN apt-get update && apt-get install -y --no-install-recommends \
