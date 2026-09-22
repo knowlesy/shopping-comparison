@@ -54,3 +54,19 @@ regressions, not fresh independent accuracy evidence. Synthetic boundaries are r
 Code checks, current dependency advisories, container startup and actual deployment acceptance are
 separate verdicts. Live image identity, DNS, persistence, headers, retailer availability and AI uplift
 need their own evidence; [deployment guidance](../deploy/k3s/README.md) provides the operator procedure.
+
+## Public CI versus private recording evidence
+
+CI runs `npm run verify:infv -- --public-checkout`. Thirteen checks requiring ignored
+retailer recordings are explicitly reported as NOT RUN, never PASS. These cover recording
+provenance, corpus depth, store coverage, recorded taxonomy and contamination in the full corpus.
+All remaining code, sample and behavioral gates still run and fail normally. The unit suite
+retains synthetic contamination regressions; CI also restores historical offline adapter payloads.
+
+`npm run verify:infv` keeps the full local acceptance contract. Run it with the private recordings
+before claiming full corpus acceptance; a public CI success establishes only the public-checkout
+checks. No live acquisition or publication of private recordings is required by CI.
+
+Manual CI runs with Publish containers enabled rebuild all four images, even if only one
+service changed. Use this to recover a failed multi-service release. Ordinary pushes retain
+per-service change filters.

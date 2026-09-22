@@ -37,7 +37,17 @@ const onlyStep = (() => {
   return i > -1 ? Number(process.argv[i + 1]) : null;
 })();
 
+// CI proves public-checkout regressions; private recording evidence stays a local gate.
+const publicCheckout = process.argv.includes('--public-checkout');
 const results = [];
+function recordedCheck(step, name, fn) {
+  if (onlyStep !== null && step !== onlyStep) return;
+  if (publicCheckout) {
+    results.push({ step, name, skipped: true, detail: 'requires ignored local retailer recordings' });
+    return;
+  }
+  check(step, name, fn);
+}
 const pending = [];
 function check(step, name, fn) {
   if (onlyStep !== null && step !== onlyStep) return;
@@ -371,7 +381,7 @@ check(6, 'Tesco normalization is proven offline against a recorded payload', () 
   if (!hit) fail('no offline test loads a tesco store-payload fixture and asserts normalization');
 });
 
-check(6, 'Tesco fixture carries real provenance and Tesco reachability is declared', () => {
+recordedCheck(6, 'Tesco fixture carries real provenance and Tesco reachability is declared', () => {
   assertReachabilityDeclared('tesco');
   const report = JSON.parse(read(r('tests/fixtures/store-payloads/_reachability.json')));
   const entry = (report.stores || report).tesco;
@@ -387,7 +397,7 @@ check(6, 'Tesco fixture carries real provenance and Tesco reachability is declar
 // ---------------------------------------------------------------------------
 // Step 7 — Remaining adapters
 // ---------------------------------------------------------------------------
-check(7, 'Adapters exist for Sainsbury’s, Asda, Morrisons, Iceland with recorded fixtures', () => {
+recordedCheck(7, 'Adapters exist for Sainsbury’s, Asda, Morrisons, Iceland with recorded fixtures', () => {
   const missing = [];
   for (const store of ['sainsburys', 'asda', 'morrisons', 'iceland']) {
     if (!fs.existsSync(r('services/store-fetcher/adapters', `${store}.py`))) missing.push(`${store}.py`);
@@ -803,7 +813,7 @@ check(15, "Reality run uses the owner's real list verbatim, single-sourced", () 
   }
 });
 
-check(15, 'Reality fixtures cover the real list, not a softened rewrite', () => {
+recordedCheck(15, 'Reality fixtures cover the real list, not a softened rewrite', () => {
   const p = r('tests/fixtures/reality-fixtures.json');
   if (!fs.existsSync(p)) fail('tests/fixtures/reality-fixtures.json missing');
   const j = JSON.parse(read(p));
@@ -912,7 +922,7 @@ check(15, 'A trimmed sample still exists so the CI ratchet can run on a fresh ch
   if (!fs.existsSync(r(BASELINE))) fail('reality-baseline.json (metrics only) must stay tracked');
 });
 
-check(15, 'Known contamination: hummus must not match hummus-flavoured crisps', async () => {
+recordedCheck(15, 'Known contamination: hummus must not match hummus-flavoured crisps', async () => {
   const p = r('tests/fixtures/reality-fixtures.json');
   if (!fs.existsSync(p)) fail('reality fixtures missing');
   const j = JSON.parse(read(p));
@@ -1744,7 +1754,7 @@ check(24, 'The AI context says when declining is right and when it is not', () =
   }
 });
 
-check(24, 'The unused list items carry enough candidates to hold out honestly', () => {
+recordedCheck(24, 'The unused list items carry enough candidates to hold out honestly', () => {
   const F = JSON.parse(read(r('tests/fixtures/ai-matching-fixtures.real.json')) || '[]');
   const used = new Set(F.map((f) => Number(String(f.id).split('-')[1])));
   const fxPath = fs.existsSync(r('tests/fixtures/reality-fixtures.json'))
@@ -1887,7 +1897,7 @@ check(26, 'A produce request rejects a candidate from a confectionery aisle', as
   }
 });
 
-check(26, 'Recorded fixtures carry the taxonomy so matching can be tested offline', () => {
+recordedCheck(26, 'Recorded fixtures carry the taxonomy so matching can be tested offline', () => {
   const p = r('tests/fixtures/reality-fixtures.json');
   if (!fs.existsSync(p)) return 'no reality fixtures';
   const src = read(p);
@@ -1958,7 +1968,7 @@ check(27, 'Taxonomy confirms the category without settling the variety', async (
   }
 });
 
-check(27, 'Recorded fixtures carry taxonomy for nearly every product', () => {
+recordedCheck(27, 'Recorded fixtures carry taxonomy for nearly every product', () => {
   const p = r('tests/fixtures/reality-fixtures.json');
   if (!fs.existsSync(p)) return 'no reality fixtures';
   const fx = JSON.parse(read(p) || '{}');
@@ -2170,7 +2180,7 @@ check(30, 'Matching does not hardcode one retailer\'s field names', () => {
   }
 });
 
-check(30, 'Each store is recorded at a usable depth, not a token presence', () => {
+recordedCheck(30, 'Each store is recorded at a usable depth, not a token presence', () => {
   const fxPath = fs.existsSync(r('tests/fixtures/reality-fixtures.json'))
     ? r('tests/fixtures/reality-fixtures.json')
     : r('tests/fixtures/reality-sample.json');
@@ -2198,7 +2208,7 @@ check(30, 'Each store is recorded at a usable depth, not a token presence', () =
   }
 });
 
-check(30, 'Recorded candidates are per-item search results, not one shared list', () => {
+recordedCheck(30, 'Recorded candidates are per-item search results, not one shared list', () => {
   const fxPath = fs.existsSync(r('tests/fixtures/reality-fixtures.json'))
     ? r('tests/fixtures/reality-fixtures.json')
     : r('tests/fixtures/reality-sample.json');
@@ -2227,7 +2237,7 @@ check(30, 'Recorded candidates are per-item search results, not one shared list'
   }
 });
 
-check(30, 'The recorded corpus covers more than one store', () => {
+recordedCheck(30, 'The recorded corpus covers more than one store', () => {
   const fxPath = fs.existsSync(r('tests/fixtures/reality-fixtures.json'))
     ? r('tests/fixtures/reality-fixtures.json')
     : r('tests/fixtures/reality-sample.json');
@@ -2308,7 +2318,7 @@ check(34, 'A store that returns products is not filed as unreachable', () => {
   }
 });
 
-check(34, 'An unreachable declaration is backed by a recorded artifact', () => {
+recordedCheck(34, 'An unreachable declaration is backed by a recorded artifact', () => {
   const dir = r('tests/fixtures/store-payloads');
   if (!fs.existsSync(dir)) return 'no payload directory';
   const files = fs.readdirSync(dir);
@@ -2332,7 +2342,7 @@ check(34, 'An unreachable declaration is backed by a recorded artifact', () => {
 // the owner in the loop for every item. Correctness is now judged against
 // per-item constraints, so what matters is that every reachable store is
 // actually scored.
-check(34, 'Every reachable store is covered by the correctness scorer', () => {
+recordedCheck(34, 'Every reachable store is covered by the correctness scorer', () => {
   const reach = JSON.parse(read(r('tests/fixtures/store-payloads/_reachability.json')) || '{}');
   const expected = SHOPPED.filter((s) => reach.stores?.[s]?.status === 'reachable');
   const src = read(r('scripts/eval-stores.js'));
@@ -2354,7 +2364,7 @@ check(34, 'Every reachable store is covered by the correctness scorer', () => {
   }
 });
 
-check(34, 'The corpus is recorded for every reachable store', () => {
+recordedCheck(34, 'The corpus is recorded for every reachable store', () => {
   const fxPath = fs.existsSync(r('tests/fixtures/reality-fixtures.json'))
     ? r('tests/fixtures/reality-fixtures.json')
     : r('tests/fixtures/reality-sample.json');
@@ -2819,12 +2829,12 @@ await Promise.allSettled(pending);
       console.log(`\n— Step ${res.step} —`);
       lastStep = res.step;
     }
-    const mark = res.ok ? '✅ PASS' : '❌ FAIL';
+    const mark = res.skipped ? '⏭ NOT RUN' : res.ok ? '✅ PASS' : '❌ FAIL';
     console.log(`  ${mark}  ${res.name}${res.ok ? '' : `\n          ↳ ${res.detail}`}`);
-    if (!res.ok) failed++;
+    if (!res.ok && !res.skipped) failed++;
   }
   console.log(
-    `\n${failed === 0 ? '✅ ALL GATES PASS — direct store adapters complete.' : `❌ ${failed} gate(s) failing — the corresponding infv-context.md steps are NOT done.`}`
+    `\n${failed === 0 ? (publicCheckout ? `✅ PUBLIC-CHECKOUT GATES PASS — ${results.filter((res) => res.skipped).length} private-recording checks NOT RUN; full local acceptance still required.` : '✅ ALL GATES PASS — direct store adapters complete.') : `❌ ${failed} gate(s) failing — the corresponding infv-context.md steps are NOT done.`}`
   );
   process.exit(failed === 0 ? 0 : 1);
 }

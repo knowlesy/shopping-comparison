@@ -94,7 +94,7 @@ jobs:
         run: npm run verify:audit
 
       - name: Run direct adapters verification
-        run: npm run verify:infv
+        run: npm run verify:infv -- --public-checkout
 
       - name: Build client production bundle
         run: npm run build
@@ -199,7 +199,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and Push client Image
-        if: startsWith(github.ref, 'refs/tags/v') || needs.changes.outputs.client == 'true'
+        if: (github.event_name == 'workflow_dispatch' && inputs.publish_containers) || startsWith(github.ref, 'refs/tags/v') || needs.changes.outputs.client == 'true'
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -218,7 +218,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Build and Push logic-api Image
-        if: startsWith(github.ref, 'refs/tags/v') || needs.changes.outputs.logic-api == 'true'
+        if: (github.event_name == 'workflow_dispatch' && inputs.publish_containers) || startsWith(github.ref, 'refs/tags/v') || needs.changes.outputs.logic-api == 'true'
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -239,7 +239,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Build and Push scraper-pod Image
-        if: startsWith(github.ref, 'refs/tags/v') || needs.changes.outputs.scraper-pod == 'true'
+        if: (github.event_name == 'workflow_dispatch' && inputs.publish_containers) || startsWith(github.ref, 'refs/tags/v') || needs.changes.outputs.scraper-pod == 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./services/scraper-pod
@@ -258,7 +258,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Build and Push store-fetcher Image
-        if: startsWith(github.ref, 'refs/tags/v') || needs.changes.outputs.store-fetcher == 'true'
+        if: (github.event_name == 'workflow_dispatch' && inputs.publish_containers) || startsWith(github.ref, 'refs/tags/v') || needs.changes.outputs.store-fetcher == 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./services/store-fetcher
