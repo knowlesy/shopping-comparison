@@ -11,6 +11,8 @@ RUN cd client && npm ci
 # Copy client source code and shared data directory
 COPY client/ ./client/
 COPY data/ ./data/
+# Food types shared with the Logic-API, imported as ../../shared from client/src.
+COPY shared/ ./shared/
 
 # Build client production bundle
 WORKDIR /app/client

@@ -32,6 +32,9 @@ const readAll = (dir, ext = '') => {
     .join('\n');
 };
 
+// The settings UI: a page split into section components (it was one modal file).
+const readSettingsUi = () => readAll('client/src/components/settings', '.tsx');
+
 const onlyStep = (() => {
   const i = process.argv.indexOf('--step');
   return i > -1 ? Number(process.argv[i + 1]) : null;
@@ -128,10 +131,10 @@ check(2, 'Both keys are in the PUT allowlist and survive a round-trip', async ()
   await regressionProof('services/logic-api/src/services/settingsPersistence.test.js');
 });
 
-check(2, 'SettingsModal has a direct-scraper section with per-store toggles', () => {
-  const modal = read(r('client/src/components/SettingsModal.tsx'));
-  if (!/directScrapersEnabled/.test(modal)) fail('SettingsModal has no directScrapersEnabled control');
-  if (!/directStoreAdapters/.test(modal)) fail('SettingsModal has no per-store directStoreAdapters toggles');
+check(2, 'Settings has a direct-scraper section with per-store toggles', () => {
+  const modal = readSettingsUi();
+  if (!/directScrapersEnabled/.test(modal)) fail('Settings has no directScrapersEnabled control');
+  if (!/directStoreAdapters/.test(modal)) fail('Settings has no per-store directStoreAdapters toggles');
 });
 
 // ---------------------------------------------------------------------------
@@ -570,8 +573,8 @@ check(9, 'Fan-out asks the adapter for size variants, and the setting is user-fa
   const mod = await import(r('services/logic-api/src/routes/settings.js'));
   const s = mod.getSafeUserSettings();
   if (typeof s.allowMixedPackSizes !== 'boolean') fail('allowMixedPackSizes missing from settings');
-  const modal = read(r('client/src/components/SettingsModal.tsx'));
-  if (!/allowMixedPackSizes/.test(modal)) fail('SettingsModal has no allowMixedPackSizes control');
+  const modal = readSettingsUi();
+  if (!/allowMixedPackSizes/.test(modal)) fail('Settings has no allowMixedPackSizes control');
 });
 
 // ---------------------------------------------------------------------------
@@ -1017,9 +1020,9 @@ check(16, 'AI settings are user-facing: assist level, per-basket budget, per-sta
     if (typeof s.aiStages[stage] !== 'boolean') fail(`aiStages.${stage} missing`);
   }
   await regressionProof('services/logic-api/src/services/settingsPersistence.test.js');
-  const modal = read(r('client/src/components/SettingsModal.tsx'));
-  if (!/aiAssistLevel/.test(modal)) fail('SettingsModal has no AI assist level control');
-  if (!/aiMaxCallsPerBasket/.test(modal)) fail('SettingsModal has no AI budget control');
+  const modal = readSettingsUi();
+  if (!/aiAssistLevel/.test(modal)) fail('Settings has no AI assist level control');
+  if (!/aiMaxCallsPerBasket/.test(modal)) fail('Settings has no AI budget control');
 });
 
 check(16, 'Per-basket AI budget is actually enforced and reported', async () => {
@@ -2767,7 +2770,8 @@ check(41, 'AI runs as a fallback behind the rules, never ahead of them', async (
 // ---------------------------------------------------------------------------
 check(42, 'Diagnostic logging is a Settings toggle, not an env-only flag', async () => {
   await regressionProof('services/logic-api/src/services/settingsPersistence.test.js');
-  const client = readAll('client/src/components', '.tsx') + readAll('client/src/pages', '.tsx') + readAll('client/src', '.tsx');
+  const client =
+    readAll('client/src/components', '.tsx') + readSettingsUi() + readAll('client/src/pages', '.tsx') + readAll('client/src', '.tsx');
   if (!/enableMatchLog|matchLogging/.test(client)) {
     fail('no Settings control exposes the toggle in the UI');
   }

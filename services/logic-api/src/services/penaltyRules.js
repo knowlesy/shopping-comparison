@@ -7,6 +7,21 @@ import { fileURLToPath } from 'url';
 import { isContaminated } from './contaminationRules.js';
 import { KeywordExtractor } from './keywordExtractor.js';
 import { PackSelector } from './packSelector.js';
+import {
+  DIET_IDS,
+  ONLY_NEVER_REASON,
+  RATING_SCORES,
+  classifyProduct,
+  coveringCategories,
+  namedType,
+  productTypeText,
+  ratingOf,
+  resolveFoodRatings,
+  violatesDiet
+} from '../../../../shared/foodTypes.js';
+
+// Minimum score for a candidate to count as a match (see the scale in scoreCandidate).
+export const SCORE_FLOOR = 25;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -172,6 +187,14 @@ export class PenaltyRules {
     }
 
     const titleLower = prod.title.toLowerCase();
+
+    // Hard Diet Filter: best effort from the title. A household diet excludes the product
+    // outright; it is never traded against price.
+    for (const diet of Array.isArray(preferences?.diet) ? preferences.diet : []) {
+      if (DIET_IDS.includes(diet) && violatesDiet(diet, prod.title)) {
+        return { eligible: false, reason: 'diet_excluded', details: { diet } };
+      }
+    }
 
     // Contamination guard check: consults title and retailer taxonomy (aisle, department, shelf)
     if (isContaminated(item, titleLower, prod)) {
@@ -517,8 +540,8 @@ export class PenaltyRules {
       score += 30;
     }
 
-    const isFreeRangeApplicable = item.isFreeRange || (preferences.preferFreeRange && (/\beggs?\b/i.test(itemLower) || /\b(?:chicken|poultry|turkey)\b/i.test(itemLower)));
-    if (isFreeRangeApplicable) {
+    // An explicit "free range" on the list is a requirement of that item, not a rating.
+    if (item.isFreeRange) {
       if (prodIsFreeRange) {
         score += 35;
       } else {
@@ -526,29 +549,10 @@ export class PenaltyRules {
       }
     }
 
-    const isWholewheatGrain = /\b(?:bread|toastie|bloomer|cob|loaf|loaves|pitta|pitas?|bagels?|rolls?|buns?|baps?|wraps?|pasta|spaghetti|penne|fusilli|noodles?|flour|rice|couscous|cereal)\b/i.test(itemLower);
-    if (preferences.preferWholewheat && !isWholemealRequested && isWholewheatGrain) {
-      const prodIsWholewheat = Boolean(prod.isWholewheat || /\b(?:wholemeal|wholegrain|wholewheat|whole\s+wheat|brown|granary)\b/i.test(titleLower));
-      if (prodIsWholewheat) {
-        score += 35;
-      } else {
-        score -= 20;
-      }
-    }
-
-    // Healthier default lean meat & lower fat dairy preference when not explicitly specified
+    // Healthier default lower-fat dairy preference when not explicitly specified.
+    // Mince fat is a Love / OK / Never rating now (see foodRatingFor).
     if (preferences.healthierDefault && item.fatPercentage === undefined) {
-      if (/\bmince\b/i.test(itemLower)) {
-        const targetFat = preferences.fatPercentagePreference !== undefined ? preferences.fatPercentagePreference : 5;
-        let prodFat = prod.fatPercentage;
-        if (prodFat === undefined) {
-          const fatMatch = prod.title && prod.title.match(/\b(\d+)%\s*(?:fat|lean)\b/i);
-          if (fatMatch) prodFat = parseInt(fatMatch[1], 10);
-        }
-        if (prodFat !== undefined && prodFat <= targetFat) {
-          score += 25;
-        }
-      } else if (/\byog[hu]rt\b/i.test(itemLower)) {
+      if (/\byog[hu]rt\b/i.test(itemLower)) {
         if (/\b(?:0%|fat\s*free|low\s*fat|lighter|light)\b/i.test(titleLower)) {
           score += 25;
         }
@@ -605,7 +609,83 @@ export class PenaltyRules {
       score -= Math.min(25, (packs - 1) * 5);
     }
 
-    return { score, packs, totalQty, totalPrice, weightDiffPct, dealApplied, eligible: true };
+    // 6. Household food ratings, one per applicable category (an item's own category plus
+    // Frozen or fresh). Applied last so a Never can be kept at the floor below.
+    const ratings = PenaltyRules.foodRatingsFor(prod, item, preferences);
+    score += ratings.filter((r) => r.rating === 'love').length * RATING_SCORES.love;
+    if (ratings.some((r) => r.rating === 'never') && score >= SCORE_FLOOR) {
+      // A penalty, not a filter: a Never type sinks below every acceptable alternative but
+      // stays just above the floor, so a store whose only option is a Never type still
+      // returns it (flagged) rather than nothing. Order among Never types is preserved.
+      score = Math.max(score + RATING_SCORES.never, SCORE_FLOOR + (score - SCORE_FLOOR) / 1000);
+    }
+
+    return { score, packs, totalQty, totalPrice, weightDiffPct, dealApplied, eligible: true, foodRatings: ratings };
+  }
+
+  /**
+   * The household's ratings of this product, one per category that applies. A category
+   * is skipped when the list already names one of its types (the list wins) or when the
+   * product's own title is outside it ("white chocolate" is not bread).
+   *
+   * @returns {Array<{categoryId: string, typeId: string, rating: 'love'|'ok'|'never'}>}
+   */
+  static foodRatingsFor(prod, item, preferences = {}) {
+    if (!prod?.title || !item) return [];
+    const itemText = PenaltyRules.itemTypeText(item);
+    const ratings = resolveFoodRatings(preferences);
+    const out = [];
+    for (const category of coveringCategories(itemText)) {
+      if (namedType(category, itemText)) continue;
+      const type = classifyProduct(category, productTypeText(prod));
+      if (type) out.push({ categoryId: category.id, typeId: type.id, rating: ratingOf(ratings, category.id, type.id) });
+    }
+    return out;
+  }
+
+  /** The rating that matters most for display: a Never if there is one, else the first. */
+  static foodRatingFor(prod, item, preferences = {}) {
+    const ratings = PenaltyRules.foodRatingsFor(prod, item, preferences);
+    return ratings.find((r) => r.rating === 'never') || ratings[0] || null;
+  }
+
+  /** The list's own words, plus the attributes the parser lifted out of them. */
+  static itemTypeText(item) {
+    const parts = [item.name, item.baseItem, item.rawText];
+    if (item.isWholewheat) parts.push('wholemeal');
+    if (item.isFreeRange) parts.push('free range');
+    if (item.isOrganic) parts.push('organic');
+    if (item.fatPercentage !== undefined && item.fatPercentage !== null) parts.push(`${item.fatPercentage}% fat`);
+    return parts.filter(Boolean).join(' ');
+  }
+
+  /**
+   * Record the chosen product's rating on a finished match, and flag a store whose best
+   * option is a type the household rated Never. Mutates and returns `match`.
+   */
+  static annotateFoodRating(match, item, preferences = {}) {
+    if (!match) return match;
+    delete match.foodRating;
+    if (match.reasonCode === ONLY_NEVER_REASON) delete match.reasonCode;
+    if (!match.product) return match;
+    const rated = PenaltyRules.foodRatingFor(match.product, item, preferences);
+    if (!rated) return match;
+    match.foodRating = rated;
+    if (rated.rating !== 'never') return match;
+
+    // Normally a Never pick means nothing else qualified. An AI override can pick one
+    // anyway, so when the scored field is known, check that no acceptable non-Never
+    // option was passed over before saying "only".
+    const passedOver = (match.scoredCandidates || []).some(
+      (c) =>
+        c.product &&
+        c.product.id !== match.product.id &&
+        c.eligible !== false &&
+        c.score >= SCORE_FLOOR &&
+        PenaltyRules.foodRatingFor(c.product, item, preferences)?.rating !== 'never'
+    );
+    if (!passedOver) match.reasonCode = ONLY_NEVER_REASON;
+    return match;
   }
 }
 

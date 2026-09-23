@@ -14,14 +14,14 @@ import {
 import {
   DEFAULT_INGREDIENT_IDEAS,
 } from './clientEngine';
+import { DEFAULT_FOOD_RATINGS } from '../../../shared/foodTypes.js';
 
 const API_BASE = '/api';
 
 const DEFAULT_PREFERENCES: UserPreferences = {
   healthierDefault: true,
-  fatPercentagePreference: 5,
-  preferWholewheat: true,
-  preferFreeRange: true,
+  foodRatings: DEFAULT_FOOD_RATINGS,
+  diet: [],
   preferOrganic: false,
   cutMatchingStrategy: 'best_value',
   brandTierPriority: 'standard',

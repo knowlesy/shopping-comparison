@@ -73,7 +73,7 @@ jobs:
         run: npm --prefix services/scraper-pod ci
 
       - name: Lint codebase
-        run: npx eslint services/
+        run: npx eslint services/ shared/
 
       - name: Run unit test suite
         run: npm test
@@ -154,11 +154,13 @@ jobs:
           filters: |
             client:
               - 'client/**'
+              - 'shared/**'
               - 'package.json'
               - 'package-lock.json'
               - 'client/Dockerfile'
             logic-api:
               - 'services/logic-api/**'
+              - 'shared/**'
               - 'data/**'
               - 'package.json'
               - 'package-lock.json'

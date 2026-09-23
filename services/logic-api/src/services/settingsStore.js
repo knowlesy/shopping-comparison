@@ -23,6 +23,14 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import {
+  DEFAULT_FOOD_RATINGS,
+  LEGACY_FOOD_KEYS,
+  applyLegacyFoodKeys,
+  ratingsFromLegacy,
+  validateDiet,
+  validateFoodRatings
+} from '../../../../shared/foodTypes.js';
+import {
   DEFAULT_ENABLED_SUPERMARKETS,
   KNOWN_DIRECT_STORES,
   KNOWN_SUPERMARKETS,
@@ -98,9 +106,16 @@ const isOptionalString = (maxLength) => (v) => {
  */
 export const SETTINGS_SCHEMA = {
   healthierDefault: { default: true, validate: isBoolean, persisted: true },
-  fatPercentagePreference: { default: 5, validate: isBoundedNumber(0, 100), persisted: true },
-  preferWholewheat: { default: true, validate: isBoolean, persisted: true },
-  preferFreeRange: { default: true, validate: isBoolean, persisted: true },
+  // Love / Never per food type (shared/foodTypes.js); a type left out is OK. Replaced
+  // whole on a PUT, so removing a rating is expressible.
+  foodRatings: {
+    default: DEFAULT_FOOD_RATINGS,
+    validate: validateFoodRatings,
+    persisted: true,
+    coerce: cloneRatings
+  },
+  // Hard filter, best effort from product titles.
+  diet: { default: [], validate: validateDiet, persisted: true },
   preferOrganic: { default: false, validate: isBoolean, persisted: true },
   cutMatchingStrategy: { default: 'strict_cut', validate: isEnum(CUT_STRATEGIES), persisted: true },
   brandTierPriority: { default: 'standard', validate: isEnum(BRAND_TIERS), persisted: true },
@@ -155,6 +170,20 @@ export const SETTINGS_SCHEMA = {
   }
 };
 
+/**
+ * Flat food settings from before food ratings. Still accepted, from a settings file or a
+ * PUT by an older client, and converted into `foodRatings`; never written back.
+ */
+const LEGACY_FOOD_SCHEMA = {
+  preferWholewheat: isBoolean,
+  preferFreeRange: isBoolean,
+  fatPercentagePreference: isBoundedNumber(0, 100)
+};
+
+function cloneRatings(ratings) {
+  return Object.fromEntries(Object.entries(ratings).map(([category, types]) => [category, { ...types }]));
+}
+
 export const SETTINGS_KEYS = Object.keys(SETTINGS_SCHEMA);
 export const PERSISTED_KEYS = SETTINGS_KEYS.filter((k) => SETTINGS_SCHEMA[k].persisted);
 
@@ -181,7 +210,13 @@ export function buildDefaults() {
   const out = {};
   for (const [key, spec] of Object.entries(SETTINGS_SCHEMA)) {
     const base = spec.envDefault ? spec.envDefault() : spec.default;
-    out[key] = Array.isArray(base) ? [...base] : base && typeof base === 'object' ? { ...base } : base;
+    out[key] = Array.isArray(base)
+      ? [...base]
+      : base && typeof base === 'object'
+        ? spec.coerce
+          ? spec.coerce(base)
+          : { ...base }
+        : base;
   }
   return out;
 }
@@ -212,6 +247,20 @@ export function validatePatch(patch, current) {
       value = { ...(current?.[key] || spec.default), ...value };
     }
     accepted[key] = value;
+  }
+
+  // An older client still sends the flat food keys. Validate them like any other field,
+  // then fold them into the current ratings, unless this same patch sets the ratings.
+  const legacy = {};
+  for (const key of LEGACY_FOOD_KEYS) {
+    if (patch[key] === undefined) continue;
+    const problem = LEGACY_FOOD_SCHEMA[key](patch[key]);
+    if (problem) return { ok: false, field: key, error: composeError(key, problem) };
+    legacy[key] = patch[key];
+  }
+  if (Object.keys(legacy).length > 0 && accepted.foodRatings === undefined) {
+    legacy.healthierDefault = accepted.healthierDefault ?? current?.healthierDefault;
+    accepted.foodRatings = applyLegacyFoodKeys(current?.foodRatings ?? DEFAULT_FOOD_RATINGS, legacy);
   }
 
   return { ok: true, patch: accepted };
@@ -252,6 +301,23 @@ export function loadPersisted() {
       continue;
     }
     result.values[key] = spec.coerce ? spec.coerce(parsed[key]) : parsed[key];
+  }
+
+  // A file written before food ratings: derive them from the flat keys it does have.
+  // Invalid legacy values are reported and fall back to the old defaults.
+  if (!('foodRatings' in parsed) && LEGACY_FOOD_KEYS.some((k) => k in parsed)) {
+    const legacy = { healthierDefault: result.values.healthierDefault };
+    for (const key of LEGACY_FOOD_KEYS) {
+      if (!(key in parsed)) continue;
+      const problem = LEGACY_FOOD_SCHEMA[key](parsed[key]);
+      if (problem) {
+        result.rejected.push({ field: key, reason: composeError(key, problem) });
+        continue;
+      }
+      legacy[key] = parsed[key];
+    }
+    result.values.foodRatings = ratingsFromLegacy(legacy);
+    result.migratedLegacyFood = true;
   }
 
   return result;

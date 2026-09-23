@@ -18,6 +18,8 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
     proxy: apiProxy,
+    // shared/ (food types used by client and API) sits beside client/, outside the root.
+    fs: { allow: ['..'] },
   },
   preview: {
     proxy: apiProxy,

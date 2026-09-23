@@ -1,3 +1,10 @@
+import type { DietId, FoodRatings, FoodRating } from '../../shared/foodTypes.js';
+
+export type { DietId, FoodRatings, FoodRating };
+
+/** Top-level views; the app has no router. */
+export type AppTab = 'list' | 'compare' | 'history' | 'favorites' | 'quickcheck' | 'stats' | 'settings';
+
 export type SupermarketName = 'tesco' | 'asda' | 'sainsburys' | 'morrisons' | 'iceland' | 'waitrose' | 'ocado' | 'coop' | 'aldi' | 'lidl';
 
 export interface SupermarketInfo {
@@ -115,6 +122,10 @@ export interface ItemMatch {
   routeExplanation?: string;
   explanation?: string;
   alternatives?: SupermarketProduct[];
+  /** The household's rating of the chosen product's food type, when one applies. */
+  foodRating?: { categoryId: string; typeId: string; rating: FoodRating };
+  /** 'only_never_option': the best this store had is a type the household rated Never. */
+  reasonCode?: 'only_never_option';
 }
 
 export interface RecentSearchItem {
@@ -143,7 +154,8 @@ export interface StoreBasketResult {
   isCheapest: boolean;
   estimatedShare?: number;
   hasEstimatedPrices?: boolean;
-  averageHealthScore: number;
+  /** Null when no matched product states whether it is healthier. */
+  averageHealthScore: number | null;
   badge?: string;
   candidateStatus?: {
     fallbackItems: number;
@@ -219,9 +231,10 @@ export interface ComparisonResponse {
 
 export interface UserPreferences {
   healthierDefault: boolean;
-  fatPercentagePreference: number;
-  preferWholewheat: boolean;
-  preferFreeRange: boolean;
+  /** Love / Never per food type; a type left out is OK. */
+  foodRatings?: FoodRatings;
+  /** Hard filter, best effort from product titles. */
+  diet?: DietId[];
   preferOrganic: boolean;
   cutMatchingStrategy?: 'best_value' | 'strict_cut';
   brandTierPriority: 'value' | 'standard' | 'premium' | 'branded';

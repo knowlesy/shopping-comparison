@@ -15,6 +15,9 @@ COPY services/logic-api/package*.json ./
 RUN npm ci --omit=dev
 
 COPY services/logic-api/src/ ./src/
+# Food types shared with the client. The services import them as ../../../../shared from
+# src/services, which from /usr/src/app/src/services resolves to /usr/shared.
+COPY shared/ /usr/shared/
 COPY data/ ./data/
 COPY CHANGELOG.md ./
 

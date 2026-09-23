@@ -1,6 +1,7 @@
 import { FuzzyMatcher } from './fuzzyMatcher.js';
 import { MatchResultBuilder } from './matchResultBuilder.js';
 import { BasketCalculator } from './basketCalculator.js';
+import { PenaltyRules } from './penaltyRules.js';
 import { PriceCache } from './priceCache.js';
 import { getCoreSearchQuery, getOrFetchCandidatesWithSource } from './candidatePipeline.js';
 import { getUserSettings } from '../routes/settings.js';
@@ -303,6 +304,8 @@ export class ComparisonEngine {
         const item = items[i];
         const finalMatch = matches[i];
         if (!finalMatch) continue;
+        // After AI review and escalation, so the flag describes the product actually chosen.
+        PenaltyRules.annotateFoodRating(finalMatch, item, enrichedPreferences);
 
         const aiDec = aiDecisionsMap.get(`${store}:${i}`) || {
           fired: finalMatch.matchSource === 'ai' || finalMatch.matchSource === 'ai-escalation',

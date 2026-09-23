@@ -27,7 +27,7 @@ flowchart TD
     Actions -->|View Split Basket| ViewSplit[Inspect Two-Store Split Basket Savings]
     Actions -->|Save Shop| SavePast[Save Trip to Archive History]
     Actions -->|View Price Trends| ViewStats[Open Stats Page for Historical Price Series]
-    Actions -->|Adjust Biases| OpenSettings[Open Settings Modal]
+    Actions -->|Adjust Biases| OpenSettings[Open Settings Page]
 
     %% Quick Price Check Mode
     ModeSelect -->|Quick Price Check| SingleSearch[Type Single Item in Quick Check Tab]

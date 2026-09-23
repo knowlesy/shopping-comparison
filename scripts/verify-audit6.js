@@ -193,9 +193,12 @@ check(5, 'Stats API has per-item series route and client has a stats page', () =
   if (!/item/i.test(route)) fail('no per-item series endpoint in routes/stats.js');
   const clientFiles = [
     read(r('client/src/App.tsx')),
-    ...fs
-      .readdirSync(r('client/src/components'))
-      .map((f) => read(r('client/src/components', f)))
+    ...['client/src/components', 'client/src/components/settings'].flatMap((dir) =>
+      fs
+        .readdirSync(r(dir))
+        .filter((f) => f.endsWith('.tsx'))
+        .map((f) => read(r(dir, f)))
+    )
   ].join('\n');
   if (!/api\/stats/.test(clientFiles)) fail('no client code calls /api/stats (no stats page)');
 });
@@ -228,8 +231,12 @@ check(6, 'In-app AI test endpoint + settings button', () => {
     .map((f) => read(r('services/logic-api/src/routes', f)))
     .join('\n');
   if (!/ai-test/.test(routes)) fail('no /api/settings/ai-test route');
-  if (!/ai-test|Test AI/i.test(read(r('client/src/components/SettingsModal.tsx')))) {
-    fail('SettingsModal has no Test AI matching action');
+  const settingsUi = fs
+    .readdirSync(r('client/src/components/settings'))
+    .map((f) => read(r('client/src/components/settings', f)))
+    .join('\n');
+  if (!/ai-test|Test AI/i.test(settingsUi)) {
+    fail('Settings has no Test AI matching action');
   }
 });
 

@@ -3,6 +3,13 @@
 @tailwind utilities;
 
 @layer base {
+  /* Keep a focused control clear of the sticky header and the settings save bar when
+     the browser scrolls it into view. */
+  html {
+    scroll-padding-top: 7rem;
+    scroll-padding-bottom: 6rem;
+  }
+
   body {
     @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100;
   }

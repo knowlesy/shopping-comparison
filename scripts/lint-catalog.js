@@ -5,6 +5,8 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+import { FOOD_CATEGORIES, MAX_TYPES_PER_CATEGORY } from '../shared/foodTypes.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -127,4 +129,78 @@ function lintCatalog() {
   console.log(`✅ Catalog linting passed! All ${products.length} products are valid.\n`);
 }
 
+/**
+ * Validate the rateable food types in shared/foodTypes.js: unique ids, a bounded number of
+ * types per category, and patterns that compile and are safe to call .test() on.
+ */
+function lintFoodTypes() {
+  console.log('--- Linting Food Types ---');
+  const errors = [];
+
+  const checkPattern = (where, re, { allowGlobal = false } = {}) => {
+    if (!(re instanceof RegExp)) {
+      errors.push(`${where} is not a RegExp`);
+      return;
+    }
+    try {
+      new RegExp(re.source, re.flags);
+    } catch (err) {
+      errors.push(`${where} does not compile: ${err.message}`);
+      return;
+    }
+    // A global or sticky pattern keeps lastIndex between .test() calls and gives
+    // alternating answers for the same title.
+    if (!allowGlobal && (re.global || re.sticky)) errors.push(`${where} must not use the g or y flag`);
+    if (re.test('')) errors.push(`${where} matches an empty string`);
+  };
+
+  const categoryIds = new Set();
+  for (const category of FOOD_CATEGORIES) {
+    const where = `[category ${category.id || 'NO_ID'}]`;
+    if (!category.id || typeof category.id !== 'string') errors.push(`${where} missing id`);
+    else if (categoryIds.has(category.id)) errors.push(`${where} duplicate category id`);
+    categoryIds.add(category.id);
+    if (!category.label) errors.push(`${where} missing label`);
+
+    checkPattern(`${where}.appliesTo`, category.appliesTo);
+    if (category.excludes !== undefined) checkPattern(`${where}.excludes`, category.excludes);
+    if (category.ignore !== undefined) checkPattern(`${where}.ignore`, category.ignore, { allowGlobal: true });
+
+    if (!Array.isArray(category.types) || category.types.length === 0) {
+      errors.push(`${where} has no types`);
+      continue;
+    }
+    if (category.types.length > MAX_TYPES_PER_CATEGORY) {
+      errors.push(`${where} has ${category.types.length} types; the most is ${MAX_TYPES_PER_CATEGORY}`);
+    }
+    const typeIds = new Set();
+    for (const type of category.types) {
+      const typeWhere = `${where}.${type.id || 'NO_ID'}`;
+      if (!type.id || typeof type.id !== 'string') errors.push(`${typeWhere} missing id`);
+      else if (typeIds.has(type.id)) errors.push(`${typeWhere} duplicate type id`);
+      typeIds.add(type.id);
+      if (!type.label) errors.push(`${typeWhere} missing label`);
+      if (!(type.match instanceof RegExp)) {
+        errors.push(`${typeWhere}.match is not a RegExp`);
+        continue;
+      }
+      try {
+        new RegExp(type.match.source, type.match.flags);
+      } catch (err) {
+        errors.push(`${typeWhere}.match does not compile: ${err.message}`);
+      }
+      if (type.match.global || type.match.sticky) errors.push(`${typeWhere}.match must not use the g or y flag`);
+    }
+  }
+
+  if (errors.length > 0) {
+    console.error(`\n❌ Food type linting failed with ${errors.length} error(s):`);
+    for (const err of errors) console.error(`  - ${err}`);
+    process.exit(1);
+  }
+  const typeCount = FOOD_CATEGORIES.reduce((n, c) => n + c.types.length, 0);
+  console.log(`✅ Food types valid: ${FOOD_CATEGORIES.length} categories, ${typeCount} types.\n`);
+}
+
 lintCatalog();
+lintFoodTypes();

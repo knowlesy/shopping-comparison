@@ -1,8 +1,9 @@
+import type { AppTab } from '../types';
 import { ShoppingCart, Sparkles, History, BookmarkCheck, Settings, Moon, Sun, Search, Loader2, ArrowUpCircle, BarChart3 } from 'lucide-react';
 
 interface HeaderProps {
-  activeTab: 'list' | 'compare' | 'history' | 'favorites' | 'quickcheck' | 'stats';
-  setActiveTab: (tab: 'list' | 'compare' | 'history' | 'favorites' | 'quickcheck' | 'stats') => void;
+  activeTab: AppTab;
+  setActiveTab: (tab: AppTab) => void;
   onOpenSettings: () => void;
   onOpenChangelog?: () => void;
   version?: string;
@@ -29,6 +30,10 @@ export const Header: React.FC<HeaderProps> = ({
   cheapestStore,
   loading = false,
 }) => {
+  const settingsButtonTone = activeTab === 'settings'
+    ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300'
+    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800';
+
   return (
     <header className="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors w-full">
       {/* 24-hour Update Notification Banner */}
@@ -84,8 +89,10 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="flex items-center space-x-1 sm:hidden">
               <button
                 onClick={onOpenSettings}
-                title="Comparison Preferences"
-                className="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                title="Settings"
+                aria-label="Settings"
+                aria-current={activeTab === 'settings' ? 'page' : undefined}
+                className={`p-2 rounded-lg transition ${settingsButtonTone}`}
               >
                 <Settings className="w-4 h-4" />
               </button>
@@ -186,8 +193,10 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="hidden sm:flex items-center space-x-2">
             <button
               onClick={onOpenSettings}
-              title="Comparison Preferences"
-              className="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+              title="Settings"
+              aria-label="Settings"
+              aria-current={activeTab === 'settings' ? 'page' : undefined}
+              className={`p-2 rounded-lg transition ${settingsButtonTone}`}
             >
               <Settings className="w-5 h-5" />
             </button>

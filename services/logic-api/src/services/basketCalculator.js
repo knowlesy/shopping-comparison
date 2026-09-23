@@ -153,12 +153,18 @@ export class BasketCalculator {
       const missingItems = [];
       let subtotal = 0;
       let totalHealthScore = 0;
+      let healthKnown = 0;
       let estimatedMatches = 0;
 
       for (const m of matches) {
         if (m.product) {
           subtotal += m.totalPrice;
-          if (m.product.isHealthier) totalHealthScore += 1;
+          // Only live aggregator and catalog products carry a health flag; direct store
+          // results do not, and an absent flag is unknown, not unhealthy.
+          if (typeof m.product.isHealthier === 'boolean') {
+            healthKnown += 1;
+            if (m.product.isHealthier) totalHealthScore += 1;
+          }
           if (m.isEstimated || m.confidenceSource === 'catalog') {
             estimatedMatches += 1;
           }
@@ -190,8 +196,9 @@ export class BasketCalculator {
         isCheapest: false,
         estimatedShare,
         hasEstimatedPrices,
+        // Null when no matched product states whether it is healthier: "no data", not 0%.
         averageHealthScore:
-          items.length > 0 ? Math.round((totalHealthScore / items.length) * 100) : 0
+          healthKnown > 0 ? Math.round((totalHealthScore / healthKnown) * 100) : null
       };
       storeResults[store].coveredIndices = matches.reduce(
         (indices, match, index) => (match?.product ? [...indices, index] : indices),

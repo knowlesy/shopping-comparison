@@ -46,6 +46,9 @@ function initialSettings() {
   if (loaded.existed) {
     console.log(`[Settings] Loaded household settings from ${loaded.file}`);
   }
+  if (loaded.migratedLegacyFood) {
+    console.log('[Settings] Converted legacy food preferences to food ratings; saved on the next change.');
+  }
   return merged;
 }
 

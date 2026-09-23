@@ -13,6 +13,8 @@ import path from 'node:path';
  * only thing carried over is the file on disk.
  */
 
+const { DEFAULT_FOOD_RATINGS } = await import('../../../../shared/foodTypes.js');
+
 const UNIQUE_FAKE_KEY = `AIzaFAKE-test-key-${Date.now()}`;
 
 // A developer .env (or a configured container) sets GEMINI_API_KEY, which makes the
@@ -94,7 +96,9 @@ describe('Settings persistence across a restart', () => {
     const second = await startApi();
     const after = await (await fetch(second.url)).json();
 
-    assert.equal(after.fatPercentagePreference, 20);
+    // A legacy fat preference from an older client lands as a mince rating.
+    assert.deepEqual(after.foodRatings.mince, { fat20: 'love' });
+    assert.equal(after.fatPercentagePreference, undefined, 'legacy keys are never written back');
     assert.equal(after.preferOrganic, true);
     assert.deepEqual(after.enabledSupermarkets, ['tesco', 'aldi']);
     assert.equal(after.directStoreAdapters.tesco, false);
@@ -106,7 +110,7 @@ describe('Settings persistence across a restart', () => {
     // Untouched nested keys keep their default rather than disappearing.
     assert.equal(after.directStoreAdapters.asda, true);
     // Untouched top-level settings keep their default.
-    assert.equal(after.preferWholewheat, true);
+    assert.equal(after.foodRatings.bread.wholemeal, 'love');
     assert.equal(after.packSizingPolicy, 'closest');
     await second.stop();
   });
@@ -174,7 +178,8 @@ describe('Settings persistence across a restart', () => {
 
     assert.equal(settings.preferOrganic, true, 'valid persisted values are kept');
     assert.equal(settings.brandTierPriority, 'premium');
-    assert.equal(settings.fatPercentagePreference, 5, 'an invalid value falls back to its default');
+    // The invalid legacy value falls back to the old default: 5% mince, loved.
+    assert.deepEqual(settings.foodRatings.mince, { lean5: 'love' }, 'an invalid value falls back to its default');
     assert.deepEqual(
       settings.enabledSupermarkets,
       ['asda', 'sainsburys', 'tesco', 'morrisons', 'iceland', 'aldi', 'lidl'],
@@ -187,7 +192,8 @@ describe('Settings persistence across a restart', () => {
     fs.writeFileSync(settingsFile(), '{ this is not json');
     const api = await startApi();
     const settings = await (await fetch(api.url)).json();
-    assert.equal(settings.fatPercentagePreference, 5);
+    assert.deepEqual(settings.foodRatings, DEFAULT_FOOD_RATINGS);
+    assert.deepEqual(settings.diet, []);
     await api.stop();
   });
 });
@@ -212,7 +218,14 @@ describe('Settings validation', () => {
     ['directStoreAdapters', { unknown_shop: true }, /Unknown store in directStoreAdapters/],
     ['directStoreAdapters', { asda: 'false' }, /boolean/],
     ['aiStages', { teleport: true }, /Unknown stage in aiStages/],
-    ['enableMatchLog', 'true', /boolean/]
+    ['enableMatchLog', 'true', /boolean/],
+    ['foodRatings', [], /must be an object/],
+    ['foodRatings', { cake: { sponge: 'love' } }, /unknown category: cake/],
+    ['foodRatings', { bread: { rye: 'love' } }, /unknown type: rye/],
+    ['foodRatings', { bread: { white: 'ok' } }, /"love" or "never"/],
+    ['diet', 'vegan', /array/],
+    ['diet', ['keto'], /unknown diet: keto/],
+    ['diet', ['vegan', 'vegan'], /repeat/]
   ];
 
   for (const [field, value, expected] of invalid) {
@@ -233,14 +246,14 @@ describe('Settings validation', () => {
 
     const res = await put(api.url, {
       preferOrganic: true,
-      fatPercentagePreference: 15,
+      foodRatings: { bread: { white: 'never' } },
       aiAssistLevel: 'nonsense'
     });
     assert.equal(res.status, 400);
 
     const after = await (await fetch(api.url)).json();
     assert.equal(after.preferOrganic, before.preferOrganic, 'no partial write');
-    assert.equal(after.fatPercentagePreference, before.fatPercentagePreference, 'no partial write');
+    assert.deepEqual(after.foodRatings, before.foodRatings, 'no partial write');
     assert.ok(!fs.existsSync(settingsFile()), 'a rejected request must not touch disk');
     await api.stop();
   });
@@ -282,5 +295,127 @@ describe('Settings validation', () => {
     const res = await put(api.url, { enabledSupermarkets: [...KNOWN_SUPERMARKETS] });
     assert.equal(res.status, 200, 'every name the comparison route accepts must be settable');
     await api.stop();
+  });
+});
+
+describe('Legacy food settings conversion', () => {
+  const LEGACY_KEYS = ['preferWholewheat', 'preferFreeRange', 'fatPercentagePreference'];
+
+  it('reads the old flat keys from a file that has no food ratings', async () => {
+    fs.writeFileSync(
+      settingsFile(),
+      JSON.stringify({
+        healthierDefault: true,
+        preferWholewheat: false,
+        preferFreeRange: true,
+        fatPercentagePreference: 12,
+        preferOrganic: true
+      })
+    );
+
+    const api = await startApi();
+    try {
+      const settings = await (await fetch(api.url)).json();
+      assert.deepEqual(settings.foodRatings, {
+        eggs: { free_range: 'love' },
+        chicken: { free_range: 'love' },
+        mince: { lean10: 'love' }
+      });
+      // preferOrganic stays a separate toggle.
+      assert.equal(settings.preferOrganic, true);
+      for (const key of LEGACY_KEYS) assert.equal(settings[key], undefined, `${key} is not served`);
+    } finally {
+      await api.stop();
+    }
+  });
+
+  it('writes only the new keys on the next save', async () => {
+    fs.writeFileSync(
+      settingsFile(),
+      JSON.stringify({ preferWholewheat: true, preferFreeRange: false, fatPercentagePreference: 20 })
+    );
+
+    const api = await startApi();
+    try {
+      const res = await put(api.url, { includeDeals: false });
+      assert.equal(res.status, 200);
+    } finally {
+      await api.stop();
+    }
+
+    const onDisk = JSON.parse(fs.readFileSync(settingsFile(), 'utf8'));
+    for (const key of LEGACY_KEYS) assert.equal(onDisk[key], undefined, `${key} must not be written`);
+    assert.deepEqual(onDisk.foodRatings, { bread: { wholemeal: 'love' }, mince: { fat20: 'love' } });
+  });
+
+  it('drops the mince rating when the old healthier default was off, as the old rule did', async () => {
+    fs.writeFileSync(
+      settingsFile(),
+      JSON.stringify({ healthierDefault: false, preferWholewheat: false, preferFreeRange: false, fatPercentagePreference: 5 })
+    );
+    const api = await startApi();
+    try {
+      const settings = await (await fetch(api.url)).json();
+      assert.deepEqual(settings.foodRatings, {});
+    } finally {
+      await api.stop();
+    }
+  });
+
+  it('prefers food ratings over legacy keys when a file has both', async () => {
+    fs.writeFileSync(
+      settingsFile(),
+      JSON.stringify({ preferWholewheat: true, foodRatings: { bread: { white: 'never' } } })
+    );
+    const api = await startApi();
+    try {
+      const settings = await (await fetch(api.url)).json();
+      assert.deepEqual(settings.foodRatings, { bread: { white: 'never' } });
+    } finally {
+      await api.stop();
+    }
+  });
+
+  it('folds a legacy key from an older client into the current ratings', async () => {
+    const api = await startApi();
+    try {
+      await put(api.url, { foodRatings: { bread: { white: 'never' }, eggs: { free_range: 'love' } } });
+      const res = await put(api.url, { preferFreeRange: false, preferWholewheat: true });
+      assert.equal(res.status, 200);
+      const body = await res.json();
+      assert.deepEqual(body.foodRatings, { bread: { white: 'never', wholemeal: 'love' } });
+      assert.equal(body.preferFreeRange, undefined);
+    } finally {
+      await api.stop();
+    }
+  });
+
+  it('lets explicit food ratings win over legacy keys in the same request', async () => {
+    const api = await startApi();
+    try {
+      const res = await put(api.url, { preferWholewheat: true, foodRatings: { milk: { semi: 'love' } } });
+      assert.equal(res.status, 200);
+      assert.deepEqual((await res.json()).foodRatings, { milk: { semi: 'love' } });
+    } finally {
+      await api.stop();
+    }
+  });
+
+  it('round-trips a diet and a cleared rating', async () => {
+    const api = await startApi();
+    try {
+      const res = await put(api.url, { diet: ['vegetarian', 'gluten_free'], foodRatings: {} });
+      assert.equal(res.status, 200);
+    } finally {
+      await api.stop();
+    }
+    const again = await startApi();
+    try {
+      const settings = await (await fetch(again.url)).json();
+      assert.deepEqual(settings.diet, ['vegetarian', 'gluten_free']);
+      assert.deepEqual(settings.foodRatings, {}, 'an empty object means every type is OK, not "use defaults"');
+    } finally {
+      await again.stop();
+    }
   });
 });

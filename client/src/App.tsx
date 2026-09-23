@@ -6,7 +6,7 @@ import { ListCreator, EXAMPLE_LIST_TEXT } from './components/ListCreator';
 import { ComparisonView } from './components/ComparisonView';
 import { ArchiveHistory } from './components/ArchiveHistory';
 import { FavoritesManager } from './components/FavoritesManager';
-import { SettingsModal } from './components/SettingsModal';
+import { SettingsPage } from './components/settings/SettingsPage';
 import { ItemSwapModal } from './components/ItemSwapModal';
 import { QuickPriceCheck } from './components/QuickPriceCheck';
 import { StatsPage } from './components/StatsPage';
@@ -20,14 +20,17 @@ import {
   UserPreferences,
   FavoriteItem,
   IngredientIdea,
+  AppTab,
 } from './types';
 import { api } from './services/api';
+import { DEFAULT_FOOD_RATINGS } from '../../shared/foodTypes.js';
+
+const TABS: AppTab[] = ['list', 'compare', 'history', 'favorites', 'quickcheck', 'stats', 'settings'];
 
 const DEFAULT_PREFS: UserPreferences = {
   healthierDefault: true,
-  fatPercentagePreference: 5,
-  preferWholewheat: true,
-  preferFreeRange: true,
+  foodRatings: DEFAULT_FOOD_RATINGS,
+  diet: [],
   preferOrganic: false,
   cutMatchingStrategy: 'best_value',
   brandTierPriority: 'standard',
@@ -46,17 +49,17 @@ const DEFAULT_PREFS: UserPreferences = {
 
 export default function App() {
   // Persistent active tab
-  const [activeTab, setActiveTabState] = useState<'list' | 'compare' | 'history' | 'favorites' | 'quickcheck' | 'stats'>(() => {
+  const [activeTab, setActiveTabState] = useState<AppTab>(() => {
     try {
       const savedTab = localStorage.getItem('shoppingwise_active_tab');
-      if (savedTab && ['list', 'compare', 'history', 'favorites', 'quickcheck', 'stats'].includes(savedTab)) {
-        return savedTab as any;
+      if (savedTab && (TABS as string[]).includes(savedTab)) {
+        return savedTab as AppTab;
       }
     } catch {}
     return 'list';
   });
 
-  const setActiveTab = (tab: 'list' | 'compare' | 'history' | 'favorites' | 'quickcheck' | 'stats') => {
+  const setActiveTab = (tab: AppTab) => {
     setActiveTabState(tab);
     try {
       localStorage.setItem('shoppingwise_active_tab', tab);
@@ -128,7 +131,6 @@ export default function App() {
   const [comparisonError, setComparisonError] = useState<string | null>(null);
 
   // Modals
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [swapModalState, setSwapModalState] = useState<{
     isOpen: boolean;
     item: ParsedItem | null;
@@ -441,7 +443,7 @@ export default function App() {
 
   // Update Settings.
   // api.updateSettings throws when the server refuses the write, and that must reach the
-  // settings modal so it can say so. The recompare afterwards is a separate concern: a
+  // settings page so it can say so. The recompare afterwards is a separate concern: a
   // comparison failure must not be reported as a failed save.
   const handleSavePreferences = async (newPrefs: Partial<UserPreferences>) => {
     const updated = await api.updateSettings(newPrefs);
@@ -457,13 +459,15 @@ export default function App() {
     }
   };
 
+  // overflow-x-clip, not -hidden: hidden turns this div into a scroll container, which
+  // stops the sticky header and the settings save bar from sticking.
   return (
-    <div className="min-h-screen w-full overflow-x-hidden flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
+    <div className="min-h-screen w-full overflow-x-clip flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
       {/* Top Navbar */}
       <Header
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        onOpenSettings={() => setIsSettingsOpen(true)}
+        onOpenSettings={() => setActiveTab('settings')}
         onOpenChangelog={() => setIsChangelogOpen(true)}
         version={appVersion}
         updateAvailable={updateAvailable}
@@ -694,6 +698,15 @@ export default function App() {
         {activeTab === 'stats' && (
           <StatsPage />
         )}
+
+        {activeTab === 'settings' && (
+          <SettingsPage
+            preferences={preferences}
+            onSavePreferences={handleSavePreferences}
+            items={items}
+            comparison={comparison}
+          />
+        )}
       </main>
 
       {/* Item Swap Modal */}
@@ -704,14 +717,6 @@ export default function App() {
         store={swapModalState.store}
         currentMatch={swapModalState.currentMatch}
         onSelectAlternative={handleSelectAlternative}
-      />
-
-      {/* Settings Modal */}
-      <SettingsModal
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-        preferences={preferences}
-        onSavePreferences={handleSavePreferences}
       />
 
       {/* Changelog & Update Modal */}
